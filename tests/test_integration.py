@@ -21,6 +21,11 @@ from maude.client.models import (
     ChatSession,
     GovernorNow,
     HealthResponse,
+    IntentCompilationResult,
+    IntentFormSchema,
+    IntentPolicy,
+    IntentTemplateList,
+    IntentValidationResult,
     SessionMessage,
     SessionSummary,
 )
@@ -218,6 +223,114 @@ class TestDashboard:
         result = await client.create_run(task="integration test", profile="established")
         assert isinstance(result, dict)
         assert "run_id" in result
+
+
+# ============================================================================
+# Streaming — skipped unless backend is connected
+# ============================================================================
+
+
+# ============================================================================
+# Intent Compiler
+# ============================================================================
+
+
+class TestIntentCompiler:
+    async def test_list_templates(self, client: GovernorClient):
+        result = await client.intent_templates()
+        assert isinstance(result, IntentTemplateList)
+        assert len(result.templates) == 3
+        names = [t.name for t in result.templates]
+        assert "session_start" in names
+        assert "task_scope" in names
+        assert "verification_config" in names
+
+    async def test_template_descriptions(self, client: GovernorClient):
+        result = await client.intent_templates()
+        for t in result.templates:
+            assert len(t.description) > 0
+
+    async def test_get_schema_session_start(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        assert isinstance(schema, IntentFormSchema)
+        assert schema.template_name == "session_start"
+        assert len(schema.fields) == 4
+        assert schema.schema_id  # non-empty
+        assert schema.policy in ("template_only", "validated_custom", "custom_ok")
+
+    async def test_get_schema_task_scope(self, client: GovernorClient):
+        schema = await client.intent_schema("task_scope")
+        assert isinstance(schema, IntentFormSchema)
+        assert schema.template_name == "task_scope"
+        assert len(schema.fields) == 5
+
+    async def test_get_schema_verification_config(self, client: GovernorClient):
+        schema = await client.intent_schema("verification_config")
+        assert isinstance(schema, IntentFormSchema)
+        assert schema.template_name == "verification_config"
+
+    async def test_schema_has_branches(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        assert len(schema.branches) >= 2
+        for branch in schema.branches:
+            assert branch.branch_id
+            assert branch.name
+
+    async def test_validate_valid_response(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        result = await client.intent_validate(
+            schema_id=schema.schema_id,
+            values={"profile": "strict", "mode": "general"},
+        )
+        assert isinstance(result, IntentValidationResult)
+        assert result.valid is True
+        assert result.errors == []
+
+    async def test_validate_invalid_response(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        result = await client.intent_validate(
+            schema_id=schema.schema_id,
+            values={"profile": "nonexistent", "mode": "general"},
+        )
+        assert isinstance(result, IntentValidationResult)
+        assert result.valid is False
+        assert len(result.errors) > 0
+
+    async def test_compile_session_start(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        result = await client.intent_compile(
+            schema_id=schema.schema_id,
+            values={"profile": "strict", "mode": "general"},
+            template_name="session_start",
+        )
+        assert isinstance(result, IntentCompilationResult)
+        assert result.intent_profile == "strict"
+        assert len(result.receipt_hash) == 64
+
+    async def test_compile_with_scope(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        result = await client.intent_compile(
+            schema_id=schema.schema_id,
+            values={"profile": "strict", "mode": "general", "scope": "src/**,tests/**"},
+            template_name="session_start",
+        )
+        assert result.intent_scope == ["src/**", "tests/**"]
+
+    async def test_compile_with_escape(self, client: GovernorClient):
+        schema = await client.intent_schema("session_start")
+        result = await client.intent_compile(
+            schema_id=schema.schema_id,
+            values={"profile": "strict", "mode": "general"},
+            template_name="session_start",
+            escape_text="allow exception for testing",
+        )
+        assert result.escape_classification == "waiver_candidate"
+
+    async def test_policy(self, client: GovernorClient):
+        policy = await client.intent_policy()
+        assert isinstance(policy, IntentPolicy)
+        assert policy.mode  # non-empty
+        assert policy.policy in ("template_only", "validated_custom", "custom_ok")
 
 
 # ============================================================================

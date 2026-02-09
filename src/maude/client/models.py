@@ -149,3 +149,86 @@ class DashboardSummary(BaseModel):
     total_claims: int = 0
     total_violations: int = 0
     active_run: str | None = None
+
+
+# ============================================================================
+# V2 Intent Compiler
+# ============================================================================
+
+
+class IntentTemplateSummary(BaseModel):
+    """Summary of an available intent template."""
+    name: str
+    description: str
+
+
+class IntentTemplateList(BaseModel):
+    """Response from GET /v2/intent/templates."""
+    templates: list[IntentTemplateSummary]
+
+
+class IntentFieldOption(BaseModel):
+    """An option within a form field."""
+    value: str
+    label: str
+    confidence: float = 0.0
+    branch_id: str = ""
+
+
+class IntentFormField(BaseModel):
+    """A field in an intent form schema."""
+    field_id: str
+    widget: str
+    label: str
+    options: list[IntentFieldOption] | None = None
+    default: str | int | float | bool | None = None
+    required: bool = True
+    help_text: str = ""
+
+    model_config = {"extra": "allow"}
+
+
+class IntentBranch(BaseModel):
+    """A hypothesis branch in the form schema."""
+    branch_id: str
+    name: str
+    description: str
+    confidence: float
+    constraints_implied: list[str] = Field(default_factory=list)
+    fields_affected: list[str] = Field(default_factory=list)
+
+
+class IntentFormSchema(BaseModel):
+    """Response from GET /v2/intent/schema/{name}."""
+    schema_id: str
+    template_name: str
+    mode: str
+    policy: str
+    fields: list[IntentFormField]
+    branches: list[IntentBranch]
+    escape_enabled: bool = True
+
+
+class IntentValidationResult(BaseModel):
+    """Response from POST /v2/intent/validate."""
+    valid: bool
+    errors: list[str] = Field(default_factory=list)
+
+
+class IntentCompilationResult(BaseModel):
+    """Response from POST /v2/intent/compile."""
+    intent_profile: str = ""
+    intent_scope: list[str] | None = None
+    intent_deny: list[str] | None = None
+    intent_timebox_minutes: int | None = None
+    constraint_block: dict | None = None
+    selected_branch: str | None = None
+    escape_classification: str | None = None
+    warnings: list[str] = Field(default_factory=list)
+    receipt_hash: str = ""
+
+
+class IntentPolicy(BaseModel):
+    """Response from GET /v2/intent/policy."""
+    mode: str
+    policy: str

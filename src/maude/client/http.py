@@ -12,6 +12,11 @@ from maude.client.models import (
     DashboardSummary,
     GovernorNow,
     HealthResponse,
+    IntentCompilationResult,
+    IntentFormSchema,
+    IntentPolicy,
+    IntentTemplateList,
+    IntentValidationResult,
     RunSummary,
     SessionMessage,
     SessionSummary,
@@ -189,7 +194,58 @@ class GovernorClient:
                     continue
 
     async def dashboard_summary(self) -> DashboardSummary:
-        # TODO: v2 dashboard
         resp = await self._client.get("/v2/dashboard/summary")
         resp.raise_for_status()
         return DashboardSummary.model_validate(resp.json())
+
+    # ========================================================================
+    # V2 Intent Compiler
+    # ========================================================================
+
+    async def intent_templates(self) -> IntentTemplateList:
+        """List available intent form templates."""
+        resp = await self._client.get("/v2/intent/templates")
+        resp.raise_for_status()
+        return IntentTemplateList.model_validate(resp.json())
+
+    async def intent_schema(self, template_name: str) -> IntentFormSchema:
+        """Get the form schema for a template in the current mode."""
+        resp = await self._client.get(f"/v2/intent/schema/{template_name}")
+        resp.raise_for_status()
+        return IntentFormSchema.model_validate(resp.json())
+
+    async def intent_validate(
+        self, schema_id: str, values: dict
+    ) -> IntentValidationResult:
+        """Validate form values against a schema."""
+        resp = await self._client.post(
+            "/v2/intent/validate",
+            json={"schema_id": schema_id, "values": values},
+        )
+        resp.raise_for_status()
+        return IntentValidationResult.model_validate(resp.json())
+
+    async def intent_compile(
+        self,
+        schema_id: str,
+        values: dict,
+        template_name: str,
+        escape_text: str | None = None,
+    ) -> IntentCompilationResult:
+        """Compile form values into an intent + constraints."""
+        payload: dict = {
+            "schema_id": schema_id,
+            "values": values,
+            "template_name": template_name,
+        }
+        if escape_text is not None:
+            payload["escape_text"] = escape_text
+        resp = await self._client.post("/v2/intent/compile", json=payload)
+        resp.raise_for_status()
+        return IntentCompilationResult.model_validate(resp.json())
+
+    async def intent_policy(self) -> IntentPolicy:
+        """Get the current form policy for the active mode."""
+        resp = await self._client.get("/v2/intent/policy")
+        resp.raise_for_status()
+        return IntentPolicy.model_validate(resp.json())

@@ -5,6 +5,11 @@ from maude.client.models import (
     DashboardSummary,
     GovernorNow,
     HealthResponse,
+    IntentCompilationResult,
+    IntentFormSchema,
+    IntentPolicy,
+    IntentTemplateList,
+    IntentValidationResult,
     RunSummary,
     SessionMessage,
     SessionSummary,
@@ -228,3 +233,139 @@ class TestDashboardSummary:
         assert ds.total_runs == 10
         assert ds.pass_rate == 0.8
         assert ds.active_run is None
+
+
+class TestIntentTemplateList:
+    def test_deserialize(self):
+        data = {
+            "templates": [
+                {"name": "session_start", "description": "Initialize a governance session"},
+                {"name": "task_scope", "description": "Scope a specific task"},
+                {"name": "verification_config", "description": "Configure verification"},
+            ]
+        }
+        tl = IntentTemplateList.model_validate(data)
+        assert len(tl.templates) == 3
+        assert tl.templates[0].name == "session_start"
+
+    def test_empty(self):
+        data = {"templates": []}
+        tl = IntentTemplateList.model_validate(data)
+        assert len(tl.templates) == 0
+
+
+class TestIntentFormSchema:
+    def test_deserialize(self):
+        data = {
+            "schema_id": "abc123def456",
+            "template_name": "session_start",
+            "mode": "general",
+            "policy": "template_only",
+            "fields": [
+                {
+                    "field_id": "profile",
+                    "widget": "select_one",
+                    "label": "Profile",
+                    "options": [
+                        {"value": "strict", "label": "Strict", "confidence": 0.8, "branch_id": "b1"},
+                    ],
+                    "required": True,
+                    "help_text": "Select a profile",
+                },
+            ],
+            "branches": [
+                {
+                    "branch_id": "b1",
+                    "name": "Strict",
+                    "description": "Full enforcement",
+                    "confidence": 0.8,
+                    "constraints_implied": ["c1"],
+                    "fields_affected": ["profile"],
+                },
+            ],
+            "escape_enabled": True,
+        }
+        schema = IntentFormSchema.model_validate(data)
+        assert schema.schema_id == "abc123def456"
+        assert schema.template_name == "session_start"
+        assert schema.policy == "template_only"
+        assert len(schema.fields) == 1
+        assert schema.fields[0].field_id == "profile"
+        assert len(schema.fields[0].options) == 1
+        assert schema.fields[0].options[0].confidence == 0.8
+        assert len(schema.branches) == 1
+        assert schema.branches[0].confidence == 0.8
+
+    def test_minimal(self):
+        data = {
+            "schema_id": "x",
+            "template_name": "t",
+            "mode": "general",
+            "policy": "template_only",
+            "fields": [],
+            "branches": [],
+        }
+        schema = IntentFormSchema.model_validate(data)
+        assert schema.escape_enabled is True  # default
+
+
+class TestIntentValidationResult:
+    def test_valid(self):
+        data = {"valid": True, "errors": []}
+        r = IntentValidationResult.model_validate(data)
+        assert r.valid is True
+        assert r.errors == []
+
+    def test_invalid(self):
+        data = {"valid": False, "errors": ["profile: invalid value 'bogus'"]}
+        r = IntentValidationResult.model_validate(data)
+        assert r.valid is False
+        assert len(r.errors) == 1
+
+
+class TestIntentCompilationResult:
+    def test_deserialize(self):
+        data = {
+            "intent_profile": "strict",
+            "intent_scope": ["src/**"],
+            "intent_deny": None,
+            "intent_timebox_minutes": 120,
+            "constraint_block": None,
+            "selected_branch": "strict_branch",
+            "escape_classification": None,
+            "warnings": [],
+            "receipt_hash": "a" * 64,
+        }
+        r = IntentCompilationResult.model_validate(data)
+        assert r.intent_profile == "strict"
+        assert r.intent_scope == ["src/**"]
+        assert r.intent_timebox_minutes == 120
+        assert len(r.receipt_hash) == 64
+
+    def test_defaults(self):
+        data = {}
+        r = IntentCompilationResult.model_validate(data)
+        assert r.intent_profile == ""
+        assert r.warnings == []
+
+    def test_with_escape(self):
+        data = {
+            "intent_profile": "strict",
+            "escape_classification": "waiver_candidate",
+            "receipt_hash": "b" * 64,
+        }
+        r = IntentCompilationResult.model_validate(data)
+        assert r.escape_classification == "waiver_candidate"
+
+
+class TestIntentPolicy:
+    def test_deserialize(self):
+        data = {"mode": "general", "policy": "template_only"}
+        p = IntentPolicy.model_validate(data)
+        assert p.mode == "general"
+        assert p.policy == "template_only"
+
+    def test_fiction_mode(self):
+        data = {"mode": "fiction", "policy": "custom_ok"}
+        p = IntentPolicy.model_validate(data)
+        assert p.policy == "custom_ok"
