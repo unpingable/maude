@@ -80,3 +80,36 @@ class TestMaudeSession:
         s.last_governor_now = FakeNow()
         line = s.status_line()
         assert "GOV=ok" in line
+
+    # Template support
+
+    def test_load_template(self):
+        s = MaudeSession()
+        s.load_template("architecture", "# Arch Template\n...")
+        assert s.spec_template == "architecture"
+        assert s.spec_template_content == "# Arch Template\n..."
+
+    def test_clear_template(self):
+        s = MaudeSession()
+        s.load_template("architecture", "content")
+        s.clear_template()
+        assert s.spec_template is None
+        assert s.spec_template_content == ""
+
+    def test_status_line_with_template(self):
+        s = MaudeSession()
+        s.load_template("architecture", "content")
+        line = s.status_line()
+        assert "TEMPLATE=architecture" in line
+
+    def test_status_line_without_template(self):
+        s = MaudeSession()
+        line = s.status_line()
+        assert "TEMPLATE" not in line
+
+    def test_lock_spec_returns_draft(self):
+        s = MaudeSession()
+        s.spec_draft = "my spec content"
+        result = s.lock_spec()
+        assert result == "my spec content"
+        assert s.spec_locked

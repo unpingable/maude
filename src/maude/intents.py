@@ -7,6 +7,8 @@ from enum import Enum, auto
 
 class IntentKind(Enum):
     PLAN = auto()
+    PLAN_TEMPLATE = auto()
+    CLEAR_TEMPLATE = auto()
     LOCK_SPEC = auto()
     BUILD = auto()
     SHOW_SPEC = auto()
@@ -29,6 +31,12 @@ class Intent:
 
 
 _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
+    # Template-specific plan commands (must come before generic ^plan\b)
+    (re.compile(r"^plan\s+(architecture|arch)$", re.IGNORECASE), IntentKind.PLAN_TEMPLATE),
+    (re.compile(r"^plan\s+(product design|product)$", re.IGNORECASE), IntentKind.PLAN_TEMPLATE),
+    (re.compile(r"^plan\s+(requirements|reqs)$", re.IGNORECASE), IntentKind.PLAN_TEMPLATE),
+    (re.compile(r"^clear template$", re.IGNORECASE), IntentKind.CLEAR_TEMPLATE),
+    # Generic plan
     (re.compile(r"^plan\b", re.IGNORECASE), IntentKind.PLAN),
     (re.compile(r"^let'?s plan\b", re.IGNORECASE), IntentKind.PLAN),
     (re.compile(r"^lock spec$", re.IGNORECASE), IntentKind.LOCK_SPEC),

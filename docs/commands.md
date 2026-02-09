@@ -23,24 +23,55 @@ PostgreSQL for storage, Redis for caching
 
 Also recognized: `let's plan`
 
+### `plan architecture` / `plan arch`
+
+Load the architecture spec template. Chat enters **guided mode** — the LLM receives the template structure and current draft as context, and responses are automatically appended to the spec draft.
+
+```
+> plan architecture
+Loaded template: architecture
+Chat is now in guided mode — responses will fill the template.
+```
+
+### `plan product` / `plan product design`
+
+Load the product design spec template (guided mode).
+
+### `plan requirements` / `plan reqs`
+
+Load the requirements spec template (guided mode).
+
+### `clear template`
+
+Unload the current template and exit guided mode. The spec draft is preserved.
+
+```
+> clear template
+Template 'architecture' cleared.
+```
+
 ### `lock spec` / `freeze spec`
 
-Lock the current spec draft. Required before switching to BUILD mode. This is a local state transition — it signals that you're done planning and ready to implement.
+Lock the current spec draft and submit it as a constraint to the governor. Required before switching to BUILD mode.
 
 ```
 > lock spec
 Spec locked.
+Constraint submitted to governor.
 ```
+
+If the governor is unreachable, the spec is still locked locally.
 
 Keybinding: `Ctrl+L`
 
 ### `build` / `implement` / `do it`
 
-Switch to BUILD mode. Requires a locked spec.
+Switch to BUILD mode and create a v2 run with the spec. Requires a locked spec.
 
 ```
 > build
 Switched to BUILD mode.
+v2 run created: run_abc123
 ```
 
 If the spec isn't locked:
@@ -158,11 +189,12 @@ The governor mediates this — your message goes through the policy pipeline bef
 The status bar at the top of the screen updates every 5 seconds:
 
 ```
-MODE=PLAN  SPEC=UNLOCKED  SESSION=abc123  GOV=ok
+MODE=PLAN  SPEC=UNLOCKED  TEMPLATE=architecture  SESSION=abc123  GOV=ok
 ```
 
 - **MODE** — Current workflow mode (PLAN or BUILD)
 - **SPEC** — Whether the spec draft is locked
+- **TEMPLATE** — Active spec template name (only shown when loaded)
 - **SESSION** — Active governor session ID
 - **GOV** — Governor status from `/governor/now`
 

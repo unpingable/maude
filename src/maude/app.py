@@ -19,12 +19,25 @@ from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
 _CSS_PATH = Path(__file__).parent / "ui" / "theme.tcss"
+_TEMPLATES_DIR = Path(__file__).resolve().parent.parent.parent / "templates"
+_TEMPLATE_MAP = {
+    "architecture": "ARCHITECTURE_TEMPLATE.md",
+    "arch": "ARCHITECTURE_TEMPLATE.md",
+    "product": "PRODUCT_DESIGN_TEMPLATE.md",
+    "product design": "PRODUCT_DESIGN_TEMPLATE.md",
+    "requirements": "REQUIREMENTS_TEMPLATE.md",
+    "reqs": "REQUIREMENTS_TEMPLATE.md",
+}
 
 _HELP_TEXT = """\
 [bold]Available commands:[/bold]
-  plan <text>   - Start planning
-  lock spec     - Lock the current spec
-  build         - Switch to BUILD mode (requires locked spec)
+  plan <text>   - Start planning (freeform)
+  plan architecture / arch - Load architecture template
+  plan product / product design - Load product design template
+  plan requirements / reqs - Load requirements template
+  clear template - Unload the current template
+  lock spec     - Lock the current spec (submits constraint to governor)
+  build         - Switch to BUILD mode (creates v2 run)
   show spec     - Show the current spec draft
   show diff     - Show diff (TODO)
   apply         - Apply changes (TODO)
@@ -62,6 +75,7 @@ class MaudeApp(App):
         self.session = MaudeSession()
         self._polling_task: asyncio.Task | None = None
         self._last_session_list: list[SessionSummary] = []
+        self._pending_template: str | None = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -142,18 +156,32 @@ class MaudeApp(App):
         input_box.value = ""
 
         log = self.query_one("#chat-log", RichLog)
+
+        # Confirmation flow for pending template load
+        if self._pending_template is not None:
+            if text.lower() in ("yes", "y"):
+                self._load_template(log, self._pending_template)
+            else:
+                log.write("[dim]Template load cancelled.[/dim]")
+            self._pending_template = None
+            return
+
         intent = parse_intent(text)
 
         if intent.kind == IntentKind.HELP:
             log.write(_HELP_TEXT)
         elif intent.kind == IntentKind.STATUS:
             await self._handle_status(log)
+        elif intent.kind == IntentKind.PLAN_TEMPLATE:
+            self._handle_plan_template(log, intent.payload)
+        elif intent.kind == IntentKind.CLEAR_TEMPLATE:
+            self._handle_clear_template(log)
         elif intent.kind == IntentKind.PLAN:
             self._handle_plan(log, intent.payload)
         elif intent.kind == IntentKind.LOCK_SPEC:
-            self._handle_lock_spec(log)
+            await self._handle_lock_spec(log)
         elif intent.kind == IntentKind.BUILD:
-            self._handle_build(log)
+            await self._handle_build(log)
         elif intent.kind == IntentKind.SHOW_SPEC:
             self._handle_show_spec(log)
         elif intent.kind == IntentKind.WHY:
@@ -201,21 +229,84 @@ class MaudeApp(App):
         else:
             log.write("[dim]Usage: plan <description>[/dim]")
 
-    def _handle_lock_spec(self, log: RichLog) -> None:
+    async def _handle_lock_spec(self, log: RichLog) -> None:
         if not self.session.spec_draft:
             log.write("[yellow]No spec draft to lock. Use 'plan <text>' first.[/yellow]")
             return
-        self.session.lock_spec()
+        draft = self.session.lock_spec()
         log.write("[green]Spec locked.[/green]")
         self._update_status_bar()
 
-    def _handle_build(self, log: RichLog) -> None:
+        # Submit spec as constraint to governor
+        try:
+            await self.client.add_constraint(draft)
+            log.write("[dim]Constraint submitted to governor.[/dim]")
+        except Exception as e:
+            log.write(f"[dim]Governor constraint submission failed (spec still locked locally): {e}[/dim]")
+
+    async def _handle_build(self, log: RichLog) -> None:
         try:
             self.session.set_mode(Mode.BUILD)
             log.write("[green]Switched to BUILD mode.[/green]")
             self._update_status_bar()
         except ValueError as e:
             log.write(f"[yellow]{e}[/yellow]")
+            return
+
+        # Create a v2 run
+        try:
+            result = await self.client.create_run(task=self.session.spec_draft)
+            run_id = result.get("id", result.get("run_id", "?"))
+            log.write(f"[dim]v2 run created: {run_id}[/dim]")
+        except Exception as e:
+            log.write(f"[dim]v2 run creation failed (BUILD mode set locally): {e}[/dim]")
+
+    def _handle_plan_template(self, log: RichLog, payload: str) -> None:
+        """Handle 'plan architecture', 'plan product', etc."""
+        key = payload.lower()
+        if key not in _TEMPLATE_MAP:
+            log.write(f"[yellow]Unknown template: {key}[/yellow]")
+            return
+        if self.session.spec_draft:
+            self._pending_template = key
+            log.write(
+                "[yellow]Spec draft has content. Loading a template will NOT erase it,[/yellow]"
+            )
+            log.write("[yellow]but guided chat will append to the existing draft.[/yellow]")
+            log.write("[yellow]Type 'yes' to confirm, anything else to cancel.[/yellow]")
+            return
+        self._load_template(log, key)
+
+    def _load_template(self, log: RichLog, key: str) -> None:
+        """Load a template file into the session."""
+        filename = _TEMPLATE_MAP[key]
+        # Normalise alias to canonical name
+        canonical = key
+        if key == "arch":
+            canonical = "architecture"
+        elif key == "reqs":
+            canonical = "requirements"
+        elif key == "product design":
+            canonical = "product"
+        path = _TEMPLATES_DIR / filename
+        try:
+            content = path.read_text()
+        except FileNotFoundError:
+            log.write(f"[red]Template file not found: {path}[/red]")
+            return
+        self.session.load_template(canonical, content)
+        log.write(f"[green]Loaded template: {canonical}[/green]")
+        log.write("[dim]Chat is now in guided mode — responses will fill the template.[/dim]")
+        self._update_status_bar()
+
+    def _handle_clear_template(self, log: RichLog) -> None:
+        if not self.session.spec_template:
+            log.write("[dim]No template loaded.[/dim]")
+            return
+        name = self.session.spec_template
+        self.session.clear_template()
+        log.write(f"[green]Template '{name}' cleared.[/green]")
+        self._update_status_bar()
 
     def _handle_show_spec(self, log: RichLog) -> None:
         if not self.session.spec_draft:
@@ -321,13 +412,32 @@ class MaudeApp(App):
             except Exception:
                 pass
 
+        # Build messages for the API call
+        messages = list(self.session.messages)
+
+        # Inject template context as system message when a template is loaded
+        if self.session.spec_template_content:
+            draft_section = ""
+            if self.session.spec_draft:
+                draft_section = f"\n\n## Current Draft\n{self.session.spec_draft}"
+            system_msg = {
+                "role": "system",
+                "content": (
+                    "You are helping the user fill out a structured spec template "
+                    "section by section. Guide them through each section, ask "
+                    "clarifying questions, and produce well-structured content "
+                    "that fits the template format.\n\n"
+                    f"## Template\n{self.session.spec_template_content}"
+                    f"{draft_section}"
+                ),
+            }
+            messages.insert(0, system_msg)
+
         # Stream response
         log.write("[bold green]Assistant:[/bold green] ", end="")
         full_response = ""
         try:
-            async for delta in self.client.chat_stream(
-                self.session.messages, model=""
-            ):
+            async for delta in self.client.chat_stream(messages, model=""):
                 full_response += delta
                 log.write(delta, end="")
             log.write("")  # newline after streaming
@@ -336,6 +446,11 @@ class MaudeApp(App):
             return
 
         self.session.add_message("assistant", full_response)
+
+        # Accumulate response into spec draft when template is loaded
+        if self.session.spec_template_content and full_response:
+            self.session.spec_draft += full_response + "\n"
+            log.write("[dim](appended to spec draft)[/dim]")
 
         # Persist assistant message to session
         if self.session.governor_session_id:
@@ -348,7 +463,7 @@ class MaudeApp(App):
 
     async def action_lock_spec(self) -> None:
         log = self.query_one("#chat-log", RichLog)
-        self._handle_lock_spec(log)
+        await self._handle_lock_spec(log)
 
     async def action_new_session(self) -> None:
         log = self.query_one("#chat-log", RichLog)

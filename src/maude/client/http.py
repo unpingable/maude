@@ -120,6 +120,21 @@ class GovernorClient:
         resp.raise_for_status()
         return resp.json()
 
+    async def add_constraint(
+        self, constraint: str, patterns: list[str] | None = None
+    ) -> dict:
+        payload: dict = {"constraint": constraint}
+        if patterns is not None:
+            payload["patterns"] = patterns
+        resp = await self._client.post("/governor/code/constraints", json=payload)
+        resp.raise_for_status()
+        return resp.json()
+
+    async def list_constraints(self) -> list[dict]:
+        resp = await self._client.get("/governor/code/constraints")
+        resp.raise_for_status()
+        return resp.json()
+
     # ========================================================================
     # V2 endpoints (stubbed for future)
     # ========================================================================
@@ -131,11 +146,14 @@ class GovernorClient:
         data = resp.json()
         return [RunSummary.model_validate(r) for r in data.get("runs", [])]
 
-    async def create_run(self, task: str, profile: str = "established") -> dict:
+    async def create_run(
+        self, task: str, profile: str = "established", scope: str | None = None
+    ) -> dict:
         # TODO: v2 run creation
-        resp = await self._client.post(
-            "/v2/runs", json={"task": task, "profile": profile}
-        )
+        payload: dict = {"task": task, "profile": profile}
+        if scope is not None:
+            payload["scope"] = scope
+        resp = await self._client.post("/v2/runs", json=payload)
         resp.raise_for_status()
         return resp.json()
 

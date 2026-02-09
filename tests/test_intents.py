@@ -172,3 +172,45 @@ class TestParseIntent:
         """'switch' alone with no ID falls through to CHAT."""
         result = parse_intent("switch")
         assert result.kind == IntentKind.CHAT
+
+    # Template intents
+
+    def test_plan_architecture(self):
+        result = parse_intent("plan architecture")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "architecture"
+
+    def test_plan_arch(self):
+        result = parse_intent("plan arch")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "arch"
+
+    def test_plan_product(self):
+        result = parse_intent("plan product")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "product"
+
+    def test_plan_product_design(self):
+        result = parse_intent("plan product design")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "product design"
+
+    def test_plan_requirements(self):
+        result = parse_intent("plan requirements")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "requirements"
+
+    def test_plan_reqs(self):
+        result = parse_intent("plan reqs")
+        assert result.kind == IntentKind.PLAN_TEMPLATE
+        assert result.payload == "reqs"
+
+    def test_plan_freeform_not_template(self):
+        """'plan build a REST API' should match PLAN, not PLAN_TEMPLATE."""
+        result = parse_intent("plan build a REST API")
+        assert result.kind == IntentKind.PLAN
+        assert result.payload == "plan build a REST API"
+
+    def test_clear_template(self):
+        result = parse_intent("clear template")
+        assert result.kind == IntentKind.CLEAR_TEMPLATE
