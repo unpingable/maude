@@ -15,3 +15,6 @@ class Settings:
     governor_mode: str = field(
         default_factory=lambda: os.environ.get("GOVERNOR_MODE", "code")
     )
+    governor_token: str = field(
+        default_factory=lambda: os.environ.get("GOVERNOR_AUTH_TOKEN", "")
+    )

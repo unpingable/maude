@@ -22,9 +22,19 @@ from maude.client.models import (
 class GovernorClient:
     """Async HTTP client for governor v1 and v2 endpoints."""
 
-    def __init__(self, base_url: str = "http://127.0.0.1:8000", timeout: float = 30.0):
+    def __init__(
+        self,
+        base_url: str = "http://127.0.0.1:8000",
+        timeout: float = 30.0,
+        token: str | None = None,
+    ):
         self.base_url = base_url.rstrip("/")
-        self._client = httpx.AsyncClient(base_url=self.base_url, timeout=timeout)
+        headers = {}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        self._client = httpx.AsyncClient(
+            base_url=self.base_url, timeout=timeout, headers=headers
+        )
 
     async def close(self) -> None:
         await self._client.aclose()
@@ -133,7 +143,11 @@ class GovernorClient:
     async def list_constraints(self) -> list[dict]:
         resp = await self._client.get("/governor/code/constraints")
         resp.raise_for_status()
-        return resp.json()
+        data = resp.json()
+        # Server returns {"constraints": [...]} — unwrap to match return type
+        if isinstance(data, dict):
+            return data.get("constraints", [])
+        return data
 
     # ========================================================================
     # V2 endpoints (stubbed for future)
