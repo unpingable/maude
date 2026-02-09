@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "maude"
 version = "0.1.0"
 description = "Textual TUI frontend for the agent-governor project"
+license = "Apache-2.0"
 requires-python = ">=3.11"
 dependencies = [
     "textual>=1.0.0",
