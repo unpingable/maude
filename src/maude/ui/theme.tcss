@@ -1,0 +1,38 @@
+Screen {
+    layout: vertical;
+}
+
+#status-bar {
+    dock: top;
+    height: 1;
+    background: $surface;
+    color: $text;
+    padding: 0 1;
+}
+
+#status-bar.ok {
+    background: $success-darken-3;
+    color: $text;
+}
+
+#status-bar.warning {
+    background: $warning-darken-3;
+    color: $text;
+}
+
+#status-bar.violation {
+    background: $error-darken-3;
+    color: $text;
+}
+
+#chat-log {
+    height: 1fr;
+    border: none;
+    padding: 0 1;
+}
+
+#input-box {
+    dock: bottom;
+    height: 3;
+    padding: 0 1;
+}
