@@ -33,7 +33,7 @@ Maude never imports governor code. Two repos, one HTTP boundary.
 
 ```bash
 # Install
-git clone <repo-url>
+git clone https://github.com/unpingable/maude
 cd maude
 python3 -m venv .venv
 .venv/bin/pip install -e .
