@@ -15,6 +15,9 @@ class IntentKind(Enum):
     ROLLBACK = auto()
     WHY = auto()
     STATUS = auto()
+    SESSIONS = auto()
+    SWITCH_SESSION = auto()
+    DELETE_SESSION = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -45,6 +48,14 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^blocked$", re.IGNORECASE), IntentKind.WHY),
     (re.compile(r"^status$", re.IGNORECASE), IntentKind.STATUS),
     (re.compile(r"^state$", re.IGNORECASE), IntentKind.STATUS),
+    (re.compile(r"^sessions$", re.IGNORECASE), IntentKind.SESSIONS),
+    (re.compile(r"^list sessions$", re.IGNORECASE), IntentKind.SESSIONS),
+    (re.compile(r"^ls$", re.IGNORECASE), IntentKind.SESSIONS),
+    (re.compile(r"^switch\s+(\S+)", re.IGNORECASE), IntentKind.SWITCH_SESSION),
+    (re.compile(r"^session\s+(\S+)", re.IGNORECASE), IntentKind.SWITCH_SESSION),
+    (re.compile(r"^resume\s+(\S+)", re.IGNORECASE), IntentKind.SWITCH_SESSION),
+    (re.compile(r"^delete session\s+(\S+)", re.IGNORECASE), IntentKind.DELETE_SESSION),
+    (re.compile(r"^rm session\s+(\S+)", re.IGNORECASE), IntentKind.DELETE_SESSION),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]
@@ -53,6 +64,9 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
 def parse_intent(text: str) -> Intent:
     stripped = text.strip()
     for pattern, kind in _PATTERNS:
-        if pattern.search(stripped):
-            return Intent(kind=kind, payload=stripped)
+        m = pattern.search(stripped)
+        if m:
+            # Use first capture group as payload when present (e.g. session ID)
+            payload = m.group(1) if m.lastindex and m.lastindex >= 1 else stripped
+            return Intent(kind=kind, payload=payload)
     return Intent(kind=IntentKind.CHAT, payload=stripped)

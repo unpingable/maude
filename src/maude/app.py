@@ -12,6 +12,7 @@ from textual.widgets import Footer, Header, Input, RichLog
 
 from maude import __version__
 from maude.client.http import GovernorClient
+from maude.client.models import SessionSummary
 from maude.config import Settings
 from maude.intents import IntentKind, parse_intent
 from maude.session import MaudeSession, Mode
@@ -30,6 +31,9 @@ _HELP_TEXT = """\
   rollback      - Rollback changes (TODO)
   why           - Show why something is blocked
   status        - Show governor status
+  sessions      - List all sessions (also: ls, list sessions)
+  switch <id>   - Switch to a session by ID or #N (also: session <id>, resume <id>)
+  delete session <id> - Delete a session (also: rm session <id>)
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
 """
@@ -57,6 +61,7 @@ class MaudeApp(App):
         self.settings = settings
         self.session = MaudeSession()
         self._polling_task: asyncio.Task | None = None
+        self._last_session_list: list[SessionSummary] = []
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -153,6 +158,12 @@ class MaudeApp(App):
             self._handle_show_spec(log)
         elif intent.kind == IntentKind.WHY:
             await self._handle_why(log)
+        elif intent.kind == IntentKind.SESSIONS:
+            await self._handle_sessions(log)
+        elif intent.kind == IntentKind.SWITCH_SESSION:
+            await self._handle_switch_session(log, intent.payload)
+        elif intent.kind == IntentKind.DELETE_SESSION:
+            await self._handle_delete_session(log, intent.payload)
         elif intent.kind == IntentKind.SHOW_DIFF:
             log.write("[dim]# TODO: diff pane not yet implemented[/dim]")
         elif intent.kind == IntentKind.APPLY:
@@ -222,6 +233,79 @@ class MaudeApp(App):
                 log.write(f"[dim]Suggested: {now.suggested_action}[/dim]")
         except Exception as e:
             log.write(f"[red]Why error:[/red] {e}")
+
+    def _resolve_session_id(self, ref: str) -> str | None:
+        """Resolve a session reference — either a #N index or a raw ID."""
+        if ref.startswith("#"):
+            try:
+                idx = int(ref[1:]) - 1
+            except ValueError:
+                return None
+            if 0 <= idx < len(self._last_session_list):
+                return self._last_session_list[idx].id
+            return None
+        # Exact or prefix match against cached list
+        for s in self._last_session_list:
+            if s.id == ref or s.id.startswith(ref):
+                return s.id
+        # Fall through: treat as raw ID (server will 404 if invalid)
+        return ref
+
+    async def _handle_sessions(self, log: RichLog) -> None:
+        try:
+            sessions = await self.client.list_sessions()
+            self._last_session_list = sessions
+            if not sessions:
+                log.write("[dim]No sessions found.[/dim]")
+                return
+            log.write("[bold]Sessions:[/bold]")
+            log.write(f"  {'#':<4} {'ID':<16} {'TITLE':<24} {'MSGS':>5}  {'UPDATED':<12}")
+            for i, s in enumerate(sessions, 1):
+                updated = s.updated_at[:10] if len(s.updated_at) >= 10 else s.updated_at
+                active = "  *active*" if s.id == self.session.governor_session_id else ""
+                log.write(
+                    f"  {i:<4} {s.id[:14]:<16} {s.title[:22]:<24} "
+                    f"{s.message_count:>5}  {updated:<12}{active}"
+                )
+        except Exception as e:
+            log.write(f"[red]Session list error:[/red] {e}")
+
+    async def _handle_switch_session(self, log: RichLog, ref: str) -> None:
+        session_id = self._resolve_session_id(ref)
+        if session_id is None:
+            log.write(f"[yellow]Cannot resolve session: {ref}[/yellow]")
+            return
+        try:
+            full = await self.client.get_session(session_id)
+            self.session = MaudeSession(governor_session_id=full.id)
+            for msg in full.messages:
+                self.session.add_message(msg.role, msg.content)
+            log.write(
+                f"[green]Switched to session:[/green] {full.title} "
+                f"({full.id}) — {len(full.messages)} messages"
+            )
+            self._update_status_bar()
+        except Exception as e:
+            log.write(f"[red]Switch session error:[/red] {e}")
+
+    async def _handle_delete_session(self, log: RichLog, ref: str) -> None:
+        session_id = self._resolve_session_id(ref)
+        if session_id is None:
+            log.write(f"[yellow]Cannot resolve session: {ref}[/yellow]")
+            return
+        try:
+            ok = await self.client.delete_session(session_id)
+            if ok:
+                log.write(f"[green]Deleted session:[/green] {session_id}")
+                if session_id == self.session.governor_session_id:
+                    new = await self.client.create_session(title="Maude session")
+                    self.session = MaudeSession(governor_session_id=new.id)
+                    log.write(f"[dim]Created new session: {new.id}[/dim]")
+                    self._update_status_bar()
+            else:
+                log.write(f"[red]Failed to delete session:[/red] {session_id}")
+        except Exception as e:
+            log.write(f"[red]Delete session error:[/red] {e}")
 
     async def _handle_chat(self, log: RichLog, text: str) -> None:
         log.write(f"\n[bold cyan]You:[/bold cyan] {text}")

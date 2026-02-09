@@ -118,3 +118,57 @@ class TestParseIntent:
     def test_plan_requires_word_boundary(self):
         result = parse_intent("planning ahead")
         assert result.kind == IntentKind.CHAT
+
+    # Session commands
+
+    def test_sessions(self):
+        result = parse_intent("sessions")
+        assert result.kind == IntentKind.SESSIONS
+
+    def test_list_sessions(self):
+        result = parse_intent("list sessions")
+        assert result.kind == IntentKind.SESSIONS
+
+    def test_ls(self):
+        result = parse_intent("ls")
+        assert result.kind == IntentKind.SESSIONS
+
+    def test_switch_session(self):
+        result = parse_intent("switch abc123")
+        assert result.kind == IntentKind.SWITCH_SESSION
+        assert result.payload == "abc123"
+
+    def test_session_id(self):
+        result = parse_intent("session abc123")
+        assert result.kind == IntentKind.SWITCH_SESSION
+        assert result.payload == "abc123"
+
+    def test_resume_session(self):
+        result = parse_intent("resume abc123")
+        assert result.kind == IntentKind.SWITCH_SESSION
+        assert result.payload == "abc123"
+
+    def test_switch_hash_index(self):
+        result = parse_intent("switch #2")
+        assert result.kind == IntentKind.SWITCH_SESSION
+        assert result.payload == "#2"
+
+    def test_delete_session(self):
+        result = parse_intent("delete session abc123")
+        assert result.kind == IntentKind.DELETE_SESSION
+        assert result.payload == "abc123"
+
+    def test_rm_session(self):
+        result = parse_intent("rm session abc123")
+        assert result.kind == IntentKind.DELETE_SESSION
+        assert result.payload == "abc123"
+
+    def test_session_alone_is_chat(self):
+        """'session' alone with no ID falls through to CHAT."""
+        result = parse_intent("session")
+        assert result.kind == IntentKind.CHAT
+
+    def test_switch_alone_is_chat(self):
+        """'switch' alone with no ID falls through to CHAT."""
+        result = parse_intent("switch")
+        assert result.kind == IntentKind.CHAT

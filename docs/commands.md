@@ -95,6 +95,44 @@ Governor Status:
 
 Show the list of available commands.
 
+### `sessions` / `list sessions` / `ls`
+
+List all sessions as a numbered table showing ID, title, message count, and last-updated date. The active session is marked.
+
+```
+> sessions
+Sessions:
+  #    ID               TITLE                    MSGS  UPDATED
+  1    abc123def456     Maude session               12  2025-01-15  *active*
+  2    789xyz000111     Auth planning                4  2025-01-14
+  3    fedcba654321     Debug logging                8  2025-01-13
+```
+
+### `switch <id>` / `session <id>` / `resume <id>`
+
+Switch to a session by its ID or by `#N` index from the last `sessions` listing. Loads the session's message history and resets local PLAN/BUILD state.
+
+```
+> switch #2
+Switched to session: Auth planning (789xyz000111) — 4 messages
+
+> switch abc123
+Switched to session: Maude session (abc123def456) — 12 messages
+```
+
+### `delete session <id>` / `rm session <id>`
+
+Delete a session by ID or `#N` index. If deleting the active session, a new session is created automatically.
+
+```
+> delete session #3
+Deleted session: fedcba654321
+
+> rm session abc123
+Deleted session: abc123def456
+Created new session: newid789
+```
+
 ## Chat (Default)
 
 Any input that doesn't match a command is treated as a chat message. It's sent to the governor's `/v1/chat/completions` endpoint with the full conversation history, and the response is streamed back to the chat pane.
