@@ -6,28 +6,38 @@ import os
 
 import pytest
 
-from maude.client.http import GovernorClient
+from maude.client.rpc import GovernorClient
 
 
-def governor_url() -> str | None:
-    """Return GOVERNOR_URL if set, else None."""
-    return os.environ.get("GOVERNOR_URL")
+def governor_socket() -> str | None:
+    """Return GOVERNOR_SOCKET if set, else None."""
+    return os.environ.get("GOVERNOR_SOCKET")
 
 
-def requires_governor(reason: str = "GOVERNOR_URL not set"):
+def governor_dir() -> str | None:
+    """Return GOVERNOR_DIR if set, else None."""
+    return os.environ.get("GOVERNOR_DIR")
+
+
+def requires_governor(reason: str = "GOVERNOR_SOCKET/GOVERNOR_DIR not set"):
     """Skip test if no live governor is available."""
-    return pytest.mark.skipif(governor_url() is None, reason=reason)
+    return pytest.mark.skipif(
+        governor_socket() is None and governor_dir() is None,
+        reason=reason,
+    )
 
 
 @pytest.fixture
 async def client():
-    """Async GovernorClient pointed at GOVERNOR_URL.
+    """Async GovernorClient connected to daemon via Unix socket.
 
-    Skips if GOVERNOR_URL is not set.
+    Skips if neither GOVERNOR_SOCKET nor GOVERNOR_DIR is set.
     """
-    url = governor_url()
-    if url is None:
-        pytest.skip("GOVERNOR_URL not set — run via test-with-governor.sh")
-    c = GovernorClient(base_url=url)
+    sock = governor_socket()
+    gdir = governor_dir()
+    if sock is None and gdir is None:
+        pytest.skip("GOVERNOR_SOCKET/GOVERNOR_DIR not set — run via test-with-governor.sh")
+    c = GovernorClient(socket_path=sock, governor_dir=gdir)
+    await c.connect()
     yield c
     await c.close()

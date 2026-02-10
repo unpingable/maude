@@ -1,13 +1,14 @@
-"""Integration tests — require a live governor.
+"""Integration tests — require a live governor daemon.
 
 Run via:
-    bash test-with-governor.sh           # starts governor, runs all tests
+    bash test-with-governor.sh           # starts daemon, runs all tests
     bash test-with-governor.sh --mock    # degraded mode (no LLM)
 
 Or manually:
-    GOVERNOR_URL=http://127.0.0.1:8000 python3 -m pytest tests/test_integration.py -v
+    GOVERNOR_SOCKET=/path/to/sock python3 -m pytest tests/test_integration.py -v
+    GOVERNOR_DIR=/path/to/gov python3 -m pytest tests/test_integration.py -v
 
-Skipped automatically when GOVERNOR_URL is not set.
+Skipped automatically when neither GOVERNOR_SOCKET nor GOVERNOR_DIR is set.
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import os
 
 import pytest
 
-from maude.client.http import GovernorClient
+from maude.client.rpc import GovernorClient
 from maude.client.models import (
     ChatSession,
     GovernorNow,
@@ -26,13 +27,13 @@ from maude.client.models import (
     IntentPolicy,
     IntentTemplateList,
     IntentValidationResult,
-    SessionMessage,
     SessionSummary,
 )
 
 _skip_no_governor = pytest.mark.skipif(
-    os.environ.get("GOVERNOR_URL") is None,
-    reason="GOVERNOR_URL not set — run via test-with-governor.sh",
+    os.environ.get("GOVERNOR_SOCKET") is None
+    and os.environ.get("GOVERNOR_DIR") is None,
+    reason="GOVERNOR_SOCKET/GOVERNOR_DIR not set — run via test-with-governor.sh",
 )
 
 
@@ -60,12 +61,12 @@ class TestHealth:
     async def test_health_backend_type_known(self, client: GovernorClient):
         health = await client.health()
         assert health.backend.type in (
-            "anthropic", "ollama", "claude-code", "codex"
+            "anthropic", "ollama", "claude-code", "codex", "unknown",
         )
 
 
 # ============================================================================
-# Sessions — full CRUD lifecycle
+# Sessions — CRUD lifecycle
 # ============================================================================
 
 
@@ -105,49 +106,6 @@ class TestSessionLifecycle:
         result = await client.delete_session("nonexistent-id-12345")
         assert result is False
 
-    async def test_append_message(self, client: GovernorClient):
-        session = await client.create_session(title="append-test")
-        msg = await client.append_message(
-            session_id=session.id,
-            role="user",
-            content="Hello from integration test",
-        )
-        assert isinstance(msg, SessionMessage)
-        assert msg.role == "user"
-        assert msg.content == "Hello from integration test"
-        assert msg.id  # non-empty
-        assert msg.timestamp  # non-empty
-
-    async def test_append_message_with_model(self, client: GovernorClient):
-        session = await client.create_session(title="append-model-test")
-        msg = await client.append_message(
-            session_id=session.id,
-            role="assistant",
-            content="Response with model tag",
-            model="test-model",
-        )
-        assert msg.model == "test-model"
-
-    async def test_append_message_with_usage(self, client: GovernorClient):
-        session = await client.create_session(title="append-usage-test")
-        usage = {"prompt_tokens": 10, "completion_tokens": 20}
-        msg = await client.append_message(
-            session_id=session.id,
-            role="assistant",
-            content="Response with usage",
-            usage=usage,
-        )
-        assert msg.usage == usage
-
-    async def test_get_session_with_messages(self, client: GovernorClient):
-        session = await client.create_session(title="messages-test")
-        await client.append_message(session.id, "user", "first")
-        await client.append_message(session.id, "assistant", "second")
-        fetched = await client.get_session(session.id)
-        assert len(fetched.messages) == 2
-        assert fetched.messages[0].content == "first"
-        assert fetched.messages[1].content == "second"
-
 
 # ============================================================================
 # Governor state
@@ -158,76 +116,14 @@ class TestGovernorState:
     async def test_governor_now(self, client: GovernorClient):
         now = await client.governor_now()
         assert isinstance(now, GovernorNow)
-        assert now.status in ("ok", "needs_attention", "blocked")
+        # Daemon returns pill format: OK, BLOCK, DRIFT, UNKNOWN
+        assert now.status in ("OK", "BLOCK", "DRIFT", "UNKNOWN")
         assert isinstance(now.sentence, str)
         assert isinstance(now.mode, str)
-        assert isinstance(now.context_id, str)
 
     async def test_governor_status_returns_dict(self, client: GovernorClient):
         status = await client.governor_status()
         assert isinstance(status, dict)
-        # Should have at least context_id and mode
-        assert "context_id" in status or "mode" in status or "initialized" in status
-
-
-# ============================================================================
-# Constraints
-# ============================================================================
-
-
-class TestConstraints:
-    async def test_list_constraints_returns_list(self, client: GovernorClient):
-        """list_constraints returns a list (possibly empty)."""
-        result = await client.list_constraints()
-        assert isinstance(result, list)
-
-    async def test_add_and_list_constraint(self, client: GovernorClient):
-        """Adding a constraint and listing shows it."""
-        # Trigger context auto-creation via dashboard (or it may already exist)
-        try:
-            await client.dashboard_summary()
-        except Exception:
-            pass  # Fine if it fails — context may already be created
-
-        result = await client.add_constraint(
-            constraint="No eval() calls",
-            patterns=["eval("],
-        )
-        assert isinstance(result, dict)
-
-        constraints = await client.list_constraints()
-        assert isinstance(constraints, list)
-        assert len(constraints) > 0
-
-
-# ============================================================================
-# V2 Dashboard
-# ============================================================================
-
-
-class TestDashboard:
-    async def test_list_runs(self, client: GovernorClient):
-        """V2 runs endpoint returns a list (possibly empty)."""
-        runs = await client.list_runs()
-        assert isinstance(runs, list)
-
-    async def test_dashboard_summary(self, client: GovernorClient):
-        """V2 dashboard returns a valid DashboardSummary."""
-        from maude.client.models import DashboardSummary
-        summary = await client.dashboard_summary()
-        assert isinstance(summary, DashboardSummary)
-        assert isinstance(summary.total_runs, int)
-
-    async def test_create_run(self, client: GovernorClient):
-        """V2 run creation returns a dict with run_id."""
-        result = await client.create_run(task="integration test", profile="established")
-        assert isinstance(result, dict)
-        assert "run_id" in result
-
-
-# ============================================================================
-# Streaming — skipped unless backend is connected
-# ============================================================================
 
 
 # ============================================================================

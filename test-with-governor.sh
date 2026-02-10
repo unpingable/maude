@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test-with-governor.sh — Start a live governor, run Maude tests against it, tear down.
+# test-with-governor.sh — Start a governor daemon, run Maude tests against it, tear down.
 #
 # Usage:
 #   bash test-with-governor.sh              # Claude Code backend (default)
@@ -8,12 +8,10 @@
 #   bash test-with-governor.sh --mock       # Degraded mode (no real backend)
 #
 # Prerequisites:
-#   - gov-webui repo at GOV_WEBUI_DIR (default: ../gov-webui)
-#   - pip install -e "../gov-webui"  (script will check)
+#   - agent_gov installed (governor CLI available)
 #
 # Environment overrides:
-#   GOV_WEBUI_DIR   — path to gov-webui repo (default: ../gov-webui)
-#   GOVERNOR_PORT   — port for governor (default: 8321, avoids 8000 conflicts)
+#   AGENT_GOV_DIR   — path to agent_gov repo (default: ../agent_gov)
 #   PYTEST_ARGS     — extra args for pytest (default: -v --tb=short)
 
 set -euo pipefail
@@ -21,13 +19,13 @@ set -euo pipefail
 # --- Configuration -----------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GOV_WEBUI_DIR="${GOV_WEBUI_DIR:-$SCRIPT_DIR/../gov-webui}"
-GOVERNOR_PORT="${GOVERNOR_PORT:-8321}"
-GOVERNOR_URL="http://127.0.0.1:${GOVERNOR_PORT}"
+AGENT_GOV_DIR="${AGENT_GOV_DIR:-$SCRIPT_DIR/../agent_gov}"
 PYTEST_ARGS="${PYTEST_ARGS:--v --tb=short}"
 REAL_HOME=$(eval echo "~$(whoami)")
 BACKEND_TYPE="claude-code"
 GOVERNOR_PID=""
+GOV_DIR=""
+SOCKET_PATH=""
 
 # --- Argument parsing ---------------------------------------------------------
 
@@ -39,7 +37,7 @@ for arg in "$@"; do
         --help|-h)
             echo "Usage: bash test-with-governor.sh [--codex|--ollama|--mock]"
             echo ""
-            echo "Starts a governor, runs Maude's tests against it, tears down."
+            echo "Starts a governor daemon, runs Maude's tests against it, tears down."
             echo ""
             echo "Options:"
             echo "  --codex    Use Codex backend (needs codex installed)"
@@ -48,8 +46,7 @@ for arg in "$@"; do
             echo "  (default)  Claude Code backend (needs claude installed)"
             echo ""
             echo "Environment:"
-            echo "  GOV_WEBUI_DIR   Path to gov-webui repo (default: ../gov-webui)"
-            echo "  GOVERNOR_PORT   Port for governor (default: 8321)"
+            echo "  AGENT_GOV_DIR   Path to agent_gov repo (default: ../agent_gov)"
             echo "  PYTEST_ARGS     Extra pytest args (default: -v --tb=short)"
             exit 0
             ;;
@@ -66,38 +63,44 @@ done
 cleanup() {
     if [ -n "$GOVERNOR_PID" ] && kill -0 "$GOVERNOR_PID" 2>/dev/null; then
         echo ""
-        echo "--- Stopping governor (PID $GOVERNOR_PID) ---"
+        echo "--- Stopping governor daemon (PID $GOVERNOR_PID) ---"
         kill "$GOVERNOR_PID" 2>/dev/null || true
         wait "$GOVERNOR_PID" 2>/dev/null || true
+    fi
+    # Clean up socket file
+    if [ -n "$SOCKET_PATH" ] && [ -S "$SOCKET_PATH" ]; then
+        rm -f "$SOCKET_PATH"
+    fi
+    # Clean up temp governor dir
+    if [ -n "$GOV_DIR" ] && [ -d "$GOV_DIR" ]; then
+        rm -rf "$GOV_DIR"
     fi
 }
 trap cleanup EXIT INT TERM
 
 # --- Verify agent_gov ---------------------------------------------------------
 
-GOV_WEBUI_DIR="${GOV_WEBUI_DIR:-$SCRIPT_DIR/../gov-webui}"
-
-if [ ! -d "$GOV_WEBUI_DIR/src/gov_webui" ]; then
-    echo "ERROR: gov-webui not found at $GOV_WEBUI_DIR"
-    echo "Set GOV_WEBUI_DIR to the path of the gov-webui repo."
-    exit 1
-fi
-
-# Check webui extras are installed
-PIP_FLAGS=""
-# Detect if we need --user --break-system-packages (externally managed envs)
-if ! pip3 install --dry-run --quiet pip 2>/dev/null; then
-    PIP_FLAGS="--user --break-system-packages"
-fi
-
-if ! python3 -c "import uvicorn; import starlette" 2>/dev/null; then
-    echo "Installing gov-webui dependencies..."
-    pip3 install -e "${GOV_WEBUI_DIR}" $PIP_FLAGS --quiet
+if ! command -v governor &>/dev/null; then
+    if [ -d "$AGENT_GOV_DIR" ]; then
+        echo "Installing agent_gov in dev mode..."
+        PIP_FLAGS=""
+        if ! pip3 install --dry-run --quiet pip 2>/dev/null; then
+            PIP_FLAGS="--user --break-system-packages"
+        fi
+        pip3 install -e "$AGENT_GOV_DIR" $PIP_FLAGS --quiet
+    else
+        echo "ERROR: governor CLI not found and agent_gov repo not at $AGENT_GOV_DIR"
+        exit 1
+    fi
 fi
 
 # Ensure maude itself is importable
 if ! python3 -c "import maude" 2>/dev/null; then
     echo "Installing maude in dev mode..."
+    PIP_FLAGS=""
+    if ! pip3 install --dry-run --quiet pip 2>/dev/null; then
+        PIP_FLAGS="--user --break-system-packages"
+    fi
     pip3 install -e "$SCRIPT_DIR" $PIP_FLAGS --quiet
 fi
 
@@ -121,12 +124,10 @@ detect_claude() {
 }
 
 detect_codex() {
-    # Try PATH first
     if command -v codex &>/dev/null; then
         command -v codex
         return
     fi
-    # Try nvm location
     local node_version
     node_version=$(node --version 2>/dev/null | sed 's/^v//' || true)
     if [ -z "$node_version" ]; then
@@ -177,29 +178,32 @@ case "$BACKEND_TYPE" in
         ;;
 esac
 
-# --- Start governor -----------------------------------------------------------
+# --- Initialize temp governor directory ---------------------------------------
 
-echo "Starting governor on port $GOVERNOR_PORT..."
+GOV_DIR=$(mktemp -d /tmp/maude-test-gov.XXXXXX)
+governor --root "$GOV_DIR" init
+echo "Governor dir: $GOV_DIR"
 
-python3 -m uvicorn gov_webui.adapter:app \
-    --host 127.0.0.1 \
-    --port "$GOVERNOR_PORT" \
-    --log-level warning \
-    &
+# --- Start daemon -------------------------------------------------------------
+
+SOCKET_PATH="${XDG_RUNTIME_DIR:-/tmp}/maude-test-$$.sock"
+echo "Starting governor daemon (socket: $SOCKET_PATH)..."
+
+governor --root "$GOV_DIR" serve --socket "$SOCKET_PATH" --mode code &
 GOVERNOR_PID=$!
 
-# --- Wait for health ----------------------------------------------------------
+# --- Wait for socket ----------------------------------------------------------
 
-echo -n "Waiting for governor health"
+echo -n "Waiting for daemon socket"
 MAX_WAIT=30
 for i in $(seq 1 $MAX_WAIT); do
-    if curl -sf "${GOVERNOR_URL}/health" >/dev/null 2>&1; then
+    if [ -S "$SOCKET_PATH" ]; then
         echo " OK (${i}s)"
         break
     fi
     if ! kill -0 "$GOVERNOR_PID" 2>/dev/null; then
         echo " FAILED"
-        echo "ERROR: Governor process exited prematurely."
+        echo "ERROR: Daemon process exited prematurely."
         exit 1
     fi
     echo -n "."
@@ -207,24 +211,24 @@ for i in $(seq 1 $MAX_WAIT); do
 done
 
 # Final check
-if ! curl -sf "${GOVERNOR_URL}/health" >/dev/null 2>&1; then
+if [ ! -S "$SOCKET_PATH" ]; then
     echo " TIMEOUT"
-    echo "ERROR: Governor did not become healthy within ${MAX_WAIT}s."
+    echo "ERROR: Daemon socket did not appear within ${MAX_WAIT}s."
     exit 1
 fi
 
-# Print health status
-echo "Governor health:"
-curl -sf "${GOVERNOR_URL}/health" | python3 -m json.tool 2>/dev/null || true
+echo "Daemon is running (PID $GOVERNOR_PID)."
 echo ""
 
 # --- Run tests ----------------------------------------------------------------
 
 echo "--- Running Maude tests ---"
-echo "GOVERNOR_URL=$GOVERNOR_URL"
+echo "GOVERNOR_SOCKET=$SOCKET_PATH"
+echo "GOVERNOR_DIR=$GOV_DIR"
 echo ""
 
-GOVERNOR_URL="$GOVERNOR_URL" \
+GOVERNOR_SOCKET="$SOCKET_PATH" \
+GOVERNOR_DIR="$GOV_DIR" \
     python3 -m pytest "$SCRIPT_DIR/tests/" $PYTEST_ARGS
 TEST_EXIT=$?
 

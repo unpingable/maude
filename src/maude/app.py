@@ -11,7 +11,7 @@ from textual.binding import Binding
 from textual.widgets import Footer, Header, Input, RichLog
 
 from maude import __version__
-from maude.client.http import GovernorClient
+from maude.client.rpc import GovernorClient
 from maude.client.models import SessionSummary
 from maude.config import Settings
 from maude.intents import IntentKind, parse_intent
@@ -87,7 +87,7 @@ class MaudeApp(App):
     async def on_mount(self) -> None:
         log = self.query_one("#chat-log", RichLog)
         log.write(f"[bold]Maude v{__version__}[/bold] — governor TUI")
-        log.write(f"Governor: {self.settings.governor_url}")
+        log.write(f"Governor: {self.client.socket_path}")
         log.write("")
 
         # Check governor health
@@ -403,15 +403,6 @@ class MaudeApp(App):
 
         self.session.add_message("user", text)
 
-        # Persist user message to session
-        if self.session.governor_session_id:
-            try:
-                await self.client.append_message(
-                    self.session.governor_session_id, "user", text
-                )
-            except Exception:
-                pass
-
         # Build messages for the API call
         messages = list(self.session.messages)
 
@@ -452,15 +443,6 @@ class MaudeApp(App):
             self.session.spec_draft += full_response + "\n"
             log.write("[dim](appended to spec draft)[/dim]")
 
-        # Persist assistant message to session
-        if self.session.governor_session_id:
-            try:
-                await self.client.append_message(
-                    self.session.governor_session_id, "assistant", full_response
-                )
-            except Exception:
-                pass
-
     async def action_lock_spec(self) -> None:
         log = self.query_one("#chat-log", RichLog)
         await self._handle_lock_spec(log)
@@ -484,9 +466,14 @@ class MaudeApp(App):
 def main() -> None:
     parser = argparse.ArgumentParser(description="Maude - Governor TUI")
     parser.add_argument(
-        "--governor-url",
+        "--governor-dir",
         default=None,
-        help="Governor API URL (default: from GOVERNOR_URL env or http://127.0.0.1:8000)",
+        help="Governor directory (default: from GOVERNOR_DIR env or cwd)",
+    )
+    parser.add_argument(
+        "--socket",
+        default=None,
+        help="Governor daemon socket path (default: from GOVERNOR_SOCKET env or auto-derived)",
     )
     parser.add_argument(
         "--context-id",
@@ -496,12 +483,17 @@ def main() -> None:
     args = parser.parse_args()
 
     settings = Settings()
-    if args.governor_url:
-        settings.governor_url = args.governor_url
+    if args.governor_dir:
+        settings.governor_dir = args.governor_dir
+    if args.socket:
+        settings.socket_path = args.socket
     if args.context_id:
         settings.context_id = args.context_id
 
-    client = GovernorClient(base_url=settings.governor_url)
+    client = GovernorClient(
+        socket_path=settings.socket_path or None,
+        governor_dir=settings.governor_dir or None,
+    )
     app = MaudeApp(client=client, settings=settings)
     app.run()
 

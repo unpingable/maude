@@ -1,4 +1,4 @@
-from maude.client.http import GovernorClient
+from maude.client.rpc import GovernorClient
 from maude.client.models import (
     ChatSession,
     GovernorNow,
