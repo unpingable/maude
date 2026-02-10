@@ -1,6 +1,6 @@
 # Architecture
 
-Maude is a Textual TUI that talks to a running Agent Governor instance over HTTP. It is a pure client — no governor code is imported, no models are shared, no state is coupled.
+Maude is a Textual TUI that talks to a running Agent Governor daemon over JSON-RPC. It is a pure client — no governor code is imported, no models are shared, no state is coupled.
 
 ## Separation of Concerns
 
@@ -14,29 +14,42 @@ Maude is a Textual TUI that talks to a running Agent Governor instance over HTTP
   Displays governor status       Produces receipts
 ```
 
-The HTTP boundary is the contract. Maude depends on the governor's REST API, not its Python packages.
+The JSON-RPC boundary is the contract. Maude depends on the governor daemon's RPC interface, not its Python packages.
 
 ## Components
 
 ### Client Layer (`client/`)
 
-`GovernorClient` wraps `httpx.AsyncClient` with typed methods for every governor endpoint:
+`GovernorClient` wraps a pluggable `Transport` with typed methods for every daemon RPC method:
 
-- **V1 (MVP)**: health, sessions, chat completions (streaming), governor now/status
-- **V2 (stubbed)**: runs, dashboard summary, run events (SSE)
+- **Transport abstraction** (`transport.py`): `Transport` protocol + `UnixSocketTransport` implementation. The protocol defines `connect()`, `close()`, `read_message()`, `write_message()`, and `connected`. Future transports (TCP, etc.) implement the same interface.
+- **RPC client** (`rpc.py`): `GovernorClient` accepts an optional `transport` parameter. When omitted, it creates a `UnixSocketTransport` from `socket_path` or `governor_dir`. All 25+ domain methods delegate to `_call()` / `_call_streaming()` which use the transport for framing.
+- **Models** (`models.py`): Pydantic models that mirror the governor's response shapes. Derived from daemon output, not shared code.
 
-`models.py` contains Pydantic models that mirror the governor's response shapes. These are derived from the governor's actual API output, not from shared code.
+**RPC methods by namespace:**
+
+| Namespace | Methods |
+|-----------|---------|
+| `governor.*` | hello, now, status |
+| `sessions.*` | list, create, get, delete |
+| `intent.*` | templates, schema, validate, compile, policy |
+| `receipts.*` | list, detail |
+| `scars.*` | list, history |
+| `commit.*` | pending, fix, revise, proceed, exceptions |
+| `chat.*` | send, stream, models, backend |
 
 ### Intent Parser (`intents.py`)
 
-Lightweight regex matching that classifies user input into one of 11 intent types:
+Lightweight regex matching that classifies user input into intent types:
 
 ```
 PLAN, LOCK_SPEC, BUILD, SHOW_SPEC, SHOW_DIFF,
-APPLY, ROLLBACK, WHY, STATUS, HELP, CHAT
+APPLY, ROLLBACK, WHY, STATUS, HELP, CHAT,
+SESSIONS, SWITCH_SESSION, DELETE_SESSION,
+PLAN_TEMPLATE, CLEAR_TEMPLATE
 ```
 
-`CHAT` is the default — anything that doesn't match a command goes to the model via the governor's `/v1/chat/completions` endpoint.
+`CHAT` is the default — anything that doesn't match a command goes to the model via the daemon's `chat.stream` RPC method.
 
 No NLP. No LLM classification. Just patterns. Fast and predictable.
 
@@ -75,7 +88,7 @@ Footer          ─  Keybinding hints
 - Yellow — warnings or degraded state
 - Red — violations or blocked state
 
-**Status polling:** Every 5 seconds, Maude calls `GET /governor/now` and updates the status bar. This gives you a live heartbeat of the governor's state without needing to ask.
+**Status polling:** Every 5 seconds, Maude calls `governor.now` via RPC and updates the status bar. This gives you a live heartbeat of the governor's state without needing to ask.
 
 ## Data Flow
 
@@ -85,11 +98,11 @@ Footer          ─  Keybinding hints
 1. User types "explain decorators"
 2. Intent parser → CHAT
 3. Message appended to local history
-4. POST /sessions/{id}/messages (persist user message)
-5. POST /v1/chat/completions (stream=true, full history)
-6. SSE stream parsed, deltas rendered to chat pane
-7. Full response appended to local history
-8. POST /sessions/{id}/messages (persist assistant message)
+4. chat.stream RPC sent to daemon (full history)
+5. Daemon augments messages (system prompt, anchors, puppet)
+6. Daemon streams to backend, relays chat.delta notifications
+7. Maude yields deltas, renders to chat pane
+8. Full response appended to local history
 ```
 
 ### Status command
@@ -97,38 +110,58 @@ Footer          ─  Keybinding hints
 ```
 1. User types "status"
 2. Intent parser → STATUS
-3. GET /governor/status
-4. Response rendered to chat pane (context, mode, viewmodel summary)
+3. governor.status RPC sent to daemon
+4. Response rendered to chat pane
 ```
 
 ### Governor status poll
 
 ```
 1. Timer fires (every 5s)
-2. GET /governor/now
+2. governor.now RPC sent to daemon
 3. Response cached in session.last_governor_now
 4. Status bar updated with text + color level
 ```
 
-## API Surface
+## Transport Architecture
 
-Maude consumes these governor endpoints:
+```
+┌─────────────┐                        ┌──────────────────┐
+│   Maude     │  Unix socket           │ Governor Daemon   │
+│   (TUI)     │  Content-Length framing │ (governor serve)  │
+│             │ ─────────────────────▶  │                   │
+│ GovernorClient                        │ JSON-RPC 2.0      │
+│   └─ Transport (pluggable)            │   └─ 25 methods   │
+│       └─ UnixSocketTransport          │                   │
+└─────────────┘                        └──────────────────┘
+```
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/health` | GET | Startup connectivity check |
-| `/sessions/` | GET | List sessions (resume latest) |
-| `/sessions/` | POST | Create new session |
-| `/sessions/{id}` | GET | Load session with messages |
-| `/sessions/{id}` | DELETE | Delete session |
-| `/sessions/{id}/messages` | POST | Persist a message |
-| `/v1/chat/completions` | POST | Streaming chat (SSE) |
-| `/governor/now` | GET | Glanceable status (polling) |
-| `/governor/status` | GET | Full status with viewmodel |
-| `/v2/runs` | GET | List runs (future) |
-| `/v2/runs` | POST | Create run (future) |
-| `/v2/runs/{id}/events` | GET | Stream run events (future) |
-| `/v2/dashboard/summary` | GET | Dashboard stats (future) |
+The `Transport` protocol is the extension point. To add a new transport:
+
+1. Implement `Transport` protocol (connect, close, read_message, write_message, connected)
+2. Pass instance to `GovernorClient(transport=my_transport)`
+3. All domain methods work unchanged
+
+### Content-Length framing
+
+Same protocol as the daemon and MCP server:
+
+```
+Content-Length: 42\r\n
+\r\n
+{"jsonrpc":"2.0","method":"governor.now","id":1,"params":{}}
+```
+
+### Streaming
+
+`chat.stream` uses JSON-RPC notifications (no `id` field) for content deltas:
+
+```
+→ {"jsonrpc":"2.0","method":"chat.stream","id":1,"params":{...}}
+← {"jsonrpc":"2.0","method":"chat.delta","params":{"content":"Hello"}}
+← {"jsonrpc":"2.0","method":"chat.delta","params":{"content":" world"}}
+← {"jsonrpc":"2.0","id":1,"result":{"done":true}}
+```
 
 ## Future: Apply Gate
 

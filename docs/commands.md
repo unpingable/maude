@@ -99,7 +99,7 @@ Display the current spec draft and its lock status.
 
 ### `why` / `why blocked` / `blocked`
 
-Ask the governor why something is blocked. Fetches `GET /governor/now` and displays the status sentence and suggested action.
+Ask the governor why something is blocked. Calls `governor.now` RPC and displays the status sentence and suggested action.
 
 ```
 > why
@@ -166,7 +166,7 @@ Created new session: newid789
 
 ## Chat (Default)
 
-Any input that doesn't match a command is treated as a chat message. It's sent to the governor's `/v1/chat/completions` endpoint with the full conversation history, and the response is streamed back to the chat pane.
+Any input that doesn't match a command is treated as a chat message. It's sent to the governor daemon via `chat.stream` RPC with the full conversation history, and the response is streamed back to the chat pane.
 
 ```
 > explain Python decorators
@@ -174,7 +174,7 @@ You: explain Python decorators
 Assistant: A decorator is a function that takes another function...
 ```
 
-The governor mediates this — your message goes through the policy pipeline before reaching the model backend, and the response is checked for violations before being returned.
+The governor mediates this — your message goes through the policy pipeline (augmentation, anchors, puppet constraints) before reaching the model backend, and the response is checked for violations before being returned.
 
 ## Keybindings
 
@@ -196,7 +196,7 @@ MODE=PLAN  SPEC=UNLOCKED  TEMPLATE=architecture  SESSION=abc123  GOV=ok
 - **SPEC** — Whether the spec draft is locked
 - **TEMPLATE** — Active spec template name (only shown when loaded)
 - **SESSION** — Active governor session ID
-- **GOV** — Governor status from `/governor/now`
+- **GOV** — Governor status from `governor.now` RPC
 
 Color coding:
 - **Green** — All clear

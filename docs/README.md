@@ -4,7 +4,7 @@
 
 | Document | Contents |
 |----------|----------|
-| [architecture.md](architecture.md) | System design, component map, data flow, API surface |
+| [architecture.md](architecture.md) | System design, component map, data flow, transport abstraction |
 | [commands.md](commands.md) | Full command and intent reference, keybindings, status bar |
 | [configuration.md](configuration.md) | Environment variables, CLI flags, typical setups |
 
@@ -13,11 +13,14 @@
 ### Start Maude
 
 ```bash
-# Default (governor at localhost:8000)
+# Default (auto-detects governor socket from cwd)
 maude
 
-# Custom governor URL
-maude --governor-url http://my-server:8000 --context-id my-project
+# Explicit governor directory
+maude --governor-dir /path/to/.governor
+
+# Explicit socket path
+maude --socket /run/user/1000/governor-abc123.sock
 ```
 
 ### Commands
@@ -29,6 +32,8 @@ build          Switch to BUILD mode
 show spec      Display spec draft
 status         Show governor status
 why            Explain what's blocked
+sessions       List sessions
+switch #N      Switch to session by index
 help           List commands
 <anything>     Chat via governor
 ```
