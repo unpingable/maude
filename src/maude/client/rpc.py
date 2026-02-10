@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
-import json
 import os
 from pathlib import Path
 from typing import Any, AsyncIterator
@@ -21,42 +19,7 @@ from maude.client.models import (
     RunSummary,
     SessionSummary,
 )
-
-
-# =============================================================================
-# Content-Length framing (same protocol as daemon)
-# =============================================================================
-
-
-async def _read_message(reader: asyncio.StreamReader) -> dict | None:
-    """Read a Content-Length framed JSON-RPC message."""
-    headers: dict[str, str] = {}
-    while True:
-        line = await reader.readline()
-        if not line:
-            return None  # EOF
-        decoded = line.decode("utf-8")
-        if decoded in ("\r\n", "\n"):
-            break
-        if ":" in decoded:
-            key, _, value = decoded.partition(":")
-            headers[key.strip()] = value.strip()
-
-    content_length_str = headers.get("Content-Length")
-    if content_length_str is None:
-        return None
-
-    content_length = int(content_length_str)
-    body = await reader.readexactly(content_length)
-    return json.loads(body.decode("utf-8"))
-
-
-async def _write_message(writer: asyncio.StreamWriter, msg: dict) -> None:
-    """Write a Content-Length framed JSON-RPC message."""
-    json_bytes = json.dumps(msg).encode("utf-8")
-    header = f"Content-Length: {len(json_bytes)}\r\n\r\n".encode("utf-8")
-    writer.write(header + json_bytes)
-    await writer.drain()
+from maude.client.transport import Transport, UnixSocketTransport
 
 
 # =============================================================================
@@ -77,67 +40,71 @@ def _default_socket_path(governor_dir: Path) -> Path:
 
 
 # =============================================================================
-# GovernorClient — JSON-RPC 2.0 over Unix socket
+# GovernorClient — JSON-RPC 2.0 over pluggable Transport
 # =============================================================================
 
 
 class GovernorClient:
-    """JSON-RPC 2.0 client over Unix socket to the governor daemon.
+    """JSON-RPC 2.0 client over pluggable transport to the governor daemon.
 
     Provides the same public API as the HTTP client so that app.py
     can switch transports without code changes.
+
+    When ``transport`` is provided, it is used directly.
+    Otherwise a ``UnixSocketTransport`` is created from ``socket_path``
+    or ``governor_dir`` (same resolution logic as before).
     """
 
     def __init__(
         self,
         socket_path: str | Path | None = None,
         governor_dir: str | Path | None = None,
+        transport: Transport | None = None,
     ) -> None:
-        if socket_path:
-            self._socket_path = Path(socket_path)
-        elif governor_dir:
-            self._socket_path = _default_socket_path(Path(governor_dir))
+        if transport is not None:
+            self._transport: Transport = transport
+            # Best-effort socket path for the property
+            self._socket_path = Path(socket_path) if socket_path else Path("")
         else:
-            # Try GOVERNOR_SOCKET, then GOVERNOR_DIR, then cwd
-            env_socket = os.environ.get("GOVERNOR_SOCKET", "")
-            if env_socket:
-                self._socket_path = Path(env_socket)
-            else:
-                gov_dir = Path(os.environ.get("GOVERNOR_DIR", os.getcwd()))
-                if not (gov_dir / "proposals.json").exists():
-                    # Maybe the cwd IS the project root, governor dir is .governor/
-                    candidate = gov_dir / ".governor"
-                    if candidate.exists():
-                        gov_dir = candidate
-                self._socket_path = _default_socket_path(gov_dir)
+            self._socket_path = self._resolve_socket_path(socket_path, governor_dir)
+            self._transport = UnixSocketTransport(self._socket_path)
 
-        self._reader: asyncio.StreamReader | None = None
-        self._writer: asyncio.StreamWriter | None = None
         self._request_id: int = 0
+
+    @staticmethod
+    def _resolve_socket_path(
+        socket_path: str | Path | None,
+        governor_dir: str | Path | None,
+    ) -> Path:
+        if socket_path:
+            return Path(socket_path)
+        if governor_dir:
+            return _default_socket_path(Path(governor_dir))
+        # Try GOVERNOR_SOCKET, then GOVERNOR_DIR, then cwd
+        env_socket = os.environ.get("GOVERNOR_SOCKET", "")
+        if env_socket:
+            return Path(env_socket)
+        gov_dir = Path(os.environ.get("GOVERNOR_DIR", os.getcwd()))
+        if not (gov_dir / "proposals.json").exists():
+            candidate = gov_dir / ".governor"
+            if candidate.exists():
+                gov_dir = candidate
+        return _default_socket_path(gov_dir)
 
     @property
     def socket_path(self) -> Path:
         return self._socket_path
 
     async def connect(self) -> None:
-        """Open the Unix socket connection."""
-        self._reader, self._writer = await asyncio.open_unix_connection(
-            str(self._socket_path)
-        )
+        """Open the transport connection."""
+        await self._transport.connect()
 
     async def close(self) -> None:
-        """Close the connection."""
-        if self._writer is not None:
-            self._writer.close()
-            try:
-                await self._writer.wait_closed()
-            except Exception:
-                pass
-            self._writer = None
-            self._reader = None
+        """Close the transport connection."""
+        await self._transport.close()
 
     async def _ensure_connected(self) -> None:
-        if self._writer is None or self._writer.is_closing():
+        if not self._transport.connected:
             await self.connect()
 
     def _next_id(self) -> int:
@@ -150,7 +117,6 @@ class GovernorClient:
         Raises RuntimeError on JSON-RPC errors.
         """
         await self._ensure_connected()
-        assert self._reader is not None and self._writer is not None
 
         request_id = self._next_id()
         msg = {
@@ -159,11 +125,11 @@ class GovernorClient:
             "id": request_id,
             "params": params or {},
         }
-        await _write_message(self._writer, msg)
+        await self._transport.write_message(msg)
 
         # Read responses, skipping notifications until we get our response
         while True:
-            resp = await _read_message(self._reader)
+            resp = await self._transport.read_message()
             if resp is None:
                 raise ConnectionError("Connection closed by daemon")
 
@@ -195,7 +161,6 @@ class GovernorClient:
         NOT yielded — it's available via the return value after iteration.
         """
         await self._ensure_connected()
-        assert self._reader is not None and self._writer is not None
 
         request_id = self._next_id()
         msg = {
@@ -204,10 +169,10 @@ class GovernorClient:
             "id": request_id,
             "params": params or {},
         }
-        await _write_message(self._writer, msg)
+        await self._transport.write_message(msg)
 
         while True:
-            resp = await _read_message(self._reader)
+            resp = await self._transport.read_message()
             if resp is None:
                 raise ConnectionError("Connection closed by daemon")
 

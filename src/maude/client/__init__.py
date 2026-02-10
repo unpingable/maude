@@ -1,4 +1,5 @@
 from maude.client.rpc import GovernorClient
+from maude.client.transport import Transport, UnixSocketTransport
 from maude.client.models import (
     ChatSession,
     GovernorNow,
@@ -9,6 +10,8 @@ from maude.client.models import (
 
 __all__ = [
     "GovernorClient",
+    "Transport",
+    "UnixSocketTransport",
     "ChatSession",
     "GovernorNow",
     "HealthResponse",
