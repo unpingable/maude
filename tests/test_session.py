@@ -1,7 +1,10 @@
 """Tests for session state management."""
 
+import os
+
 import pytest
 
+from maude.config import Settings
 from maude.session import MaudeSession, Mode
 
 
@@ -113,3 +116,73 @@ class TestMaudeSession:
         result = s.lock_spec()
         assert result == "my spec content"
         assert s.spec_locked
+
+    # Session identity
+
+    def test_status_line_with_project_name(self):
+        s = MaudeSession(project_name="agent_gov")
+        line = s.status_line()
+        assert line.startswith("agent_gov")
+
+    def test_status_line_with_backend_type(self):
+        s = MaudeSession(backend_type="claude")
+        line = s.status_line()
+        assert "claude" in line
+
+    def test_status_line_with_project_and_backend(self):
+        s = MaudeSession(project_name="agent_gov", backend_type="claude")
+        line = s.status_line()
+        assert "agent_gov" in line
+        assert "claude" in line
+        # Project comes before backend
+        assert line.index("agent_gov") < line.index("claude")
+
+    def test_status_line_identity_before_mode(self):
+        s = MaudeSession(project_name="myproj", backend_type="ollama")
+        line = s.status_line()
+        assert line.index("myproj") < line.index("MODE=")
+        assert line.index("ollama") < line.index("MODE=")
+
+    def test_title_line_bare(self):
+        s = MaudeSession()
+        assert s.title_line() == "maude"
+
+    def test_title_line_with_project(self):
+        s = MaudeSession(project_name="agent_gov")
+        assert s.title_line() == "maude — agent_gov"
+
+    def test_title_line_with_project_and_backend(self):
+        s = MaudeSession(project_name="agent_gov", backend_type="claude")
+        assert s.title_line() == "maude — agent_gov | claude"
+
+    def test_title_line_backend_only(self):
+        s = MaudeSession(backend_type="ollama")
+        assert s.title_line() == "maude — ollama"
+
+
+class TestSettingsProjectName:
+    def test_project_name_from_governor_dir(self):
+        s = Settings(governor_dir="/home/jbeck/git/agent_gov/.governor")
+        assert s.project_name == "agent_gov"
+
+    def test_project_name_from_dir_without_dot_governor(self):
+        s = Settings(governor_dir="/home/jbeck/git/agent_gov")
+        assert s.project_name == "agent_gov"
+
+    def test_project_name_empty_when_no_dir(self):
+        s = Settings(governor_dir="")
+        assert s.project_name == ""
+
+    def test_label_default_empty(self, monkeypatch):
+        monkeypatch.delenv("MAUDE_LABEL", raising=False)
+        s = Settings(label="")
+        assert s.label == ""
+
+    def test_label_from_env(self, monkeypatch):
+        monkeypatch.setenv("MAUDE_LABEL", "detector-work")
+        s = Settings()
+        assert s.label == "detector-work"
+
+    def test_label_from_init(self):
+        s = Settings(label="my-session")
+        assert s.label == "my-session"

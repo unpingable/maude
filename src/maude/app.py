@@ -72,7 +72,7 @@ class MaudeApp(App):
         super().__init__(**kwargs)
         self.client = client
         self.settings = settings
-        self.session = MaudeSession()
+        self.session = MaudeSession(project_name=settings.project_name)
         self._polling_task: asyncio.Task | None = None
         self._last_session_list: list[SessionSummary] = []
         self._pending_template: str | None = None
@@ -93,6 +93,7 @@ class MaudeApp(App):
         # Check governor health
         try:
             health = await self.client.health()
+            self.session.backend_type = health.backend.type
             log.write(
                 f"[green]Connected[/green] — backend={health.backend.type} "
                 f"mode={health.governor.mode} context={health.governor.context_id}"
@@ -100,6 +101,9 @@ class MaudeApp(App):
         except Exception as e:
             log.write(f"[red]Governor unreachable:[/red] {e}")
             log.write("[dim]Chat commands will fail until governor is available.[/dim]")
+
+        # Set terminal title to stable session identity
+        self._update_title()
 
         # Create or resume session
         try:
@@ -133,6 +137,13 @@ class MaudeApp(App):
                 self._update_status_bar()
             except Exception:
                 pass
+
+    def _update_title(self) -> None:
+        """Set terminal title to stable session identity (slow loop)."""
+        title = self.session.title_line()
+        if self.settings.label:
+            title += f" [{self.settings.label}]"
+        self.title = title
 
     def _update_status_bar(self) -> None:
         bar = self.query_one("#status-bar", GovernorStatusBar)
@@ -368,7 +379,11 @@ class MaudeApp(App):
             return
         try:
             full = await self.client.get_session(session_id)
-            self.session = MaudeSession(governor_session_id=full.id)
+            self.session = MaudeSession(
+                governor_session_id=full.id,
+                project_name=self.session.project_name,
+                backend_type=self.session.backend_type,
+            )
             for msg in full.messages:
                 self.session.add_message(msg.role, msg.content)
             log.write(
@@ -390,7 +405,11 @@ class MaudeApp(App):
                 log.write(f"[green]Deleted session:[/green] {session_id}")
                 if session_id == self.session.governor_session_id:
                     new = await self.client.create_session(title="Maude session")
-                    self.session = MaudeSession(governor_session_id=new.id)
+                    self.session = MaudeSession(
+                        governor_session_id=new.id,
+                        project_name=self.session.project_name,
+                        backend_type=self.session.backend_type,
+                    )
                     log.write(f"[dim]Created new session: {new.id}[/dim]")
                     self._update_status_bar()
             else:
@@ -451,7 +470,11 @@ class MaudeApp(App):
         log = self.query_one("#chat-log", RichLog)
         try:
             new = await self.client.create_session(title="Maude session")
-            self.session = MaudeSession(governor_session_id=new.id)
+            self.session = MaudeSession(
+                governor_session_id=new.id,
+                project_name=self.session.project_name,
+                backend_type=self.session.backend_type,
+            )
             log.write(f"\n[dim]New session: {new.id}[/dim]")
             self._update_status_bar()
         except Exception as e:
@@ -480,6 +503,11 @@ def main() -> None:
         default=None,
         help="Governor context ID (default: from GOVERNOR_CONTEXT_ID env or 'default')",
     )
+    parser.add_argument(
+        "--label",
+        default=None,
+        help="Session label shown in terminal title (default: from MAUDE_LABEL env)",
+    )
     args = parser.parse_args()
 
     settings = Settings()
@@ -489,6 +517,8 @@ def main() -> None:
         settings.socket_path = args.socket
     if args.context_id:
         settings.context_id = args.context_id
+    if args.label:
+        settings.label = args.label
 
     client = GovernorClient(
         socket_path=settings.socket_path or None,

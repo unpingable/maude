@@ -20,6 +20,8 @@ class MaudeSession:
     spec_template_content: str = ""
     last_governor_now: Any | None = None
     messages: list[dict[str, str]] = field(default_factory=list)
+    project_name: str = ""
+    backend_type: str = ""
 
     def status_line(self) -> str:
         mode_str = self.mode.name
@@ -29,7 +31,24 @@ class MaudeSession:
         gov_str = ""
         if self.last_governor_now is not None:
             gov_str = f" GOV={self.last_governor_now.status}"
-        return f"MODE={mode_str}  SPEC={spec_str}{tmpl_str}  SESSION={session_str}{gov_str}"
+        parts = []
+        if self.project_name:
+            parts.append(self.project_name)
+        if self.backend_type:
+            parts.append(self.backend_type)
+        parts.append(f"MODE={mode_str}")
+        parts.append(f"SPEC={spec_str}{tmpl_str}")
+        parts.append(f"SESSION={session_str}{gov_str}")
+        return "  ".join(parts)
+
+    def title_line(self) -> str:
+        """Build terminal title showing stable session identity."""
+        parts = ["maude"]
+        if self.project_name:
+            parts.append(self.project_name)
+        if self.backend_type:
+            parts.append(self.backend_type)
+        return ": ".join(parts[:1]) + ((" — " + " | ".join(parts[1:])) if len(parts) > 1 else "")
 
     def add_message(self, role: str, content: str) -> None:
         self.messages.append({"role": role, "content": content})
