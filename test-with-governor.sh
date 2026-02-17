@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
 # test-with-governor.sh — Start a governor daemon, run Maude tests against it, tear down.
 #
 # Usage:

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Async HTTP client for the governor API."""
 
 from __future__ import annotations

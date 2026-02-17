@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Maude TUI application - Textual frontend for the agent-governor."""
 
 from __future__ import annotations

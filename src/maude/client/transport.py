@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Transport abstraction for governor daemon communication.
 
 Provides the seam for future transport implementations (TCP, etc.)

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Pydantic models matching governor API response shapes."""
 
 from __future__ import annotations

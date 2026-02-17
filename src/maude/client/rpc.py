@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """JSON-RPC 2.0 client over Unix socket for the governor daemon."""
 
 from __future__ import annotations

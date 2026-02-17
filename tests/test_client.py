@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for client model deserialization."""
 
 from maude.client.models import (

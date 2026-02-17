@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for intent parsing."""
 
 from maude.intents import IntentKind, parse_intent

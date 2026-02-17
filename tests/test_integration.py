@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Integration tests — require a live governor daemon.
 
 Run via:
