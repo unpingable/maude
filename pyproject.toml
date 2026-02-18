@@ -4,10 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "maude"
-version = "0.1.0"
+version = "2.3.0"
 description = "Textual TUI frontend for the agent-governor project"
 license = "Apache-2.0"
 requires-python = ">=3.11"
+authors = [
+    { name = "James Beck" },
+]
+
+[project.urls]
+Homepage = "https://github.com/unpingable/maude"
+Issues = "https://github.com/unpingable/maude/issues"
 dependencies = [
     "textual>=1.0.0",
     "pydantic>=2.6.0",
