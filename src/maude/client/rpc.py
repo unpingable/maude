@@ -286,15 +286,28 @@ class GovernorClient:
         messages: list[dict[str, str]],
         model: str = "",
         context_id: str = "default",
+        *,
+        use_lanes: bool = False,
+        task_hint: str = "",
+        risk_class: str = "",
     ) -> AsyncIterator[str]:
         """Stream governed chat completions, yielding content deltas.
 
         Sends chat.stream RPC, yields from chat.delta notifications,
         completes when the final response arrives.
         """
+        params: dict[str, Any] = {
+            "messages": messages, "model": model, "context_id": context_id,
+        }
+        if use_lanes:
+            params["use_lanes"] = True
+        if task_hint:
+            params["task_hint"] = task_hint
+        if risk_class:
+            params["risk_class"] = risk_class
         async for delta in self._call_streaming(
             "chat.stream",
-            {"messages": messages, "model": model, "context_id": context_id},
+            params,
             notification_method="chat.delta",
         ):
             yield delta
@@ -304,12 +317,22 @@ class GovernorClient:
         messages: list[dict[str, str]],
         model: str = "",
         context_id: str = "default",
+        *,
+        use_lanes: bool = False,
+        task_hint: str = "",
+        risk_class: str = "",
     ) -> dict:
         """Non-streaming governed chat. Returns full result dict."""
-        return await self._call(
-            "chat.send",
-            {"messages": messages, "model": model, "context_id": context_id},
-        )
+        params: dict[str, Any] = {
+            "messages": messages, "model": model, "context_id": context_id,
+        }
+        if use_lanes:
+            params["use_lanes"] = True
+        if task_hint:
+            params["task_hint"] = task_hint
+        if risk_class:
+            params["risk_class"] = risk_class
+        return await self._call("chat.send", params)
 
     async def chat_models(self) -> list[dict[str, str]]:
         """List available models from the backend."""

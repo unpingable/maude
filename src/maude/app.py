@@ -448,7 +448,7 @@ class MaudeApp(App):
         log.write("[bold green]Assistant:[/bold green] ", end="")
         full_response = ""
         try:
-            async for delta in self.client.chat_stream(messages, model=""):
+            async for delta in self.client.chat_stream(messages, model="", use_lanes=True):
                 full_response += delta
                 log.write(delta, end="")
             log.write("")  # newline after streaming
