@@ -9,7 +9,7 @@ Patch versions are independent.
 
 ## Compatible Governor versions
 
-- Required: `>=2.3.0 <2.4.0`
+- Required: `>=2.3.1 <2.4.0`
 
 ## Contract versions (wire / JSON)
 
