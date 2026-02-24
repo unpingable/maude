@@ -2,6 +2,9 @@
 """Tests for client model deserialization."""
 
 from maude.client.models import (
+    ChainPreflightDecision,
+    ChainRecordResult,
+    ChainStatus,
     ChatSession,
     DashboardSummary,
     GovernorNow,
@@ -370,3 +373,138 @@ class TestIntentPolicy:
         data = {"mode": "fiction", "policy": "custom_ok"}
         p = IntentPolicy.model_validate(data)
         assert p.policy == "custom_ok"
+
+
+# ============================================================================
+# Chain Composition (Phase 2C/2D)
+# ============================================================================
+
+
+class TestChainPreflightDecision:
+    def test_deserialize_allow(self):
+        data = {
+            "decision": "allow",
+            "mode": "detect_only",
+            "kernel_verdict": "allow",
+            "effective_verdict": "allow",
+            "composition_match": False,
+            "matched_rule_ids": [],
+            "block_reasons": [],
+            "history_length": 3,
+            "action_log_hash": "a" * 64,
+            "proposed_step_hash": "b" * 64,
+            "preflight_token": "c" * 64,
+            "verdict_reason": "allow",
+            "correlation_id": "task-1",
+        }
+        d = ChainPreflightDecision.model_validate(data)
+        assert d.decision == "allow"
+        assert d.mode == "detect_only"
+        assert d.composition_match is False
+        assert d.history_length == 3
+        assert d.correlation_id == "task-1"
+
+    def test_deserialize_blocked(self):
+        data = {
+            "decision": "blocked",
+            "mode": "enforce",
+            "kernel_verdict": "deny",
+            "effective_verdict": "deny",
+            "composition_match": True,
+            "matched_rule_ids": ["exfil-001"],
+            "block_reasons": [
+                {"rule_id": "exfil-001", "message": "Egress after secret read"},
+            ],
+            "history_length": 2,
+            "action_log_hash": "a" * 64,
+            "proposed_step_hash": "b" * 64,
+            "preflight_token": "c" * 64,
+            "verdict_reason": "deny: composition match",
+            "correlation_id": "task-2",
+        }
+        d = ChainPreflightDecision.model_validate(data)
+        assert d.decision == "blocked"
+        assert d.mode == "enforce"
+        assert d.composition_match is True
+        assert len(d.matched_rule_ids) == 1
+        assert len(d.block_reasons) == 1
+
+    def test_defaults(self):
+        data = {"decision": "allow", "mode": "detect_only"}
+        d = ChainPreflightDecision.model_validate(data)
+        assert d.kernel_verdict == "allow"
+        assert d.matched_rule_ids == []
+        assert d.block_reasons == []
+        assert d.history_length == 0
+
+    def test_extra_fields_allowed(self):
+        """Daemon may include additional fields — model must tolerate them."""
+        data = {
+            "decision": "allow",
+            "mode": "detect_only",
+            "dedupe": {"candidates": {}, "counts": {}},
+            "policy_fragment": {"applied": False},
+        }
+        d = ChainPreflightDecision.model_validate(data)
+        assert d.decision == "allow"
+
+
+class TestChainRecordResult:
+    def test_deserialize(self):
+        data = {
+            "recorded": True,
+            "correlation_id": "task-1",
+            "history_length": 4,
+            "action_log_hash": "d" * 64,
+            "record_id": "rid-001",
+        }
+        r = ChainRecordResult.model_validate(data)
+        assert r.recorded is True
+        assert r.correlation_id == "task-1"
+        assert r.history_length == 4
+        assert r.record_id == "rid-001"
+
+    def test_idempotent_replay(self):
+        data = {
+            "recorded": True,
+            "correlation_id": "task-1",
+            "history_length": 4,
+            "record_id": "rid-001",
+            "idempotent_replay": True,
+        }
+        r = ChainRecordResult.model_validate(data)
+        assert r.idempotent_replay is True
+
+    def test_defaults(self):
+        data = {"recorded": True, "correlation_id": "c"}
+        r = ChainRecordResult.model_validate(data)
+        assert r.history_length == 0
+        assert r.record_id is None
+        assert r.idempotent_replay is False
+
+
+class TestChainStatus:
+    def test_deserialize(self):
+        data = {
+            "load_status": "loaded",
+            "rule_count": 3,
+            "rule_set_version": "1.0.0",
+            "content_hash": "e" * 64,
+            "mode": "enforce",
+            "log_exists": True,
+            "history_length": 5,
+            "action_log_hash": "f" * 64,
+        }
+        s = ChainStatus.model_validate(data)
+        assert s.load_status == "loaded"
+        assert s.rule_count == 3
+        assert s.mode == "enforce"
+        assert s.log_exists is True
+        assert s.history_length == 5
+
+    def test_defaults(self):
+        data = {"load_status": "missing_policy"}
+        s = ChainStatus.model_validate(data)
+        assert s.rule_count == 0
+        assert s.mode == "detect_only"
+        assert s.log_exists is None

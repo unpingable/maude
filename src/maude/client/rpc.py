@@ -8,6 +8,9 @@ from pathlib import Path
 from typing import Any, AsyncIterator
 
 from maude.client.models import (
+    ChainPreflightDecision,
+    ChainRecordResult,
+    ChainStatus,
     ChatSession,
     DashboardSummary,
     GovernorNow,
@@ -467,6 +470,72 @@ class GovernorClient:
 
     async def scars_history(self, limit: int = 50) -> list:
         return await self._call("scars.history", {"limit": limit})
+
+    # ========================================================================
+    # Chain composition (Phase 2C/2D)
+    # ========================================================================
+
+    async def chain_preflight(
+        self,
+        tool_id: str,
+        correlation_id: str,
+        args: dict | None = None,
+        exceptions: list[str] | None = None,
+    ) -> ChainPreflightDecision:
+        """Call chain.preflight — pre-dispatch composition evaluation.
+
+        Returns the daemon's decision about whether this tool dispatch
+        should proceed, based on composition rules and enforcement mode.
+        """
+        params: dict[str, Any] = {
+            "tool_id": tool_id,
+            "correlation_id": correlation_id,
+        }
+        if args:
+            params["args"] = args
+        if exceptions:
+            params["exceptions"] = exceptions
+        result = await self._call("chain.preflight", params)
+        return ChainPreflightDecision.model_validate(result)
+
+    async def chain_record(
+        self,
+        tool_id: str,
+        correlation_id: str,
+        result_status: str,
+        args: dict | None = None,
+        preflight_token: str | None = None,
+        record_id: str | None = None,
+    ) -> ChainRecordResult:
+        """Call chain.record — post-dispatch action recording.
+
+        Records a completed tool action in the action log.  Optionally
+        validates a preflight CAS token to prevent TOCTOU drift.
+        """
+        params: dict[str, Any] = {
+            "tool_id": tool_id,
+            "correlation_id": correlation_id,
+            "result_status": result_status,
+        }
+        if args:
+            params["args"] = args
+        if preflight_token:
+            params["preflight_token"] = preflight_token
+        if record_id:
+            params["record_id"] = record_id
+        result = await self._call("chain.record", params)
+        return ChainRecordResult.model_validate(result)
+
+    async def chain_status(
+        self,
+        correlation_id: str | None = None,
+    ) -> ChainStatus:
+        """Call chain.status — get chain gate status and optional log info."""
+        params: dict[str, Any] = {}
+        if correlation_id:
+            params["correlation_id"] = correlation_id
+        result = await self._call("chain.status", params)
+        return ChainStatus.model_validate(result)
 
     # ========================================================================
     # Stubs for HTTP-era methods (no-op or adapted)

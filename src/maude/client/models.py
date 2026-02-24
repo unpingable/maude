@@ -233,3 +233,57 @@ class IntentPolicy(BaseModel):
     """Response from GET /v2/intent/policy."""
     mode: str
     policy: str
+
+
+# ============================================================================
+# Chain Composition (Phase 2C/2D)
+# ============================================================================
+
+
+class ChainPreflightDecision(BaseModel):
+    """Response from chain.preflight RPC.
+
+    decision: "allow" | "would_block" | "blocked"
+    preflight_token: CAS binding token for chain.record validation
+    """
+    decision: str
+    mode: str
+    kernel_verdict: str = "allow"
+    effective_verdict: str = "allow"
+    composition_match: bool = False
+    matched_rule_ids: list[str] = Field(default_factory=list)
+    block_reasons: list[dict] = Field(default_factory=list)
+    history_length: int = 0
+    action_log_hash: str = ""
+    proposed_step_hash: str = ""
+    preflight_token: str = ""
+    verdict_reason: str = ""
+    correlation_id: str = ""
+
+    model_config = {"extra": "allow"}
+
+
+class ChainRecordResult(BaseModel):
+    """Response from chain.record RPC."""
+    recorded: bool
+    correlation_id: str
+    history_length: int = 0
+    action_log_hash: str = ""
+    record_id: str | None = None
+    idempotent_replay: bool = False
+
+    model_config = {"extra": "allow"}
+
+
+class ChainStatus(BaseModel):
+    """Response from chain.status RPC."""
+    load_status: str
+    rule_count: int = 0
+    rule_set_version: str = ""
+    content_hash: str = ""
+    mode: str = "detect_only"
+    log_exists: bool | None = None
+    history_length: int | None = None
+    action_log_hash: str | None = None
+
+    model_config = {"extra": "allow"}
