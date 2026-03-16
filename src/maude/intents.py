@@ -21,6 +21,14 @@ class IntentKind(Enum):
     SESSIONS = auto()
     SWITCH_SESSION = auto()
     DELETE_SESSION = auto()
+    # Runtime supervisor
+    SUPERVISED_LAUNCH = auto()
+    SUPERVISED_LIST = auto()
+    SUPERVISED_EVENTS = auto()
+    SUPERVISED_APPROVE = auto()
+    SUPERVISED_DENY = auto()
+    SUPERVISED_KILL = auto()
+    SUPERVISED_INTERVENTIONS = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -65,6 +73,15 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^resume\s+(\S+)", re.IGNORECASE), IntentKind.SWITCH_SESSION),
     (re.compile(r"^delete session\s+(\S+)", re.IGNORECASE), IntentKind.DELETE_SESSION),
     (re.compile(r"^rm session\s+(\S+)", re.IGNORECASE), IntentKind.DELETE_SESSION),
+    # Runtime supervisor commands
+    (re.compile(r"^supervised launch\s*(.*)", re.IGNORECASE), IntentKind.SUPERVISED_LAUNCH),
+    (re.compile(r"^supervised list$", re.IGNORECASE), IntentKind.SUPERVISED_LIST),
+    (re.compile(r"^supervised events\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_EVENTS),
+    (re.compile(r"^supervised approve\s+(\S+)\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_APPROVE),
+    (re.compile(r"^supervised deny\s+(\S+)\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_DENY),
+    (re.compile(r"^supervised kill\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_KILL),
+    (re.compile(r"^supervised interventions\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_INTERVENTIONS),
+    (re.compile(r"^supervised$", re.IGNORECASE), IntentKind.SUPERVISED_LIST),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]
@@ -75,7 +92,12 @@ def parse_intent(text: str) -> Intent:
     for pattern, kind in _PATTERNS:
         m = pattern.search(stripped)
         if m:
-            # Use first capture group as payload when present (e.g. session ID)
-            payload = m.group(1) if m.lastindex and m.lastindex >= 1 else stripped
+            # For multi-group patterns (e.g. approve <session> <tool>), join with space
+            if m.lastindex and m.lastindex >= 2:
+                payload = " ".join(m.group(i) for i in range(1, m.lastindex + 1) if m.group(i))
+            elif m.lastindex and m.lastindex >= 1:
+                payload = m.group(1) if m.group(1) else stripped
+            else:
+                payload = stripped
             return Intent(kind=kind, payload=payload)
     return Intent(kind=IntentKind.CHAT, payload=stripped)

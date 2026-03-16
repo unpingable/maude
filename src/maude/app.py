@@ -48,6 +48,16 @@ _HELP_TEXT = """\
   sessions      - List all sessions (also: ls, list sessions)
   switch <id>   - Switch to a session by ID or #N (also: session <id>, resume <id>)
   delete session <id> - Delete a session (also: rm session <id>)
+
+[bold]Supervised agent sessions:[/bold]
+  supervised launch [task]        - Launch a supervised Claude session
+  supervised list                 - List supervised sessions
+  supervised events <id>          - Show session events
+  supervised interventions <id>   - Show pending approvals
+  supervised approve <id> <tcid>  - Approve a tool call
+  supervised deny <id> <tcid>     - Deny a tool call
+  supervised kill <id>            - Kill a session
+
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
 """
@@ -210,6 +220,20 @@ class MaudeApp(App):
             log.write("[dim]# TODO: apply gate not yet implemented[/dim]")
         elif intent.kind == IntentKind.ROLLBACK:
             log.write("[dim]# TODO: rollback not yet implemented[/dim]")
+        elif intent.kind == IntentKind.SUPERVISED_LAUNCH:
+            await self._handle_supervised_launch(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_LIST:
+            await self._handle_supervised_list(log)
+        elif intent.kind == IntentKind.SUPERVISED_EVENTS:
+            await self._handle_supervised_events(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_APPROVE:
+            await self._handle_supervised_approve(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_DENY:
+            await self._handle_supervised_deny(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_KILL:
+            await self._handle_supervised_kill(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_INTERVENTIONS:
+            await self._handle_supervised_interventions(log, intent.payload)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -480,6 +504,121 @@ class MaudeApp(App):
             self._update_status_bar()
         except Exception as e:
             log.write(f"[red]New session error:[/red] {e}")
+
+    # --- Supervised Runtime Handlers ---
+
+    async def _handle_supervised_launch(self, log: RichLog, payload: str) -> None:
+        task = payload.strip() if payload.strip() else None
+        try:
+            result = await self.client.runtime_session_create(task=task)
+            session_id = result["session_id"]
+            log.write(f"[green]Session created:[/green] {session_id}")
+            if task:
+                log.write(f"  Task: {task}")
+
+            launch = await self.client.runtime_session_launch(session_id)
+            log.write(f"  Status: {launch['status']}  PID: {launch.get('pid', '?')}")
+            log.write(f"[dim]Use 'supervised events {session_id}' to see activity[/dim]")
+            log.write(f"[dim]Use 'supervised interventions {session_id}' to see pending approvals[/dim]")
+
+            # Store for convenience
+            self._active_supervised_session = session_id
+        except Exception as e:
+            log.write(f"[red]Launch error:[/red] {e}")
+
+    async def _handle_supervised_list(self, log: RichLog) -> None:
+        try:
+            sessions = await self.client.runtime_session_list()
+            if not sessions:
+                log.write("[dim]No supervised sessions.[/dim]")
+                return
+            log.write("[bold]Supervised Sessions:[/bold]")
+            for s in sessions:
+                task_str = f" — {s['task']}" if s.get("task") else ""
+                pending = s.get("pending_interventions", 0)
+                pending_str = f" [yellow][{pending} pending][/yellow]" if pending else ""
+                log.write(f"  {s['session_id']}  {s['status']:20s}  {s['backend_kind']}{task_str}{pending_str}")
+        except Exception as e:
+            log.write(f"[red]List error:[/red] {e}")
+
+    async def _handle_supervised_events(self, log: RichLog, session_id: str) -> None:
+        try:
+            events = await self.client.runtime_session_events(session_id.strip(), limit=30)
+            if not events:
+                log.write("[dim]No events.[/dim]")
+                return
+            log.write(f"[bold]Events for {session_id}:[/bold]")
+            for e in events:
+                tool_info = ""
+                payload = e.get("payload", {})
+                if "tool_name" in payload:
+                    tool_info = f" [{payload['tool_name']}]"
+                log.write(f"  {e['seq']:4d}  {e['at']}  {e['kind']:30s}{tool_info}")
+        except Exception as e:
+            log.write(f"[red]Events error:[/red] {e}")
+
+    async def _handle_supervised_interventions(self, log: RichLog, session_id: str) -> None:
+        try:
+            interventions = await self.client.runtime_intervention_list(session_id.strip())
+            if not interventions:
+                log.write("[dim]No pending interventions.[/dim]")
+                return
+            log.write(f"[bold]Pending Interventions ({session_id}):[/bold]")
+            for i in interventions:
+                log.write(
+                    f"  [yellow]{i['tool_name']}[/yellow]  "
+                    f"tool_call_id={i['tool_call_id']}  "
+                    f"remaining={i['remaining_seconds']:.0f}s"
+                )
+                if i.get("tool_input"):
+                    import json
+                    inp = json.dumps(i["tool_input"])
+                    if len(inp) > 100:
+                        inp = inp[:97] + "..."
+                    log.write(f"    [dim]{inp}[/dim]")
+                log.write(f"    [dim]→ supervised approve {session_id} {i['tool_call_id']}[/dim]")
+                log.write(f"    [dim]→ supervised deny {session_id} {i['tool_call_id']}[/dim]")
+        except Exception as e:
+            log.write(f"[red]Interventions error:[/red] {e}")
+
+    async def _handle_supervised_approve(self, log: RichLog, payload: str) -> None:
+        parts = payload.strip().split()
+        if len(parts) < 2:
+            log.write("[yellow]Usage: supervised approve <session_id> <tool_call_id>[/yellow]")
+            return
+        session_id, tool_call_id = parts[0], parts[1]
+        try:
+            result = await self.client.runtime_intervention_resolve(session_id, tool_call_id, "approve")
+            if result.get("resolved"):
+                log.write(f"[green]Approved[/green] {tool_call_id}")
+            else:
+                log.write(f"[yellow]{result.get('error', 'Not found')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Approve error:[/red] {e}")
+
+    async def _handle_supervised_deny(self, log: RichLog, payload: str) -> None:
+        parts = payload.strip().split()
+        if len(parts) < 2:
+            log.write("[yellow]Usage: supervised deny <session_id> <tool_call_id>[/yellow]")
+            return
+        session_id, tool_call_id = parts[0], parts[1]
+        try:
+            result = await self.client.runtime_intervention_resolve(
+                session_id, tool_call_id, "deny", reason="Denied by operator"
+            )
+            if result.get("resolved"):
+                log.write(f"[red]Denied[/red] {tool_call_id}")
+            else:
+                log.write(f"[yellow]{result.get('error', 'Not found')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Deny error:[/red] {e}")
+
+    async def _handle_supervised_kill(self, log: RichLog, session_id: str) -> None:
+        try:
+            result = await self.client.runtime_session_kill(session_id.strip())
+            log.write(f"[red]Killed[/red] {session_id}: {result['status']}")
+        except Exception as e:
+            log.write(f"[red]Kill error:[/red] {e}")
 
     async def on_unmount(self) -> None:
         if self._polling_task:

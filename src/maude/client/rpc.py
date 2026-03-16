@@ -575,3 +575,59 @@ class GovernorClient:
     async def dashboard_summary(self) -> DashboardSummary:
         """Stub — dashboard not yet mapped to daemon RPC."""
         return DashboardSummary()
+
+    # --- Runtime Supervisor ---
+
+    async def runtime_session_create(
+        self,
+        backend_kind: str = "claude_code",
+        cwd: str | None = None,
+        task: str | None = None,
+        operator_mode: str = "interactive",
+    ) -> dict:
+        params: dict[str, Any] = {"backend_kind": backend_kind, "operator_mode": operator_mode}
+        if cwd:
+            params["cwd"] = cwd
+        if task:
+            params["task"] = task
+        return await self._call("runtime.session.create", params)
+
+    async def runtime_session_launch(self, session_id: str) -> dict:
+        return await self._call("runtime.session.launch", {"session_id": session_id})
+
+    async def runtime_session_get(self, session_id: str) -> dict | None:
+        return await self._call("runtime.session.get", {"session_id": session_id})
+
+    async def runtime_session_list(self) -> list[dict]:
+        return await self._call("runtime.session.list", {})
+
+    async def runtime_session_events(
+        self, session_id: str, since_seq: int = 0, limit: int = 100
+    ) -> list[dict]:
+        return await self._call("runtime.session.events", {
+            "session_id": session_id, "since_seq": since_seq, "limit": limit,
+        })
+
+    async def runtime_session_pause(self, session_id: str) -> dict:
+        return await self._call("runtime.session.pause", {"session_id": session_id})
+
+    async def runtime_session_resume(self, session_id: str) -> dict:
+        return await self._call("runtime.session.resume", {"session_id": session_id})
+
+    async def runtime_session_kill(self, session_id: str) -> dict:
+        return await self._call("runtime.session.kill", {"session_id": session_id})
+
+    async def runtime_intervention_list(self, session_id: str) -> list[dict]:
+        return await self._call("runtime.intervention.list", {"session_id": session_id})
+
+    async def runtime_intervention_resolve(
+        self, session_id: str, tool_call_id: str, decision: str, reason: str | None = None
+    ) -> dict:
+        params: dict[str, Any] = {
+            "session_id": session_id,
+            "tool_call_id": tool_call_id,
+            "decision": decision,
+        }
+        if reason:
+            params["reason"] = reason
+        return await self._call("runtime.intervention.resolve", params)
