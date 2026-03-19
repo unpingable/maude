@@ -8,17 +8,60 @@ The model proposes. The governor gates. You decide.
 
 ---
 
-## The Problem
+## Supervised Agent Sessions
 
-You have a governor running. It enforces decisions, catches contradictions, blocks unverified writes. But the only way to talk to it is through a web browser or raw API calls.
+Maude can launch and supervise Claude Code as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.
 
-**You want a terminal.**
+```
+supervised launch Add error handling to users.py and write tests
 
-A fast, keyboard-driven interface that shows you governor state at a glance, streams model responses, and puts an explicit gate between "the model said this" and "this actually happens."
+  [ 14s] Approved: Edit — users.py
+  [ 16s] Approved: Write — test_users.py
+  [ 18s] Approved: Edit — README.md
+  [ 22s] Approved: Bash — pytest (adapted python → python3)
 
-## The Solution
+  Session exited (exit=0), 5 tools approved
 
-Maude is that terminal. It connects to a running governor daemon over a Unix socket and gives you:
+supervised promotion sess_cfa8ab1ebb75
+
+  Promotion: prom_e72576d3798f
+  Files: users.py, test_users.py, README.md
+  Diff stat:
+    README.md | 15 +++++++++++++
+    users.py  |  5 +++-
+    test_users.py (new file)
+
+supervised promote sess_cfa8ab1ebb75
+
+  Promoted — changes accepted
+  5 tests pass
+```
+
+**The full loop:** launch → tool interception → approve/deny → session exit → review diff → promote or reject.
+
+Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, Edit) require operator approval. Unanswered approvals time out and deny by default. Rejected promotions revert the workspace.
+
+### Supervised Commands
+
+| Command | What It Does |
+|---------|-------------|
+| `supervised launch [task]` | Launch a governed Claude Code session |
+| `supervised list` | List active/completed sessions |
+| `supervised events <id>` | Show canonical event stream |
+| `supervised interventions <id>` | Show pending tool approvals |
+| `supervised approve <id> <tcid>` | Approve a tool call |
+| `supervised deny <id> <tcid>` | Deny a tool call |
+| `supervised promotion <id>` | Show pending workspace changes |
+| `supervised diff <id>` | Show unified diff of changes |
+| `supervised promote <id>` | Accept workspace changes |
+| `supervised reject <id>` | Revert workspace changes |
+| `supervised kill <id>` | Terminate session |
+
+---
+
+## Governed Chat
+
+Maude also provides governed chat — streaming model responses through the governor's constraint engine:
 
 - **Streaming chat** through the governor daemon's `chat.stream` RPC method
 - **Live governor status** in a persistent status bar (mode, regime, violations)
@@ -94,7 +137,7 @@ Maude talks to the daemon. The daemon talks to the model. Maude never talks to t
 
 ## RPC Methods Wired
 
-Maude wires 25 of the daemon's 36 RPC methods:
+Maude wires 38 of the daemon's 78 RPC methods:
 
 | Namespace | Methods | What It Does |
 |-----------|---------|-------------|
@@ -105,15 +148,9 @@ Maude wires 25 of the daemon's 36 RPC methods:
 | `receipts.*` | list, detail | Gate receipt browsing |
 | `scars.*` | list, history | Failure history and active scars |
 | `commit.*` | pending, fix, revise, proceed, exceptions | Violation resolution |
-
-### Not Yet Wired
-
-| Namespace | Methods | What It Would Show |
-|-----------|---------|-------------------|
-| `governor.selfcheck` | 1 | Deployment health checks |
-| `correlator.*` | 3 | Capture detection: K-vector, regime, indicators |
-| `scope.*` | 4 | Locality policy: grants, contracts, escalation |
-| `stability.*` | 3 | Semantic stability: perturbation audits |
+| `runtime.session.*` | create, launch, get, list, events, pause, resume, kill | Supervised sessions |
+| `runtime.intervention.*` | list, resolve | Tool approval/denial |
+| `runtime.promotion.*` | get, diff, resolve | Workspace change review |
 
 ---
 
@@ -121,17 +158,27 @@ Maude wires 25 of the daemon's 36 RPC methods:
 
 | Command | What It Does |
 |---------|-------------|
-| `plan <text>` | Append to the spec draft |
+| `supervised launch [task]` | Launch governed Claude Code session |
+| `supervised list` | List supervised sessions |
+| `supervised events <id>` | Show event stream |
+| `supervised interventions <id>` | Show pending approvals |
+| `supervised approve <id> <tcid>` | Approve tool call |
+| `supervised deny <id> <tcid>` | Deny tool call |
+| `supervised promotion <id>` | Show workspace changes |
+| `supervised diff <id>` | Show unified diff |
+| `supervised promote <id>` | Accept changes |
+| `supervised reject <id>` | Revert changes |
+| `supervised kill <id>` | Kill session |
+| `plan <text>` | Append to spec draft |
 | `lock spec` | Lock the spec (required before BUILD) |
 | `build` | Switch to BUILD mode |
-| `show spec` | Display the current spec draft |
-| `status` | Fetch and display governor status |
+| `show spec` | Display current spec draft |
+| `status` | Governor status |
 | `why` | Show why something is blocked |
-| `sessions` | List available sessions |
-| `switch <id>` | Switch to a different session |
-| `delete <id>` | Delete a session |
-| `help` | Show available commands |
-| *anything else* | Sent to the model via governor |
+| `sessions` | List governance sessions |
+| `switch <id>` | Switch session |
+| `help` | Show commands |
+| *anything else* | Chat via governor |
 
 ### Keybindings
 
