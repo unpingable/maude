@@ -645,3 +645,11 @@ class GovernorClient:
         if reason:
             params["reason"] = reason
         return await self._call("runtime.promotion.resolve", params)
+
+    async def runtime_session_fork(
+        self, parent_session_id: str, task: str | None = None
+    ) -> dict:
+        params: dict[str, Any] = {"parent_session_id": parent_session_id}
+        if task:
+            params["task"] = task
+        return await self._call("runtime.session.fork", params)

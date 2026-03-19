@@ -61,6 +61,7 @@ _HELP_TEXT = """\
   supervised diff <id>            - Show unified diff of changes
   supervised promote <id>         - Accept workspace changes
   supervised reject <id>          - Revert workspace changes
+  supervised fork <id> [task]     - Fork new session from promoted parent
 
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
@@ -246,6 +247,8 @@ class MaudeApp(App):
             await self._handle_supervised_promote(log, intent.payload)
         elif intent.kind == IntentKind.SUPERVISED_REJECT:
             await self._handle_supervised_reject(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_FORK:
+            await self._handle_supervised_fork(log, intent.payload)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -684,6 +687,26 @@ class MaudeApp(App):
                 log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
         except Exception as e:
             log.write(f"[red]Reject error:[/red] {e}")
+
+    async def _handle_supervised_fork(self, log: RichLog, payload: str) -> None:
+        parts = payload.strip().split(None, 1)
+        if not parts:
+            log.write("[yellow]Usage: supervised fork <parent_session_id> [task][/yellow]")
+            return
+        parent_id = parts[0]
+        task = parts[1] if len(parts) > 1 else None
+        try:
+            result = await self.client.runtime_session_fork(parent_id, task=task)
+            session_id = result["session_id"]
+            log.write(f"[green]Forked from {parent_id}:[/green] {session_id}")
+            if task:
+                log.write(f"  Task: {task}")
+            log.write(f"  CWD: {result.get('cwd', '?')}")
+
+            launch = await self.client.runtime_session_launch(session_id)
+            log.write(f"  Status: {launch['status']}  PID: {launch.get('pid', '?')}")
+        except Exception as e:
+            log.write(f"[red]Fork error:[/red] {e}")
 
     async def on_unmount(self) -> None:
         if self._polling_task:

@@ -33,6 +33,7 @@ class IntentKind(Enum):
     SUPERVISED_DIFF = auto()
     SUPERVISED_PROMOTE = auto()
     SUPERVISED_REJECT = auto()
+    SUPERVISED_FORK = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -89,6 +90,7 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^supervised diff\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_DIFF),
     (re.compile(r"^supervised promote\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_PROMOTE),
     (re.compile(r"^supervised reject\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_REJECT),
+    (re.compile(r"^supervised fork\s+(\S+)\s*(.*)", re.IGNORECASE), IntentKind.SUPERVISED_FORK),
     (re.compile(r"^supervised$", re.IGNORECASE), IntentKind.SUPERVISED_LIST),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
