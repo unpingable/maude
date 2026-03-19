@@ -55,6 +55,7 @@ Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, 
 | `supervised diff <id>` | Show unified diff of changes |
 | `supervised promote <id>` | Accept workspace changes |
 | `supervised reject <id>` | Revert workspace changes |
+| `supervised fork <id> [task]` | Fork from promoted session |
 | `supervised kill <id>` | Terminate session |
 
 ---
@@ -137,7 +138,7 @@ Maude talks to the daemon. The daemon talks to the model. Maude never talks to t
 
 ## RPC Methods Wired
 
-Maude wires 38 of the daemon's 78 RPC methods:
+Maude wires 44 of the daemon's 79 RPC methods:
 
 | Namespace | Methods | What It Does |
 |-----------|---------|-------------|
@@ -168,7 +169,9 @@ Maude wires 38 of the daemon's 78 RPC methods:
 | `supervised diff <id>` | Show unified diff |
 | `supervised promote <id>` | Accept changes |
 | `supervised reject <id>` | Revert changes |
+| `supervised fork <id> [task]` | Fork from promoted session |
 | `supervised kill <id>` | Kill session |
+| `snapshot` / `wtf` | Operator overview |
 | `plan <text>` | Append to spec draft |
 | `lock spec` | Lock the spec (required before BUILD) |
 | `build` | Switch to BUILD mode |
