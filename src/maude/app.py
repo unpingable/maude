@@ -57,6 +57,10 @@ _HELP_TEXT = """\
   supervised approve <id> <tcid>  - Approve a tool call
   supervised deny <id> <tcid>     - Deny a tool call
   supervised kill <id>            - Kill a session
+  supervised promotion <id>       - Show pending promotion (changed files)
+  supervised diff <id>            - Show unified diff of changes
+  supervised promote <id>         - Accept workspace changes
+  supervised reject <id>          - Revert workspace changes
 
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
@@ -234,6 +238,14 @@ class MaudeApp(App):
             await self._handle_supervised_kill(log, intent.payload)
         elif intent.kind == IntentKind.SUPERVISED_INTERVENTIONS:
             await self._handle_supervised_interventions(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_PROMOTION:
+            await self._handle_supervised_promotion(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_DIFF:
+            await self._handle_supervised_diff(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_PROMOTE:
+            await self._handle_supervised_promote(log, intent.payload)
+        elif intent.kind == IntentKind.SUPERVISED_REJECT:
+            await self._handle_supervised_reject(log, intent.payload)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -619,6 +631,59 @@ class MaudeApp(App):
             log.write(f"[red]Killed[/red] {session_id}: {result['status']}")
         except Exception as e:
             log.write(f"[red]Kill error:[/red] {e}")
+
+    async def _handle_supervised_promotion(self, log: RichLog, session_id: str) -> None:
+        try:
+            p = await self.client.runtime_promotion_get(session_id.strip())
+            if not p:
+                log.write("[dim]No pending promotion.[/dim]")
+                return
+            log.write(f"[bold]Promotion: {p['promotion_id']}[/bold]")
+            log.write(f"  Status: {p['status']}")
+            log.write(f"  Files:  {len(p['changed_files'])}")
+            for f in p["changed_files"]:
+                log.write(f"    {f}")
+            log.write(f"\n{p.get('diff_stat', '')}")
+            log.write(f"\n[dim]→ supervised diff {session_id}[/dim]")
+            log.write(f"[dim]→ supervised promote {session_id}[/dim]")
+            log.write(f"[dim]→ supervised reject {session_id}[/dim]")
+        except Exception as e:
+            log.write(f"[red]Promotion error:[/red] {e}")
+
+    async def _handle_supervised_diff(self, log: RichLog, session_id: str) -> None:
+        try:
+            result = await self.client.runtime_promotion_diff(session_id.strip())
+            if "error" in result:
+                log.write(f"[dim]{result['error']}[/dim]")
+                return
+            diff = result.get("diff", "")
+            if diff:
+                log.write(f"[bold]Diff for {result.get('promotion_id', '?')}:[/bold]\n")
+                log.write(diff)
+            else:
+                log.write("[dim](no diff available)[/dim]")
+        except Exception as e:
+            log.write(f"[red]Diff error:[/red] {e}")
+
+    async def _handle_supervised_promote(self, log: RichLog, session_id: str) -> None:
+        try:
+            result = await self.client.runtime_promotion_resolve(session_id.strip(), "approve")
+            if result.get("resolved"):
+                log.write("[green]Promoted[/green] — changes accepted")
+            else:
+                log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Promote error:[/red] {e}")
+
+    async def _handle_supervised_reject(self, log: RichLog, session_id: str) -> None:
+        try:
+            result = await self.client.runtime_promotion_resolve(session_id.strip(), "reject")
+            if result.get("resolved"):
+                log.write("[red]Rejected[/red] — workspace changes reverted")
+            else:
+                log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Reject error:[/red] {e}")
 
     async def on_unmount(self) -> None:
         if self._polling_task:

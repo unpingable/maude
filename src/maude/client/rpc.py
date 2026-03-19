@@ -631,3 +631,17 @@ class GovernorClient:
         if reason:
             params["reason"] = reason
         return await self._call("runtime.intervention.resolve", params)
+
+    async def runtime_promotion_get(self, session_id: str) -> dict | None:
+        return await self._call("runtime.promotion.get", {"session_id": session_id})
+
+    async def runtime_promotion_diff(self, session_id: str) -> dict:
+        return await self._call("runtime.promotion.diff", {"session_id": session_id})
+
+    async def runtime_promotion_resolve(
+        self, session_id: str, decision: str, reason: str | None = None
+    ) -> dict:
+        params: dict[str, Any] = {"session_id": session_id, "decision": decision}
+        if reason:
+            params["reason"] = reason
+        return await self._call("runtime.promotion.resolve", params)

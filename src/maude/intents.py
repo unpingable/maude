@@ -29,6 +29,10 @@ class IntentKind(Enum):
     SUPERVISED_DENY = auto()
     SUPERVISED_KILL = auto()
     SUPERVISED_INTERVENTIONS = auto()
+    SUPERVISED_PROMOTION = auto()
+    SUPERVISED_DIFF = auto()
+    SUPERVISED_PROMOTE = auto()
+    SUPERVISED_REJECT = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -81,6 +85,10 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^supervised deny\s+(\S+)\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_DENY),
     (re.compile(r"^supervised kill\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_KILL),
     (re.compile(r"^supervised interventions\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_INTERVENTIONS),
+    (re.compile(r"^supervised promotion\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_PROMOTION),
+    (re.compile(r"^supervised diff\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_DIFF),
+    (re.compile(r"^supervised promote\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_PROMOTE),
+    (re.compile(r"^supervised reject\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_REJECT),
     (re.compile(r"^supervised$", re.IGNORECASE), IntentKind.SUPERVISED_LIST),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
