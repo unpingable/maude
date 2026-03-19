@@ -63,6 +63,8 @@ _HELP_TEXT = """\
   supervised reject <id>          - Revert workspace changes
   supervised fork <id> [task]     - Fork new session from promoted parent
 
+  snapshot / overview / wtf       - Operator snapshot (what's happening now?)
+
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
 """
@@ -249,6 +251,8 @@ class MaudeApp(App):
             await self._handle_supervised_reject(log, intent.payload)
         elif intent.kind == IntentKind.SUPERVISED_FORK:
             await self._handle_supervised_fork(log, intent.payload)
+        elif intent.kind == IntentKind.SNAPSHOT:
+            await self._handle_snapshot(log)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -687,6 +691,47 @@ class MaudeApp(App):
                 log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
         except Exception as e:
             log.write(f"[red]Reject error:[/red] {e}")
+
+    async def _handle_snapshot(self, log: RichLog) -> None:
+        """Show operator snapshot — the 'what the hell is happening' view."""
+        try:
+            snap = await self.client.operator_snapshot()
+
+            # Overall health
+            overall = snap.get("overall", "?")
+            level = "green" if overall == "ok" else "yellow" if overall == "degraded" else "red"
+            log.write(f"[bold]Operator Snapshot[/bold]  [{level}]{overall}[/{level}]")
+
+            # Doctor checks
+            checks = snap.get("checks", [])
+            if checks:
+                for c in checks[:10]:
+                    status = c.get("status", "?")
+                    color = "green" if status == "ok" else "yellow" if status == "warn" else "red"
+                    log.write(f"  [{color}]{status:5s}[/{color}]  {c.get('label', '?')}")
+
+            # Suggestions
+            suggestions = snap.get("suggestions", [])
+            if suggestions:
+                log.write("\n[bold]Suggestions:[/bold]")
+                for s in suggestions[:5]:
+                    log.write(f"  {s}")
+
+            # Supervised sessions summary
+            try:
+                sessions = await self.client.runtime_session_list()
+                if sessions:
+                    log.write(f"\n[bold]Supervised Sessions ({len(sessions)}):[/bold]")
+                    for s in sessions:
+                        pending = s.get("pending_interventions", 0)
+                        task = s.get("task", "")[:40]
+                        pending_str = f" [yellow][{pending} pending][/yellow]" if pending else ""
+                        log.write(f"  {s['session_id']}  {s['status']:12s}  {task}{pending_str}")
+            except Exception:
+                pass  # Supervised sessions are optional
+
+        except Exception as e:
+            log.write(f"[red]Snapshot error:[/red] {e}")
 
     async def _handle_supervised_fork(self, log: RichLog, payload: str) -> None:
         parts = payload.strip().split(None, 1)

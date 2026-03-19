@@ -34,6 +34,7 @@ class IntentKind(Enum):
     SUPERVISED_PROMOTE = auto()
     SUPERVISED_REJECT = auto()
     SUPERVISED_FORK = auto()
+    SNAPSHOT = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -92,6 +93,9 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^supervised reject\s+(\S+)", re.IGNORECASE), IntentKind.SUPERVISED_REJECT),
     (re.compile(r"^supervised fork\s+(\S+)\s*(.*)", re.IGNORECASE), IntentKind.SUPERVISED_FORK),
     (re.compile(r"^supervised$", re.IGNORECASE), IntentKind.SUPERVISED_LIST),
+    (re.compile(r"^snapshot$", re.IGNORECASE), IntentKind.SNAPSHOT),
+    (re.compile(r"^overview$", re.IGNORECASE), IntentKind.SNAPSHOT),
+    (re.compile(r"^wtf$", re.IGNORECASE), IntentKind.SNAPSHOT),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]

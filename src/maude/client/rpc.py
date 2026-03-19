@@ -20,7 +20,6 @@ from maude.client.models import (
     IntentPolicy,
     IntentTemplateList,
     IntentValidationResult,
-    RunSummary,
     SessionSummary,
 )
 from maude.client.transport import Transport, UnixSocketTransport
@@ -541,40 +540,30 @@ class GovernorClient:
     # Stubs for HTTP-era methods (no-op or adapted)
     # ========================================================================
 
-    async def append_message(
-        self,
-        session_id: str,
-        role: str,
-        content: str,
-        model: str | None = None,
-        usage: dict[str, int] | None = None,
-    ) -> None:
+    # --- Stubs (no daemon RPC yet) ---
+    # These exist so callers don't crash. They return empty/no-op results.
+    # Wire to real RPCs when the daemon surfaces are ready.
+
+    async def append_message(self, session_id: str, role: str, content: str,
+                             model: str | None = None, usage: dict[str, int] | None = None) -> None:
         """No-op: daemon manages session persistence internally."""
-        pass
 
-    async def add_constraint(
-        self, constraint: str, patterns: list[str] | None = None
-    ) -> dict:
-        """Stub — constraint submission not yet mapped to daemon RPC."""
-        return {"status": "not_implemented"}
+    async def add_constraint(self, constraint: str, patterns: list[str] | None = None) -> dict:
+        """Stub: constraint submission not wired to daemon RPC."""
+        return {"status": "stub"}
 
-    async def list_constraints(self) -> list[dict]:
-        """Stub — constraints not yet mapped to daemon RPC."""
-        return []
-
-    async def list_runs(self, limit: int = 50) -> list[RunSummary]:
-        """Stub — v2 runs not yet mapped to daemon RPC."""
-        return []
-
-    async def create_run(
-        self, task: str, profile: str = "established", scope: str | None = None
-    ) -> dict:
-        """Stub — v2 runs not yet mapped to daemon RPC."""
-        return {"status": "not_implemented"}
+    async def create_run(self, task: str, profile: str = "established", scope: str | None = None) -> dict:
+        """Stub: v2 runs not wired to daemon RPC."""
+        return {"status": "stub"}
 
     async def dashboard_summary(self) -> DashboardSummary:
-        """Stub — dashboard not yet mapped to daemon RPC."""
+        """Stub: dashboard not wired to daemon RPC."""
         return DashboardSummary()
+
+    # --- Operator snapshot ---
+
+    async def operator_snapshot(self) -> dict:
+        return await self._call("operator.snapshot", {})
 
     # --- Runtime Supervisor ---
 
