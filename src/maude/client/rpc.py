@@ -642,3 +642,6 @@ class GovernorClient:
         if task:
             params["task"] = task
         return await self._call("runtime.session.fork", params)
+
+    async def runtime_budget_get(self, session_id: str) -> dict | None:
+        return await self._call("runtime.budget.get", {"session_id": session_id})
