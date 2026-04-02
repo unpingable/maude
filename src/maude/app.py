@@ -66,6 +66,13 @@ _HELP_TEXT = """\
   snapshot / overview / wtf       - Operator snapshot (what's happening now?)
   context / ctx / usage           - Context window usage breakdown
 
+[bold]Quick supervised loop:[/bold]
+  go <task>     - Launch a supervised session (short for 'supervised launch')
+  y / yes       - Approve next pending tool call
+  n / deny      - Deny next pending tool call
+  p / pending   - Show pending interventions
+  [dim](interventions auto-appear when a supervised session is active)[/dim]
+
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
 """
@@ -96,6 +103,8 @@ class MaudeApp(App):
         self._last_session_list: list[SessionSummary] = []
         self._pending_template: str | None = None
         self._pending_rollback_anchor: str | None = None
+        self._active_supervised_session: str | None = None
+        self._intervention_poll_task: asyncio.Task | None = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -155,6 +164,47 @@ class MaudeApp(App):
                 now = await self.client.governor_now()
                 self.session.last_governor_now = now
                 self._update_status_bar()
+            except Exception:
+                pass
+
+    def _start_intervention_poll(self) -> None:
+        """Start polling for pending interventions on the active supervised session."""
+        if self._intervention_poll_task is not None:
+            self._intervention_poll_task.cancel()
+        self._intervention_poll_task = asyncio.create_task(self._poll_interventions())
+
+    async def _poll_interventions(self) -> None:
+        """Poll for interventions and surface them inline when they appear."""
+        _last_seen: set[str] = set()
+        while True:
+            await asyncio.sleep(2)
+            sid = self._active_supervised_session
+            if not sid:
+                return
+            try:
+                interventions = await self.client.runtime_intervention_list(sid)
+                if not interventions:
+                    continue
+                log = self.query_one("#chat-log", RichLog)
+                for i in interventions:
+                    tcid = i["tool_call_id"]
+                    if tcid in _last_seen:
+                        continue
+                    _last_seen.add(tcid)
+                    tool = i["tool_name"]
+                    remaining = i.get("remaining_seconds", 0)
+                    inp = ""
+                    if i.get("tool_input"):
+                        import json as _json
+                        inp = _json.dumps(i["tool_input"])
+                        if len(inp) > 80:
+                            inp = inp[:77] + "..."
+                        inp = f"  [dim]{inp}[/dim]"
+                    log.write(
+                        f"\n[yellow]⚡ {tool}[/yellow] wants to run "
+                        f"({remaining:.0f}s remaining){inp}"
+                    )
+                    log.write("[dim]  y = approve, n = deny, p = show all pending[/dim]")
             except Exception:
                 pass
 
@@ -262,6 +312,14 @@ class MaudeApp(App):
             await self._handle_snapshot(log)
         elif intent.kind == IntentKind.CONTEXT:
             self._handle_context(log)
+        elif intent.kind == IntentKind.QUICK_APPROVE:
+            await self._handle_quick_approve(log)
+        elif intent.kind == IntentKind.QUICK_DENY:
+            await self._handle_quick_deny(log)
+        elif intent.kind == IntentKind.QUICK_PENDING:
+            await self._handle_quick_pending(log)
+        elif intent.kind == IntentKind.QUICK_LAUNCH:
+            await self._handle_supervised_launch(log, intent.payload)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -657,8 +715,9 @@ class MaudeApp(App):
             log.write(f"[dim]Use 'supervised events {session_id}' to see activity[/dim]")
             log.write(f"[dim]Use 'supervised interventions {session_id}' to see pending approvals[/dim]")
 
-            # Store for convenience
+            # Store for convenience and start polling interventions
             self._active_supervised_session = session_id
+            self._start_intervention_poll()
         except Exception as e:
             log.write(f"[red]Launch error:[/red] {e}")
 
@@ -808,6 +867,60 @@ class MaudeApp(App):
                 log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
         except Exception as e:
             log.write(f"[red]Reject error:[/red] {e}")
+
+    async def _handle_quick_approve(self, log: RichLog) -> None:
+        """Approve the next pending intervention on the active supervised session."""
+        sid = self._active_supervised_session
+        if not sid:
+            log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
+            return
+        try:
+            interventions = await self.client.runtime_intervention_list(sid)
+            if not interventions:
+                log.write("[dim]No pending interventions.[/dim]")
+                return
+            i = interventions[0]
+            tcid = i["tool_call_id"]
+            tool = i["tool_name"]
+            result = await self.client.runtime_intervention_resolve(sid, tcid, "approve")
+            if result.get("resolved"):
+                log.write(f"[green]Approved[/green] {tool} ({tcid[:8]})")
+            else:
+                log.write(f"[yellow]{result.get('error', 'Not found')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Approve error:[/red] {e}")
+
+    async def _handle_quick_deny(self, log: RichLog) -> None:
+        """Deny the next pending intervention on the active supervised session."""
+        sid = self._active_supervised_session
+        if not sid:
+            log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
+            return
+        try:
+            interventions = await self.client.runtime_intervention_list(sid)
+            if not interventions:
+                log.write("[dim]No pending interventions.[/dim]")
+                return
+            i = interventions[0]
+            tcid = i["tool_call_id"]
+            tool = i["tool_name"]
+            result = await self.client.runtime_intervention_resolve(
+                sid, tcid, "deny", reason="Denied by operator",
+            )
+            if result.get("resolved"):
+                log.write(f"[red]Denied[/red] {tool} ({tcid[:8]})")
+            else:
+                log.write(f"[yellow]{result.get('error', 'Not found')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Deny error:[/red] {e}")
+
+    async def _handle_quick_pending(self, log: RichLog) -> None:
+        """Show pending interventions for the active supervised session."""
+        sid = self._active_supervised_session
+        if not sid:
+            log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
+            return
+        await self._handle_supervised_interventions(log, sid)
 
     def _handle_context(self, log: RichLog) -> None:
         """Show context usage breakdown."""

@@ -215,3 +215,39 @@ class TestParseIntent:
     def test_clear_template(self):
         result = parse_intent("clear template")
         assert result.kind == IntentKind.CLEAR_TEMPLATE
+
+    # Quick supervised loop aliases
+    def test_y_approves(self):
+        assert parse_intent("y").kind == IntentKind.QUICK_APPROVE
+
+    def test_yes_approves(self):
+        assert parse_intent("yes").kind == IntentKind.QUICK_APPROVE
+
+    def test_approve_approves(self):
+        assert parse_intent("approve").kind == IntentKind.QUICK_APPROVE
+
+    def test_n_denies(self):
+        assert parse_intent("n").kind == IntentKind.QUICK_DENY
+
+    def test_deny_denies(self):
+        assert parse_intent("deny").kind == IntentKind.QUICK_DENY
+
+    def test_p_pending(self):
+        assert parse_intent("p").kind == IntentKind.QUICK_PENDING
+
+    def test_pending_pending(self):
+        assert parse_intent("pending").kind == IntentKind.QUICK_PENDING
+
+    def test_go_launches(self):
+        result = parse_intent("go fix the failing tests")
+        assert result.kind == IntentKind.QUICK_LAUNCH
+        assert result.payload == "fix the failing tests"
+
+    def test_context_intent(self):
+        assert parse_intent("context").kind == IntentKind.CONTEXT
+
+    def test_ctx_intent(self):
+        assert parse_intent("ctx").kind == IntentKind.CONTEXT
+
+    def test_usage_intent(self):
+        assert parse_intent("usage").kind == IntentKind.CONTEXT

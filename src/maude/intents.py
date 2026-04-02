@@ -36,6 +36,11 @@ class IntentKind(Enum):
     SUPERVISED_FORK = auto()
     SNAPSHOT = auto()
     CONTEXT = auto()
+    # Short aliases for tight supervised loop
+    QUICK_APPROVE = auto()
+    QUICK_DENY = auto()
+    QUICK_PENDING = auto()
+    QUICK_LAUNCH = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -100,6 +105,15 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^context$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^ctx$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
+    # Tight supervised loop: short aliases
+    (re.compile(r"^y$"), IntentKind.QUICK_APPROVE),
+    (re.compile(r"^yes$", re.IGNORECASE), IntentKind.QUICK_APPROVE),
+    (re.compile(r"^approve$", re.IGNORECASE), IntentKind.QUICK_APPROVE),
+    (re.compile(r"^n$"), IntentKind.QUICK_DENY),
+    (re.compile(r"^deny$", re.IGNORECASE), IntentKind.QUICK_DENY),
+    (re.compile(r"^pending$", re.IGNORECASE), IntentKind.QUICK_PENDING),
+    (re.compile(r"^p$"), IntentKind.QUICK_PENDING),
+    (re.compile(r"^go\s+(.*)", re.IGNORECASE), IntentKind.QUICK_LAUNCH),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]
