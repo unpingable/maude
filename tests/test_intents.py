@@ -251,3 +251,16 @@ class TestParseIntent:
 
     def test_usage_intent(self):
         assert parse_intent("usage").kind == IntentKind.CONTEXT
+
+    # Promote/reject aliases
+    def test_promote_is_apply(self):
+        assert parse_intent("promote").kind == IntentKind.APPLY
+
+    def test_accept_is_apply(self):
+        assert parse_intent("accept").kind == IntentKind.APPLY
+
+    def test_reject_is_rollback(self):
+        assert parse_intent("reject").kind == IntentKind.ROLLBACK
+
+    def test_revert_is_rollback(self):
+        assert parse_intent("revert").kind == IntentKind.ROLLBACK

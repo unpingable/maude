@@ -40,9 +40,9 @@ _HELP_TEXT = """\
   lock spec     - Lock the current spec (submits constraint to governor)
   build         - Switch to BUILD mode (creates v2 run)
   show spec     - Show the current spec draft
-  show diff     - Show pending violations and recent receipts
-  apply         - Proceed past a pending violation (logs exception, 2h override)
-  rollback      - Fix a pending violation (correct text, revise anchor, or cancel)
+  diff          - Show changes (supervised: workspace diff, governance: pending violation)
+  apply/promote - Accept changes (supervised: promote, governance: proceed with override)
+  rollback/reject - Revert (supervised: reject changes, governance: fix violation)
   why           - Show why something is blocked
   status        - Show governor status
   sessions      - List all sessions (also: ls, list sessions)
@@ -512,12 +512,50 @@ class MaudeApp(App):
             log.write(f"[red]Why error:[/red] {e}")
 
     async def _handle_diff(self, log: RichLog) -> None:
-        """Show pending violation and governance state."""
+        """Show diff — promotion diff for supervised sessions, violation for governance."""
+        # If we have an active supervised session, show promotion diff
+        sid = self._active_supervised_session
+        if sid:
+            try:
+                diff_result = await self.client.runtime_promotion_diff(sid)
+                diff_text = diff_result.get("diff", "")
+                files = diff_result.get("files_changed", [])
+                if not diff_text and not files:
+                    log.write("[dim]No workspace changes in supervised session.[/dim]")
+                    return
+                log.write(f"[bold]Workspace Changes ({sid[:8]})[/bold]")
+                if files:
+                    log.write(f"  {len(files)} file(s) changed:")
+                    for f in files[:15]:
+                        log.write(f"    {f}")
+                    if len(files) > 15:
+                        log.write(f"    ... and {len(files) - 15} more")
+                if diff_text:
+                    # Show abbreviated diff
+                    lines = diff_text.splitlines()
+                    for line in lines[:40]:
+                        if line.startswith("+") and not line.startswith("+++"):
+                            log.write(f"  [green]{line}[/green]")
+                        elif line.startswith("-") and not line.startswith("---"):
+                            log.write(f"  [red]{line}[/red]")
+                        elif line.startswith("@@"):
+                            log.write(f"  [cyan]{line}[/cyan]")
+                        else:
+                            log.write(f"  [dim]{line}[/dim]")
+                    if len(lines) > 40:
+                        log.write(f"  [dim]... {len(lines) - 40} more lines[/dim]")
+                log.write("")
+                log.write("[dim]promote = accept, reject = revert, or keep reviewing[/dim]")
+                return
+            except Exception as e:
+                log.write(f"[yellow]Promotion diff unavailable:[/yellow] {e}")
+                # Fall through to governance diff
+
+        # Governance violation flow
         try:
             pending = await self.client.commit_pending()
             if pending is None:
                 log.write("[green]No pending violations.[/green]")
-                # Show recent receipts as a quick summary
                 try:
                     receipts = await self.client.receipts_list(last=3)
                     if receipts:
@@ -547,7 +585,14 @@ class MaudeApp(App):
             log.write(f"[red]Diff error:[/red] {e}")
 
     async def _handle_apply(self, log: RichLog) -> None:
-        """Resolve pending violation by proceeding (log exception)."""
+        """Apply: promote supervised changes, or proceed past governance violation."""
+        # If supervised session is active, apply = promote
+        sid = self._active_supervised_session
+        if sid:
+            await self._handle_promote_active(log)
+            return
+
+        # Otherwise: governance violation proceed
         try:
             pending = await self.client.commit_pending()
             if pending is None:
@@ -569,8 +614,37 @@ class MaudeApp(App):
         except Exception as e:
             log.write(f"[red]Apply error:[/red] {e}")
 
+    async def _handle_promote_active(self, log: RichLog) -> None:
+        """Promote (accept) workspace changes from the active supervised session."""
+        sid = self._active_supervised_session
+        if not sid:
+            log.write("[yellow]No active supervised session.[/yellow]")
+            return
+        try:
+            result = await self.client.runtime_promotion_resolve(sid, "approve")
+            if result.get("resolved"):
+                log.write(f"[green]Changes promoted[/green] from session {sid[:8]}")
+            else:
+                log.write(f"[yellow]{result.get('error', 'Promotion not available')}[/yellow]")
+        except Exception as e:
+            log.write(f"[red]Promote error:[/red] {e}")
+
     async def _handle_rollback(self, log: RichLog) -> None:
-        """Resolve pending violation by fixing the response."""
+        """Rollback: reject supervised changes, or fix governance violation."""
+        # If supervised session is active, rollback = reject
+        sid = self._active_supervised_session
+        if sid:
+            try:
+                result = await self.client.runtime_promotion_resolve(sid, "reject")
+                if result.get("resolved"):
+                    log.write(f"[red]Changes reverted[/red] from session {sid[:8]}")
+                else:
+                    log.write(f"[yellow]{result.get('error', 'Rejection not available')}[/yellow]")
+            except Exception as e:
+                log.write(f"[red]Reject error:[/red] {e}")
+            return
+
+        # Governance violation fix flow
         try:
             pending = await self.client.commit_pending()
             if pending is None:
