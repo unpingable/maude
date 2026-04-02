@@ -85,7 +85,8 @@ class MaudeApp(App):
     CSS_PATH = _CSS_PATH
     BINDINGS = [
         Binding("ctrl+l", "lock_spec", "Lock Spec"),
-        Binding("ctrl+n", "new_session", "New Session"),
+        Binding("ctrl+y", "approve_next", "Approve", show=False),
+        Binding("ctrl+d", "deny_next", "Deny", show=False),
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
@@ -174,23 +175,38 @@ class MaudeApp(App):
         self._intervention_poll_task = asyncio.create_task(self._poll_interventions())
 
     async def _poll_interventions(self) -> None:
-        """Poll for interventions and surface them inline when they appear."""
-        _last_seen: set[str] = set()
+        """Poll for events and interventions, surface them inline."""
+        _seen_interventions: set[str] = set()
+        _event_cursor: int = 0
         while True:
             await asyncio.sleep(2)
             sid = self._active_supervised_session
             if not sid:
                 return
+            log = self.query_one("#chat-log", RichLog)
+
+            # Poll events (show what the agent is doing)
+            try:
+                events = await self.client.runtime_session_events(
+                    sid, since_seq=_event_cursor, limit=20,
+                )
+                for ev in events:
+                    seq = ev.get("seq", 0)
+                    if seq > _event_cursor:
+                        _event_cursor = seq
+                    kind = ev.get("kind", "")
+                    self._render_event(log, ev, kind)
+            except Exception:
+                pass
+
+            # Poll interventions
             try:
                 interventions = await self.client.runtime_intervention_list(sid)
-                if not interventions:
-                    continue
-                log = self.query_one("#chat-log", RichLog)
                 for i in interventions:
                     tcid = i["tool_call_id"]
-                    if tcid in _last_seen:
+                    if tcid in _seen_interventions:
                         continue
-                    _last_seen.add(tcid)
+                    _seen_interventions.add(tcid)
                     tool = i["tool_name"]
                     remaining = i.get("remaining_seconds", 0)
                     inp = ""
@@ -207,6 +223,54 @@ class MaudeApp(App):
                     log.write("[dim]  y = approve, n = deny, p = show all pending[/dim]")
             except Exception:
                 pass
+
+    def _render_event(self, log: RichLog, ev: dict, kind: str) -> None:
+        """Render a supervised session event inline."""
+        # Filter to interesting events — skip noise
+        if kind in ("session_created", "launching", "attaching"):
+            return  # already shown at launch time
+
+        if kind == "tool_call_proposed":
+            tool = ev.get("tool_name", "?")
+            log.write(f"  [cyan]→ {tool}[/cyan]", end="")
+            inp = ev.get("tool_input")
+            if inp:
+                import json as _json
+                summary = _json.dumps(inp) if isinstance(inp, dict) else str(inp)
+                if len(summary) > 60:
+                    summary = summary[:57] + "..."
+                log.write(f"  [dim]{summary}[/dim]")
+            else:
+                log.write("")
+
+        elif kind == "tool_call_completed":
+            tool = ev.get("tool_name", "?")
+            log.write(f"  [green]✓ {tool}[/green]")
+
+        elif kind == "tool_call_denied":
+            tool = ev.get("tool_name", "?")
+            log.write(f"  [red]✗ {tool} denied[/red]")
+
+        elif kind == "agent_output":
+            content = ev.get("content", "")
+            if content:
+                # Show a brief excerpt
+                excerpt = content[:120]
+                if len(content) > 120:
+                    excerpt += "..."
+                log.write(f"  [dim]{excerpt}[/dim]")
+
+        elif kind == "session_exited":
+            exit_code = ev.get("exit_code", "?")
+            log.write(f"\n[bold]Session exited[/bold] (code {exit_code})")
+            # Check for promotion
+            sid = self._active_supervised_session
+            if sid:
+                log.write("[dim]Use 'supervised promotion {sid}' or 'supervised diff {sid}' to review changes[/dim]")
+
+        elif kind == "session_failed":
+            error = ev.get("error", "unknown")
+            log.write(f"\n[red]Session failed:[/red] {error}")
 
     def _update_title(self) -> None:
         """Set terminal title to stable session identity (slow loop)."""
@@ -684,6 +748,14 @@ class MaudeApp(App):
     async def action_lock_spec(self) -> None:
         log = self.query_one("#chat-log", RichLog)
         await self._handle_lock_spec(log)
+
+    async def action_approve_next(self) -> None:
+        log = self.query_one("#chat-log", RichLog)
+        await self._handle_quick_approve(log)
+
+    async def action_deny_next(self) -> None:
+        log = self.query_one("#chat-log", RichLog)
+        await self._handle_quick_deny(log)
 
     async def action_new_session(self) -> None:
         log = self.query_one("#chat-log", RichLog)
