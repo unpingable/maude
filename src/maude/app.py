@@ -40,9 +40,9 @@ _HELP_TEXT = """\
   lock spec     - Lock the current spec (submits constraint to governor)
   build         - Switch to BUILD mode (creates v2 run)
   show spec     - Show the current spec draft
-  show diff     - Show diff (TODO)
-  apply         - Apply changes (TODO)
-  rollback      - Rollback changes (TODO)
+  show diff     - Show pending violations and recent receipts
+  apply         - Proceed past a pending violation (logs exception, 2h override)
+  rollback      - Fix a pending violation (correct text, revise anchor, or cancel)
   why           - Show why something is blocked
   status        - Show governor status
   sessions      - List all sessions (also: ls, list sessions)
@@ -95,6 +95,7 @@ class MaudeApp(App):
         self._polling_task: asyncio.Task | None = None
         self._last_session_list: list[SessionSummary] = []
         self._pending_template: str | None = None
+        self._pending_rollback_anchor: str | None = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -196,6 +197,11 @@ class MaudeApp(App):
             self._pending_template = None
             return
 
+        # Rollback follow-up flow
+        if self._pending_rollback_anchor is not None:
+            await self._handle_rollback_response(log, text)
+            return
+
         intent = parse_intent(text)
 
         if intent.kind == IntentKind.HELP:
@@ -223,11 +229,11 @@ class MaudeApp(App):
         elif intent.kind == IntentKind.DELETE_SESSION:
             await self._handle_delete_session(log, intent.payload)
         elif intent.kind == IntentKind.SHOW_DIFF:
-            log.write("[dim]# TODO: diff pane not yet implemented[/dim]")
+            await self._handle_diff(log)
         elif intent.kind == IntentKind.APPLY:
-            log.write("[dim]# TODO: apply gate not yet implemented[/dim]")
+            await self._handle_apply(log)
         elif intent.kind == IntentKind.ROLLBACK:
-            log.write("[dim]# TODO: rollback not yet implemented[/dim]")
+            await self._handle_rollback(log)
         elif intent.kind == IntentKind.SUPERVISED_LAUNCH:
             await self._handle_supervised_launch(log, intent.payload)
         elif intent.kind == IntentKind.SUPERVISED_LIST:
@@ -382,6 +388,108 @@ class MaudeApp(App):
                 log.write(f"[dim]Suggested: {now.suggested_action}[/dim]")
         except Exception as e:
             log.write(f"[red]Why error:[/red] {e}")
+
+    async def _handle_diff(self, log: RichLog) -> None:
+        """Show pending violation and governance state."""
+        try:
+            pending = await self.client.commit_pending()
+            if pending is None:
+                log.write("[green]No pending violations.[/green]")
+                # Show recent receipts as a quick summary
+                try:
+                    receipts = await self.client.receipts_list(last=3)
+                    if receipts:
+                        log.write("\n[bold]Recent receipts:[/bold]")
+                        for r in receipts:
+                            verdict = r.get("verdict", "?")
+                            gate = r.get("gate", "?")
+                            rid = r.get("receipt_id", "?")[:12]
+                            color = "green" if verdict == "pass" else "red" if verdict == "fail" else "yellow"
+                            log.write(f"  [{color}]{verdict:5s}[/{color}]  {gate}  {rid}")
+                except Exception:
+                    pass
+                return
+
+            log.write("[bold]Pending Violation[/bold]")
+            anchor = pending.get("anchor_id", "?")
+            pattern = pending.get("pattern", "")
+            text = pending.get("text_excerpt", "")[:80]
+            log.write(f"  Anchor:  {anchor}")
+            if pattern:
+                log.write(f"  Pattern: {pattern}")
+            if text:
+                log.write(f"  Text:    {text}")
+            log.write("")
+            log.write("[dim]Resolve with: apply (proceed), rollback (fix), or 'why' for details[/dim]")
+        except Exception as e:
+            log.write(f"[red]Diff error:[/red] {e}")
+
+    async def _handle_apply(self, log: RichLog) -> None:
+        """Resolve pending violation by proceeding (log exception)."""
+        try:
+            pending = await self.client.commit_pending()
+            if pending is None:
+                log.write("[dim]Nothing to apply — no pending violations.[/dim]")
+                return
+
+            anchor = pending.get("anchor_id", "?")
+            result = await self.client.commit_proceed(
+                scope="session",
+                expiry="2h",
+            )
+            log.write(
+                f"[green]Proceeded past violation:[/green] {anchor}"
+            )
+            if result.get("exception_id"):
+                log.write(f"  Exception logged: {result['exception_id']}")
+            log.write("[dim]Override expires in 2h. Use 'why' to inspect.[/dim]")
+            self._update_status_bar()
+        except Exception as e:
+            log.write(f"[red]Apply error:[/red] {e}")
+
+    async def _handle_rollback(self, log: RichLog) -> None:
+        """Resolve pending violation by fixing the response."""
+        try:
+            pending = await self.client.commit_pending()
+            if pending is None:
+                log.write("[dim]Nothing to rollback — no pending violations.[/dim]")
+                return
+
+            anchor = pending.get("anchor_id", "?")
+            log.write(f"[bold]Rolling back violation:[/bold] {anchor}")
+            log.write("")
+            log.write("Options:")
+            log.write("  1. Type a corrected response to replace the violating text")
+            log.write("  2. Type 'revise' to update the anchor instead")
+            log.write("  3. Type 'cancel' to leave the violation pending")
+            log.write("")
+            log.write("[dim]Enter corrected text, 'revise', or 'cancel':[/dim]")
+            # Set a flag so the next input is treated as the fix
+            self._pending_rollback_anchor = anchor
+        except Exception as e:
+            log.write(f"[red]Rollback error:[/red] {e}")
+
+    async def _handle_rollback_response(self, log: RichLog, text: str) -> None:
+        """Handle follow-up input for rollback flow."""
+        anchor = self._pending_rollback_anchor
+        self._pending_rollback_anchor = None
+
+        lower = text.strip().lower()
+        if lower == "cancel":
+            log.write("[dim]Rollback cancelled. Violation still pending.[/dim]")
+            return
+
+        try:
+            if lower == "revise":
+                await self.client.commit_revise()
+                log.write(f"[green]Anchor revised:[/green] {anchor}")
+            else:
+                await self.client.commit_fix(corrected_text=text)
+                log.write(f"[green]Fixed violation:[/green] {anchor}")
+                log.write("[dim]Corrected text submitted.[/dim]")
+            self._update_status_bar()
+        except Exception as e:
+            log.write(f"[red]Rollback resolve error:[/red] {e}")
 
     def _resolve_session_id(self, ref: str) -> str | None:
         """Resolve a session reference — either a #N index or a raw ID."""
