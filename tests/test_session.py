@@ -1,12 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 """Tests for session state management."""
 
-import os
-
 import pytest
 
 from maude.config import Settings
-from maude.session import MaudeSession, Mode
+from maude.session import ContextUsage, MaudeSession, Mode
 
 
 class TestMaudeSession:
@@ -187,3 +185,72 @@ class TestSettingsProjectName:
     def test_label_from_init(self):
         s = Settings(label="my-session")
         assert s.label == "my-session"
+
+
+class TestContextUsage:
+    def test_empty_by_default(self):
+        cu = ContextUsage()
+        assert cu.input_tokens == 0
+        assert cu.turns == 0
+        assert cu.format_compact() == ""
+
+    def test_update_from_usage(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 5000, "output_tokens": 200})
+        assert cu.input_tokens == 5000
+        assert cu.output_tokens == 200
+        assert cu.turns == 1
+        assert cu.baseline_input_tokens == 5000
+
+    def test_baseline_set_once(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 5000, "output_tokens": 200})
+        cu.update({"input_tokens": 12000, "output_tokens": 400})
+        assert cu.baseline_input_tokens == 5000
+        assert cu.input_tokens == 12000
+        assert cu.turns == 2
+
+    def test_clearable_tokens(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 5000, "output_tokens": 200})
+        cu.update({"input_tokens": 15000, "output_tokens": 400})
+        assert cu.clearable_tokens == 10000
+
+    def test_format_compact(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 48000, "output_tokens": 1000})
+        result = cu.format_compact(model_context_window=200_000)
+        assert "48k" in result
+        assert "200k" in result
+        assert "24%" in result
+
+    def test_format_compact_millions(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 1_500_000, "output_tokens": 50000})
+        result = cu.format_compact(model_context_window=2_000_000)
+        assert "1.5m" in result
+
+    def test_format_detail(self):
+        cu = ContextUsage()
+        cu.update({"input_tokens": 48000, "output_tokens": 1000})
+        result = cu.format_detail()
+        assert "48,000" in result
+        assert "1,000" in result
+        assert "Turns:" in result
+
+    def test_update_empty_dict_noop(self):
+        cu = ContextUsage()
+        cu.update({})
+        assert cu.turns == 0
+        assert cu.input_tokens == 0
+
+    def test_session_has_context_usage(self):
+        s = MaudeSession()
+        assert s.context_usage.input_tokens == 0
+
+    def test_status_line_includes_ctx(self):
+        s = MaudeSession()
+        s.context_usage.update({"input_tokens": 48000, "output_tokens": 1000})
+        line = s.status_line()
+        assert "ctx:" in line
+        assert "48k" in line

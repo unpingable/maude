@@ -58,6 +58,14 @@ class GovernorClient:
     or ``governor_dir`` (same resolution logic as before).
     """
 
+    @property
+    def last_stream_usage(self) -> dict[str, int]:
+        """Usage data from the last chat.stream response, if available."""
+        result = getattr(self, "_last_stream_result", None)
+        if result and isinstance(result, dict):
+            return result.get("usage", {})
+        return {}
+
     def __init__(
         self,
         socket_path: str | Path | None = None,

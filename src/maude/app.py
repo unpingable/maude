@@ -64,6 +64,7 @@ _HELP_TEXT = """\
   supervised fork <id> [task]     - Fork new session from promoted parent
 
   snapshot / overview / wtf       - Operator snapshot (what's happening now?)
+  context / ctx / usage           - Context window usage breakdown
 
   help / ?      - Show this help
   [dim]anything else → sent to model via governor[/dim]
@@ -253,6 +254,8 @@ class MaudeApp(App):
             await self._handle_supervised_fork(log, intent.payload)
         elif intent.kind == IntentKind.SNAPSHOT:
             await self._handle_snapshot(log)
+        elif intent.kind == IntentKind.CONTEXT:
+            self._handle_context(log)
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
@@ -499,6 +502,12 @@ class MaudeApp(App):
             log.write(f"\n[red]Chat error:[/red] {e}")
             return
 
+        # Update context usage from stream result
+        usage = self.client.last_stream_usage
+        if usage:
+            self.session.context_usage.update(usage)
+            self._update_status_bar()
+
         self.session.add_message("assistant", full_response)
 
         # Accumulate response into spec draft when template is loaded
@@ -691,6 +700,15 @@ class MaudeApp(App):
                 log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
         except Exception as e:
             log.write(f"[red]Reject error:[/red] {e}")
+
+    def _handle_context(self, log: RichLog) -> None:
+        """Show context usage breakdown."""
+        detail = self.session.context_usage.format_detail()
+        log.write("[bold]Context Usage[/bold]")
+        log.write(detail)
+        if self.session.context_usage.clearable_tokens > 5000:
+            clearable_k = self.session.context_usage.clearable_tokens / 1000
+            log.write(f"\n[yellow]Tip: /clear to reclaim ~{clearable_k:.0f}k tokens[/yellow]")
 
     async def _handle_snapshot(self, log: RichLog) -> None:
         """Show operator snapshot — the 'what the hell is happening' view."""

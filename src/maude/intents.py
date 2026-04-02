@@ -35,6 +35,7 @@ class IntentKind(Enum):
     SUPERVISED_REJECT = auto()
     SUPERVISED_FORK = auto()
     SNAPSHOT = auto()
+    CONTEXT = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -96,6 +97,9 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^snapshot$", re.IGNORECASE), IntentKind.SNAPSHOT),
     (re.compile(r"^overview$", re.IGNORECASE), IntentKind.SNAPSHOT),
     (re.compile(r"^wtf$", re.IGNORECASE), IntentKind.SNAPSHOT),
+    (re.compile(r"^context$", re.IGNORECASE), IntentKind.CONTEXT),
+    (re.compile(r"^ctx$", re.IGNORECASE), IntentKind.CONTEXT),
+    (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]
