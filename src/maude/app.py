@@ -216,10 +216,19 @@ class MaudeApp(App):
                         if len(inp) > 80:
                             inp = inp[:77] + "..."
                         inp = f"  [dim]{inp}[/dim]"
-                    log.write(
-                        f"\n[yellow]⚡ {tool}[/yellow] wants to run "
-                        f"({remaining:.0f}s remaining){inp}"
-                    )
+                    # Communication gets a louder warning
+                    action_class = i.get("action_class", "write")
+                    is_comm = i.get("communication_warning") or action_class == "communicate"
+                    if is_comm:
+                        log.write(
+                            f"\n[bold red]📡 COMMUNICATE: {tool}[/bold red] wants to send "
+                            f"externally ({remaining:.0f}s remaining){inp}"
+                        )
+                    else:
+                        log.write(
+                            f"\n[yellow]⚡ {tool}[/yellow] wants to run "
+                            f"({remaining:.0f}s remaining){inp}"
+                        )
                     log.write("[dim]  y = approve, n = deny, p = show all pending[/dim]")
             except Exception:
                 pass
