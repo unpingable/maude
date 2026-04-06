@@ -264,3 +264,14 @@ class TestParseIntent:
 
     def test_revert_is_rollback(self):
         assert parse_intent("revert").kind == IntentKind.ROLLBACK
+
+    # Clear
+    def test_clear(self):
+        assert parse_intent("clear").kind == IntentKind.CLEAR
+
+    def test_reset(self):
+        assert parse_intent("reset").kind == IntentKind.CLEAR
+
+    def test_clear_template_not_clear(self):
+        """'clear template' should be CLEAR_TEMPLATE, not CLEAR."""
+        assert parse_intent("clear template").kind == IntentKind.CLEAR_TEMPLATE

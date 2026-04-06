@@ -65,6 +65,7 @@ _HELP_TEXT = """\
 
   snapshot / overview / wtf       - Operator snapshot (what's happening now?)
   context / ctx / usage           - Context window usage breakdown
+  clear / reset                   - Start fresh session, reclaim context tokens
 
 [bold]Quick supervised loop:[/bold]
   go <task>     - Launch a supervised session (short for 'supervised launch')
@@ -408,6 +409,8 @@ class MaudeApp(App):
             await self._handle_snapshot(log)
         elif intent.kind == IntentKind.CONTEXT:
             self._handle_context(log)
+        elif intent.kind == IntentKind.CLEAR:
+            await self._handle_clear(log)
         elif intent.kind == IntentKind.QUICK_APPROVE:
             await self._handle_quick_approve(log)
         elif intent.kind == IntentKind.QUICK_DENY:
@@ -1091,6 +1094,35 @@ class MaudeApp(App):
         except Exception:
             pass
         return None
+
+    async def _handle_clear(self, log: RichLog) -> None:
+        """Clear context: reset messages, create fresh session."""
+        old_usage = self.session.context_usage
+        clearable = old_usage.clearable_tokens
+        turns = old_usage.turns
+
+        # Reset session state but preserve project/backend info
+        project = self.session.project_name
+        backend = self.session.backend_type
+        self.session = MaudeSession(
+            project_name=project,
+            backend_type=backend,
+        )
+
+        # Create a fresh governor session
+        try:
+            new = await self.client.create_session(title="Maude session")
+            self.session.governor_session_id = new.id
+        except Exception:
+            pass
+
+        self._update_status_bar()
+
+        if clearable > 0:
+            k = clearable / 1000
+            log.write(f"[green]Cleared.[/green] ~{k:.0f}k tokens reclaimed ({turns} turns reset).")
+        else:
+            log.write("[green]Cleared.[/green] Fresh session started.")
 
     async def _handle_quick_approve(self, log: RichLog) -> None:
         """Approve the next pending intervention on the active supervised session."""

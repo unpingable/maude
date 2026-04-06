@@ -36,6 +36,7 @@ class IntentKind(Enum):
     SUPERVISED_FORK = auto()
     SNAPSHOT = auto()
     CONTEXT = auto()
+    CLEAR = auto()
     # Short aliases for tight supervised loop
     QUICK_APPROVE = auto()
     QUICK_DENY = auto()
@@ -109,6 +110,8 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^context$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^ctx$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
+    (re.compile(r"^clear$", re.IGNORECASE), IntentKind.CLEAR),
+    (re.compile(r"^reset$", re.IGNORECASE), IntentKind.CLEAR),
     # Tight supervised loop: short aliases
     (re.compile(r"^y$"), IntentKind.QUICK_APPROVE),
     (re.compile(r"^yes$", re.IGNORECASE), IntentKind.QUICK_APPROVE),
