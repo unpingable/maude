@@ -272,14 +272,37 @@ class MaudeApp(App):
         elif kind == "session_exited":
             exit_code = ev.get("exit_code", "?")
             log.write(f"\n[bold]Session exited[/bold] (code {exit_code})")
-            # Check for promotion
+            log.write("[dim]  diff = review changes, promote = accept, reject = revert[/dim]")
+            # Auto-show file summary if we can
             sid = self._active_supervised_session
             if sid:
-                log.write("[dim]Use 'supervised promotion {sid}' or 'supervised diff {sid}' to review changes[/dim]")
+                try:
+                    import asyncio
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        asyncio.ensure_future(self._auto_show_exit_summary(log, sid))
+                except Exception:
+                    pass
 
         elif kind == "session_failed":
             error = ev.get("error", "unknown")
             log.write(f"\n[red]Session failed:[/red] {error}")
+
+    async def _auto_show_exit_summary(self, log: RichLog, sid: str) -> None:
+        """Auto-show a brief summary when a supervised session exits."""
+        try:
+            diff_result = await self.client.runtime_promotion_diff(sid)
+            files = diff_result.get("files_changed", [])
+            if files:
+                log.write(f"\n  [bold]{len(files)} file(s) changed:[/bold]")
+                for f in files[:5]:
+                    log.write(f"    {f}")
+                if len(files) > 5:
+                    log.write(f"    ... and {len(files) - 5} more")
+            else:
+                log.write("\n  [dim]No workspace changes detected.[/dim]")
+        except Exception:
+            pass  # Promotion may not be available yet
 
     def _update_title(self) -> None:
         """Set terminal title to stable session identity (slow loop)."""
@@ -1023,9 +1046,26 @@ class MaudeApp(App):
         except Exception as e:
             log.write(f"[red]Reject error:[/red] {e}")
 
+    async def _auto_attach_session(self, log: RichLog) -> str | None:
+        """If no active session, try to auto-attach to the only running one."""
+        if self._active_supervised_session:
+            return self._active_supervised_session
+        try:
+            sessions = await self.client.runtime_session_list()
+            running = [s for s in sessions if s.get("status") in ("running", "waiting_tool_decision")]
+            if len(running) == 1:
+                sid = running[0]["session_id"]
+                self._active_supervised_session = sid
+                self._start_intervention_poll()
+                log.write(f"[dim]Auto-attached to session {sid[:8]}[/dim]")
+                return sid
+        except Exception:
+            pass
+        return None
+
     async def _handle_quick_approve(self, log: RichLog) -> None:
         """Approve the next pending intervention on the active supervised session."""
-        sid = self._active_supervised_session
+        sid = await self._auto_attach_session(log)
         if not sid:
             log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
             return
@@ -1047,7 +1087,7 @@ class MaudeApp(App):
 
     async def _handle_quick_deny(self, log: RichLog) -> None:
         """Deny the next pending intervention on the active supervised session."""
-        sid = self._active_supervised_session
+        sid = await self._auto_attach_session(log)
         if not sid:
             log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
             return
@@ -1071,7 +1111,7 @@ class MaudeApp(App):
 
     async def _handle_quick_pending(self, log: RichLog) -> None:
         """Show pending interventions for the active supervised session."""
-        sid = self._active_supervised_session
+        sid = await self._auto_attach_session(log)
         if not sid:
             log.write("[yellow]No active supervised session. Use 'go <task>' to launch one.[/yellow]")
             return
