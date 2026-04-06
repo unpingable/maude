@@ -425,7 +425,6 @@ class MaudeApp(App):
             log.write("[bold]Governor Status:[/bold]")
             log.write(f"  context: {status.get('context_id', '?')}")
             log.write(f"  mode: {status.get('mode', '?')}")
-            log.write(f"  initialized: {status.get('initialized', '?')}")
             vm = status.get("viewmodel")
             if vm:
                 log.write(f"  decisions: {len(vm.get('decisions', []))}")
@@ -433,6 +432,36 @@ class MaudeApp(App):
                 log.write(f"  claims: {len(vm.get('claims', []))}")
         except Exception as e:
             log.write(f"[red]Status error:[/red] {e}")
+
+        # Context usage
+        ctx = self.session.context_usage.format_compact()
+        if ctx:
+            log.write(f"\n[bold]Context:[/bold] {ctx}")
+
+        # Supervised sessions
+        try:
+            sessions = await self.client.runtime_session_list()
+            if sessions:
+                active_sid = self._active_supervised_session
+                log.write(f"\n[bold]Supervised Sessions ({len(sessions)}):[/bold]")
+                for s in sessions[:5]:
+                    sid = s.get("session_id", "?")
+                    st = s.get("status", "?")
+                    task = (s.get("task") or "")[:35]
+                    pending = s.get("pending_interventions", 0)
+                    marker = " *" if sid == active_sid else ""
+                    parts = [f"  {sid[:8]}  {st:12s}"]
+                    if task:
+                        parts.append(task)
+                    if pending:
+                        parts.append(f"[yellow][{pending} pending][/yellow]")
+                    if marker:
+                        parts.append("[green](active)[/green]")
+                    log.write("  ".join(parts))
+                if len(sessions) > 5:
+                    log.write(f"  ... and {len(sessions) - 5} more")
+        except Exception:
+            pass
 
     def _handle_plan(self, log: RichLog, payload: str) -> None:
         # Strip "plan" prefix from payload
@@ -1151,16 +1180,24 @@ class MaudeApp(App):
                 for s in suggestions[:5]:
                     log.write(f"  {s}")
 
+            # Context usage
+            ctx = self.session.context_usage.format_compact()
+            if ctx:
+                log.write(f"\n[bold]Context:[/bold] {ctx}")
+
             # Supervised sessions summary
             try:
                 sessions = await self.client.runtime_session_list()
                 if sessions:
+                    active_sid = self._active_supervised_session
                     log.write(f"\n[bold]Supervised Sessions ({len(sessions)}):[/bold]")
                     for s in sessions:
+                        sid = s.get("session_id", "?")
                         pending = s.get("pending_interventions", 0)
-                        task = s.get("task", "")[:40]
+                        task = (s.get("task") or "")[:40]
                         pending_str = f" [yellow][{pending} pending][/yellow]" if pending else ""
-                        log.write(f"  {s['session_id']}  {s['status']:12s}  {task}{pending_str}")
+                        active_str = " [green](active)[/green]" if sid == active_sid else ""
+                        log.write(f"  {sid[:8]}  {s['status']:12s}  {task}{pending_str}{active_str}")
             except Exception:
                 pass  # Supervised sessions are optional
 
