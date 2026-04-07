@@ -110,6 +110,7 @@ class MaudeApp(App):
         self._pending_rollback_anchor: str | None = None
         self._active_supervised_session: str | None = None
         self._intervention_poll_task: asyncio.Task | None = None
+        self._daemon_connected: bool = False
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -128,13 +129,26 @@ class MaudeApp(App):
         try:
             health = await self.client.health()
             self.session.backend_type = health.backend.type
+            self._daemon_connected = True
             log.write(
                 f"[green]Connected[/green] — backend={health.backend.type} "
                 f"mode={health.governor.mode} context={health.governor.context_id}"
             )
+        except ConnectionRefusedError:
+            log.write("[red]Governor daemon is not running.[/red]")
+            log.write("")
+            log.write("  Start it with:  [bold]governor serve[/bold]")
+            log.write("  Or with stdio:  [bold]governor serve --stdio[/bold]")
+            log.write("")
+            log.write("[dim]Most commands need the daemon. Local commands (help, history, clear) still work.[/dim]")
+        except FileNotFoundError:
+            log.write("[red]Governor socket not found.[/red]")
+            log.write("")
+            log.write("  Is governor initialized?  [bold]governor init[/bold]")
+            log.write("  Then start the daemon:    [bold]governor serve[/bold]")
         except Exception as e:
             log.write(f"[red]Governor unreachable:[/red] {e}")
-            log.write("[dim]Chat commands will fail until governor is available.[/dim]")
+            log.write("[dim]Start the daemon with: governor serve[/dim]")
 
         # Set terminal title to stable session identity
         self._update_title()
@@ -168,9 +182,19 @@ class MaudeApp(App):
             try:
                 now = await self.client.governor_now()
                 self.session.last_governor_now = now
+                if not self._daemon_connected:
+                    self._daemon_connected = True
+                    log = self.query_one("#chat-log", RichLog)
+                    log.write("\n[green]Governor daemon connected.[/green]")
                 self._update_status_bar()
             except Exception:
-                pass
+                if self._daemon_connected:
+                    self._daemon_connected = False
+                    try:
+                        log = self.query_one("#chat-log", RichLog)
+                        log.write("\n[red]Governor daemon disconnected.[/red]")
+                    except Exception:
+                        pass
 
     def _start_intervention_poll(self) -> None:
         """Start polling for pending interventions on the active supervised session."""
@@ -431,7 +455,21 @@ class MaudeApp(App):
         elif intent.kind == IntentKind.CHAT:
             await self._handle_chat(log, text)
 
+    def _require_daemon(self, log: RichLog) -> bool:
+        """Check daemon connection. Returns True if connected, False if not.
+
+        Shows a friendly message on failure instead of letting RPC errors
+        propagate with cryptic backtraces.
+        """
+        if self._daemon_connected:
+            return True
+        log.write("[yellow]Not connected to governor daemon.[/yellow]")
+        log.write("[dim]Start it with: governor serve[/dim]")
+        return False
+
     async def _handle_status(self, log: RichLog) -> None:
+        if not self._require_daemon(log):
+            return
         try:
             status = await self.client.governor_status()
             log.write("[bold]Governor Status:[/bold]")
@@ -842,6 +880,8 @@ class MaudeApp(App):
             log.write(f"[red]Delete session error:[/red] {e}")
 
     async def _handle_chat(self, log: RichLog, text: str) -> None:
+        if not self._require_daemon(log):
+            return
         log.write(f"\n[bold cyan]You:[/bold cyan] {text}")
 
         self.session.add_message("user", text)
@@ -921,6 +961,8 @@ class MaudeApp(App):
     # --- Supervised Runtime Handlers ---
 
     async def _handle_supervised_launch(self, log: RichLog, payload: str) -> None:
+        if not self._require_daemon(log):
+            return
         task = payload.strip() if payload.strip() else None
         try:
             result = await self.client.runtime_session_create(task=task)
@@ -1341,6 +1383,8 @@ class MaudeApp(App):
 
     async def _handle_snapshot(self, log: RichLog) -> None:
         """Show operator snapshot — the 'what the hell is happening' view."""
+        if not self._require_daemon(log):
+            return
         try:
             snap = await self.client.operator_snapshot()
 
