@@ -66,6 +66,9 @@ _HELP_TEXT = """\
   snapshot / overview / wtf       - Operator snapshot (what's happening now?)
   context / ctx / usage           - Context window usage breakdown
   clear / reset                   - Start fresh session, reclaim context tokens
+  lineage / branch                - Where am I? Parent chain, children, siblings
+  lineage tree                    - Full session fork tree
+  history / log                   - Recent message history (last 20)
 
 [bold]Quick supervised loop:[/bold]
   go <task>     - Launch a supervised session (short for 'supervised launch')
@@ -411,6 +414,12 @@ class MaudeApp(App):
             self._handle_context(log)
         elif intent.kind == IntentKind.CLEAR:
             await self._handle_clear(log)
+        elif intent.kind == IntentKind.LINEAGE:
+            await self._handle_lineage(log)
+        elif intent.kind == IntentKind.LINEAGE_TREE:
+            await self._handle_lineage_tree(log)
+        elif intent.kind == IntentKind.HISTORY:
+            self._handle_history(log)
         elif intent.kind == IntentKind.QUICK_APPROVE:
             await self._handle_quick_approve(log)
         elif intent.kind == IntentKind.QUICK_DENY:
@@ -1094,6 +1103,149 @@ class MaudeApp(App):
         except Exception:
             pass
         return None
+
+    async def _handle_lineage(self, log: RichLog) -> None:
+        """Show current session lineage: where am I, where did I come from."""
+        try:
+            sessions = await self.client.runtime_session_list()
+            if not sessions:
+                log.write("[dim]No supervised sessions.[/dim]")
+                return
+
+            # Build lookup
+            by_id = {s["session_id"]: s for s in sessions}
+            active_sid = self._active_supervised_session
+
+            # Find the active session or the most recent one
+            current = by_id.get(active_sid) if active_sid else None
+            if not current and sessions:
+                current = sessions[0]
+
+            if not current:
+                log.write("[dim]No session to show lineage for.[/dim]")
+                return
+
+            sid = current["session_id"]
+            log.write("[bold]Session Lineage[/bold]")
+            log.write(f"  Current:  {sid[:8]}  {current['status']}")
+            if current.get("task"):
+                log.write(f"  Task:     {current['task'][:60]}")
+            if current.get("started_at"):
+                log.write(f"  Started:  {current['started_at'][:19]}")
+
+            # Walk parent chain
+            chain: list[dict] = []
+            node = current
+            while node and node.get("parent_session_id"):
+                parent = by_id.get(node["parent_session_id"])
+                if parent:
+                    chain.append(parent)
+                    node = parent
+                else:
+                    chain.append({"session_id": node["parent_session_id"], "status": "?", "task": None})
+                    break
+
+            if chain:
+                log.write("\n[bold]Parent chain:[/bold]")
+                for i, ancestor in enumerate(reversed(chain)):
+                    indent = "  " + "  " * i
+                    aid = ancestor["session_id"][:8] if len(ancestor.get("session_id", "")) >= 8 else ancestor.get("session_id", "?")
+                    task = (ancestor.get("task") or "")[:40]
+                    log.write(f"{indent}└─ {aid}  {ancestor['status']}  {task}")
+                indent = "  " + "  " * len(chain)
+                marker = " [green](current)[/green]"
+                log.write(f"{indent}└─ {sid[:8]}  {current['status']}{marker}")
+
+            # Find children
+            children = [s for s in sessions if s.get("parent_session_id") == sid]
+            if children:
+                log.write(f"\n[bold]Children ({len(children)}):[/bold]")
+                for c in children[:5]:
+                    cid = c["session_id"][:8]
+                    task = (c.get("task") or "")[:40]
+                    log.write(f"  └─ {cid}  {c['status']}  {task}")
+
+            # Find siblings
+            parent_id = current.get("parent_session_id")
+            if parent_id:
+                siblings = [
+                    s for s in sessions
+                    if s.get("parent_session_id") == parent_id and s["session_id"] != sid
+                ]
+                if siblings:
+                    log.write(f"\n[bold]Siblings ({len(siblings)}):[/bold]")
+                    for s in siblings[:5]:
+                        sid_s = s["session_id"][:8]
+                        task = (s.get("task") or "")[:40]
+                        log.write(f"  ── {sid_s}  {s['status']}  {task}")
+
+        except Exception as e:
+            log.write(f"[red]Lineage error:[/red] {e}")
+
+    async def _handle_lineage_tree(self, log: RichLog) -> None:
+        """Show full session tree."""
+        try:
+            sessions = await self.client.runtime_session_list()
+            if not sessions:
+                log.write("[dim]No supervised sessions.[/dim]")
+                return
+
+            active_sid = self._active_supervised_session
+
+            # Build parent→children map
+            children_of: dict[str | None, list[dict]] = {}
+            for s in sessions:
+                parent = s.get("parent_session_id")
+                children_of.setdefault(parent, []).append(s)
+
+            # Find roots (no parent or parent not in our set)
+            known_ids = {s["session_id"] for s in sessions}
+            roots = [
+                s for s in sessions
+                if not s.get("parent_session_id") or s["parent_session_id"] not in known_ids
+            ]
+
+            if not roots:
+                roots = sessions[:1]
+
+            log.write("[bold]Session Tree[/bold]")
+
+            def render_node(node: dict, prefix: str, is_last: bool) -> None:
+                sid = node["session_id"]
+                short = sid[:8]
+                status = node["status"]
+                task = (node.get("task") or "")[:35]
+                marker = " [green]*[/green]" if sid == active_sid else ""
+                connector = "└─ " if is_last else "├─ "
+                log.write(f"{prefix}{connector}{short}  {status:12s}  {task}{marker}")
+
+                kids = children_of.get(sid, [])
+                for i, kid in enumerate(kids):
+                    child_prefix = prefix + ("   " if is_last else "│  ")
+                    render_node(kid, child_prefix, i == len(kids) - 1)
+
+            for i, root in enumerate(roots):
+                render_node(root, "  ", i == len(roots) - 1)
+
+        except Exception as e:
+            log.write(f"[red]Lineage tree error:[/red] {e}")
+
+    def _handle_history(self, log: RichLog) -> None:
+        """Show message history for the current session."""
+        messages = self.session.messages
+        if not messages:
+            log.write("[dim]No messages in current session.[/dim]")
+            return
+        log.write(f"[bold]Message History ({len(messages)} messages):[/bold]")
+        for i, msg in enumerate(messages[-20:], max(1, len(messages) - 19)):
+            role = msg["role"]
+            content = msg["content"]
+            if len(content) > 100:
+                content = content[:97] + "..."
+            if role == "user":
+                log.write(f"  {i:3d}  [cyan]You:[/cyan] {content}")
+            else:
+                log.write(f"  {i:3d}  [green]Asst:[/green] {content}")
 
     async def _handle_clear(self, log: RichLog) -> None:
         """Clear context: reset messages, create fresh session."""

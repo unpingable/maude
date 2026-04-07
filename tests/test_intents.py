@@ -275,3 +275,19 @@ class TestParseIntent:
     def test_clear_template_not_clear(self):
         """'clear template' should be CLEAR_TEMPLATE, not CLEAR."""
         assert parse_intent("clear template").kind == IntentKind.CLEAR_TEMPLATE
+
+    # Lineage
+    def test_lineage(self):
+        assert parse_intent("lineage").kind == IntentKind.LINEAGE
+
+    def test_branch(self):
+        assert parse_intent("branch").kind == IntentKind.LINEAGE
+
+    def test_lineage_tree(self):
+        assert parse_intent("lineage tree").kind == IntentKind.LINEAGE_TREE
+
+    def test_history(self):
+        assert parse_intent("history").kind == IntentKind.HISTORY
+
+    def test_log(self):
+        assert parse_intent("log").kind == IntentKind.HISTORY

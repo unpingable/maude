@@ -37,6 +37,10 @@ class IntentKind(Enum):
     SNAPSHOT = auto()
     CONTEXT = auto()
     CLEAR = auto()
+    # Session lineage
+    LINEAGE = auto()
+    LINEAGE_TREE = auto()
+    HISTORY = auto()
     # Short aliases for tight supervised loop
     QUICK_APPROVE = auto()
     QUICK_DENY = auto()
@@ -112,6 +116,11 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^clear$", re.IGNORECASE), IntentKind.CLEAR),
     (re.compile(r"^reset$", re.IGNORECASE), IntentKind.CLEAR),
+    (re.compile(r"^lineage tree$", re.IGNORECASE), IntentKind.LINEAGE_TREE),
+    (re.compile(r"^lineage$", re.IGNORECASE), IntentKind.LINEAGE),
+    (re.compile(r"^branch$", re.IGNORECASE), IntentKind.LINEAGE),
+    (re.compile(r"^history$", re.IGNORECASE), IntentKind.HISTORY),
+    (re.compile(r"^log$", re.IGNORECASE), IntentKind.HISTORY),
     # Tight supervised loop: short aliases
     (re.compile(r"^y$"), IntentKind.QUICK_APPROVE),
     (re.compile(r"^yes$", re.IGNORECASE), IntentKind.QUICK_APPROVE),
