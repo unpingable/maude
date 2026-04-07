@@ -101,6 +101,7 @@ class MaudeSession:
     project_name: str = ""
     backend_type: str = ""
     context_usage: ContextUsage = field(default_factory=ContextUsage)
+    active_supervised_id: str | None = None
 
     def status_line(self) -> str:
         mode_str = self.mode.name
@@ -118,6 +119,8 @@ class MaudeSession:
         ctx_str = self.context_usage.format_compact()
         if ctx_str:
             parts.append(ctx_str)
+        if self.active_supervised_id:
+            parts.append(f"SUP={self.active_supervised_id[:8]}")
         parts.append(f"MODE={mode_str}")
         parts.append(f"SPEC={spec_str}{tmpl_str}")
         parts.append(f"SESSION={session_str}{gov_str}")

@@ -91,6 +91,7 @@ class MaudeApp(App):
         Binding("ctrl+l", "lock_spec", "Lock Spec"),
         Binding("ctrl+y", "approve_next", "Approve", show=False),
         Binding("ctrl+d", "deny_next", "Deny", show=False),
+        Binding("ctrl+t", "lineage_tree", "Tree", show=False),
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
@@ -944,6 +945,10 @@ class MaudeApp(App):
         log = self.query_one("#chat-log", RichLog)
         await self._handle_quick_deny(log)
 
+    async def action_lineage_tree(self) -> None:
+        log = self.query_one("#chat-log", RichLog)
+        await self._handle_lineage_tree(log)
+
     async def action_new_session(self) -> None:
         log = self.query_one("#chat-log", RichLog)
         try:
@@ -978,6 +983,8 @@ class MaudeApp(App):
 
             # Store for convenience and start polling interventions
             self._active_supervised_session = session_id
+            self.session.active_supervised_id = session_id
+            self._update_status_bar()
             self._start_intervention_poll()
         except Exception as e:
             log.write(f"[red]Launch error:[/red] {e}")
@@ -1139,6 +1146,8 @@ class MaudeApp(App):
             if len(running) == 1:
                 sid = running[0]["session_id"]
                 self._active_supervised_session = sid
+                self.session.active_supervised_id = sid
+                self._update_status_bar()
                 self._start_intervention_poll()
                 log.write(f"[dim]Auto-attached to session {sid[:8]}[/dim]")
                 return sid
@@ -1257,9 +1266,11 @@ class MaudeApp(App):
                 short = sid[:8]
                 status = node["status"]
                 task = (node.get("task") or "")[:35]
+                ts = (node.get("started_at") or "")[:16]  # YYYY-MM-DDTHH:MM
                 marker = " [green]*[/green]" if sid == active_sid else ""
                 connector = "└─ " if is_last else "├─ "
-                log.write(f"{prefix}{connector}{short}  {status:12s}  {task}{marker}")
+                ts_str = f"  [dim]{ts}[/dim]" if ts else ""
+                log.write(f"{prefix}{connector}{short}  {status:12s}  {task}{marker}{ts_str}")
 
                 kids = children_of.get(sid, [])
                 for i, kid in enumerate(kids):
