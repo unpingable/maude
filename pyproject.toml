@@ -12,13 +12,14 @@ authors = [
     { name = "James Beck" },
 ]
 
-[project.urls]
-Homepage = "https://github.com/unpingable/maude"
-Issues = "https://github.com/unpingable/maude/issues"
 dependencies = [
     "textual>=1.0.0",
     "pydantic>=2.6.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/unpingable/maude"
+Issues = "https://github.com/unpingable/maude/issues"
 
 [project.scripts]
 maude = "maude.app:main"
