@@ -1,204 +1,131 @@
 # Commands
 
-Maude uses a lightweight intent parser to classify user input. Recognized commands are handled locally. Everything else goes to the model through the governor.
+Maude uses a lightweight regex intent parser (`src/maude/intents.py`) to
+classify input. Recognized commands are handled locally or relayed to the
+governor daemon over RPC. The primary surface is the supervised-run loop;
+the chat-era commands are legacy (see the last section).
 
-## Intent Commands
+## Supervised runs (primary)
 
-### `plan <text>`
+### `supervised launch <task>` / `go <task>`
 
-Append text to the local spec draft. Used during the PLAN phase to accumulate requirements before building.
+Launch a coding harness (Claude Code today) as a governed, supervised
+session. Tool calls are intercepted by the governor; write-class tools wait
+for operator approval.
 
-```
-> plan REST API with JWT auth and role-based access
-Added to spec draft (47 chars)
+### The tight loop: `y` / `n` / `p`
 
-> plan PostgreSQL for storage, Redis for caching
-Added to spec draft (95 chars)
+While a supervised session runs, Maude auto-polls pending interventions:
 
-> show spec
-Spec Draft (UNLOCKED):
-REST API with JWT auth and role-based access
-PostgreSQL for storage, Redis for caching
-```
+- `y` / `yes` / `approve` — approve the pending tool call
+- `n` / `deny` — deny it
+- `p` / `pending` — show pending interventions
 
-Also recognized: `let's plan`
+Unanswered approvals time out and deny by default. COMMUNICATE-class tool
+calls (external sends) render with a loud warning.
 
-### `plan architecture` / `plan arch`
+### Full supervised command set
 
-Load the architecture spec template. Chat enters **guided mode** — the LLM receives the template structure and current draft as context, and responses are automatically appended to the spec draft.
+| Command | What It Does |
+|---------|-------------|
+| `supervised launch [task]` | Launch a governed harness session |
+| `supervised list` (or bare `supervised`) | List sessions |
+| `supervised events <id>` | Canonical event stream |
+| `supervised interventions <id>` | Pending tool approvals |
+| `supervised approve <id> <tcid>` | Approve a tool call |
+| `supervised deny <id> <tcid>` | Deny a tool call |
+| `supervised promotion <id>` | Pending workspace changes |
+| `supervised diff <id>` | Unified diff of changes |
+| `supervised promote <id>` | Accept workspace changes |
+| `supervised reject <id>` | Revert workspace changes |
+| `supervised fork <id> [task]` | Fork from a promoted session |
+| `supervised kill <id>` | Terminate session |
 
-```
-> plan architecture
-Loaded template: architecture
-Chat is now in guided mode — responses will fill the template.
-```
+### `diff` / `apply` / `rollback`
 
-### `plan product` / `plan product design`
+Context-aware review verbs: with an active supervised session they act on
+its promotion (diff / promote / reject); in a governance-violation context
+they act on the pending commit (fix / revise / proceed flow via `why`).
+`promote` and `accept` alias `apply`; `reject`, `revert`, and `undo` alias
+`rollback`.
 
-Load the product design spec template (guided mode).
+### `lineage` / `lineage tree` / `history`
 
-### `plan requirements` / `plan reqs`
+Session lineage navigation: parent/child fork relationships (`lineage`,
+`branch`), ASCII tree (`lineage tree`, `Ctrl+T`), and message history
+(`history`, `log`).
 
-Load the requirements spec template (guided mode).
+### `snapshot` / `overview` / `wtf`
 
-### `clear template`
+Operator overview: governor status, supervised sessions, context usage in
+one screen.
 
-Unload the current template and exit guided mode. The spec draft is preserved.
+### `context` / `ctx` / `usage` and `clear` / `reset`
 
-```
-> clear template
-Template 'architecture' cleared.
-```
+Context-token usage display; `clear` starts a fresh session to reclaim
+context.
 
-### `lock spec` / `freeze spec`
-
-Lock the current spec draft and submit it as a constraint to the governor. Required before switching to BUILD mode.
-
-```
-> lock spec
-Spec locked.
-Constraint submitted to governor.
-```
-
-If the governor is unreachable, the spec is still locked locally.
-
-Keybinding: `Ctrl+L`
-
-### `build` / `implement` / `do it`
-
-Switch to BUILD mode and create a v2 run with the spec. Requires a locked spec.
-
-```
-> build
-Switched to BUILD mode.
-v2 run created: run_abc123
-```
-
-If the spec isn't locked:
-
-```
-> build
-Cannot enter BUILD mode without a locked spec
-```
-
-### `show spec` / `spec`
-
-Display the current spec draft and its lock status.
-
-### `show diff` / `diff`
-
-*(Not yet implemented.)* Will show proposed file changes in a side pane.
-
-### `apply` / `merge`
-
-*(Not yet implemented.)* Will apply proposed changes through the governor's policy gate.
-
-### `rollback` / `undo`
-
-*(Not yet implemented.)* Will revert the last applied change set.
-
-### `why` / `why blocked` / `blocked`
-
-Ask the governor why something is blocked. Calls `governor.now` RPC and displays the status sentence and suggested action.
-
-```
-> why
-Why: 1 violation pending — anchor 'no-eval' triggered.
-Suggested: Review violation and choose fix/revise/proceed.
-```
+## Governor queries
 
 ### `status` / `state`
 
-Fetch and display the full governor status for the active context.
+Full governor status for the active context.
 
-```
-> status
-Governor Status:
-  context: default
-  mode: code
-  initialized: true
-  decisions: 3
-  violations: 0
-  claims: 12
-```
+### `why` / `blocked`
 
-### `help` / `?`
+Ask the governor why something is blocked (`governor.now` sentence +
+suggested action).
 
-Show the list of available commands.
+## Session management
 
 ### `sessions` / `list sessions` / `ls`
 
-List all sessions as a numbered table showing ID, title, message count, and last-updated date. The active session is marked.
-
-```
-> sessions
-Sessions:
-  #    ID               TITLE                    MSGS  UPDATED
-  1    abc123def456     Maude session               12  2025-01-15  *active*
-  2    789xyz000111     Auth planning                4  2025-01-14
-  3    fedcba654321     Debug logging                8  2025-01-13
-```
+Numbered session table (ID, title, message count, last updated).
 
 ### `switch <id>` / `session <id>` / `resume <id>`
 
-Switch to a session by its ID or by `#N` index from the last `sessions` listing. Loads the session's message history and resets local PLAN/BUILD state.
-
-```
-> switch #2
-Switched to session: Auth planning (789xyz000111) — 4 messages
-
-> switch abc123
-Switched to session: Maude session (abc123def456) — 12 messages
-```
+Switch by ID or `#N` index.
 
 ### `delete session <id>` / `rm session <id>`
 
-Delete a session by ID or `#N` index. If deleting the active session, a new session is created automatically.
+Delete by ID or index; deleting the active session creates a new one.
 
-```
-> delete session #3
-Deleted session: fedcba654321
+### `help` / `?`
 
-> rm session abc123
-Deleted session: abc123def456
-Created new session: newid789
-```
-
-## Chat (Default)
-
-Any input that doesn't match a command is treated as a chat message. It's sent to the governor daemon via `chat.stream` RPC with the full conversation history, and the response is streamed back to the chat pane.
-
-```
-> explain Python decorators
-You: explain Python decorators
-Assistant: A decorator is a function that takes another function...
-```
-
-The governor mediates this — your message goes through the policy pipeline (augmentation, anchors, puppet constraints) before reaching the model backend, and the response is checked for violations before being returned.
+List available commands.
 
 ## Keybindings
 
 | Key | Action |
 |-----|--------|
-| `Ctrl+L` | Lock spec |
+| `Ctrl+Y` | Approve pending tool call |
+| `Ctrl+D` | Deny pending tool call |
+| `Ctrl+T` | Lineage tree |
 | `Ctrl+N` | New session |
 | `Ctrl+Q` | Quit |
+| `Ctrl+L` | Lock spec (legacy) |
 
 ## Status Bar
 
-The status bar at the top of the screen updates every 5 seconds:
+Updates every 5 seconds from `governor.now`; shows workflow mode, spec-lock
+state (legacy), active session, active supervised session, context usage,
+and governor status. Green = clear, yellow = degraded, red =
+violations/blocked.
 
-```
-MODE=PLAN  SPEC=UNLOCKED  TEMPLATE=architecture  SESSION=abc123  GOV=ok
-```
+## Legacy: PLAN/BUILD and chat (unsupported, removal at GS-15)
 
-- **MODE** — Current workflow mode (PLAN or BUILD)
-- **SPEC** — Whether the spec draft is locked
-- **TEMPLATE** — Active spec template name (only shown when loaded)
-- **SESSION** — Active governor session ID
-- **GOV** — Governor status from `governor.now` RPC
+These commands belong to the retired chat/spec-lock paradigm (ratified cut,
+D-GS-2 — see [REPOSITIONING.md](REPOSITIONING.md)). They still parse, but
+are unsupported and scheduled for deletion:
 
-Color coding:
-- **Green** — All clear
-- **Yellow** — Warnings or degraded state
-- **Red** — Violations or blocked
+- `plan <text>` — append to the local spec draft
+- `plan architecture` / `plan product` / `plan requirements` — load a spec
+  template into guided mode; `clear template` unloads it
+- `lock spec` / `freeze spec` — lock the draft (constraint submission is a
+  stub; it does not reach the daemon)
+- `build` / `implement` / `do it` — switch to BUILD mode (v2 run creation is
+  a stub)
+- `show spec` / `spec` — display the draft
+- **free-text chat** — any input matching no command is streamed through the
+  daemon's `chat.stream`. After GS-15, unmatched input will render
+  unknown-command help instead.

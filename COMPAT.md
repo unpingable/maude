@@ -1,6 +1,6 @@
 # Compatibility
 
-Maude is a Textual TUI client for Agent Governor.
+Maude is a terminal executor client of the Agent Governor daemon.
 
 ## Version coupling
 
@@ -10,6 +10,15 @@ Patch versions are independent.
 ## Compatible Governor versions
 
 - Required: `>=2.3.1 <2.4.0`
+
+## Planned: contract pin (v3.0, GS-15)
+
+At the v3.0 release Maude's primary compatibility pin becomes the
+**shell-contract version**, pinned via the `ag_shell_client` package
+(agent_gov `libs/ag_shell_client`, CI-tested against the daemon); the
+governor version becomes advisory. Until then the Governor version pin
+above remains authoritative, and the GS-9 live-daemon smoke test is the
+real compatibility check while the daemon evolves.
 
 ## Contract versions (wire / JSON)
 
