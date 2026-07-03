@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "maude"
 version = "2.4.0"
-description = "Textual TUI frontend for the agent-governor project"
+description = "Terminal executor for supervised agent harness runs (Agent Governor client)"
 license = "Apache-2.0"
 requires-python = ">=3.11"
 authors = [

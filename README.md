@@ -1,16 +1,16 @@
 # Maude
 
-**Terminal UI for governed AI chat. Every mutation goes through the gate.**
+**Executor desk for governed agent runs. Every mutation goes through the gate.**
 
-Maude is a standalone TUI frontend for [Agent Governor](https://github.com/unpingable/agent_governor). It connects to the governor daemon over JSON-RPC and gives you a keyboard-driven chat experience where all model interactions are mediated by the constraint engine.
+Plans are written outside Maude — by ChatGPT, Fable, Codex, or the operator. Maude runs them: launch a harness as a supervised process, watch every tool call go through the [Agent Governor](https://github.com/unpingable/agent_governor) gate, approve or deny, review the diff, promote or reject, keep the receipts.
 
-The model proposes. The governor gates. You decide.
+The plan arrives. Maude runs it. The governor gates. You decide.
 
 ---
 
 ## Supervised Agent Sessions
 
-Maude can launch and supervise Claude Code as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.
+Maude launches and supervises a coding harness (Claude Code today) as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.
 
 ```
 supervised launch Add error handling to users.py and write tests
@@ -41,11 +41,13 @@ supervised promote sess_cfa8ab1ebb75
 
 Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, Edit) require operator approval. Unanswered approvals time out and deny by default. Rejected promotions revert the workspace.
 
+Planned (see [ROADMAP.md](ROADMAP.md)): bounded-plan ingestion (`run <plan.md>`, M-2), harness selection via adapter introspection (M-3), run-report bundles (M-4), obstruction notes (M-5), and headless one-shot execution (M-6). These are roadmap items, not current features.
+
 ### Supervised Commands
 
 | Command | What It Does |
 |---------|-------------|
-| `supervised launch [task]` | Launch a governed Claude Code session |
+| `supervised launch [task]` | Launch a governed harness session |
 | `supervised list` | List active/completed sessions |
 | `supervised events <id>` | Show canonical event stream |
 | `supervised interventions <id>` | Show pending tool approvals |
@@ -60,17 +62,15 @@ Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, 
 
 ---
 
-## Governed Chat
+## Where planning happens
 
-Maude also provides governed chat — streaming model responses through the governor's constraint engine:
+Not here. Maude is the execution side of the loop: it consumes bounded plans, supervises the run, and returns a reviewable result. Spec authoring, hypothesis exploration, and "lock understanding before acting" live elsewhere — planning tools upstream, and the governor's admissibility gate at launch time (see the [Agent Governor](https://github.com/unpingable/agent_governor) governed-shell design). AG is one authority substrate Maude calls over RPC; Maude itself mints no authority and refuses nothing on its own behalf.
 
-- **Streaming chat** through the governor daemon's `chat.stream` RPC method
-- **Live governor status** in a persistent status bar (mode, regime, violations)
-- **Intent-based commands** for plan/build/lock/apply workflows
-- **Intent compiler** — structured hypothesis-collapse via governor templates
-- **Violation resolution** — fix/revise/proceed when the governor blocks
-- **Session management** — list, switch, create, delete governance sessions
-- **Receipts and scars** — browse gate receipts, failure history
+---
+
+## Legacy: governed chat (unsupported)
+
+Earlier versions framed Maude as a governed-chat client. That framing is retired (ratified decision D-GS-2 in the Agent Governor governed-shell campaign). The chat path — streaming model responses through the daemon's `chat.stream`, plus the PLAN/BUILD spec-lock workflow — still exists in the code but is **unsupported legacy**, scheduled for removal at the v3.0 release (GS-15). Do not build on it. If a chat lane is ever missed, it returns as its own recorded decision, not as a leftover.
 
 Maude never imports governor code. Two repos, one RPC boundary.
 
@@ -94,7 +94,7 @@ governor serve
 maude --governor-dir /path/to/project/.governor
 ```
 
-Type `help` to see available commands. Type anything else to chat.
+Type `help` to see available commands. `supervised launch <task>` (or `go <task>`) starts a governed run.
 
 ---
 
@@ -107,8 +107,8 @@ Type `help` to see available commands. Type anything else to chat.
 | Status bar: project  backend  MODE=  |
 +--------------------------------------+
 |                                      |
-| Chat pane (streaming, scrollable)    |
-|                                      |
+| Log pane (events, streaming,         |
+|           scrollable)                |
 +--------------------------------------+
 | Input box                            |
 +--------------------------------------+
@@ -119,18 +119,17 @@ Type `help` to see available commands. Type anything else to chat.
 ```
 ┌──────────┐   Unix socket (JSON-RPC)   ┌──────────────┐
 │  Maude   │ ──────────────────────────▶ │  Governor    │
-│  (TUI)   │  Content-Length framing     │  Daemon      │
+│  (desk)  │  Content-Length framing     │  Daemon      │
 │          │                             │              │
 │ Governor │  governor.now               │  ┌─────────┐ │
-│  Client  │  sessions.*                 │  │ Backend │ │
-│          │  chat.stream → chat.delta   │  │(Claude/ │ │
-│          │  intent.*                   │  │ Codex/  │ │
-│          │  receipts.*, scars.*        │  │ Ollama) │ │
-│          │  commit.*                   │  └─────────┘ │
+│  Client  │  runtime.session.*          │  │ Harness │ │
+│          │  runtime.intervention.*     │  │ adapter │ │
+│          │  runtime.promotion.*        │  │(Claude/ │ │
+│          │  receipts.*, commit.*       │  │ Codex/…)│ │
 └──────────┘ ◀──────────────────────────┘──────────────┘
 ```
 
-Maude talks to the daemon. The daemon talks to the model. Maude never talks to the model directly.
+Maude talks to the daemon. The daemon owns the harness adapters and the interception point. Maude never talks to the model directly, and adapter selection is introspection-informed, never adapter ownership.
 
 **Transport**: JSON-RPC 2.0 with Content-Length framing over Unix socket. Same protocol as MCP servers and VS Code language servers. Pluggable `Transport` interface for future TCP support.
 
@@ -138,20 +137,20 @@ Maude talks to the daemon. The daemon talks to the model. Maude never talks to t
 
 ## RPC Methods Wired
 
-Maude wires 44 of the daemon's 79 RPC methods:
+Maude wires 44 of the daemon's RPC methods:
 
 | Namespace | Methods | What It Does |
 |-----------|---------|-------------|
 | `governor.*` | hello, now, status | Health check, live status polling |
-| `sessions.*` | list, create, get, delete | Session management |
-| `chat.*` | send, stream, models, backend | Governed generation with streaming |
-| `intent.*` | templates, schema, validate, compile, policy | Structured intent compilation |
-| `receipts.*` | list, detail | Gate receipt browsing |
-| `scars.*` | list, history | Failure history and active scars |
-| `commit.*` | pending, fix, revise, proceed, exceptions | Violation resolution |
 | `runtime.session.*` | create, launch, get, list, events, pause, resume, kill | Supervised sessions |
 | `runtime.intervention.*` | list, resolve | Tool approval/denial |
 | `runtime.promotion.*` | get, diff, resolve | Workspace change review |
+| `receipts.*` | list, detail | Gate receipt browsing |
+| `scars.*` | list, history | Failure history and active scars |
+| `commit.*` | pending, fix, revise, proceed, exceptions | Violation resolution |
+| `sessions.*` | list, create, get, delete | Session management |
+| `chat.*` (legacy) | send, stream, models, backend | Governed generation (unsupported, removal at GS-15) |
+| `intent.*` (legacy) | templates, schema, validate, compile, policy | Structured intent compilation |
 
 ---
 
@@ -159,12 +158,12 @@ Maude wires 44 of the daemon's 79 RPC methods:
 
 | Command | What It Does |
 |---------|-------------|
-| `supervised launch [task]` | Launch governed Claude Code session |
+| `supervised launch [task]` / `go [task]` | Launch governed harness session |
 | `supervised list` | List supervised sessions |
 | `supervised events <id>` | Show event stream |
 | `supervised interventions <id>` | Show pending approvals |
-| `supervised approve <id> <tcid>` | Approve tool call |
-| `supervised deny <id> <tcid>` | Deny tool call |
+| `supervised approve <id> <tcid>` / `y` | Approve tool call |
+| `supervised deny <id> <tcid>` / `n` | Deny tool call |
 | `supervised promotion <id>` | Show workspace changes |
 | `supervised diff <id>` | Show unified diff |
 | `supervised promote <id>` | Accept changes |
@@ -172,22 +171,21 @@ Maude wires 44 of the daemon's 79 RPC methods:
 | `supervised fork <id> [task]` | Fork from promoted session |
 | `supervised kill <id>` | Kill session |
 | `snapshot` / `wtf` | Operator overview |
-| `plan <text>` | Append to spec draft |
-| `lock spec` | Lock the spec (required before BUILD) |
-| `build` | Switch to BUILD mode |
-| `show spec` | Display current spec draft |
+| `lineage` / `lineage tree` / `history` | Session lineage navigation |
 | `status` | Governor status |
 | `why` | Show why something is blocked |
-| `sessions` | List governance sessions |
-| `switch <id>` | Switch session |
+| `context` / `clear` | Context usage / reset |
 | `help` | Show commands |
-| *anything else* | Chat via governor |
+
+Legacy (unsupported, removal at GS-15): `plan <text>`, `lock spec`, `build`, `show spec`, and free-text chat via the governor.
 
 ### Keybindings
 
 | Key | Action |
 |-----|--------|
-| `Ctrl+L` | Lock spec |
+| `Ctrl+Y` | Approve pending tool call |
+| `Ctrl+D` | Deny pending tool call |
+| `Ctrl+T` | Lineage tree |
 | `Ctrl+N` | New session |
 | `Ctrl+Q` | Quit |
 
@@ -211,25 +209,23 @@ CLI flags override environment variables. Socket path is auto-derived from gover
 
 ```
 src/maude/
-  app.py              # Textual TUI application
+  app.py              # Textual TUI application (monolith; decomposition planned at GS-10)
   config.py           # Settings (env + CLI)
-  intents.py          # Regex intent parser (15 intent types)
-  session.py          # Local state machine (PLAN/BUILD)
+  intents.py          # Regex intent parser
+  session.py          # Local state machine
   client/
     __init__.py       # Public exports (GovernorClient, Transport, models)
     rpc.py            # JSON-RPC 2.0 client over pluggable transport
     transport.py      # Transport protocol + UnixSocketTransport
     models.py         # Pydantic models matching daemon response shapes
-    http.py           # Legacy HTTP client (reference only, unwired)
   ui/
     widgets.py        # GovernorStatusBar
-    theme.tcss        # Textual CSS layout
 tests/
-  test_intents.py     # Intent parsing (28 tests)
-  test_session.py     # State machine + project name (25 tests)
-  test_client.py      # Model deserialization (13 tests)
-  test_integration.py # Live daemon integration (24 tests, skip without daemon)
-  test_transport.py   # Transport protocol + mock transport (10 tests)
+  test_intents.py     # Intent parsing
+  test_session.py     # State machine + project name
+  test_client.py      # Model deserialization
+  test_integration.py # Live daemon integration (skip without daemon)
+  test_transport.py   # Transport protocol + mock transport
   conftest.py         # Shared fixtures
 ```
 
@@ -256,26 +252,21 @@ bash test-with-governor.sh
 
 ## What's Built
 
-- [x] Streaming chat via governor daemon (JSON-RPC + chat.delta notifications)
-- [x] Intent parser (plan/build/lock/status/why/help/sessions/switch/delete)
-- [x] Session state machine (PLAN/BUILD, spec lock)
-- [x] Live governor status polling (5s interval)
-- [x] Session management (create/resume/switch/delete)
-- [x] Intent compiler (template selection, form rendering, compilation)
-- [x] Violation resolution (fix/revise/proceed)
-- [x] Gate receipt browsing
-- [x] Scar history
+- [x] Supervised harness sessions (launch, tool interception, approve/deny, kill)
+- [x] Promotion review (diff, promote, reject; rejected promotions revert)
+- [x] Session fork from promoted baseline
+- [x] Session lineage navigation (`lineage`, `lineage tree`, `history`)
+- [x] Inline event streaming (tool proposals, completions, denials)
+- [x] Tight supervised loop (`go` / `y` / `n` / `p` + auto-poll)
+- [x] COMMUNICATE-class loud warning (external sends)
+- [x] Gate receipt browsing, scar history, violation resolution (fix/revise/proceed)
+- [x] Live governor status polling; context usage gauge
 - [x] Pluggable transport (Unix socket now, TCP later)
-- [x] Project name + backend type in status bar and terminal title
-- [x] 112 unit tests + 24 integration tests (skipped without daemon)
+- [x] Legacy: streaming chat + PLAN/BUILD spec workflow (unsupported, removal at GS-15)
 
 ## What's Next
 
-- [ ] Apply gate — require explicit approval before file mutations
-- [ ] Diff pane — right-side split showing proposed changes
-- [ ] Correlator telemetry — K-vector display, capture alerts
-- [ ] Scope view — locality policy visualization
-- [ ] Mode switching (code/research/fiction)
+See [ROADMAP.md](ROADMAP.md) — the repositioning roadmap: foundation refactor (GS-9/GS-10), the decision-queue desk (GS-11..GS-14), the plan-executor spine (M-1..M-5: plan envelope, plan ingestion, harness selection, run reports, obstruction notes), the v3.0 chat cut (GS-15), and headless one-shot execution (M-6).
 
 ---
 
@@ -283,6 +274,7 @@ bash test-with-governor.sh
 
 | Document | Contents |
 |----------|----------|
+| [docs/REPOSITIONING.md](docs/REPOSITIONING.md) | The executor thesis, boundary, do-not-build list |
 | [docs/architecture.md](docs/architecture.md) | System design, transport, data flow, RPC mapping |
 | [docs/commands.md](docs/commands.md) | Full command and intent reference |
 | [docs/configuration.md](docs/configuration.md) | Environment, CLI, and runtime settings |
@@ -295,7 +287,7 @@ bash test-with-governor.sh
 |---------|-----------|
 | [Agent Governor](https://github.com/unpingable/agent_governor) | The constraint system (Python, 11k+ tests) |
 | [Guvnah](https://github.com/unpingable/guvnah) | Electron desktop cockpit (Svelte 5, same daemon RPC) |
-| [Governor WebUI](https://github.com/unpingable/governor_webui) | Web-based chat + governance dashboard (FastAPI) |
+| [Governor WebUI](https://github.com/unpingable/governor_webui) | Web-based governance dashboard (FastAPI) |
 | [VS Code Extension](https://github.com/unpingable/vscode-governor) | IDE integration — preflight, correlator, file checking |
 
 ---
@@ -306,4 +298,4 @@ Apache-2.0
 
 ---
 
-*You talk. The governor listens. Maude is just the terminal.*
+*The plan arrives. Maude runs it. The governor gates. You review the diff.*
