@@ -1,3 +1,9 @@
+> **HISTORICAL (archived 2026-07-03).** Chat-era document; assumed Maude was a
+> long-lived conversational surface. That framing was retired by D-GS-2 (chat +
+> PLAN/BUILD cut, agent_gov governed-shell campaign) and the 2026-07-03
+> plan-executor repositioning (docs/REPOSITIONING.md). Kept as history; do not
+> build from it.
+
 # TODO: Context Usage UX
 
 Swipe from Claude Code: context gauge, clear nudge, idle-return prompt.

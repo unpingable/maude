@@ -35,7 +35,7 @@ vscode-governor/node_modules/
 vscode-governor/*.vsix
 
 # Misc
-ingest/
+/ingest/
 old/
 
 # Claude Code local session data
