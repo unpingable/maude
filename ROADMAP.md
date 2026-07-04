@@ -71,7 +71,14 @@ Surfaced by the GS-9 live smoke against the current daemon (method count 97):
 
 ## Phase 2 — The desk (GS campaign, as specced)
 
-- [ ] **GS-11** queue home · **GS-12** sessions board + session view +
+- [~] **GS-11 data layer landed** — `client/rpc.py` gained the governed-shell
+  operator surface (`operator.decisions.list/resolve`, `operator.watch`
+  streaming full snapshots, `runtime.session.send_input`,
+  `runtime.adapters.list`, `why.chain`); `DecisionFeedController.ingest_watch_update`
+  consumes live watch snapshots. Verified end-to-end against a real daemon.
+  Remaining GS-11 is the queue *screen* (cards + keypress→resolve + the
+  subscribe/re-subscribe loop), which needs GS-10b to be reachable.
+- [ ] **GS-11** queue home (screen) · **GS-12** sessions board + session view +
   steering · **GS-13** why overlay + refusal→route map · **GS-14** envelope
   strip + widen one-liner (local-qwen eligible).
 - Executor notes: GS-12's event rendering stays pure (ledger order is truth)
