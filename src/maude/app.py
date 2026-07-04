@@ -278,7 +278,15 @@ class MaudeApp(App):
                         if len(inp) > 80:
                             inp = inp[:77] + "..."
                         inp = f"  [dim]{inp}[/dim]"
-                    # Communication gets a louder warning
+                    # Communication gets a louder warning.
+                    # FUTURE-WORK (record, not stub): "External send" is
+                    # intentionally channel-GENERIC. Email is the current
+                    # specimen; slack/post_message, webhook/post, github/comment,
+                    # issue/update etc. should enter later as communication
+                    # ADAPTERS under the same operator-approval + receipt
+                    # semantics (adapters are cargo handlers, not authority
+                    # sources). No hooks yet — do not imply supported channels
+                    # before the authority model exists.
                     action_class = i.get("action_class", "write")
                     is_comm = i.get("communication_warning") or action_class == "communicate"
                     if is_comm:
@@ -436,13 +444,13 @@ class MaudeApp(App):
             return
         try:
             status = await self.client.governor_status()
-            log.write("[bold]Governor Status:[/bold]")
+            log.write("[bold]Status:[/bold]")
             log.write(f"  context: {status.get('context_id', '?')}")
             log.write(f"  mode: {status.get('mode', '?')}")
             vm = status.get("viewmodel")
             if vm:
                 log.write(f"  decisions: {len(vm.get('decisions', []))}")
-                log.write(f"  violations: {len(vm.get('violations', []))}")
+                log.write(f"  blocked: {len(vm.get('violations', []))}")
                 log.write(f"  claims: {len(vm.get('claims', []))}")
         except Exception as e:
             log.write(f"[red]Status error:[/red] {e}")
@@ -1212,7 +1220,7 @@ class MaudeApp(App):
                 return
 
             sid = current["session_id"]
-            log.write("[bold]Session Lineage[/bold]")
+            log.write("[bold]Where am I[/bold]")
             log.write(f"  Current:  {sid[:8]}  {current['status']}")
             if current.get("task"):
                 log.write(f"  Task:     {current['task'][:60]}")
@@ -1294,7 +1302,7 @@ class MaudeApp(App):
             if not roots:
                 roots = sessions[:1]
 
-            log.write("[bold]Session Tree[/bold]")
+            log.write("[bold]Run tree[/bold]")
 
             def render_node(node: dict, prefix: str, is_last: bool) -> None:
                 sid = node["session_id"]
@@ -1437,7 +1445,7 @@ class MaudeApp(App):
             # Overall health
             overall = snap.get("overall", "?")
             level = "green" if overall == "ok" else "yellow" if overall == "degraded" else "red"
-            log.write(f"[bold]Operator Snapshot[/bold]  [{level}]{overall}[/{level}]")
+            log.write(f"[bold]Now — what's happening[/bold]  [{level}]{overall}[/{level}]")
 
             # Doctor checks
             checks = snap.get("checks", [])
