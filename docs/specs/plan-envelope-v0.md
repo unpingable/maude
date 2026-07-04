@@ -1,9 +1,14 @@
 # Plan envelope v0 + submitter contracts
 
-**Status:** CANDIDATE (2026-07-04; slice M-1). Awaiting operator ratification —
-this is a `fable + operator` tier artifact. CANDIDATE means: M-2..M-7 implement
-against this document; any need for a new field returns HERE for a version bump.
-Downstream slices never improvise plan vocabulary.
+**Status:** CANDIDATE — **operator-approved 2026-07-04** (slice M-1). This is
+candidate *Maude-side* law, **not** daemon law: it is ratified as the contract
+M-2..M-7 build against, but it is NOT promoted to stable daemon law. Budget,
+scope, and acceptance are enforced **Maude-side (client / autopilot profile)**
+for now — the client-side version must prove shape against the real desk before
+the daemon absorbs any of it. **CT-1 stays named as future AG support, not
+built:** `plan_ref`, per-session budget, per-session scope (see §2). Any need
+for a new plan field returns HERE for a version bump; downstream slices never
+improvise plan vocabulary.
 
 **Boundary law.** Planning happens *outside* Maude. Maude neither authors nor
 edits nor completes plan content; it validates a plan's *shape* and maps it to a

@@ -86,9 +86,12 @@ regressions.
 
 ## Phase 3 — Plan-executor spine (M-series)
 
-- [~] **M-1 — plan-envelope v0 spec + submitter contracts** — CANDIDATE
-  drafted at [docs/specs/plan-envelope-v0.md](docs/specs/plan-envelope-v0.md);
-  **awaiting operator ratification** before M-2 builds against it.
+- [x] **M-1 — plan-envelope v0 spec + submitter contracts** — **operator-ratified
+  CANDIDATE 2026-07-04** at [docs/specs/plan-envelope-v0.md](docs/specs/plan-envelope-v0.md).
+  Candidate *Maude-side* law, not daemon law: budget/scope/acceptance enforced
+  client-side / via autopilot profile for now; CT-1 (`plan_ref`, per-session
+  budget/scope) stays named as future AG support, not built. M-2 builds against
+  this; do not promote to daemon law until the client-side version proves shape.
   tier: conceptual · executor: **fable + operator ratification** · prereq: [M-0b]
   - purpose: mint the input contract ONCE so M-2..M-7 are mechanical. A
     bounded plan = markdown/front-matter with: goal; workspace + scope
