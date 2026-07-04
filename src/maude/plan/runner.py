@@ -124,7 +124,7 @@ class RunPlanCommand(Command):
                 operator_mode=operator_mode,
             )
             session_id = result["session_id"]
-            log.write(f"[green]Session created:[/green] {session_id}")
+            log.write(f"[green]Run started:[/green] {session_id}")
             launch = await ctx.app.client.runtime_session_launch(session_id)
             log.write(f"  Status: {launch['status']}  PID: {launch.get('pid', '?')}")
             log.write(f"  plan_ref recorded: {env.plan_ref}")

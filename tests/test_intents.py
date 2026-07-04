@@ -265,6 +265,22 @@ class TestParseIntent:
     def test_revert_is_rollback(self):
         assert parse_intent("revert").kind == IntentKind.ROLLBACK
 
+    def test_keep_is_apply(self):
+        assert parse_intent("keep").kind == IntentKind.APPLY
+
+    def test_discard_is_rollback(self):
+        assert parse_intent("discard").kind == IntentKind.ROLLBACK
+
+    def test_supervised_keep_is_promote(self):
+        i = parse_intent("supervised keep sess_9")
+        assert i.kind == IntentKind.SUPERVISED_PROMOTE
+        assert i.payload == "sess_9"
+
+    def test_supervised_discard_is_reject(self):
+        i = parse_intent("supervised discard sess_9")
+        assert i.kind == IntentKind.SUPERVISED_REJECT
+        assert i.payload == "sess_9"
+
     # Clear
     def test_clear(self):
         assert parse_intent("clear").kind == IntentKind.CLEAR

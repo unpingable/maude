@@ -63,8 +63,8 @@ _HELP_TEXT = """\
   supervised kill <id>            - Kill a session
   supervised promotion <id>       - Show a run's pending changes (changed files)
   supervised diff <id>            - Show unified diff of changes
-  supervised promote <id>         - Accept workspace changes
-  supervised reject <id>          - Revert workspace changes
+  supervised keep <id>            - Accept a run's changes (also: promote)
+  supervised discard <id>         - Revert a run's changes (also: reject)
   supervised fork <id> [task]     - Fork new session from promoted parent
 
   snapshot / overview / wtf       - Operator snapshot (what's happening now?)
@@ -283,8 +283,8 @@ class MaudeApp(App):
                     is_comm = i.get("communication_warning") or action_class == "communicate"
                     if is_comm:
                         log.write(
-                            f"\n[bold red]📡 COMMUNICATE: {tool}[/bold red] wants to send "
-                            f"externally ({remaining:.0f}s remaining){inp}"
+                            f"\n[bold red]📡 External send: {tool}[/bold red] wants to send "
+                            f"data outside this machine ({remaining:.0f}s remaining){inp}"
                         )
                     else:
                         log.write(
@@ -333,8 +333,8 @@ class MaudeApp(App):
 
         elif kind == "session_exited":
             exit_code = ev.get("exit_code", "?")
-            log.write(f"\n[bold]Session exited[/bold] (code {exit_code})")
-            log.write("[dim]  diff = review changes, promote = accept, reject = revert[/dim]")
+            log.write(f"\n[bold]Run finished[/bold] (exit code {exit_code})")
+            log.write("[dim]  diff = review changes · keep = accept · discard = revert[/dim]")
             # Auto-show file summary if we can
             sid = self._active_supervised_session
             if sid:
@@ -632,21 +632,21 @@ class MaudeApp(App):
                     if len(lines) > 40:
                         log.write(f"  [dim]... {len(lines) - 40} more lines[/dim]")
                 log.write("")
-                log.write("[dim]promote = accept, reject = revert, or keep reviewing[/dim]")
+                log.write("[dim]keep = accept changes · discard = revert · or keep reviewing[/dim]")
                 return
             except Exception as e:
-                log.write(f"[yellow]Promotion diff unavailable:[/yellow] {e}")
-                # Fall through to governance diff
+                log.write(f"[yellow]Changes unavailable:[/yellow] {e}")
+                # Fall through to the blocked-item flow
 
         # Governance violation flow
         try:
             pending = await self.client.commit_pending()
             if pending is None:
-                log.write("[green]No pending violations.[/green]")
+                log.write("[green]Nothing blocked.[/green]")
                 try:
                     receipts = await self.client.receipts_list(last=3)
                     if receipts:
-                        log.write("\n[bold]Recent receipts:[/bold]")
+                        log.write("\n[bold]Recent activity:[/bold]")
                         for r in receipts:
                             verdict = r.get("verdict", "?")
                             gate = r.get("gate", "?")
@@ -657,17 +657,17 @@ class MaudeApp(App):
                     pass
                 return
 
-            log.write("[bold]Pending Violation[/bold]")
+            log.write("[bold]Blocked — needs your call[/bold]")
             anchor = pending.get("anchor_id", "?")
             pattern = pending.get("pattern", "")
             text = pending.get("text_excerpt", "")[:80]
-            log.write(f"  Anchor:  {anchor}")
+            log.write(f"  Rule:    {anchor}")
             if pattern:
                 log.write(f"  Pattern: {pattern}")
             if text:
                 log.write(f"  Text:    {text}")
             log.write("")
-            log.write("[dim]Resolve with: apply (proceed), rollback (fix), or 'why' for details[/dim]")
+            log.write("[dim]keep (proceed anyway) · discard (fix it) · why (details)[/dim]")
         except Exception as e:
             log.write(f"[red]Diff error:[/red] {e}")
 
@@ -683,7 +683,7 @@ class MaudeApp(App):
         try:
             pending = await self.client.commit_pending()
             if pending is None:
-                log.write("[dim]Nothing to apply — no pending violations.[/dim]")
+                log.write("[dim]Nothing to keep — nothing is blocked.[/dim]")
                 return
 
             anchor = pending.get("anchor_id", "?")
@@ -692,7 +692,7 @@ class MaudeApp(App):
                 expiry="2h",
             )
             log.write(
-                f"[green]Proceeded past violation:[/green] {anchor}"
+                f"[green]Proceeded past block:[/green] {anchor}"
             )
             if result.get("exception_id"):
                 log.write(f"  Exception logged: {result['exception_id']}")
@@ -710,11 +710,11 @@ class MaudeApp(App):
         try:
             result = await self.client.runtime_promotion_resolve(sid, "approve")
             if result.get("resolved"):
-                log.write(f"[green]Changes promoted[/green] from session {sid[:8]}")
+                log.write(f"[green]Changes kept[/green] from run {sid[:8]}")
             else:
-                log.write(f"[yellow]{result.get('error', 'Promotion not available')}[/yellow]")
+                log.write(f"[yellow]{result.get('error', 'No changes to keep')}[/yellow]")
         except Exception as e:
-            log.write(f"[red]Promote error:[/red] {e}")
+            log.write(f"[red]Keep error:[/red] {e}")
 
     async def _handle_rollback(self, log: RichLog) -> None:
         """Rollback: reject supervised changes, or fix governance violation."""
@@ -724,22 +724,22 @@ class MaudeApp(App):
             try:
                 result = await self.client.runtime_promotion_resolve(sid, "reject")
                 if result.get("resolved"):
-                    log.write(f"[red]Changes reverted[/red] from session {sid[:8]}")
+                    log.write(f"[red]Changes discarded[/red] from run {sid[:8]}")
                 else:
-                    log.write(f"[yellow]{result.get('error', 'Rejection not available')}[/yellow]")
+                    log.write(f"[yellow]{result.get('error', 'Nothing to discard')}[/yellow]")
             except Exception as e:
-                log.write(f"[red]Reject error:[/red] {e}")
+                log.write(f"[red]Discard error:[/red] {e}")
             return
 
-        # Governance violation fix flow
+        # Blocked-item fix flow
         try:
             pending = await self.client.commit_pending()
             if pending is None:
-                log.write("[dim]Nothing to rollback — no pending violations.[/dim]")
+                log.write("[dim]Nothing to discard — nothing is blocked.[/dim]")
                 return
 
             anchor = pending.get("anchor_id", "?")
-            log.write(f"[bold]Rolling back violation:[/bold] {anchor}")
+            log.write(f"[bold]Fixing blocked item:[/bold] {anchor}")
             log.write("")
             log.write("Options:")
             log.write("  1. Type a corrected response to replace the violating text")
@@ -759,7 +759,7 @@ class MaudeApp(App):
 
         lower = text.strip().lower()
         if lower == "cancel":
-            log.write("[dim]Rollback cancelled. Violation still pending.[/dim]")
+            log.write("[dim]Cancelled. Item still blocked.[/dim]")
             return
 
         try:
@@ -1007,7 +1007,7 @@ class MaudeApp(App):
         try:
             result = await self.client.runtime_session_create(task=task)
             session_id = result["session_id"]
-            log.write(f"[green]Session created:[/green] {session_id}")
+            log.write(f"[green]Run started:[/green] {session_id}")
             if task:
                 log.write(f"  Task: {task}")
 
@@ -1122,19 +1122,19 @@ class MaudeApp(App):
         try:
             p = await self.client.runtime_promotion_get(session_id.strip())
             if not p:
-                log.write("[dim]No pending promotion.[/dim]")
+                log.write("[dim]No pending changes.[/dim]")
                 return
-            log.write(f"[bold]Promotion: {p['promotion_id']}[/bold]")
+            log.write(f"[bold]Pending changes: {p['promotion_id']}[/bold]")
             log.write(f"  Status: {p['status']}")
             log.write(f"  Files:  {len(p['changed_files'])}")
             for f in p["changed_files"]:
                 log.write(f"    {f}")
             log.write(f"\n{p.get('diff_stat', '')}")
             log.write(f"\n[dim]→ supervised diff {session_id}[/dim]")
-            log.write(f"[dim]→ supervised promote {session_id}[/dim]")
-            log.write(f"[dim]→ supervised reject {session_id}[/dim]")
+            log.write(f"[dim]→ supervised keep {session_id}   (accept changes)[/dim]")
+            log.write(f"[dim]→ supervised discard {session_id}  (revert changes)[/dim]")
         except Exception as e:
-            log.write(f"[red]Promotion error:[/red] {e}")
+            log.write(f"[red]Changes error:[/red] {e}")
 
     async def _handle_supervised_diff(self, log: RichLog, session_id: str) -> None:
         try:
@@ -1155,21 +1155,21 @@ class MaudeApp(App):
         try:
             result = await self.client.runtime_promotion_resolve(session_id.strip(), "approve")
             if result.get("resolved"):
-                log.write("[green]Promoted[/green] — changes accepted")
+                log.write("[green]Changes kept[/green]")
             else:
-                log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
+                log.write(f"[yellow]{result.get('error', 'No pending changes')}[/yellow]")
         except Exception as e:
-            log.write(f"[red]Promote error:[/red] {e}")
+            log.write(f"[red]Keep error:[/red] {e}")
 
     async def _handle_supervised_reject(self, log: RichLog, session_id: str) -> None:
         try:
             result = await self.client.runtime_promotion_resolve(session_id.strip(), "reject")
             if result.get("resolved"):
-                log.write("[red]Rejected[/red] — workspace changes reverted")
+                log.write("[red]Changes discarded[/red] — workspace reverted")
             else:
-                log.write(f"[yellow]{result.get('error', 'No pending promotion')}[/yellow]")
+                log.write(f"[yellow]{result.get('error', 'No pending changes')}[/yellow]")
         except Exception as e:
-            log.write(f"[red]Reject error:[/red] {e}")
+            log.write(f"[red]Discard error:[/red] {e}")
 
     async def _auto_attach_session(self, log: RichLog) -> str | None:
         """If no active session, try to auto-attach to the only running one."""
