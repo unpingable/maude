@@ -7,6 +7,7 @@ GS-11..GS-14 (and M-4 for the report). ``app.py`` migrates onto the
 ScreenManager in GS-10b.
 """
 
+from maude.screens.adapters import AdaptersScreen
 from maude.screens.base import DeskScreen
 from maude.screens.board import BoardScreen
 from maude.screens.diff import DiffScreen
@@ -22,6 +23,7 @@ __all__ = [
     "BoardScreen",
     "DiffScreen",
     "ReportScreen",
+    "AdaptersScreen",
     "ScreenManager",
     "OVERLAY_NAMES",
 ]

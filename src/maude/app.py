@@ -18,7 +18,7 @@ from maude.commands import CommandContext, build_registry
 from maude.config import Settings
 from maude.feed import DecisionFeedController
 from maude.intents import parse_intent
-from maude.screens import BoardScreen, QueueScreen, ScreenManager
+from maude.screens import AdaptersScreen, BoardScreen, QueueScreen, ScreenManager
 from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
@@ -97,6 +97,7 @@ class MaudeApp(App):
         Binding("ctrl+t", "lineage_tree", "Tree", show=False),
         Binding("ctrl+g", "toggle_desk", "Queue"),
         Binding("ctrl+b", "toggle_board", "Sessions"),
+        Binding("ctrl+o", "toggle_adapters", "Adapters"),
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
@@ -129,12 +130,17 @@ class MaudeApp(App):
         self._screen_manager.bind("queue", self._make_queue_screen)
         # GS-10b leg 3b: the sessions board goes live (read-only status board).
         self._screen_manager.bind("board", self._make_board_screen)
+        # GS-10b leg 3c: the adapters capability board goes live (read-only).
+        self._screen_manager.bind("adapters", self._make_adapters_screen)
 
     def _make_queue_screen(self) -> QueueScreen:
         return QueueScreen(feed=self._decision_feed, client=self.client)
 
     def _make_board_screen(self) -> BoardScreen:
         return BoardScreen(client=self.client)
+
+    def _make_adapters_screen(self) -> AdaptersScreen:
+        return AdaptersScreen(client=self.client)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -925,6 +931,10 @@ class MaudeApp(App):
     async def action_toggle_board(self) -> None:
         """``ctrl+b`` — chat ↔ the sessions board desk screen."""
         await self._toggle_desk("board")
+
+    async def action_toggle_adapters(self) -> None:
+        """``ctrl+o`` — chat ↔ the adapters capability board."""
+        await self._toggle_desk("adapters")
 
     async def _toggle_desk(self, name: str) -> None:
         """Route to desk screen ``name``: open from chat, switch between desks,

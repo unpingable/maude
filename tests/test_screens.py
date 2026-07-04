@@ -83,9 +83,11 @@ async def test_queue_renders_feed_items_when_present():
 
 
 class TestScreenManager:
-    def test_registers_the_five_desk_screens(self):
+    def test_registers_the_desk_screens(self):
         mgr = ScreenManager()
-        assert mgr.names() == ["queue", "session", "board", "diff", "report"]
+        assert mgr.names() == [
+            "queue", "session", "board", "diff", "report", "adapters",
+        ]
 
     def test_create_returns_a_screen_instance(self):
         mgr = ScreenManager()

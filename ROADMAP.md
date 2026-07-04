@@ -94,9 +94,29 @@ execution in the campaign's six-field shape.
       error, waiting-first sort, waiting-count summary, unknown-status renders
       raw, offline no-crash; app: ctrl+b toggle, queue↔board switch keeps chat
       reachable. 231 tests green.
-    - [ ] **leg 3c — adapters/why/report** last, after the shell loop is stable.
-      Keep boring; the "report" surface stays display-only (M-4 composes the
-      real thing) — laundering risk lives here.
+    - [~] **leg 3c — adapters (done); why + report deferred on purpose.**
+      - [x] **adapters capability board** (`ctrl+o`; `ScreenManager.bind` injects
+        the live client — 6th registered screen). AdaptersScreen renders
+        `runtime.adapters.list` read-only: per-backend declared capabilities as
+        ✓/✗ (pause/resume/steer/tool-hooks/events/graceful-stop), per-adapter
+        construction errors surfaced verbatim; explicit `ctrl+r` refresh + on
+        open; empty/loading/error states. Introspection only, below the gate —
+        selects/configures/launches nothing (harness *selection* is M-3).
+        Compatibility-tested against the known daemon shape (not live testimony).
+        Guards: lists adapters, ✓/✗ honesty pin (claude pause ✓, gemini pause ✗),
+        error-adapter surfaced, empty/error/offline, ctrl+r re-refresh; app
+        ctrl+o toggle + board→adapters switch. 239 tests green.
+      - [ ] **why-chain — deferred to GS-13 overlays (not built).** `why.chain`
+        is an *overlay* ("never steal the screen", reserved in `OVERLAY_NAMES`),
+        not a full desk screen; building it now would open GS-13's overlay UX
+        contract ahead of its slice. The client method is landed; the surface
+        waits for GS-13.
+      - [ ] **report — stays the M-4 session-end stub (not nav-promoted).**
+        ReportScreen remains a registered, honestly-labelled stub. It is M-4's
+        *end-of-run* reviewable artifact ("displayed evidence, not adjudication"),
+        not a browse-to destination — promoting a stub into desk nav is exactly
+        the "report starts sounding official" laundering to avoid. M-4 composes +
+        wires it.
   Goal: desk-shaped without changing the authority model — wiring, not a
   constitutional convention inside app.py.
 

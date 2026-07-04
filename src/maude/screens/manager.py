@@ -14,6 +14,7 @@ from typing import Callable
 
 from textual.screen import Screen
 
+from maude.screens.adapters import AdaptersScreen
 from maude.screens.board import BoardScreen
 from maude.screens.diff import DiffScreen
 from maude.screens.queue import QueueScreen
@@ -44,6 +45,7 @@ class ScreenManager:
             BoardScreen,
             DiffScreen,
             ReportScreen,
+            AdaptersScreen,
         ):
             self.register(screen_cls.SCREEN_NAME, screen_cls)
 
