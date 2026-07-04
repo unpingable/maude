@@ -86,7 +86,9 @@ regressions.
 
 ## Phase 3 — Plan-executor spine (M-series)
 
-- [ ] **M-1 — plan-envelope v0 spec + submitter contracts**
+- [~] **M-1 — plan-envelope v0 spec + submitter contracts** — CANDIDATE
+  drafted at [docs/specs/plan-envelope-v0.md](docs/specs/plan-envelope-v0.md);
+  **awaiting operator ratification** before M-2 builds against it.
   tier: conceptual · executor: **fable + operator ratification** · prereq: [M-0b]
   - purpose: mint the input contract ONCE so M-2..M-7 are mechanical. A
     bounded plan = markdown/front-matter with: goal; workspace + scope

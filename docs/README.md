@@ -5,6 +5,7 @@
 | Document | Contents |
 |----------|----------|
 | [REPOSITIONING.md](REPOSITIONING.md) | The executor thesis, ingress contracts, boundary, do-not-build list |
+| [specs/plan-envelope-v0.md](specs/plan-envelope-v0.md) | Plan envelope + submitter contracts (M-1, CANDIDATE) |
 | [architecture.md](architecture.md) | System design, component map, data flow, transport abstraction |
 | [commands.md](commands.md) | Full command and intent reference, keybindings, status bar |
 | [configuration.md](configuration.md) | Environment variables, CLI flags, typical setups |
