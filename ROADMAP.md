@@ -81,8 +81,22 @@ execution in the campaign's six-field shape.
       error, cursor moves selection+keymap, resolve relays selected key with a
       call-log pin (+follow-up refresh), key-not-in-keymap ignored, offline
       no-crash. 221 tests green.
-    - [ ] **leg 3b — operator/watch** second · **leg 3c — adapters/why/report**
-      last, after the shell loop is stable.
+    - [x] **leg 3b — sessions/watch board** (`ctrl+b`; `ScreenManager.bind`
+      injects the live client). BoardScreen renders `runtime.session.list`
+      verbatim — status glyph (a visual echo of the payload's own status, raw
+      string always shown) · pending-decision count · task — with
+      **waiting-on-you sorted to the top**; explicit `ctrl+r` refresh + on open;
+      empty/loading/error states. A *status board, not a diagnosis engine*: no
+      health/obstruction verdict, no new daemon fields, read-only (no resolve).
+      App nav generalized: `ctrl+g` queue / `ctrl+b` board / `esc` chat, with
+      desk↔desk switch (`switch_screen`) that never drops through chat and keeps
+      the chat default mounted underneath. Guards: refresh populates / empty /
+      error, waiting-first sort, waiting-count summary, unknown-status renders
+      raw, offline no-crash; app: ctrl+b toggle, queue↔board switch keeps chat
+      reachable. 231 tests green.
+    - [ ] **leg 3c — adapters/why/report** last, after the shell loop is stable.
+      Keep boring; the "report" surface stays display-only (M-4 composes the
+      real thing) — laundering risk lives here.
   Goal: desk-shaped without changing the authority model — wiring, not a
   constitutional convention inside app.py.
 

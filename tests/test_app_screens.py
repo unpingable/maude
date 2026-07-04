@@ -18,7 +18,7 @@ from textual.widgets import Input, RichLog
 from maude.app import MaudeApp
 from maude.client.rpc import GovernorClient
 from maude.config import Settings
-from maude.screens import QueueScreen, ScreenManager
+from maude.screens import BoardScreen, QueueScreen, ScreenManager
 
 
 async def _refuse_connection():
@@ -77,6 +77,41 @@ async def test_escape_returns_from_desk_to_chat():
         assert app._active_desk_screen == "queue"
 
         await pilot.press("escape")
+        await pilot.pause()
+        assert app._active_desk_screen is None
+        assert app.query_one("#chat-log", RichLog) is not None
+
+
+@pytest.mark.asyncio
+async def test_ctrl_b_opens_and_closes_the_sessions_board():
+    app = _offline_app()
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        await pilot.press("ctrl+b")
+        await pilot.pause()
+        assert app._active_desk_screen == "board"
+        assert isinstance(app.screen, BoardScreen)
+        await pilot.press("ctrl+b")
+        await pilot.pause()
+        assert app._active_desk_screen is None
+        assert app.query_one("#chat-log", RichLog) is not None
+
+
+@pytest.mark.asyncio
+async def test_switching_between_desks_keeps_chat_reachable():
+    app = _offline_app()
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        await pilot.press("ctrl+g")   # open queue
+        await pilot.pause()
+        assert isinstance(app.screen, QueueScreen)
+
+        await pilot.press("ctrl+b")   # switch queue -> board (no chat in between)
+        await pilot.pause()
+        assert app._active_desk_screen == "board"
+        assert isinstance(app.screen, BoardScreen)
+
+        await pilot.press("escape")   # board -> chat
         await pilot.pause()
         assert app._active_desk_screen is None
         assert app.query_one("#chat-log", RichLog) is not None

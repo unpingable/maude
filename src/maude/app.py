@@ -18,7 +18,7 @@ from maude.commands import CommandContext, build_registry
 from maude.config import Settings
 from maude.feed import DecisionFeedController
 from maude.intents import parse_intent
-from maude.screens import QueueScreen, ScreenManager
+from maude.screens import BoardScreen, QueueScreen, ScreenManager
 from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
@@ -95,7 +95,8 @@ class MaudeApp(App):
         Binding("ctrl+y", "approve_next", "Approve", show=False),
         Binding("ctrl+d", "deny_next", "Deny", show=False),
         Binding("ctrl+t", "lineage_tree", "Tree", show=False),
-        Binding("ctrl+g", "toggle_desk", "Desk"),
+        Binding("ctrl+g", "toggle_desk", "Queue"),
+        Binding("ctrl+b", "toggle_board", "Sessions"),
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
@@ -126,9 +127,14 @@ class MaudeApp(App):
         # so it survives open/close; the screen is the view.
         self._decision_feed = DecisionFeedController()
         self._screen_manager.bind("queue", self._make_queue_screen)
+        # GS-10b leg 3b: the sessions board goes live (read-only status board).
+        self._screen_manager.bind("board", self._make_board_screen)
 
     def _make_queue_screen(self) -> QueueScreen:
         return QueueScreen(feed=self._decision_feed, client=self.client)
+
+    def _make_board_screen(self) -> BoardScreen:
+        return BoardScreen(client=self.client)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -913,16 +919,28 @@ class MaudeApp(App):
     # --- Desk screens (GS-10b leg 2: screen plumbing, not authority promotion) ---
 
     async def action_toggle_desk(self) -> None:
-        """Toggle between the legacy chat shell and the desk (queue) screen.
+        """``ctrl+g`` — chat ↔ the queue desk screen."""
+        await self._toggle_desk("queue")
 
-        The narrow internal transition that wires the ScreenManager behind the
-        existing shell: chat stays the default surface; this pushes/pops a desk
-        screen on top of it without disturbing the chat state underneath.
+    async def action_toggle_board(self) -> None:
+        """``ctrl+b`` — chat ↔ the sessions board desk screen."""
+        await self._toggle_desk("board")
+
+    async def _toggle_desk(self, name: str) -> None:
+        """Route to desk screen ``name``: open from chat, switch between desks,
+        or (if already on it) return to chat.
+
+        Chat stays the default surface underneath — desk screens are only ever
+        pushed on top or swapped for one another; the chat state is never
+        disturbed. This is the narrow internal transition, not authority
+        promotion.
         """
-        if self._active_desk_screen is None:
-            await self.open_desk("queue")
-        else:
+        if self._active_desk_screen == name:
             await self.close_desk()
+        elif self._active_desk_screen is None:
+            await self.open_desk(name)
+        else:
+            await self.switch_desk(name)
 
     async def open_desk(self, name: str) -> None:
         """Push the desk screen registered under ``name`` via the ScreenManager.
@@ -942,6 +960,17 @@ class MaudeApp(App):
             return
         self._active_desk_screen = None
         await self.pop_screen()
+
+    async def switch_desk(self, name: str) -> None:
+        """Swap one desk screen for another, keeping chat mounted underneath.
+
+        Only called when a desk screen is already active, so ``switch_screen``
+        replaces the top desk without touching the chat default beneath it.
+        """
+        if self._active_desk_screen is None:
+            return
+        self._active_desk_screen = name
+        await self.switch_screen(self._screen_manager.create(name))
 
     # --- Supervised Runtime Handlers ---
 
