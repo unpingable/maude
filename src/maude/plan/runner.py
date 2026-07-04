@@ -46,8 +46,11 @@ class RunPlanCommand(Command):
     help = "run a plan envelope file (M-1 contract)"
 
     def __init__(self, witness_resolver: WitnessResolver | None = None) -> None:
-        # Injected for tests / CD-4; absent by default (governed plans refuse
-        # fail-closed — a status field is never its own evidence).
+        # Injected for tests; when absent, execute() defaults to a file
+        # resolver over the PLAN FILE'S OWN DIRECTORY — witnesses co-located
+        # with the plan (the CD-4 specimen layout). Fail-closed is preserved:
+        # a directory with no matching artifacts resolves nothing and governed
+        # plans refuse (a status field is never its own evidence).
         self._witness_resolver = witness_resolver
 
     async def execute(self, ctx: CommandContext, payload: str) -> None:
@@ -62,9 +65,15 @@ class RunPlanCommand(Command):
             log.write(f"[red]Cannot read plan:[/red] {exc}")
             return
 
+        resolver = self._witness_resolver
+        if resolver is None:
+            from maude.plan.witness import file_witness_resolver
+
+            resolver = file_witness_resolver(path.parent)
+
         try:
             env = parse_plan_envelope(text)
-            admission = admit_for_execution(env, witness_resolver=self._witness_resolver)
+            admission = admit_for_execution(env, witness_resolver=resolver)
         except PlanRefusal as refusal:
             # Typed, client-side, NOT authority. No session created.
             log.write(f"[red]Plan refused[/red] [{refusal.refusal_class}]")

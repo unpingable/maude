@@ -216,3 +216,33 @@ class TestFileWitnessResolver:
 
         resolve = file_witness_resolver(tmp_path / "does-not-exist")
         assert resolve("sha256:" + "a" * 64) is None
+
+    def test_colocated_witnesses_admit_without_explicit_resolver(self, tmp_path: Path):
+        """Default resolver = the plan file's own directory (CD-4 layout)."""
+        playbook = b"pb-bytes"
+        ration = b"rc-bytes"
+        d1 = "sha256:" + hashlib.sha256(playbook).hexdigest()
+        d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
+        (tmp_path / "playbook.yaml").write_bytes(playbook)
+        (tmp_path / "ration_card.json").write_bytes(ration)
+        from maude.plan.witness import sanitize_ref
+
+        (tmp_path / sanitize_ref("operator:act")).write_bytes(b"act record")
+        plan = tmp_path / "gov-colocated.md"
+        plan.write_text(
+            HUMAN_PLAN.replace(
+                "---\n\nBackground prose.",
+                "governance:\n"
+                "  authority_system: ag\n"
+                "  playbook_id: \"chore.x\"\n"
+                f"  playbook_digest: \"{d1}\"\n"
+                f"  ration_card_digest: \"{d2}\"\n"
+                "  approval_ref: \"operator:act\"\n"
+                "  governance_status: approved\n"
+                "---\n\nBackground prose.",
+            )
+        )
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))  # no resolver injected
+        assert len(app.client.create_calls) == 1
+        assert "witnessed citations" in log.text()
