@@ -111,14 +111,16 @@ class TestBuildRegistry:
 
     def test_every_handler_name_exists_on_the_app(self):
         """Guard against a typo'd handler string — app.py has no tests, so a
-        bad name would otherwise fail only at runtime."""
+        bad name would otherwise fail only at runtime. Applies to AppCommand
+        adapters only; self-contained Commands (e.g. M-2 RunPlanCommand) own
+        their execute() and have no app handler to name."""
         from maude.app import MaudeApp
 
         registry = build_registry()
         missing = [
             cmd._handler
             for cmd in registry.commands()
-            if not hasattr(MaudeApp, cmd._handler)
+            if isinstance(cmd, AppCommand) and not hasattr(MaudeApp, cmd._handler)
         ]
         assert missing == [], f"handlers not found on MaudeApp: {missing}"
 

@@ -1,0 +1,129 @@
+# SPDX-License-Identifier: Apache-2.0
+"""M-2 `run <plan.md>` — parse, validate, admit, map to a supervised run.
+
+The human ingress path. Maude validates a plan's SHAPE and maps it to a
+supervised session; format validation is not authority — AG's gates refuse
+forbidden actions regardless of how well-formed the plan is. Synthetic-agent
+envelopes parse here but ride the same mapping with a non-interactive
+posture; their dedicated batch ingress (exit codes, ``--out``) is M-7.
+
+Governed plans admit only per §7 (approved + every load-bearing citation
+witnessed). v0 ships with NO witness resolver wired: governed plans refuse
+fail-closed until the AG conveyor projection surface lands (CD-4 wires it).
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from maude.commands.base import Command, CommandContext
+from maude.intents import IntentKind
+from maude.plan.envelope import (
+    PlanEnvelope,
+    PlanRefusal,
+    WitnessResolver,
+    admit_for_execution,
+    parse_plan_envelope,
+)
+
+
+def compose_task_text(env: PlanEnvelope) -> str:
+    """Goal + advisory steps + prose body, verbatim — Maude never reorders or
+    invents steps (M-1 §2)."""
+    parts = [env.goal]
+    if env.steps:
+        parts.append("Steps (advisory, ordered):\n" + "\n".join(f"- {s}" for s in env.steps))
+    body = env.body.strip()
+    if body:
+        parts.append(body)
+    return "\n\n".join(parts)
+
+
+class RunPlanCommand(Command):
+    """``run <plan.md>`` — the M-2 plan runner (human path)."""
+
+    kinds = (IntentKind.RUN_PLAN,)
+    help = "run a plan envelope file (M-1 contract)"
+
+    def __init__(self, witness_resolver: WitnessResolver | None = None) -> None:
+        # Injected for tests / CD-4; absent by default (governed plans refuse
+        # fail-closed — a status field is never its own evidence).
+        self._witness_resolver = witness_resolver
+
+    async def execute(self, ctx: CommandContext, payload: str) -> None:
+        log = ctx.log
+        path = Path(payload.strip()).expanduser()
+        if not path.is_file():
+            log.write(f"[red]Plan file not found:[/red] {path}")
+            return
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            log.write(f"[red]Cannot read plan:[/red] {exc}")
+            return
+
+        try:
+            env = parse_plan_envelope(text)
+            admission = admit_for_execution(env, witness_resolver=self._witness_resolver)
+        except PlanRefusal as refusal:
+            # Typed, client-side, NOT authority. No session created.
+            log.write(f"[red]Plan refused[/red] [{refusal.refusal_class}]")
+            log.write(f"  {refusal.detail}")
+            return
+
+        for w in env.warnings:
+            log.write(f"[yellow]warning:[/yellow] {w}")
+
+        backend_kind = env.harness or "claude_code"
+        operator_mode = "interactive" if env.submitter_kind == "human" else "autonomous"
+        task = compose_task_text(env)
+
+        log.write(f"[bold]Plan admitted[/bold] plan_ref={env.plan_ref}")
+        if admission.governed:
+            log.write(
+                "  governance: approved; witnessed citations: "
+                + ", ".join(name for name, _ in admission.verified)
+            )
+            for fld, src in (env.governance.projected or {}).items():
+                log.write(f"  projected {fld} <- {src}")
+        else:
+            log.write("  governance: none claimed (ungoverned human plan)")
+        if env.stop_forbidden_paths:
+            log.write(
+                "  client-side advisory fence: forbidden "
+                + ", ".join(env.stop_forbidden_paths)
+            )
+        if env.stop_halt_if:
+            log.write(f"  halt_if (operator cue, not machine-enforced): {env.stop_halt_if}")
+
+        try:
+            result = await ctx.app.client.runtime_session_create(
+                backend_kind=backend_kind,
+                cwd=env.workspace,
+                task=task,
+                operator_mode=operator_mode,
+            )
+            session_id = result["session_id"]
+            log.write(f"[green]Session created:[/green] {session_id}")
+            launch = await ctx.app.client.runtime_session_launch(session_id)
+            log.write(f"  Status: {launch['status']}  PID: {launch.get('pid', '?')}")
+            log.write(f"  plan_ref recorded: {env.plan_ref}")
+            log.write(
+                "[dim]Acceptance criteria render UNCHECKED in the run report "
+                "(M-4); the reviewer judges.[/dim]"
+            )
+        except Exception as exc:  # daemon/transport errors surface verbatim
+            log.write(f"[red]Launch error:[/red] {exc}")
+            return
+
+        # Same bookkeeping as supervised launch (best-effort on fakes).
+        app = ctx.app
+        if hasattr(app, "_active_supervised_session"):
+            app._active_supervised_session = session_id
+        session = getattr(app, "session", None)
+        if session is not None and hasattr(session, "active_supervised_id"):
+            session.active_supervised_id = session_id
+        for hook in ("_update_status_bar", "_start_intervention_poll"):
+            fn = getattr(app, hook, None)
+            if callable(fn):
+                fn()

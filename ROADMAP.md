@@ -179,7 +179,19 @@ regressions.
     contract question + operator ratification; do not stretch
     session.create.
 
-- [ ] **M-2 — plan ingestion command (`run <plan.md>`, in-TUI, human path)**
+- [x] **M-2 — plan ingestion command (`run <plan.md>`, in-TUI, human path)** —
+  **DONE 2026-07-04 (CD-3, conveyor-dogfood campaign).** `src/maude/plan/`
+  (envelope.py parser + runner.py RunPlanCommand; module layout supersedes
+  the sketched file names below). Implements M-1 incl. the CD-1a governance
+  binding: all FIVE refusal classes enforced client-side
+  (invalid_plan_envelope, submitter_limits_missing, governance_not_approved,
+  governance_ref_mismatch, governance_approval_unverified); governed plans
+  fail CLOSED with no witness resolver wired (CD-4 wires the conveyor
+  projection); param-mapping pins per the M-1 table; refusals create no
+  session; `run` intent anchored on `.md` so prose falls through to chat.
+  Tests: test_plan_envelope (24) + test_plan_runner (9); suite 272 green.
+  Live-daemon smoke owed at next daemon-up (with the desk screens' first
+  real-feed check).
   tier: mechanical · executor: codex · prereq: [M-1 ratified, GS-9, GS-10]
   - purpose: parse envelope → validate → map to create params → launch
     supervised session → session view. Maude neither edits nor generates

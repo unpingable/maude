@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from maude.commands.base import AppCommand, Command
 from maude.intents import IntentKind as K
+from maude.plan.runner import RunPlanCommand
 
 
 def desk_commands() -> list[Command]:
@@ -59,4 +60,5 @@ def desk_commands() -> list[Command]:
         AppCommand((K.QUICK_APPROVE,), "_handle_quick_approve", help="approve (y)"),
         AppCommand((K.QUICK_DENY,), "_handle_quick_deny", help="deny (n)"),
         AppCommand((K.QUICK_PENDING,), "_handle_quick_pending", help="pending (p)"),
+        RunPlanCommand(),
     ]

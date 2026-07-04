@@ -46,6 +46,8 @@ class IntentKind(Enum):
     QUICK_DENY = auto()
     QUICK_PENDING = auto()
     QUICK_LAUNCH = auto()
+    # M-2 plan ingestion (plan-envelope-v0 contract)
+    RUN_PLAN = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -114,6 +116,9 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^context$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^ctx$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
+    # M-2: run a plan-envelope file. Anchored on the .md suffix so bare
+    # "run" prose still falls through to chat.
+    (re.compile(r"^run\s+(\S+\.md)\s*$", re.IGNORECASE), IntentKind.RUN_PLAN),
     (re.compile(r"^clear$", re.IGNORECASE), IntentKind.CLEAR),
     (re.compile(r"^reset$", re.IGNORECASE), IntentKind.CLEAR),
     (re.compile(r"^lineage tree$", re.IGNORECASE), IntentKind.LINEAGE_TREE),
