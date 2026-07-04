@@ -189,6 +189,96 @@ class GovernorClient:
         finally:
             await stream_client.aclose()
 
+    async def _stream_updates(
+        self,
+        method: str,
+        params: dict | None,
+        notification_method: str,
+    ) -> AsyncIterator[dict]:
+        """Stream an RPC on a dedicated connection, yielding each matching
+        notification's full params dict (not just a content string).
+
+        Used by held feeds like ``operator.watch`` whose notifications carry
+        structured payloads. The terminal result is stashed in
+        ``_last_stream_result``."""
+        stream_client = await self._client_factory()
+        try:
+            async for item in stream_client.stream(method, params, read_timeout=None):
+                if item.kind == "notification" and item.method == notification_method:
+                    yield item.payload if isinstance(item.payload, dict) else {}
+                elif item.kind == "result":
+                    self._last_stream_result = item.payload
+        finally:
+            await stream_client.aclose()
+
+    # ========================================================================
+    # Governed-shell operator surface (GS-2..GS-6) — used by the desk (GS-11+)
+    # ========================================================================
+
+    async def operator_decisions_list(self, kinds: list[str] | None = None) -> dict:
+        """The unified decision feed (operator.decisions.list). Returns
+        ``{items, count}`` per shell-contract §2."""
+        params: dict[str, Any] = {}
+        if kinds is not None:
+            params["kinds"] = kinds
+        return await self._call("operator.decisions.list", params)
+
+    async def operator_decisions_resolve(
+        self, decision_id: str, option_key: str, args: dict | None = None
+    ) -> dict:
+        """Resolve a decision — THE one mutation door (operator.decisions.resolve).
+
+        Routes by the item's kind + chosen option to the backing subsystem; the
+        daemon mints the receipt and applies any refusal. Maude only relays the
+        operator's chosen ``option_key`` (from the envelope) — it decides
+        nothing."""
+        params: dict[str, Any] = {"decision_id": decision_id, "option_key": option_key}
+        if args is not None:
+            params["args"] = args
+        return await self._call("operator.decisions.resolve", params)
+
+    async def operator_watch(
+        self,
+        kinds: list[str] | None = None,
+        *,
+        interval_ms: int | None = None,
+        max_ticks: int | None = None,
+    ) -> AsyncIterator[dict]:
+        """Stream the decision feed. Yields each ``operator.watch.update``
+        payload — a FULL feed snapshot ``{items, count, tick, changed}`` (the
+        daemon dedups by content, not incremental events). The stream is bounded
+        (``max_ticks``); the caller re-subscribes to keep watching."""
+        params: dict[str, Any] = {}
+        if kinds is not None:
+            params["kinds"] = kinds
+        if interval_ms is not None:
+            params["interval_ms"] = interval_ms
+        if max_ticks is not None:
+            params["max_ticks"] = max_ticks
+        async for update in self._stream_updates(
+            "operator.watch", params, "operator.watch.update"
+        ):
+            yield update
+
+    async def runtime_session_send_input(self, session_id: str, text: str) -> dict:
+        """Steer a running session (runtime.session.send_input). Downstream tool
+        calls stay fully intercepted — steering widens nothing."""
+        return await self._call(
+            "runtime.session.send_input", {"session_id": session_id, "text": text}
+        )
+
+    async def runtime_adapters_list(self) -> dict:
+        """List harness adapters + declared capabilities (runtime.adapters.list).
+        Introspection only — adapters are AG's, below the authority gate."""
+        return await self._call("runtime.adapters.list", {})
+
+    async def why_chain(self, receipt_id: str, max_depth: int | None = None) -> dict:
+        """Walk a receipt's chain (why.chain) for the `w` overlay."""
+        params: dict[str, Any] = {"receipt_id": receipt_id}
+        if max_depth is not None:
+            params["max_depth"] = max_depth
+        return await self._call("why.chain", params)
+
     # ========================================================================
     # Health / Handshake
     # ========================================================================

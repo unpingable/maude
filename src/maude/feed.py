@@ -11,9 +11,11 @@ It owns the local decision cache and derives, from the envelope alone:
 
 Boundary: this is render/triage state only. It resolves nothing and mints no
 authority — resolving a decision goes to ``operator.decisions.resolve`` on the
-daemon (wired in GS-11). The live ``operator.watch`` stream that feeds
-:meth:`apply_snapshot` / :meth:`apply_update` is also GS-11; the cache-update
-logic those call is complete and tested here.
+daemon (wired in GS-11). The live ``operator.watch`` subscribe/re-subscribe
+loop is also GS-11; each update is a full snapshot consumed via
+:meth:`ingest_watch_update`. The cache-update logic (snapshot + the incremental
+``apply_update``, which supports the contract's added/resolved/expiring
+vocabulary should the daemon emit it) is complete and tested here.
 """
 
 from __future__ import annotations
@@ -48,6 +50,15 @@ class DecisionFeedController:
         seq = result.get("feed_seq")
         if isinstance(seq, int):
             self._feed_seq = seq
+
+    def ingest_watch_update(self, update: dict) -> None:
+        """Apply one ``operator.watch.update`` notification.
+
+        Each update carries a FULL feed snapshot (``{items, count, tick,
+        changed}``) — the daemon dedups by content rather than sending
+        incremental events — so a watch tick is just a snapshot replace.
+        """
+        self.apply_snapshot(update)
 
     def apply_update(self, change: str, item: DecisionItem) -> None:
         """Apply one ``decision.event`` change (added | resolved | expiring).
