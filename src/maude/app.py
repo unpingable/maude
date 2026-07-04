@@ -17,6 +17,7 @@ from maude.client.models import SessionSummary
 from maude.commands import CommandContext, build_registry
 from maude.config import Settings
 from maude.intents import parse_intent
+from maude.screens import ScreenManager
 from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
@@ -93,6 +94,7 @@ class MaudeApp(App):
         Binding("ctrl+y", "approve_next", "Approve", show=False),
         Binding("ctrl+d", "deny_next", "Deny", show=False),
         Binding("ctrl+t", "lineage_tree", "Tree", show=False),
+        Binding("ctrl+g", "toggle_desk", "Desk"),
         Binding("ctrl+q", "quit", "Quit"),
     ]
 
@@ -114,6 +116,10 @@ class MaudeApp(App):
         self._intervention_poll_task: asyncio.Task | None = None
         self._daemon_connected: bool = False
         self._command_registry = build_registry()
+        # Desk screens (GS-10b leg 2: screen plumbing behind the chat shell).
+        # Explicit app-owned state — no module-level/ambient screen singleton.
+        self._screen_manager = ScreenManager()
+        self._active_desk_screen: str | None = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -894,6 +900,39 @@ class MaudeApp(App):
             self._update_status_bar()
         except Exception as e:
             log.write(f"[red]New session error:[/red] {e}")
+
+    # --- Desk screens (GS-10b leg 2: screen plumbing, not authority promotion) ---
+
+    async def action_toggle_desk(self) -> None:
+        """Toggle between the legacy chat shell and the desk (queue) screen.
+
+        The narrow internal transition that wires the ScreenManager behind the
+        existing shell: chat stays the default surface; this pushes/pops a desk
+        screen on top of it without disturbing the chat state underneath.
+        """
+        if self._active_desk_screen is None:
+            await self.open_desk("queue")
+        else:
+            await self.close_desk()
+
+    async def open_desk(self, name: str) -> None:
+        """Push the desk screen registered under ``name`` via the ScreenManager.
+
+        The chat shell (the default screen) stays mounted underneath, so closing
+        the desk returns to it with its input/log state intact.
+        """
+        if self._active_desk_screen is not None:
+            return
+        screen = self._screen_manager.create(name)
+        self._active_desk_screen = name
+        await self.push_screen(screen)
+
+    async def close_desk(self) -> None:
+        """Return to the legacy chat shell by popping the active desk screen."""
+        if self._active_desk_screen is None:
+            return
+        self._active_desk_screen = None
+        await self.pop_screen()
 
     # --- Supervised Runtime Handlers ---
 

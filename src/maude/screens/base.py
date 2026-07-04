@@ -9,6 +9,7 @@ they carry no authority logic (GS-10 stop condition).
 
 from __future__ import annotations
 
+from textual.binding import Binding
 from textual.containers import Vertical
 from textual.screen import Screen
 from textual.widgets import Static
@@ -17,12 +18,22 @@ from textual.widgets import Static
 class DeskScreen(Screen):
     """A desk screen: a title line over a body region with an empty state."""
 
+    #: ``escape`` returns to the legacy chat shell (GS-10b leg 2: the desk is
+    #: pushed on top of chat, never replaces it). Merged with subclass bindings.
+    BINDINGS = [Binding("escape", "close_desk", "Back to chat")]
+
     #: Logical name used by the ScreenManager registry.
     SCREEN_NAME: str = "desk"
     #: Title shown at the top of the screen.
     TITLE_TEXT: str = "Desk"
     #: Message shown when the body has nothing to render yet.
     EMPTY_TEXT: str = ""
+
+    async def action_close_desk(self) -> None:
+        """Pop back to the legacy chat shell, if the host app supports it."""
+        close = getattr(self.app, "close_desk", None)
+        if close is not None:
+            await close()
 
     def compose(self):
         yield Static(self.TITLE_TEXT, id="screen-title")
