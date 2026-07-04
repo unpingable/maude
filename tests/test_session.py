@@ -53,27 +53,27 @@ class TestMaudeSession:
     def test_status_line_default(self):
         s = MaudeSession()
         line = s.status_line()
-        assert "MODE=PLAN" in line
-        assert "SPEC=UNLOCKED" in line
-        assert "SESSION=none" in line
+        assert "mode: plan" in line
+        assert "spec: unlocked" in line
+        assert "sess: none" in line
 
     def test_status_line_with_session(self):
         s = MaudeSession(governor_session_id="abc123")
         line = s.status_line()
-        assert "SESSION=abc123" in line
+        assert "sess: abc123" in line
 
     def test_status_line_locked_spec(self):
         s = MaudeSession()
         s.lock_spec()
         line = s.status_line()
-        assert "SPEC=LOCKED" in line
+        assert "spec: locked" in line
 
     def test_status_line_build_mode(self):
         s = MaudeSession()
         s.lock_spec()
         s.set_mode(Mode.BUILD)
         line = s.status_line()
-        assert "MODE=BUILD" in line
+        assert "mode: build" in line
 
     def test_status_line_with_governor_now(self):
         class FakeNow:
@@ -81,7 +81,7 @@ class TestMaudeSession:
         s = MaudeSession()
         s.last_governor_now = FakeNow()
         line = s.status_line()
-        assert "GOV=ok" in line
+        assert "policy: ok" in line
 
     # Template support
 
@@ -102,12 +102,12 @@ class TestMaudeSession:
         s = MaudeSession()
         s.load_template("architecture", "content")
         line = s.status_line()
-        assert "TEMPLATE=architecture" in line
+        assert "template: architecture" in line
 
     def test_status_line_without_template(self):
         s = MaudeSession()
         line = s.status_line()
-        assert "TEMPLATE" not in line
+        assert "template" not in line
 
     def test_lock_spec_returns_draft(self):
         s = MaudeSession()
@@ -139,8 +139,8 @@ class TestMaudeSession:
     def test_status_line_identity_before_mode(self):
         s = MaudeSession(project_name="myproj", backend_type="ollama")
         line = s.status_line()
-        assert line.index("myproj") < line.index("MODE=")
-        assert line.index("ollama") < line.index("MODE=")
+        assert line.index("myproj") < line.index("mode:")
+        assert line.index("ollama") < line.index("mode:")
 
     def test_title_line_bare(self):
         s = MaudeSession()

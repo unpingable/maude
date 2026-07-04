@@ -86,3 +86,27 @@ async def test_empty_input_dispatches_nothing():
         app._handle_help = lambda log: fired.__setitem__("n", fired["n"] + 1)
         await _submit(pilot, app, "")
         assert fired["n"] == 0
+
+
+class _RecordingLog:
+    def __init__(self) -> None:
+        self.lines: list[str] = []
+
+    def write(self, s: object) -> None:
+        self.lines.append(str(s))
+
+
+@pytest.mark.asyncio
+async def test_why_law_view_discloses_blocked_plan():
+    """V2 law view: after a blocked plan run, `why` shows the plain surface AND
+    discloses the raw contract code (which the block output itself hides)."""
+    from maude.labels import refusal_explanation
+
+    app = _offline_app()
+    exp = refusal_explanation("governance_not_approved")
+    app._last_plan_block = ("governance_not_approved", "detail prose", exp)
+    log = _RecordingLog()
+    await app._handle_why(log)
+    text = "\n".join(log.lines)
+    assert "Not approved" in text  # plain-ops surface, first
+    assert "governance_not_approved" in text  # cybernetics disclosed on drilldown

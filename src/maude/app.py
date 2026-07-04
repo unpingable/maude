@@ -43,10 +43,11 @@ _HELP_TEXT = """\
   lock spec     - Lock the current spec (submits constraint to governor)
   build         - Switch to BUILD mode (creates v2 run)
   show spec     - Show the current spec draft
-  diff          - Show changes (supervised: workspace diff, governance: pending violation)
-  apply/promote - Accept changes (supervised: promote, governance: proceed with override)
-  rollback/reject - Revert (supervised: reject changes, governance: fix violation)
-  why           - Show why something is blocked
+  run <plan.md> - Run a plan file (checks it, then starts a supervised run)
+  diff          - Show changes (a run's edits, or the current blocked item)
+  apply/promote - Keep changes (a run's edits, or proceed past a block with an override)
+  rollback/reject - Discard changes (revert a run's edits, or fix a blocked item)
+  why           - Explain what's blocked, with the policy detail
   status        - Show governor status
   sessions      - List all sessions (also: ls, list sessions)
   switch <id>   - Switch to a session by ID or #N (also: session <id>, resume <id>)
@@ -60,7 +61,7 @@ _HELP_TEXT = """\
   supervised approve <id> <tcid>  - Approve a tool call
   supervised deny <id> <tcid>     - Deny a tool call
   supervised kill <id>            - Kill a session
-  supervised promotion <id>       - Show pending promotion (changed files)
+  supervised promotion <id>       - Show a run's pending changes (changed files)
   supervised diff <id>            - Show unified diff of changes
   supervised promote <id>         - Accept workspace changes
   supervised reject <id>          - Revert workspace changes
@@ -116,6 +117,9 @@ class MaudeApp(App):
         self._pending_template: str | None = None
         self._pending_rollback_anchor: str | None = None
         self._active_supervised_session: str | None = None
+        # Last blocked plan run: (refusal_class, detail, Explanation) — the raw
+        # cybernetics stays off the surface but `why` can disclose it (V2 law view).
+        self._last_plan_block: tuple[str, str, object] | None = None
         self._intervention_poll_task: asyncio.Task | None = None
         self._daemon_connected: bool = False
         self._command_registry = build_registry()
@@ -574,6 +578,18 @@ class MaudeApp(App):
         log.write(self.session.spec_draft)
 
     async def _handle_why(self, log: RichLog) -> None:
+        # V2 law view: if the last run was blocked, disclose the policy detail
+        # kept off the surface. Plain "what/why" first, raw contract term last.
+        block = self._last_plan_block
+        if block is not None:
+            refusal_class, detail, exp = block
+            surface = getattr(exp, "surface", "Plan blocked")
+            plain = getattr(exp, "detail", detail)
+            law = getattr(exp, "law", "") or f"refusal_class={refusal_class}"
+            log.write(f"[bold]Why blocked:[/bold] {surface}")
+            log.write(f"  {plain}")
+            log.write(f"  [dim]policy: {law}[/dim]")
+            return
         try:
             now = await self.client.governor_now()
             log.write(f"[bold]Why:[/bold] {now.sentence}")

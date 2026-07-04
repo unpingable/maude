@@ -104,13 +104,11 @@ class MaudeSession:
     active_supervised_id: str | None = None
 
     def status_line(self) -> str:
-        mode_str = self.mode.name
-        spec_str = "LOCKED" if self.spec_locked else "UNLOCKED"
+        # Plain-ops labels on the surface (lowercase, spelled out) rather than
+        # crammed CAPS=abbrev. Deeper visual redesign (segments/color) is V3.
+        mode_str = self.mode.name.lower()
+        spec_str = "locked" if self.spec_locked else "unlocked"
         session_str = self.governor_session_id or "none"
-        tmpl_str = f"  TEMPLATE={self.spec_template}" if self.spec_template else ""
-        gov_str = ""
-        if self.last_governor_now is not None:
-            gov_str = f" GOV={self.last_governor_now.status}"
         parts = []
         if self.project_name:
             parts.append(self.project_name)
@@ -120,10 +118,15 @@ class MaudeSession:
         if ctx_str:
             parts.append(ctx_str)
         if self.active_supervised_id:
-            parts.append(f"SUP={self.active_supervised_id[:8]}")
-        parts.append(f"MODE={mode_str}")
-        parts.append(f"SPEC={spec_str}{tmpl_str}")
-        parts.append(f"SESSION={session_str}{gov_str}")
+            parts.append(f"run: {self.active_supervised_id[:8]}")
+        parts.append(f"mode: {mode_str}")
+        parts.append(f"spec: {spec_str}")
+        if self.spec_template:
+            parts.append(f"template: {self.spec_template}")
+        sess = f"sess: {session_str}"
+        if self.last_governor_now is not None:
+            sess += f"  policy: {self.last_governor_now.status}"
+        parts.append(sess)
         return "  ".join(parts)
 
     def title_line(self) -> str:

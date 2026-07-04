@@ -116,7 +116,9 @@ class TestRunPlanCommand:
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(plan))
         assert app.client.create_calls == []
-        assert "invalid_plan_envelope" in log.text()
+        # Surface is plain-ops; the raw refusal code moves to the `why` stash.
+        assert "malformed" in log.text()
+        assert app._last_plan_block[0] == "invalid_plan_envelope"
 
     def test_governed_candidate_never_executes(self, tmp_path: Path):
         d = "sha256:" + "a" * 64
@@ -136,7 +138,8 @@ class TestRunPlanCommand:
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(plan))
         assert app.client.create_calls == []
-        assert "governance_not_approved" in log.text()
+        assert "Not approved" in log.text()
+        assert app._last_plan_block[0] == "governance_not_approved"
 
     def test_governed_approved_with_witness_executes(self, tmp_path: Path):
         playbook = b"pb"
@@ -161,7 +164,7 @@ class TestRunPlanCommand:
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(witness_resolver=store.get), _ctx(app, log), str(plan))
         assert len(app.client.create_calls) == 1
-        assert "witnessed citations" in log.text()
+        assert "verified references" in log.text()
 
     def test_governed_approved_without_witness_fails_closed(self, tmp_path: Path):
         d = "sha256:" + "a" * 64
@@ -182,7 +185,8 @@ class TestRunPlanCommand:
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(plan))  # no resolver wired
         assert app.client.create_calls == []
-        assert "governance_approval_unverified" in log.text()
+        assert "verify the approval" in log.text()
+        assert app._last_plan_block[0] == "governance_approval_unverified"
 
 
 def test_compose_task_text_never_invents_steps():
@@ -245,4 +249,4 @@ class TestFileWitnessResolver:
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(plan))  # no resolver injected
         assert len(app.client.create_calls) == 1
-        assert "witnessed citations" in log.text()
+        assert "verified references" in log.text()

@@ -18,6 +18,7 @@ from pathlib import Path
 
 from maude.commands.base import Command, CommandContext
 from maude.intents import IntentKind
+from maude.labels import refusal_explanation
 from maude.plan.envelope import (
     PlanEnvelope,
     PlanRefusal,
@@ -43,7 +44,7 @@ class RunPlanCommand(Command):
     """``run <plan.md>`` — the M-2 plan runner (human path)."""
 
     kinds = (IntentKind.RUN_PLAN,)
-    help = "run a plan envelope file (M-1 contract)"
+    help = "run a plan file"
 
     def __init__(self, witness_resolver: WitnessResolver | None = None) -> None:
         # Injected for tests; when absent, execute() defaults to a file
@@ -55,6 +56,8 @@ class RunPlanCommand(Command):
 
     async def execute(self, ctx: CommandContext, payload: str) -> None:
         log = ctx.log
+        # Reset the `why` law-view stash per run; set again only if this run blocks.
+        ctx.app._last_plan_block = None
         path = Path(payload.strip()).expanduser()
         if not path.is_file():
             log.write(f"[red]Plan file not found:[/red] {path}")
@@ -75,35 +78,43 @@ class RunPlanCommand(Command):
             env = parse_plan_envelope(text)
             admission = admit_for_execution(env, witness_resolver=resolver)
         except PlanRefusal as refusal:
-            # Typed, client-side, NOT authority. No session created.
-            log.write(f"[red]Plan refused[/red] [{refusal.refusal_class}]")
-            log.write(f"  {refusal.detail}")
+            # Typed, client-side, NOT authority. No session created. The surface
+            # stays plain-ops; the raw refusal code is stashed for the `why`
+            # law-view drilldown (progressive disclosure).
+            exp = refusal_explanation(refusal.refusal_class, refusal.detail)
+            log.write(f"[red]Blocked:[/red] {exp.surface}")
+            log.write(f"  {exp.detail}")
+            log.write("  [dim]type 'why' for the policy detail[/dim]")
+            ctx.app._last_plan_block = (refusal.refusal_class, refusal.detail, exp)
             return
 
         for w in env.warnings:
-            log.write(f"[yellow]warning:[/yellow] {w}")
+            log.write(f"[yellow]note:[/yellow] {w}")
 
         backend_kind = env.harness or "claude_code"
         operator_mode = "interactive" if env.submitter_kind == "human" else "autonomous"
         task = compose_task_text(env)
 
-        log.write(f"[bold]Plan admitted[/bold] plan_ref={env.plan_ref}")
+        log.write(f"[bold]OK — starting run[/bold]  (plan {env.plan_ref[:14]}…)")
         if admission.governed:
             log.write(
-                "  governance: approved; witnessed citations: "
+                "  policy: approved; verified references: "
                 + ", ".join(name for name, _ in admission.verified)
             )
             for fld, src in (env.governance.projected or {}).items():
-                log.write(f"  projected {fld} <- {src}")
+                log.write(f"  limit '{fld}' enforced from {src}")
         else:
-            log.write("  governance: none claimed (ungoverned human plan)")
+            log.write("  policy: none (plain run, no sign-off attached)")
         if env.stop_forbidden_paths:
             log.write(
-                "  client-side advisory fence: forbidden "
+                "  local guard — off-limits paths: "
                 + ", ".join(env.stop_forbidden_paths)
             )
         if env.stop_halt_if:
-            log.write(f"  halt_if (operator cue, not machine-enforced): {env.stop_halt_if}")
+            log.write(
+                f"  stop if: {env.stop_halt_if}  "
+                "[dim](a reminder for you, not auto-enforced)[/dim]"
+            )
 
         try:
             result = await ctx.app.client.runtime_session_create(
