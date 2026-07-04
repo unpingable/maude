@@ -59,13 +59,30 @@ execution in the campaign's six-field shape.
     quarantined as a named group). Guards: every IntentKind resolves; every
     handler name exists on MaudeApp; 4 end-to-end pilot smokes. Caught + fixed
     a real collision with Textual's internal `self._registry`. 206 tests green.
-  - [ ] **leg 2 — ScreenManager** wired behind the existing shell shape; old
-    chat path kept as legacy; no big-bang. Design note: the current
-    single-screen chat shell must coexist with the screen stack — the one
-    place to watch for untestable global state (a stop condition).
-  - [ ] **leg 3 — desk screens** brought up incrementally: decisions/feed
-    first (consumes the GS-11 data layer), operator/watch second,
-    adapters/why/report last, after the shell loop is stable.
+  - [x] **leg 2 — ScreenManager** wired behind the existing chat shell
+    (`8a1f16f`). App owns the manager + explicit `_active_desk_screen` state
+    (no ambient global — the stop condition); `ctrl+g` toggles chat ↔ a desk
+    screen *pushed on top of* the default chat screen (kept mounted, so input/
+    log state survives); `escape` returns. Caught a real Textual gotcha:
+    `on_mount` is dispatched for *every* class in the MRO, so the base skeleton
+    render and a subclass render both fire — resolved with a `_MANAGES_OWN_BODY`
+    yield flag on DeskScreen. Guards: manager owned per-app / no global; startup
+    +quit lifecycle smoke; toggle open/close; escape→chat; input-state
+    preserved. Screen plumbing, not authority promotion. 211 tests green.
+  - [~] **leg 3 — desk screens** brought up incrementally.
+    - [x] **leg 3a — decisions/feed** (`ScreenManager.bind` injects the live
+      client+feed): QueueScreen consumes the GS-11 data layer — explicit
+      refresh (`operator.decisions.list`, `ctrl+r` + on open), `↑/↓` selection,
+      empty/loading/error states, and operator-triggered resolve
+      (`operator.decisions.resolve`) that relays ONLY the selected item's
+      envelope `option_key` — no shell-invented verbs, no autopilot, no
+      background/implicit resolution. The `operator.watch` subscribe loop stays
+      deferred (explicit refresh only). Guards: refresh populates / empty /
+      error, cursor moves selection+keymap, resolve relays selected key with a
+      call-log pin (+follow-up refresh), key-not-in-keymap ignored, offline
+      no-crash. 221 tests green.
+    - [ ] **leg 3b — operator/watch** second · **leg 3c — adapters/why/report**
+      last, after the shell loop is stable.
   Goal: desk-shaped without changing the authority model — wiring, not a
   constitutional convention inside app.py.
 

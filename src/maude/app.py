@@ -16,8 +16,9 @@ from maude.client.rpc import GovernorClient
 from maude.client.models import SessionSummary
 from maude.commands import CommandContext, build_registry
 from maude.config import Settings
+from maude.feed import DecisionFeedController
 from maude.intents import parse_intent
-from maude.screens import ScreenManager
+from maude.screens import QueueScreen, ScreenManager
 from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
@@ -120,6 +121,14 @@ class MaudeApp(App):
         # Explicit app-owned state — no module-level/ambient screen singleton.
         self._screen_manager = ScreenManager()
         self._active_desk_screen: str | None = None
+        # GS-10b leg 3a: the queue screen goes live — bind its factory to inject
+        # the app-owned decision feed + client. Decision cache lives on the app
+        # so it survives open/close; the screen is the view.
+        self._decision_feed = DecisionFeedController()
+        self._screen_manager.bind("queue", self._make_queue_screen)
+
+    def _make_queue_screen(self) -> QueueScreen:
+        return QueueScreen(feed=self._decision_feed, client=self.client)
 
     def compose(self) -> ComposeResult:
         yield Header()

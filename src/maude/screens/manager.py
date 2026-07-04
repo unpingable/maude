@@ -52,6 +52,18 @@ class ScreenManager:
             raise ValueError(f"screen {name!r} already registered")
         self._factories[name] = factory
 
+    def bind(self, name: str, factory: ScreenFactory) -> None:
+        """Rebind an already-registered screen name to a new factory.
+
+        The app uses this to inject live dependencies (client + feed) into a
+        screen's factory once they exist (GS-10b leg 3a) while keeping the
+        screen addressable by the same name. Rebinding an *unregistered* name is
+        a programming error — use :meth:`register` to add a new screen.
+        """
+        if name not in self._factories:
+            raise KeyError(f"no screen registered as {name!r}")
+        self._factories[name] = factory
+
     def create(self, name: str) -> Screen:
         """Instantiate the screen registered under ``name``."""
         try:

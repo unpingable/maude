@@ -28,6 +28,11 @@ class DeskScreen(Screen):
     TITLE_TEXT: str = "Desk"
     #: Message shown when the body has nothing to render yet.
     EMPTY_TEXT: str = ""
+    #: A subclass that renders its own body (e.g. the live QueueScreen) sets this
+    #: so the skeleton ``on_mount`` below stands down. Textual dispatches
+    #: ``on_mount`` for *every* class in the MRO, so the base must yield
+    #: explicitly rather than rely on being overridden.
+    _MANAGES_OWN_BODY: bool = False
 
     async def action_close_desk(self) -> None:
         """Pop back to the legacy chat shell, if the host app supports it."""
@@ -40,6 +45,8 @@ class DeskScreen(Screen):
         yield Vertical(id="screen-body")
 
     def on_mount(self) -> None:
+        if self._MANAGES_OWN_BODY:
+            return
         body = self.query_one("#screen-body", Vertical)
         rows = list(self.body_lines())
         if rows:
