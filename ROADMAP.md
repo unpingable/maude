@@ -56,18 +56,17 @@ execution in the campaign's six-field shape.
   behavior-preserving refactor once app.py gets pilot coverage. The GS-10a
   seams exist and are tested, so this is wiring, not design.
 
-### Known daemon drift (R-MAUDE-1)
+### Daemon drift (R-MAUDE-1) — surfaced by GS-9, RESOLVED
 
-Surfaced by the GS-9 live smoke against the current daemon (method count 97):
-- `tests/test_integration.py::test_compile_with_escape` expects
-  `intent.compile` to return `escape_classification="waiver_candidate"` for
-  `escape_text="allow exception for testing"`; the current daemon returns
-  `None`. The full result deserializes correctly — this is a daemon-side
-  classification behavior change, not a transport regression. Left failing
-  (not silently re-asserted) pending the R-MAUDE-1 surface-diff pass, which
-  should decide whether the daemon regressed or the test's expectation is
-  stale. The bare suite (no daemon) stays green; this only appears under
-  `test-with-governor.sh`.
+The GS-9 live smoke caught `intent.compile` returning
+`escape_classification=None` where `test_compile_with_escape` expects
+`waiver_candidate`. Diagnosed as a real daemon bug (not a transport regression
+or a stale test): the daemon wasn't threading `escape_text` through the RPC
+path, so classification never fired. **Fixed AG-side (`eb82f20` — "intent.compile
+threads escape_text so classification fires over RPC").** Re-run smoke: 23
+passed / 1 skipped (only the intentional chat-stream skip), exit 0. A worked
+example of the R-MAUDE-1 value: the surface diff flushes out real daemon
+regressions.
 
 ## Phase 2 — The desk (GS campaign, as specced)
 
