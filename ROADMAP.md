@@ -39,10 +39,22 @@ execution in the campaign's six-field shape.
   busy guard; `chat.stream` runs on a dedicated connection; a poisoned
   connection is dropped and reconnected on the next call. Verify: bare
   `pytest` 156 passed / 24 skipped; live-daemon smoke 22/24 (see drift note).
-- [ ] **GS-10** — ScreenManager + CommandRegistry skeleton, per
-  maude-boundary.md. Repositioning notes: chat/PLAN/BUILD handlers port
-  **as-is** into quarantined `commands/legacy.py`; ScreenManager reserves a
-  named run-report view stub (feeds M-4). Executor: codex.
+- [x] **GS-10a** — skeleton modules + isolation tests (additive; app.py
+  untouched). `feed.py` `DecisionFeedController` (the envelope-aware kernel:
+  cache, interrupt/accumulate split, keymap-from-`options[].key`; GS-11 wires
+  the live `operator.watch` loop + resolve). `commands/` `CommandRegistry`
+  keyed by `IntentKind` (the seam that replaces app.py's if/elif).
+  `screens/` — the four desk screens (queue/session/board/diff) + reserved
+  `ReportScreen` (M-4 stub) + `ScreenManager` registry; overlay names
+  reserved for GS-13. Verify: bare pytest 185 passed / 24 skipped exit 0
+  (feed + registry pure-logic pins; each screen isolation-mounts via Textual
+  pilot); ruff clean.
+- [ ] **GS-10b** — bootstrap migration: point app.py at `ScreenManager`,
+  move the if/elif dispatch onto `CommandRegistry`, quarantine chat/PLAN/BUILD
+  handlers into `commands/legacy.py`, shrink app.py to bootstrap. Deferred
+  behind GS-11..GS-14 (fill the screens first) or done as a deliberate
+  behavior-preserving refactor once app.py gets pilot coverage. The GS-10a
+  seams exist and are tested, so this is wiring, not design.
 
 ### Known daemon drift (R-MAUDE-1)
 
@@ -56,10 +68,6 @@ Surfaced by the GS-9 live smoke against the current daemon (method count 97):
   should decide whether the daemon regressed or the test's expectation is
   stale. The bare suite (no daemon) stays green; this only appears under
   `test-with-governor.sh`.
-- [ ] **GS-10** — ScreenManager + CommandRegistry skeleton, per
-  maude-boundary.md. Repositioning notes: chat/PLAN/BUILD handlers port
-  **as-is** into quarantined `commands/legacy.py`; ScreenManager reserves a
-  named run-report view stub (feeds M-4). Executor: codex.
 
 ## Phase 2 — The desk (GS campaign, as specced)
 
