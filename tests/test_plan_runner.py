@@ -189,3 +189,30 @@ def test_compose_task_text_never_invents_steps():
     env = parse_plan_envelope(HUMAN_PLAN)
     text = compose_task_text(env)
     assert text.count("- ") == 1  # exactly the one advisory step, verbatim
+
+
+class TestFileWitnessResolver:
+    def test_digest_resolved_by_content_not_filename(self, tmp_path: Path):
+        from maude.plan.witness import file_witness_resolver
+
+        artifact = b"queue-item-bytes"
+        digest = "sha256:" + hashlib.sha256(artifact).hexdigest()
+        (tmp_path / "arbitrary-name.json").write_bytes(artifact)
+        resolve = file_witness_resolver(tmp_path)
+        assert resolve(digest) == artifact
+        assert resolve("sha256:" + "0" * 64) is None
+
+    def test_ref_resolved_by_sanitized_filename(self, tmp_path: Path):
+        from maude.plan.witness import file_witness_resolver, sanitize_ref
+
+        ref = "operator:queued_playbook.operator_approved:2026-07-04"
+        (tmp_path / sanitize_ref(ref)).write_bytes(b"act record")
+        resolve = file_witness_resolver(tmp_path)
+        assert resolve(ref) == b"act record"
+        assert resolve("operator:unknown") is None
+
+    def test_missing_directory_fails_closed(self, tmp_path: Path):
+        from maude.plan.witness import file_witness_resolver
+
+        resolve = file_witness_resolver(tmp_path / "does-not-exist")
+        assert resolve("sha256:" + "a" * 64) is None
