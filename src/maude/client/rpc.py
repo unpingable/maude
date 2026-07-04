@@ -1,11 +1,35 @@
 # SPDX-License-Identifier: Apache-2.0
-"""JSON-RPC 2.0 client over Unix socket for the governor daemon."""
+"""Typed governor-daemon client for maude.
+
+The wire layer — Content-Length framing, XDG socket-path derivation, JSON-RPC
+2.0 dispatch, the ``-32001`` auth error, streaming — lives in the shared
+``ag_shell_client`` package (agent_gov ``libs/ag_shell_client``, CI-tested
+against the daemon). This module is only maude's *ergonomic surface*: one
+place that names every RPC method maude calls and adapts daemon shapes to the
+Pydantic rendering models in :mod:`maude.client.models`. Kills the previously
+triplicated framing/socket-path code (GS-9).
+
+Connection model (from ag_shell_client): one connection serves one in-flight
+request. Unary calls share a single cached connection, serialized by a lock so
+the 5s status poll and a command handler never collide on the busy guard. A
+held stream (``chat.stream``) runs on its own dedicated connection so it does
+not block the poll. An interrupted exchange poisons its connection; the wrapper
+drops the poisoned client and reconnects a fresh one on the next call.
+"""
 
 from __future__ import annotations
 
+import asyncio
 import os
 from pathlib import Path
-from typing import Any, AsyncIterator
+from typing import Any, AsyncIterator, Awaitable, Callable
+
+from ag_shell_client import (
+    AsyncDaemonClient,
+    DaemonAuthError,
+    RPCError,
+    default_socket_path,
+)
 
 from maude.client.models import (
     ChainPreflightDecision,
@@ -22,76 +46,55 @@ from maude.client.models import (
     IntentValidationResult,
     SessionSummary,
 )
-from maude.client.transport import Transport, UnixSocketTransport
+
+# Re-export so callers that used to catch transport errors keep a stable name.
+__all__ = ["GovernorClient", "DaemonAuthError", "RPCError"]
+
+ClientFactory = Callable[[], Awaitable[AsyncDaemonClient]]
 
 
 # =============================================================================
-# Socket path resolution
-# =============================================================================
-
-
-def _default_socket_path(governor_dir: Path) -> Path:
-    """Compute the default Unix socket path for a governor directory.
-
-    Same algorithm as governor.daemon.default_socket_path.
-    """
-    import hashlib
-
-    xdg = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
-    dir_hash = hashlib.sha256(str(governor_dir.resolve()).encode()).hexdigest()[:12]
-    return Path(xdg) / f"governor-{dir_hash}.sock"
-
-
-# =============================================================================
-# GovernorClient — JSON-RPC 2.0 over pluggable Transport
+# GovernorClient — typed surface over ag_shell_client.AsyncDaemonClient
 # =============================================================================
 
 
 class GovernorClient:
-    """JSON-RPC 2.0 client over pluggable transport to the governor daemon.
+    """Typed async client for the governor daemon.
 
-    Provides the same public API as the HTTP client so that app.py
-    can switch transports without code changes.
-
-    When ``transport`` is provided, it is used directly.
-    Otherwise a ``UnixSocketTransport`` is created from ``socket_path``
-    or ``governor_dir`` (same resolution logic as before).
+    Delegates all framing/transport to :class:`ag_shell_client.AsyncDaemonClient`.
+    Public method signatures are unchanged from the pre-GS-9 client so callers
+    (``app.py``, the integration suite) need no edits.
     """
-
-    @property
-    def last_stream_usage(self) -> dict[str, int]:
-        """Usage data from the last chat.stream response, if available."""
-        result = getattr(self, "_last_stream_result", None)
-        if result and isinstance(result, dict):
-            return result.get("usage", {})
-        return {}
 
     def __init__(
         self,
         socket_path: str | Path | None = None,
         governor_dir: str | Path | None = None,
-        transport: Transport | None = None,
+        *,
+        client_factory: ClientFactory | None = None,
     ) -> None:
-        if transport is not None:
-            self._transport: Transport = transport
-            # Best-effort socket path for the property
-            self._socket_path = Path(socket_path) if socket_path else Path("")
-        else:
-            self._socket_path = self._resolve_socket_path(socket_path, governor_dir)
-            self._transport = UnixSocketTransport(self._socket_path)
+        self._socket_path = self._resolve_socket_path(socket_path, governor_dir)
+        # Injectable for tests; default opens a real socket connection.
+        self._client_factory: ClientFactory = client_factory or self._default_factory
+        self._client: AsyncDaemonClient | None = None
+        self._lock = asyncio.Lock()
+        self._last_stream_result: Any = None
 
-        self._request_id: int = 0
+    async def _default_factory(self) -> AsyncDaemonClient:
+        return await AsyncDaemonClient.connect(socket_path=self._socket_path)
 
     @staticmethod
     def _resolve_socket_path(
         socket_path: str | Path | None,
         governor_dir: str | Path | None,
     ) -> Path:
+        """Select the daemon socket. Hash derivation is ag_shell_client's
+        (byte-identical to the daemon); the env/subdir *selection* is maude's
+        config concern."""
         if socket_path:
             return Path(socket_path)
         if governor_dir:
-            return _default_socket_path(Path(governor_dir))
-        # Try GOVERNOR_SOCKET, then GOVERNOR_DIR, then cwd
+            return default_socket_path(governor_dir)
         env_socket = os.environ.get("GOVERNOR_SOCKET", "")
         if env_socket:
             return Path(env_socket)
@@ -100,64 +103,68 @@ class GovernorClient:
             candidate = gov_dir / ".governor"
             if candidate.exists():
                 gov_dir = candidate
-        return _default_socket_path(gov_dir)
+        return default_socket_path(gov_dir)
 
     @property
     def socket_path(self) -> Path:
         return self._socket_path
 
+    @property
+    def last_stream_usage(self) -> dict[str, int]:
+        """Usage data from the last chat.stream response, if available."""
+        result = self._last_stream_result
+        if result and isinstance(result, dict):
+            return result.get("usage", {})
+        return {}
+
+    # -- lifecycle ---------------------------------------------------------- #
+
     async def connect(self) -> None:
-        """Open the transport connection."""
-        await self._transport.connect()
+        """Open the unary connection (idempotent)."""
+        await self._ensure_client()
 
     async def close(self) -> None:
-        """Close the transport connection."""
-        await self._transport.close()
+        """Close the unary connection."""
+        await self._reset()
 
-    async def _ensure_connected(self) -> None:
-        if not self._transport.connected:
-            await self.connect()
+    async def _ensure_client(self) -> AsyncDaemonClient:
+        if self._client is None:
+            self._client = await self._client_factory()
+        return self._client
 
-    def _next_id(self) -> int:
-        self._request_id += 1
-        return self._request_id
+    async def _reset(self) -> None:
+        client, self._client = self._client, None
+        if client is not None:
+            await client.aclose()
+
+    # -- dispatch ----------------------------------------------------------- #
 
     async def _call(self, method: str, params: dict | None = None) -> Any:
-        """Send a JSON-RPC request and return the result.
+        """Send a unary RPC and return its result.
 
-        Raises RuntimeError on JSON-RPC errors.
+        Serialized so maude's own concurrency (poll + command) never trips the
+        one-in-flight busy guard. A transport-fatal failure drops the poisoned
+        connection so the next call reconnects; a semantic daemon error (a
+        well-formed error response) leaves the healthy connection intact and
+        simply propagates.
         """
-        await self._ensure_connected()
-
-        request_id = self._next_id()
-        msg = {
-            "jsonrpc": "2.0",
-            "method": method,
-            "id": request_id,
-            "params": params or {},
-        }
-        await self._transport.write_message(msg)
-
-        # Read responses, skipping notifications until we get our response
-        while True:
-            resp = await self._transport.read_message()
-            if resp is None:
-                raise ConnectionError("Connection closed by daemon")
-
-            # Skip notifications (no id)
-            if "id" not in resp:
-                continue
-
-            if resp.get("id") != request_id:
-                # Unexpected id — skip (shouldn't happen in single-client mode)
-                continue
-
-            if "error" in resp:
-                err = resp["error"]
-                raise RuntimeError(
-                    f"RPC error {err.get('code', '?')}: {err.get('message', '?')}"
-                )
-            return resp.get("result")
+        async with self._lock:
+            client = await self._ensure_client()
+            try:
+                return await client.call(method, params)
+            except DaemonAuthError:
+                # Backend not authenticated: the connection is fine, surface as-is.
+                raise
+            except RPCError as e:
+                # code 0 == transport-level failure (closed/desync) → reconnect;
+                # a real daemon error code means the connection is healthy.
+                if getattr(e, "code", 0) == 0:
+                    await self._reset()
+                raise
+            except (RuntimeError, ConnectionError, OSError, asyncio.TimeoutError):
+                # Poisoned/indeterminate connection → drop it; next call reconnects.
+                await self._reset()
+                raise
 
     async def _call_streaming(
         self,
@@ -165,46 +172,22 @@ class GovernorClient:
         params: dict | None = None,
         notification_method: str = "chat.delta",
     ) -> AsyncIterator[str]:
-        """Send a JSON-RPC request and yield streaming notification content.
+        """Stream an RPC on a dedicated connection, yielding notification
+        content. The final result is stashed in ``_last_stream_result``.
 
-        Yields content strings from notifications, then returns when the
-        final response (with matching id) arrives. The final response is
-        NOT yielded — it's available via the return value after iteration.
-        """
-        await self._ensure_connected()
-
-        request_id = self._next_id()
-        msg = {
-            "jsonrpc": "2.0",
-            "method": method,
-            "id": request_id,
-            "params": params or {},
-        }
-        await self._transport.write_message(msg)
-
-        while True:
-            resp = await self._transport.read_message()
-            if resp is None:
-                raise ConnectionError("Connection closed by daemon")
-
-            # Notification — yield content
-            if "id" not in resp:
-                if resp.get("method") == notification_method:
-                    content = resp.get("params", {}).get("content", "")
+        A dedicated connection keeps the held stream from blocking the unary
+        poll (per the shell contract's one-in-flight rule)."""
+        stream_client = await self._client_factory()
+        try:
+            async for item in stream_client.stream(method, params, read_timeout=None):
+                if item.kind == "notification" and item.method == notification_method:
+                    content = (item.payload or {}).get("content", "")
                     if content:
                         yield content
-                continue
-
-            # Final response
-            if resp.get("id") == request_id:
-                if "error" in resp:
-                    err = resp["error"]
-                    raise RuntimeError(
-                        f"RPC error {err.get('code', '?')}: {err.get('message', '?')}"
-                    )
-                # Store the final result for the caller to inspect if needed
-                self._last_stream_result = resp.get("result")
-                return
+                elif item.kind == "result":
+                    self._last_stream_result = item.payload
+        finally:
+            await stream_client.aclose()
 
     # ========================================================================
     # Health / Handshake
@@ -288,7 +271,7 @@ class GovernorClient:
         }
 
     # ========================================================================
-    # Chat (governed generation)
+    # Chat (governed generation) — legacy, removal at GS-15
     # ========================================================================
 
     async def chat_stream(
@@ -301,11 +284,7 @@ class GovernorClient:
         task_hint: str = "",
         risk_class: str = "",
     ) -> AsyncIterator[str]:
-        """Stream governed chat completions, yielding content deltas.
-
-        Sends chat.stream RPC, yields from chat.delta notifications,
-        completes when the final response arrives.
-        """
+        """Stream governed chat completions, yielding content deltas."""
         params: dict[str, Any] = {
             "messages": messages, "model": model, "context_id": context_id,
         }
@@ -489,11 +468,7 @@ class GovernorClient:
         args: dict | None = None,
         exceptions: list[str] | None = None,
     ) -> ChainPreflightDecision:
-        """Call chain.preflight — pre-dispatch composition evaluation.
-
-        Returns the daemon's decision about whether this tool dispatch
-        should proceed, based on composition rules and enforcement mode.
-        """
+        """Call chain.preflight — pre-dispatch composition evaluation."""
         params: dict[str, Any] = {
             "tool_id": tool_id,
             "correlation_id": correlation_id,
@@ -514,11 +489,7 @@ class GovernorClient:
         preflight_token: str | None = None,
         record_id: str | None = None,
     ) -> ChainRecordResult:
-        """Call chain.record — post-dispatch action recording.
-
-        Records a completed tool action in the action log.  Optionally
-        validates a preflight CAS token to prevent TOCTOU drift.
-        """
+        """Call chain.record — post-dispatch action recording."""
         params: dict[str, Any] = {
             "tool_id": tool_id,
             "correlation_id": correlation_id,
@@ -545,12 +516,8 @@ class GovernorClient:
         return ChainStatus.model_validate(result)
 
     # ========================================================================
-    # Stubs for HTTP-era methods (no-op or adapted)
+    # Stubs for HTTP-era methods (legacy PLAN/BUILD, removal at GS-15)
     # ========================================================================
-
-    # --- Stubs (no daemon RPC yet) ---
-    # These exist so callers don't crash. They return empty/no-op results.
-    # Wire to real RPCs when the daemon surfaces are ready.
 
     async def append_message(self, session_id: str, role: str, content: str,
                              model: str | None = None, usage: dict[str, int] | None = None) -> None:

@@ -27,11 +27,35 @@ execution in the campaign's six-field shape.
 
 ## Phase 1 — Foundation (GS campaign)
 
-- [ ] **GS-8b** — ag_shell_client live-socket client class (AG-side prereq;
-  the lib is codec + models only today). Executor: codex.
-- [ ] **GS-9** — Maude consumes ag_shell_client; deletes `src/maude/client/`
-  wholesale (stub methods not ported). R-MAUDE-1 (RPC surface diff,
-  record-only) runs first as input evidence. Executor: codex.
+- [x] **GS-8b** — ag_shell_client live-socket client class landed AG-side
+  (`AsyncDaemonClient`, agent_gov `e8670ae`).
+- [x] **GS-9** — Maude consumes ag_shell_client. Deleted `client/transport.py`
+  (the duplicated Content-Length framing + socket-path derivation); rewrote
+  `client/rpc.py` as a thin typed surface over `AsyncDaemonClient`. Kept
+  `client/models.py` (maude's Pydantic rendering models — not the package's)
+  and the typed method surface (one module naming every RPC method maude
+  calls — the record R-MAUDE-1 wants). Concurrency: unary calls share one
+  lock-serialized connection so the 5s poll never trips the one-in-flight
+  busy guard; `chat.stream` runs on a dedicated connection; a poisoned
+  connection is dropped and reconnected on the next call. Verify: bare
+  `pytest` 156 passed / 24 skipped; live-daemon smoke 22/24 (see drift note).
+- [ ] **GS-10** — ScreenManager + CommandRegistry skeleton, per
+  maude-boundary.md. Repositioning notes: chat/PLAN/BUILD handlers port
+  **as-is** into quarantined `commands/legacy.py`; ScreenManager reserves a
+  named run-report view stub (feeds M-4). Executor: codex.
+
+### Known daemon drift (R-MAUDE-1)
+
+Surfaced by the GS-9 live smoke against the current daemon (method count 97):
+- `tests/test_integration.py::test_compile_with_escape` expects
+  `intent.compile` to return `escape_classification="waiver_candidate"` for
+  `escape_text="allow exception for testing"`; the current daemon returns
+  `None`. The full result deserializes correctly — this is a daemon-side
+  classification behavior change, not a transport regression. Left failing
+  (not silently re-asserted) pending the R-MAUDE-1 surface-diff pass, which
+  should decide whether the daemon regressed or the test's expectation is
+  stale. The bare suite (no daemon) stays green; this only appears under
+  `test-with-governor.sh`.
 - [ ] **GS-10** — ScreenManager + CommandRegistry skeleton, per
   maude-boundary.md. Repositioning notes: chat/PLAN/BUILD handlers port
   **as-is** into quarantined `commands/legacy.py`; ScreenManager reserves a

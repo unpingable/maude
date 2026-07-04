@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
+from ag_shell_client import DaemonAuthError, RPCError
+
 from maude.client.rpc import GovernorClient
-from maude.client.transport import Transport, UnixSocketTransport
 from maude.client.models import (
     ChatSession,
     GovernorNow,
@@ -11,8 +12,8 @@ from maude.client.models import (
 
 __all__ = [
     "GovernorClient",
-    "Transport",
-    "UnixSocketTransport",
+    "DaemonAuthError",
+    "RPCError",
     "ChatSession",
     "GovernorNow",
     "HealthResponse",
