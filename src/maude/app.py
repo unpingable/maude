@@ -14,8 +14,9 @@ from textual.widgets import Footer, Header, Input, RichLog
 from maude import __version__
 from maude.client.rpc import GovernorClient
 from maude.client.models import SessionSummary
+from maude.commands import CommandContext, build_registry
 from maude.config import Settings
-from maude.intents import IntentKind, parse_intent
+from maude.intents import parse_intent
 from maude.session import MaudeSession, Mode
 from maude.ui.widgets import GovernorStatusBar
 
@@ -112,6 +113,7 @@ class MaudeApp(App):
         self._active_supervised_session: str | None = None
         self._intervention_poll_task: asyncio.Task | None = None
         self._daemon_connected: bool = False
+        self._command_registry = build_registry()
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -379,82 +381,12 @@ class MaudeApp(App):
 
         intent = parse_intent(text)
 
-        if intent.kind == IntentKind.HELP:
-            log.write(_HELP_TEXT)
-        elif intent.kind == IntentKind.STATUS:
-            await self._handle_status(log)
-        elif intent.kind == IntentKind.PLAN_TEMPLATE:
-            self._handle_plan_template(log, intent.payload)
-        elif intent.kind == IntentKind.CLEAR_TEMPLATE:
-            self._handle_clear_template(log)
-        elif intent.kind == IntentKind.PLAN:
-            self._handle_plan(log, intent.payload)
-        elif intent.kind == IntentKind.LOCK_SPEC:
-            await self._handle_lock_spec(log)
-        elif intent.kind == IntentKind.BUILD:
-            await self._handle_build(log)
-        elif intent.kind == IntentKind.SHOW_SPEC:
-            self._handle_show_spec(log)
-        elif intent.kind == IntentKind.WHY:
-            await self._handle_why(log)
-        elif intent.kind == IntentKind.SESSIONS:
-            await self._handle_sessions(log)
-        elif intent.kind == IntentKind.SWITCH_SESSION:
-            await self._handle_switch_session(log, intent.payload)
-        elif intent.kind == IntentKind.DELETE_SESSION:
-            await self._handle_delete_session(log, intent.payload)
-        elif intent.kind == IntentKind.SHOW_DIFF:
-            await self._handle_diff(log)
-        elif intent.kind == IntentKind.APPLY:
-            await self._handle_apply(log)
-        elif intent.kind == IntentKind.ROLLBACK:
-            await self._handle_rollback(log)
-        elif intent.kind == IntentKind.SUPERVISED_LAUNCH:
-            await self._handle_supervised_launch(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_LIST:
-            await self._handle_supervised_list(log)
-        elif intent.kind == IntentKind.SUPERVISED_EVENTS:
-            await self._handle_supervised_events(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_APPROVE:
-            await self._handle_supervised_approve(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_DENY:
-            await self._handle_supervised_deny(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_KILL:
-            await self._handle_supervised_kill(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_INTERVENTIONS:
-            await self._handle_supervised_interventions(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_PROMOTION:
-            await self._handle_supervised_promotion(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_DIFF:
-            await self._handle_supervised_diff(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_PROMOTE:
-            await self._handle_supervised_promote(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_REJECT:
-            await self._handle_supervised_reject(log, intent.payload)
-        elif intent.kind == IntentKind.SUPERVISED_FORK:
-            await self._handle_supervised_fork(log, intent.payload)
-        elif intent.kind == IntentKind.SNAPSHOT:
-            await self._handle_snapshot(log)
-        elif intent.kind == IntentKind.CONTEXT:
-            self._handle_context(log)
-        elif intent.kind == IntentKind.CLEAR:
-            await self._handle_clear(log)
-        elif intent.kind == IntentKind.LINEAGE:
-            await self._handle_lineage(log)
-        elif intent.kind == IntentKind.LINEAGE_TREE:
-            await self._handle_lineage_tree(log)
-        elif intent.kind == IntentKind.HISTORY:
-            self._handle_history(log)
-        elif intent.kind == IntentKind.QUICK_APPROVE:
-            await self._handle_quick_approve(log)
-        elif intent.kind == IntentKind.QUICK_DENY:
-            await self._handle_quick_deny(log)
-        elif intent.kind == IntentKind.QUICK_PENDING:
-            await self._handle_quick_pending(log)
-        elif intent.kind == IntentKind.QUICK_LAUNCH:
-            await self._handle_supervised_launch(log, intent.payload)
-        elif intent.kind == IntentKind.CHAT:
-            await self._handle_chat(log, text)
+        command = self._command_registry.resolve(intent.kind)
+        if command is not None:
+            await command.execute(CommandContext(self, log, text), intent.payload)
+
+    def _handle_help(self, log: RichLog) -> None:
+        log.write(_HELP_TEXT)
 
     def _require_daemon(self, log: RichLog) -> bool:
         """Check daemon connection. Returns True if connected, False if not.
