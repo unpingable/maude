@@ -49,12 +49,25 @@ execution in the campaign's six-field shape.
   reserved for GS-13. Verify: bare pytest 185 passed / 24 skipped exit 0
   (feed + registry pure-logic pins; each screen isolation-mounts via Textual
   pilot); ruff clean.
-- [ ] **GS-10b** — bootstrap migration: point app.py at `ScreenManager`,
-  move the if/elif dispatch onto `CommandRegistry`, quarantine chat/PLAN/BUILD
-  handlers into `commands/legacy.py`, shrink app.py to bootstrap. Deferred
-  behind GS-11..GS-14 (fill the screens first) or done as a deliberate
-  behavior-preserving refactor once app.py gets pilot coverage. The GS-10a
-  seams exist and are tested, so this is wiring, not design.
+- [~] **GS-10b** — bootstrap migration, staged (operator direction: checkpoint
+  first, dispatch second, screens third). Safety anchor: tag
+  `checkpoint/pre-gs10b` (`0b92402`) + bundle in scratchpad (maude has no
+  remote).
+  - [x] **leg 1 — dispatch** (`4939100`): if/elif → `CommandRegistry` via
+    `AppCommand` adapters (handlers unchanged, behavior-preserving);
+    `commands/desk.py` (supported) + `commands/legacy.py` (chat/PLAN/BUILD
+    quarantined as a named group). Guards: every IntentKind resolves; every
+    handler name exists on MaudeApp; 4 end-to-end pilot smokes. Caught + fixed
+    a real collision with Textual's internal `self._registry`. 206 tests green.
+  - [ ] **leg 2 — ScreenManager** wired behind the existing shell shape; old
+    chat path kept as legacy; no big-bang. Design note: the current
+    single-screen chat shell must coexist with the screen stack — the one
+    place to watch for untestable global state (a stop condition).
+  - [ ] **leg 3 — desk screens** brought up incrementally: decisions/feed
+    first (consumes the GS-11 data layer), operator/watch second,
+    adapters/why/report last, after the shell loop is stable.
+  Goal: desk-shaped without changing the authority model — wiring, not a
+  constitutional convention inside app.py.
 
 ### Daemon drift (R-MAUDE-1) — surfaced by GS-9, RESOLVED
 
