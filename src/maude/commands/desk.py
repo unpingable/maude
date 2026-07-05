@@ -9,6 +9,7 @@ unchanged). GS-11..GS-14 move these onto real screens.
 from __future__ import annotations
 
 from maude.commands.base import AppCommand, Command
+from maude.commands.report import ReportCommand
 from maude.intents import IntentKind as K
 from maude.plan.runner import RunPlanCommand
 
@@ -61,4 +62,5 @@ def desk_commands() -> list[Command]:
         AppCommand((K.QUICK_DENY,), "_handle_quick_deny", help="deny (n)"),
         AppCommand((K.QUICK_PENDING,), "_handle_quick_pending", help="pending (p)"),
         RunPlanCommand(),
+        ReportCommand(),
     ]

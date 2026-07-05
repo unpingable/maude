@@ -120,6 +120,9 @@ class MaudeApp(App):
         # Last blocked plan run: (refusal_class, detail, Explanation) — the raw
         # cybernetics stays off the surface but `why` can disclose it (V2 law view).
         self._last_plan_block: tuple[str, str, object] | None = None
+        #: The most recent composed run report (M-4); `why` discloses its raw
+        #: law layer (the ReviewPacket verbatim) without the surface showing it.
+        self._last_run_report: object | None = None
         self._intervention_poll_task: asyncio.Task | None = None
         self._daemon_connected: bool = False
         self._command_registry = build_registry()
@@ -597,6 +600,15 @@ class MaudeApp(App):
             log.write(f"[bold]Why blocked:[/bold] {surface}")
             log.write(f"  {plain}")
             log.write(f"  [dim]policy: {law}[/dim]")
+            return
+        report = self._last_run_report
+        if report is not None:
+            # M-4 law view: disclose the run report's underlying record — the
+            # ReviewPacket verbatim + receipt refs — kept off the surface.
+            from maude.report import render_law
+
+            for line in render_law(report):
+                log.write(line)
             return
         try:
             now = await self.client.governor_now()

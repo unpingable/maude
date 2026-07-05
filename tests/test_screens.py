@@ -53,7 +53,7 @@ def _title(screen) -> str:
         (SessionScreen, "SESSION", "No session selected."),
         (BoardScreen, "SESSIONS", "No active sessions."),
         (DiffScreen, "DIFF", "No promotion to review."),
-        (ReportScreen, "RUN REPORT", "No run report yet. (Composed at M-4.)"),
+        (ReportScreen, "RUN REPORT", "No run report yet. Compose one with `report <session_id>`."),
     ],
 )
 async def test_screen_mounts_in_isolation(screen_cls, title, empty):
