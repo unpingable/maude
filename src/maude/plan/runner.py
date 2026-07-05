@@ -58,7 +58,19 @@ class RunPlanCommand(Command):
         log = ctx.log
         # Reset the `why` law-view stash per run; set again only if this run blocks.
         ctx.app._last_plan_block = None
-        path = Path(payload.strip()).expanduser()
+        # ``run <plan.md> [--model <name>]`` — the model pin is the OPERATOR'S
+        # spend choice at run time; it never lives in the plan envelope (a plan
+        # must not dictate spend). NS-0, nightshift-functional-mvp.
+        tokens = payload.strip().split()
+        model: str | None = None
+        if "--model" in tokens:
+            i = tokens.index("--model")
+            if i + 1 >= len(tokens):
+                log.write("[red]--model needs a value[/red] (e.g. --model claude-haiku-4-5)")
+                return
+            model = tokens[i + 1]
+            del tokens[i : i + 2]
+        path = Path(" ".join(tokens)).expanduser()
         if not path.is_file():
             log.write(f"[red]Plan file not found:[/red] {path}")
             return
@@ -131,12 +143,16 @@ class RunPlanCommand(Command):
             )
 
         try:
+            harness_args = ["--model", model] if model else []
+            if model:
+                log.write(f"  model pinned: {model} (operator's choice, not the plan's)")
             result = await ctx.app.client.runtime_session_create(
                 backend_kind=backend_kind,
                 cwd=env.workspace,
                 task=task,
                 operator_mode=operator_mode,
                 allow_dirty=allow_dirty,
+                harness_args=harness_args,
             )
             session_id = result["session_id"]
             log.write(f"[green]Run started:[/green] {session_id}")

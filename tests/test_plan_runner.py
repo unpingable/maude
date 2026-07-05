@@ -104,6 +104,32 @@ class TestRunPlanCommand:
         env = parse_plan_envelope(HUMAN_PLAN)
         assert env.plan_ref in log.text()
 
+    def test_model_flag_pins_harness_args(self, tmp_path: Path):
+        """NS-0: `run <plan> --model X` threads the operator's model choice as
+        harness_args; the plan envelope itself never dictates spend."""
+        plan = tmp_path / "plan.md"
+        plan.write_text(HUMAN_PLAN)
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), f"{plan} --model claude-haiku-4-5")
+        call = app.client.create_calls[0]
+        assert call["harness_args"] == ["--model", "claude-haiku-4-5"]
+        assert "model pinned: claude-haiku-4-5" in log.text()
+
+    def test_no_model_flag_no_harness_args(self, tmp_path: Path):
+        plan = tmp_path / "plan.md"
+        plan.write_text(HUMAN_PLAN)
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))
+        assert app.client.create_calls[0].get("harness_args", []) == []
+
+    def test_model_flag_missing_value_refuses_before_session(self, tmp_path: Path):
+        plan = tmp_path / "plan.md"
+        plan.write_text(HUMAN_PLAN)
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), f"{plan} --model")
+        assert app.client.create_calls == []
+        assert "--model needs a value" in log.text()
+
     def test_ungoverned_launch_does_not_fence_dirty(self, tmp_path: Path):
         # An ungoverned plan carries no approval acts to fence; the workspace
         # baseline is the operator's own, not the run's. allow_dirty stays off

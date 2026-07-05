@@ -643,6 +643,7 @@ class GovernorClient:
         task: str | None = None,
         operator_mode: str = "interactive",
         allow_dirty: bool = False,
+        harness_args: list[str] | None = None,
     ) -> dict:
         params: dict[str, Any] = {"backend_kind": backend_kind, "operator_mode": operator_mode}
         if cwd:
@@ -651,6 +652,10 @@ class GovernorClient:
             params["task"] = task
         if allow_dirty:
             params["allow_dirty"] = True
+        if harness_args:
+            # NS-0: operator-chosen extra backend argv (e.g. --model). Carries
+            # no authority — the daemon validates strings-only, fail closed.
+            params["harness_args"] = list(harness_args)
         return await self._call("runtime.session.create", params)
 
     async def runtime_session_launch(self, session_id: str) -> dict:
