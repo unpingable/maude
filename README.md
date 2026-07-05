@@ -41,7 +41,7 @@ supervised promote sess_cfa8ab1ebb75
 
 Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, Edit) require operator approval. Unanswered approvals time out and deny by default. Rejected promotions revert the workspace.
 
-Planned (see [ROADMAP.md](ROADMAP.md)): obstruction notes (M-5) and headless one-shot execution (M-6). Shipped: bounded-plan ingestion (`run <plan.md>`, M-2), harness selection (M-3), run-report bundles (`report <id>`, M-4).
+Planned (see [ROADMAP.md](ROADMAP.md)): harness selection (M-3), obstruction notes (M-5), and headless one-shot execution (M-6). Shipped: bounded-plan ingestion (`run <plan.md>`, M-2) and run-report bundles (`report <id>`, M-4).
 
 ### Supervised Commands
 
