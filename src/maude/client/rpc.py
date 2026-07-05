@@ -625,6 +625,10 @@ class GovernorClient:
         """Stub: dashboard not wired to daemon RPC."""
         return DashboardSummary()
 
+    async def list_runs(self) -> list:
+        """Stub: v2 run list not wired to daemon RPC."""
+        return []
+
     # --- Operator snapshot ---
 
     async def operator_snapshot(self) -> dict:

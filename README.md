@@ -41,7 +41,7 @@ supervised promote sess_cfa8ab1ebb75
 
 Read-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, Edit) require operator approval. Unanswered approvals time out and deny by default. Rejected promotions revert the workspace.
 
-Planned (see [ROADMAP.md](ROADMAP.md)): bounded-plan ingestion (`run <plan.md>`, M-2), harness selection via adapter introspection (M-3), run-report bundles (M-4), obstruction notes (M-5), and headless one-shot execution (M-6). These are roadmap items, not current features.
+Planned (see [ROADMAP.md](ROADMAP.md)): obstruction notes (M-5) and headless one-shot execution (M-6). Shipped: bounded-plan ingestion (`run <plan.md>`, M-2), harness selection (M-3), run-report bundles (`report <id>`, M-4).
 
 ### Supervised Commands
 
@@ -170,6 +170,7 @@ Maude wires 44 of the daemon's RPC methods:
 | `supervised reject <id>` | Revert changes |
 | `supervised fork <id> [task]` | Fork from promoted session |
 | `supervised kill <id>` | Kill session |
+| `report <id> [plan.md]` | Run report — three-layer disclosure (surface / detail / law) |
 | `snapshot` / `wtf` | Operator overview |
 | `lineage` / `lineage tree` / `history` | Session lineage navigation |
 | `status` | Governor status |
@@ -259,6 +260,7 @@ bash test-with-governor.sh
 - [x] Inline event streaming (tool proposals, completions, denials)
 - [x] Tight supervised loop (`go` / `y` / `n` / `p` + auto-poll)
 - [x] COMMUNICATE-class loud warning (external sends)
+- [x] Run reports (`report <session_id> [plan.md]`) — composes from daemon reads (no new RPC); three-layer disclosure: plain surface (outcome, files, tool counts), expandable detail (authority block, acceptance criteria), raw law one `why` away (ReviewPacket verbatim). Honest-absence discipline: reads that fail surface as notes, nothing inferred. Testimony-not-admission: exit 0 is "the run reports it ended," never upgraded to a verdict; `used ≤ granted` is operator-visible, overruns flagged.
 - [x] Gate receipt browsing, scar history, violation resolution (fix/revise/proceed)
 - [x] Live governor status polling; context usage gauge
 - [x] Pluggable transport (Unix socket now, TCP later)
