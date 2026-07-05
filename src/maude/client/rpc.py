@@ -638,12 +638,15 @@ class GovernorClient:
         cwd: str | None = None,
         task: str | None = None,
         operator_mode: str = "interactive",
+        allow_dirty: bool = False,
     ) -> dict:
         params: dict[str, Any] = {"backend_kind": backend_kind, "operator_mode": operator_mode}
         if cwd:
             params["cwd"] = cwd
         if task:
             params["task"] = task
+        if allow_dirty:
+            params["allow_dirty"] = True
         return await self._call("runtime.session.create", params)
 
     async def runtime_session_launch(self, session_id: str) -> dict:

@@ -116,12 +116,27 @@ class RunPlanCommand(Command):
                 "[dim](a reminder for you, not auto-enforced)[/dim]"
             )
 
+        # A governed plan's flip (queue latch, approval-witness file, plan
+        # promotion) inherently dirties the workspace before the run — those
+        # edits ARE the citations the admission just verified. Launch with the
+        # pre-existing dirty set FENCED (session-attributable promotion, GAP-N):
+        # the run refuses nothing on account of them, and they stay excluded
+        # from the run's promote/discard, so a discard can never revert the
+        # operator's own approval acts.
+        allow_dirty = admission.governed
+        if allow_dirty:
+            log.write(
+                "  [dim]pre-existing changes are fenced from this run's "
+                "keep/discard (they include your approval acts)[/dim]"
+            )
+
         try:
             result = await ctx.app.client.runtime_session_create(
                 backend_kind=backend_kind,
                 cwd=env.workspace,
                 task=task,
                 operator_mode=operator_mode,
+                allow_dirty=allow_dirty,
             )
             session_id = result["session_id"]
             log.write(f"[green]Run started:[/green] {session_id}")

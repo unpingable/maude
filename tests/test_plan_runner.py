@@ -104,6 +104,16 @@ class TestRunPlanCommand:
         env = parse_plan_envelope(HUMAN_PLAN)
         assert env.plan_ref in log.text()
 
+    def test_ungoverned_launch_does_not_fence_dirty(self, tmp_path: Path):
+        # An ungoverned plan carries no approval acts to fence; the workspace
+        # baseline is the operator's own, not the run's. allow_dirty stays off
+        # (default behaviour preserved).
+        plan = tmp_path / "plan.md"
+        plan.write_text(HUMAN_PLAN)
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))
+        assert app.client.create_calls[0].get("allow_dirty", False) is False
+
     def test_missing_file_no_session(self, tmp_path: Path):
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(tmp_path / "nope.md"))
@@ -165,6 +175,12 @@ class TestRunPlanCommand:
         _run(RunPlanCommand(witness_resolver=store.get), _ctx(app, log), str(plan))
         assert len(app.client.create_calls) == 1
         assert "verified references" in log.text()
+        # A governed plan's flip (queue latch + approval-witness file + plan
+        # promotion) dirties the workspace before the run; those edits are the
+        # citations admission just verified. Launch fences them (GAP-N) so the
+        # run refuses nothing on their account and discard can't revert them.
+        assert app.client.create_calls[0].get("allow_dirty") is True
+        assert "fenced from this run's" in log.text()
 
     def test_governed_approved_without_witness_fails_closed(self, tmp_path: Path):
         d = "sha256:" + "a" * 64
