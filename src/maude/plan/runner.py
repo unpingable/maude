@@ -156,6 +156,35 @@ class RunPlanCommand(Command):
             )
             session_id = result["session_id"]
             log.write(f"[green]Run started:[/green] {session_id}")
+
+            # S4 — attach an execution grant so in-envelope actions don't
+            # re-prompt ("a use of standing is not a request for new standing").
+            # Governed runs only; FAIL-SAFE — if projection or activation fails,
+            # the run just prompts as before (never grants more). Attached
+            # BEFORE launch so the first tool call already sees the grant.
+            if admission.governed:
+                from maude.plan.execution_request import project_execution_request
+
+                call = project_execution_request(env, resolver)
+                if call is not None:
+                    try:
+                        granted = await ctx.app.client.runtime_grant_activate(
+                            session_id, call.execution_request,
+                            witness_bytes=call.witness_bytes,
+                        )
+                        if granted and granted.get("grant_id"):
+                            log.write(
+                                f"  grant {granted['grant_id']}: in-envelope actions "
+                                "auto-proceed; widening still asks. "
+                                "[dim](declared scope enforced by gate; substrate "
+                                "effects not yet armed)[/dim]"
+                            )
+                    except Exception as exc:  # fail-safe: run continues, all prompts
+                        log.write(
+                            f"  [yellow]grant not attached ({exc}); every action "
+                            "will ask.[/yellow]"
+                        )
+
             launch = await ctx.app.client.runtime_session_launch(session_id)
             log.write(f"  Status: {launch['status']}  PID: {launch.get('pid', '?')}")
             log.write(f"  plan_ref recorded: {env.plan_ref}")

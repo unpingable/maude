@@ -30,6 +30,7 @@ class FakeClient:
     def __init__(self) -> None:
         self.create_calls: list[dict] = []
         self.launch_calls: list[str] = []
+        self.grant_calls: list[dict] = []
 
     async def runtime_session_create(self, **params):
         self.create_calls.append(params)
@@ -38,6 +39,14 @@ class FakeClient:
     async def runtime_session_launch(self, session_id: str):
         self.launch_calls.append(session_id)
         return {"status": "running", "pid": 4242}
+
+    async def runtime_grant_activate(self, session_id, execution_request, witness_bytes=None):
+        self.grant_calls.append({
+            "session_id": session_id,
+            "execution_request": execution_request,
+            "witness_bytes": witness_bytes,
+        })
+        return {"grant_id": "sgr_test000000", "enforcement": "declared-effects-only"}
 
 
 class FakeApp:
@@ -223,6 +232,58 @@ class TestRunPlanCommand:
         # run refuses nothing on their account and discard can't revert them.
         assert app.client.create_calls[0].get("allow_dirty") is True
         assert "fenced from this run's" in log.text()
+
+    def test_governed_approved_attaches_execution_grant(self, tmp_path: Path):
+        # S4: an approved run projects scope_allowlist + ration commands into a
+        # grant and attaches it, so in-envelope actions won't re-prompt.
+        import json as _json
+        ration = _json.dumps({"allowed_shell_commands": ["cargo test", "cargo build"]}).encode()
+        d1 = "sha256:" + hashlib.sha256(b"pb").hexdigest()
+        d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
+        plan = tmp_path / "gov-grant.md"
+        plan.write_text(
+            "---\n"
+            "plan_version: 0\n"
+            'goal: "x"\n'
+            'workspace: "/tmp/proj"\n'
+            "submitter_kind: human\n"
+            "plan_origin: human_written\n"
+            "provenance:\n"
+            '  author: "operator"\n'
+            "harness: claude_code\n"
+            "scope_allowlist:\n"
+            '  - "crates/nightshiftd/src/**"\n'
+            "steps:\n"
+            '  - "step one"\n'
+            "governance:\n"
+            "  authority_system: ag\n"
+            '  playbook_id: "chore.x"\n'
+            f'  playbook_digest: "{d1}"\n'
+            f'  ration_card_digest: "{d2}"\n'
+            '  approval_ref: "operator_plan_approved"\n'
+            "  governance_status: approved\n"
+            "---\n\nprose.\n"
+        )
+        witness = b"operator approved"
+        store = {d1: b"pb", d2: ration, "operator_plan_approved": witness}
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(witness_resolver=store.get), _ctx(app, log), str(plan))
+        assert len(app.client.grant_calls) == 1
+        req = app.client.grant_calls[0]["execution_request"]
+        assert req["write_paths"] == ["crates/nightshiftd/src/**"]
+        assert req["commands"] == [
+            {"program": "cargo", "argv_prefix": ["test"]},
+            {"program": "cargo", "argv_prefix": ["build"]},
+        ]
+        assert app.client.grant_calls[0]["witness_bytes"] == witness.decode()
+        assert "grant sgr_" in log.text()
+
+    def test_ungoverned_run_attaches_no_grant(self, tmp_path: Path):
+        plan = tmp_path / "plain.md"
+        plan.write_text(HUMAN_PLAN)
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))
+        assert app.client.grant_calls == []
 
     def test_governed_approved_without_witness_fails_closed(self, tmp_path: Path):
         d = "sha256:" + "a" * 64

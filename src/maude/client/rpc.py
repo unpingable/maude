@@ -658,6 +658,28 @@ class GovernorClient:
             params["harness_args"] = list(harness_args)
         return await self._call("runtime.session.create", params)
 
+    async def runtime_grant_activate(
+        self,
+        session_id: str,
+        execution_request: dict[str, Any],
+        witness_bytes: str | None = None,
+    ) -> dict:
+        """S4: attach an execution grant (approval compression) to a session.
+        The daemon re-verifies ``witness_bytes`` against the request's
+        ``approval_witness_digest`` — a forged digest is refused there."""
+        params: dict[str, Any] = {
+            "session_id": session_id,
+            "execution_request": execution_request,
+        }
+        if witness_bytes is not None:
+            params["witness_bytes"] = witness_bytes
+        return await self._call("runtime.grant.activate", params)
+
+    async def runtime_grant_get(self, session_id: str) -> dict | None:
+        """S4: the execution grant attached to a session + recent grant-use
+        dispositions (accepted / widens / unverifiable). Read-only."""
+        return await self._call("runtime.grant.get", {"session_id": session_id})
+
     async def runtime_session_launch(self, session_id: str) -> dict:
         return await self._call("runtime.session.launch", {"session_id": session_id})
 
