@@ -84,6 +84,22 @@ class TestIntentParse:
     def test_bare_run_prose_falls_through_to_chat(self):
         assert parse_intent("run the tests please").kind == IntentKind.CHAT
 
+    def test_run_plan_with_model_flag_routes_and_forwards(self):
+        # NS-0 coverage gap: the runner learned --model but the classifier
+        # regex ended at .md, so `run <plan.md> --model X` fell through to
+        # chat and the pin never reached the runner. The trailing flag must
+        # route to RUN_PLAN and be forwarded verbatim.
+        intent = parse_intent("run docs/plans/foo.md --model claude-haiku-4-5")
+        assert intent.kind == IntentKind.RUN_PLAN
+        assert intent.payload == "docs/plans/foo.md --model claude-haiku-4-5"
+
+    def test_run_plan_missing_model_value_still_routes_to_runner(self):
+        # A malformed flag still routes to the runner, which owns validation
+        # (it refuses "--model needs a value") — better than a silent chat.
+        intent = parse_intent("run docs/plans/foo.md --model")
+        assert intent.kind == IntentKind.RUN_PLAN
+        assert intent.payload == "docs/plans/foo.md --model"
+
 
 class TestRunPlanCommand:
     def test_happy_path_maps_fields_and_launches(self, tmp_path: Path):

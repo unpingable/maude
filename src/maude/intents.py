@@ -123,8 +123,10 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^ctx$", re.IGNORECASE), IntentKind.CONTEXT),
     (re.compile(r"^usage$", re.IGNORECASE), IntentKind.CONTEXT),
     # M-2: run a plan-envelope file. Anchored on the .md suffix so bare
-    # "run" prose still falls through to chat.
-    (re.compile(r"^run\s+(\S+\.md)\s*$", re.IGNORECASE), IntentKind.RUN_PLAN),
+    # "run" prose still falls through to chat. Trailing tokens after the path
+    # (e.g. NS-0's `--model <name>` pin) are captured and forwarded verbatim —
+    # the classifier routes; the runner owns flag parsing + validation.
+    (re.compile(r"^run\s+(\S+\.md)(?:\s+(\S.*?))?\s*$", re.IGNORECASE), IntentKind.RUN_PLAN),
     # M-4: `report <session_id> [plan.md]` — reviewable run report.
     (re.compile(r"^report\s+(\S+)\s*(\S+\.md)?\s*$", re.IGNORECASE), IntentKind.REPORT),
     (re.compile(r"^clear$", re.IGNORECASE), IntentKind.CLEAR),
