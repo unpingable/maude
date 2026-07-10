@@ -50,6 +50,8 @@ class IntentKind(Enum):
     RUN_PLAN = auto()
     # M-4 run report (composed from existing reads)
     REPORT = auto()
+    # S4c grant diagnostic (read-only grant-lease status)
+    GRANT_STATUS = auto()
     HELP = auto()
     CHAT = auto()
 
@@ -129,6 +131,9 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^run\s+(\S+\.md)(?:\s+(\S.*?))?\s*$", re.IGNORECASE), IntentKind.RUN_PLAN),
     # M-4: `report <session_id> [plan.md]` — reviewable run report.
     (re.compile(r"^report\s+(\S+)\s*(\S+\.md)?\s*$", re.IGNORECASE), IntentKind.REPORT),
+    # S4c: `grant [session_id]` — read-only grant-lease diagnostic.
+    (re.compile(r"^grant\s+(\S+)\s*$", re.IGNORECASE), IntentKind.GRANT_STATUS),
+    (re.compile(r"^grant$", re.IGNORECASE), IntentKind.GRANT_STATUS),
     (re.compile(r"^clear$", re.IGNORECASE), IntentKind.CLEAR),
     (re.compile(r"^reset$", re.IGNORECASE), IntentKind.CLEAR),
     (re.compile(r"^lineage tree$", re.IGNORECASE), IntentKind.LINEAGE_TREE),
