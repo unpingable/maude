@@ -314,16 +314,17 @@ class MaudeApp(App):
 
         if kind == "tool_call_proposed":
             tool = ev.get("tool_name", "?")
-            log.write(f"  [cyan]→ {tool}[/cyan]", end="")
+            # RichLog is line-oriented (no `end=` on Textual >=7); build the
+            # one-line render then write once.
+            line = f"  [cyan]→ {tool}[/cyan]"
             inp = ev.get("tool_input")
             if inp:
                 import json as _json
                 summary = _json.dumps(inp) if isinstance(inp, dict) else str(inp)
                 if len(summary) > 60:
                     summary = summary[:57] + "..."
-                log.write(f"  [dim]{summary}[/dim]")
-            else:
-                log.write("")
+                line += f"  [dim]{summary}[/dim]"
+            log.write(line)
 
         elif kind == "tool_call_completed":
             tool = ev.get("tool_name", "?")
@@ -903,16 +904,15 @@ class MaudeApp(App):
             }
             messages.insert(0, system_msg)
 
-        # Stream response
-        log.write("[bold green]Assistant:[/bold green] ", end="")
+        # Accumulate the stream, then render once — RichLog is line-oriented
+        # (no `end=` on Textual >=7), so per-delta appends aren't possible.
         full_response = ""
         try:
             async for delta in self.client.chat_stream(messages, model="", use_lanes=True):
                 full_response += delta
-                log.write(delta, end="")
-            log.write("")  # newline after streaming
+            log.write(f"[bold green]Assistant:[/bold green] {full_response}")
         except Exception as e:
-            log.write(f"\n[red]Chat error:[/red] {e}")
+            log.write(f"[red]Chat error:[/red] {e}")
             return
 
         # Update context usage from stream result

@@ -96,6 +96,22 @@ class _RecordingLog:
         self.lines.append(str(s))
 
 
+def test_render_event_tool_call_proposed_is_single_line_no_end_kwarg():
+    """Regression: _render_event rendered supervised tool events with
+    RichLog.write(..., end="") — a kwarg the real widget dropped on Textual
+    >=7, so it raised TypeError on the FIRST tool call of a supervised run
+    (the NS-1 dogfood path). Nothing exercised this renderer, so the crash
+    hid behind a green suite. _RecordingLog mirrors the real widget (one
+    positional arg, no end=), so a stray end= would TypeError here."""
+    log = _RecordingLog()
+    ev = {"tool_name": "Edit", "tool_input": {"file_path": "crates/nightshiftd/src/packet.rs"}}
+    # self-independent branch; drive it directly without a full app.
+    MaudeApp._render_event(object(), log, ev, "tool_call_proposed")
+    assert len(log.lines) == 1  # tool name + input on ONE line, not two
+    assert "→ Edit" in log.lines[0]
+    assert "packet.rs" in log.lines[0]
+
+
 @pytest.mark.asyncio
 async def test_why_law_view_discloses_blocked_plan():
     """V2 law view: after a blocked plan run, `why` shows the plain surface AND
