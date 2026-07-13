@@ -28,6 +28,17 @@ If AG's list or matching changes, this mirror must change too. That coupling is
 the honest cost of the boundary; it is named here and in the S7 design note, not
 hidden. Dimensions the card does not model (horizon, task_kind, …) are reported
 as NOT-MODELLED, never silently treated as contained.
+
+**Known boundary (disclosed, not a containment bug).** The network/git AXIS
+check governs the declared ``execution_request.network``/``git`` FLAG, not the
+side-effects of allowed commands. A card that allows a network-reaching command
+in ``allowed_shell_commands`` (e.g. ``curl …``) while denying the network axis
+is internally permissive; a request citing that command is contained (the card
+allowed it), even though it will reach the network. This is the same
+declared-effects-only limit as the gate — the command allowlist is not an effect
+boundary; the armed sandbox is. S7 faithfully enforces the card's own
+declarations; it does not infer axis usage from command spelling (that would be
+re-implementing the gate's runtime network detection, out of S7 scope).
 """
 
 from __future__ import annotations

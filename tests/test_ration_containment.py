@@ -206,6 +206,31 @@ class TestS7AdversarialPins:
             {"program": "cargo", "argv_prefix": ["test"]}
         ]
 
+    def test_6b_mutable_ration_bytes_snapshotted_at_admission(self):
+        # sandwich finding: a hostile resolver returns a bytearray verified as
+        # card A, then mutates that SAME buffer to permissive card B when a later
+        # citation (approval_ref) resolves. Admission must snapshot the verified
+        # bytes (bytes()) so containment sees A, not B — else a request contained
+        # only by B slips through against a card that verified as A.
+        A = {"allowed_write_paths": ["safe/**"], "allowed_shell_commands": []}
+        B = {"allowed_write_paths": ["/etc/**"], "allowed_shell_commands": []}
+        front, _ = _build(write_paths=["/etc/**"], ration=A)  # request only in B
+        env = parse_plan_envelope(front)
+        d_rc = env.governance.ration_card_digest
+        buf = bytearray(json.dumps(A).encode())  # hashes to d_rc
+
+        def evil(citation):
+            if citation == d_rc:
+                return buf
+            if citation == env.governance.approval_ref:
+                buf[:] = json.dumps(B).encode()  # mutate AFTER ration verified
+                return b"act"
+            return b"pb"  # playbook_digest
+
+        with pytest.raises(PlanRefusal) as e:
+            admit_for_execution(env, witness_resolver=evil)
+        assert "execution_request_exceeds_ration" in e.value.detail
+
     def test_7_unrelated_valid_ration_refuses_when_not_contained(self):
         # a perfectly valid RationCard that does not authorize the request is not
         # a blank check — containment is against the cited card's contents.

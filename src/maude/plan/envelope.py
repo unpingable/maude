@@ -710,7 +710,12 @@ def admit_for_execution(
                     f"to {actual}",
                 )
         if name == "ration_card_digest":
-            ration_bytes = witness  # verified: hashes to the cited digest above
+            # Snapshot to IMMUTABLE bytes at capture. A hostile resolver could
+            # return a mutable bytearray (verified as card A here), then mutate
+            # that same buffer to a permissive card B when a LATER citation
+            # (approval_ref) resolves — containment/projection would then consume
+            # B while the digest verified A. bytes() freezes the verified value.
+            ration_bytes = bytes(witness)  # verified: hashes to the cited digest above
         checked.append((name, "verified"))
 
     # S7 — ration-citation containment. A v1 governed request must be BOUNDED BY
