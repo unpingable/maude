@@ -68,6 +68,14 @@ def _commands_from_ration(resolver: WitnessResolver, ration_card_digest: str) ->
     ration = resolver(ration_card_digest)
     if ration is None:
         return []  # fail-safe: no commands granted -> shell widens/prompts
+    # Defense-in-depth (TOCTOU): the bytes we CONSUME must hash to the cited
+    # digest, even if a stateful resolver returned different bytes here than
+    # admission verified earlier. Admission already checked A; we re-check the
+    # bytes actually used. A mismatch fails safe (no commands -> shell widens),
+    # never trusts substituted bytes.
+    if ration_card_digest.startswith("sha256:"):
+        if "sha256:" + hashlib.sha256(ration).hexdigest() != ration_card_digest:
+            return []
     try:
         data = json.loads(ration)
         raw = data.get("allowed_shell_commands", [])
@@ -137,8 +145,12 @@ def project_execution_request(
         if env.execution_request is None:
             return None  # governed-but-no-request: run uncompressed (fail-safe)
         request = _request_from_v1_block(env)
-    else:  # frozen-v0 historical decoder
+    elif env.plan_version == 0:  # frozen-v0 historical decoder
         request = _request_from_v0(env, resolver)
+    else:
+        # unreachable: parse only produces version 0 or 1. Fail-safe rather than
+        # treat an unexpected version as legacy via a catch-all else.
+        return None
     request["source_plan_digest"] = env.plan_ref
     request["approval_witness_digest"] = approval_witness_digest
     return GrantActivationCall(execution_request=request, witness_bytes=witness_str)

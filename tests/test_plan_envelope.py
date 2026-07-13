@@ -255,6 +255,21 @@ class TestVersionDiscrimination:
             parse_plan_envelope(_plan(bad))
         assert "plan_version_unknown" in e.value.detail
 
+    def test_bool_plan_version_refuses_no_type_coercion(self):
+        # YAML `true` -> Python True; True == 1 in Python. The discriminator must
+        # not be reachable by bool coercion.
+        bad = HUMAN_MIN.replace("plan_version: 1", "plan_version: true")
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert "plan_version_unknown" in e.value.detail
+
+    def test_float_plan_version_refuses_no_type_coercion(self):
+        # YAML `1.0` -> float; 1.0 == 1 in Python. Must refuse, not reach v1.
+        bad = HUMAN_MIN.replace("plan_version: 1", "plan_version: 1.0")
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert "plan_version_unknown" in e.value.detail
+
     def test_ns1_hash_is_registered_frozen(self):
         # pins the registration without a cross-repo file read: if the frozen
         # set changes, this catches it.

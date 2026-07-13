@@ -75,8 +75,12 @@ class RunPlanCommand(Command):
             log.write(f"[red]Plan file not found:[/red] {path}")
             return
         try:
-            text = path.read_text(encoding="utf-8")
-        except OSError as exc:
+            # read_bytes + explicit decode (NOT read_text) so plan_ref is over
+            # the true file bytes. read_text applies universal-newline
+            # translation (CRLF->LF), which would let a CRLF copy of a frozen
+            # specimen alias to the frozen LF hash. Approval attaches to bytes.
+            text = path.read_bytes().decode("utf-8")
+        except (OSError, UnicodeDecodeError) as exc:
             log.write(f"[red]Cannot read plan:[/red] {exc}")
             return
 

@@ -607,6 +607,19 @@ def parse_plan_envelope(text: str) -> PlanEnvelope:
     # missing/unknown always refuses. "Unversioned means legacy" — the
     # permanent ambiguity generator — is closed by construction.
     version = data.get("plan_version")
+    if version is None:
+        raise _refuse(
+            "plan_version is required (plan_version_missing) — it is the schema "
+            "discriminator; there is no unversioned/legacy default"
+        )
+    # Strict int only. `type(...) is int` excludes bool (YAML `true`/`false`,
+    # since True == 1 in Python) and float (`1.0 == 1`) — a discriminator must
+    # not be reachable by type coercion. Anything else refuses.
+    if type(version) is not int:
+        raise _refuse(
+            f"plan_version must be an integer (plan_version_unknown); got "
+            f"{version!r} of type {type(version).__name__}"
+        )
     if version == 1:
         return _parse_v1(data, body, plan_ref, warnings)
     if version == 0:
@@ -617,11 +630,6 @@ def parse_plan_envelope(text: str) -> PlanEnvelope:
                 "pre-v1 specimens decode via the legacy path."
             )
         return _parse_v0(data, body, plan_ref, warnings)
-    if version is None:
-        raise _refuse(
-            "plan_version is required (plan_version_missing) — it is the schema "
-            "discriminator; there is no unversioned/legacy default"
-        )
     raise _refuse(
         f"unknown plan_version {version!r} (plan_version_unknown); "
         "this contract knows 0 (frozen specimens only) and 1"

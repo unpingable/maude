@@ -183,6 +183,30 @@ class TestRunPlanCommand:
         assert "malformed" in log.text()
         assert app._last_plan_block[0] == "invalid_plan_envelope"
 
+    def test_crlf_copy_of_frozen_plan_not_aliased(self, tmp_path: Path, monkeypatch):
+        # The frozen membership check is byte-exact: the runner reads true file
+        # bytes (not universal-newline-normalized), so a CRLF copy of a frozen
+        # LF specimen hashes differently and refuses as retired v0 — it does not
+        # alias to the frozen LF hash. Approval attaches to bytes.
+        lf = (
+            "---\nplan_version: 0\ngoal: \"x\"\nworkspace: \"/tmp/p\"\n"
+            "submitter_kind: human\nplan_origin: human_written\n"
+            "provenance:\n  author: \"op\"\nscope_allowlist: [\"src/**\"]\n---\n\nbody\n"
+        )
+        lf_ref = "sha256:" + hashlib.sha256(lf.encode()).hexdigest()
+        monkeypatch.setattr(
+            "maude.plan.envelope.FROZEN_V0_PLAN_REFS", frozenset({lf_ref})
+        )
+        # the LF bytes ARE the frozen specimen and parse as v0
+        assert parse_plan_envelope(lf).plan_version == 0
+        # a CRLF copy on disk is different bytes -> not frozen -> refuses
+        crlf_path = tmp_path / "crlf.md"
+        crlf_path.write_bytes(lf.replace("\n", "\r\n").encode())
+        app, log = FakeApp(), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(crlf_path))
+        assert app.client.create_calls == []
+        assert app._last_plan_block[0] == "invalid_plan_envelope"
+
     def test_governed_candidate_never_executes(self, tmp_path: Path):
         d = "sha256:" + "a" * 64
         plan = tmp_path / "gov.md"
