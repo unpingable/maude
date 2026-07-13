@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 from pathlib import Path
 
 from maude.commands.base import CommandContext
@@ -78,6 +79,17 @@ stop_conditions:
 
 Background prose.
 """
+
+
+# S7: a RationCard that CONTAINS HUMAN_PLAN's execution_request (src/**) and the
+# cargo commands, plus the projected citation binding the request to it. A
+# governed v1 plan is admitted only if its request is cited AND contained.
+S7_RATION_SRC = json.dumps(
+    {"allowed_write_paths": ["src/**"], "allowed_shell_commands": ["cargo test", "cargo build"]}
+).encode()
+_S7_PROJECTED_WRITE = (
+    '  projected:\n    execution_request.write_paths: "ration_card:{d2}"\n'
+)
 
 
 def _run(cmd: RunPlanCommand, ctx: CommandContext, payload: str) -> None:
@@ -230,7 +242,7 @@ class TestRunPlanCommand:
 
     def test_governed_approved_with_witness_executes(self, tmp_path: Path):
         playbook = b"pb"
-        ration = b"rc"
+        ration = S7_RATION_SRC
         d1 = "sha256:" + hashlib.sha256(playbook).hexdigest()
         d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
         plan = tmp_path / "gov-ok.md"
@@ -244,7 +256,8 @@ class TestRunPlanCommand:
                 f"  ration_card_digest: \"{d2}\"\n"
                 "  approval_ref: \"operator:act\"\n"
                 "  governance_status: approved\n"
-                "---\n\nBackground prose.",
+                + _S7_PROJECTED_WRITE.format(d2=d2)
+                + "---\n\nBackground prose.",
             )
         )
         store = {d1: playbook, d2: ration, "operator:act": b"act-record"}
@@ -263,7 +276,14 @@ class TestRunPlanCommand:
         # S4/S6: an approved run projects the first-class execution_request block
         # into a grant and attaches it, so in-envelope actions won't re-prompt.
         d1 = "sha256:" + hashlib.sha256(b"pb").hexdigest()
-        d2 = "sha256:" + hashlib.sha256(b"rc").hexdigest()
+        # S7: a RationCard that contains the request, and both dimensions cited.
+        ration = json.dumps(
+            {
+                "allowed_write_paths": ["crates/nightshiftd/src/**"],
+                "allowed_shell_commands": ["cargo test", "cargo build"],
+            }
+        ).encode()
+        d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
         plan = tmp_path / "gov-grant.md"
         plan.write_text(
             "---\n"
@@ -290,10 +310,13 @@ class TestRunPlanCommand:
             f'  ration_card_digest: "{d2}"\n'
             '  approval_ref: "operator_plan_approved"\n'
             "  governance_status: approved\n"
+            "  projected:\n"
+            f'    execution_request.write_paths: "ration_card:{d2}"\n'
+            f'    execution_request.commands: "ration_card:{d2}"\n'
             "---\n\nprose.\n"
         )
         witness = b"operator approved"
-        store = {d1: b"pb", d2: b"rc", "operator_plan_approved": witness}
+        store = {d1: b"pb", d2: ration, "operator_plan_approved": witness}
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(witness_resolver=store.get), _ctx(app, log), str(plan))
         assert len(app.client.grant_calls) == 1
@@ -371,7 +394,7 @@ class TestFileWitnessResolver:
     def test_colocated_witnesses_admit_without_explicit_resolver(self, tmp_path: Path):
         """Default resolver = the plan file's own directory (CD-4 layout)."""
         playbook = b"pb-bytes"
-        ration = b"rc-bytes"
+        ration = S7_RATION_SRC
         d1 = "sha256:" + hashlib.sha256(playbook).hexdigest()
         d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
         (tmp_path / "playbook.yaml").write_bytes(playbook)
@@ -390,7 +413,8 @@ class TestFileWitnessResolver:
                 f"  ration_card_digest: \"{d2}\"\n"
                 "  approval_ref: \"operator:act\"\n"
                 "  governance_status: approved\n"
-                "---\n\nBackground prose.",
+                + _S7_PROJECTED_WRITE.format(d2=d2)
+                + "---\n\nBackground prose.",
             )
         )
         app, log = FakeApp(), FakeLog()

@@ -109,23 +109,58 @@ def _request_from_v1_block(env: PlanEnvelope) -> dict[str, Any]:
     }
 
 
-def _request_from_v0(env: PlanEnvelope, resolver: WitnessResolver) -> dict[str, Any]:
+def _commands_from_ration_bytes(ration_bytes: bytes, ration_card_digest: str) -> list[dict]:
+    """Parse commands from ALREADY-VERIFIED ration bytes (S7 single-read path):
+    admission verified these bytes hash to the cited digest, so no resolver call
+    and no rehash is needed here."""
+    try:
+        data = json.loads(ration_bytes)
+        raw = data.get("allowed_shell_commands", [])
+    except (ValueError, TypeError):
+        return []
+    if not isinstance(raw, (list, tuple)):
+        return []
+    out: list[dict] = []
+    for cmd in raw:
+        parsed = _parse_command(str(cmd))
+        if parsed is not None:
+            out.append(parsed)
+    return out
+
+
+def _request_from_v0(
+    env: PlanEnvelope,
+    resolver: WitnessResolver,
+    verified_ration_bytes: bytes | None,
+) -> dict[str, Any]:
     """v0 — retired legacy inference (frozen specimens only): scope_allowlist ->
-    write_paths, RationCard allowed_shell_commands -> commands."""
+    write_paths, RationCard allowed_shell_commands -> commands. Prefers the
+    admission-verified ration bytes (S7 single read); falls back to a resolver
+    read with a rehash guard only when projected without a prior admission."""
     gov = env.governance
     assert gov is not None  # only reached on an approved, governed plan
+    if verified_ration_bytes is not None:
+        commands = _commands_from_ration_bytes(verified_ration_bytes, gov.ration_card_digest)
+    else:
+        commands = _commands_from_ration(resolver, gov.ration_card_digest)
     return {
         "write_paths": list(env.scope_allowlist),
-        "commands": _commands_from_ration(resolver, gov.ration_card_digest),
+        "commands": commands,
         "horizon": "run",
     }
 
 
 def project_execution_request(
-    env: PlanEnvelope, resolver: WitnessResolver
+    env: PlanEnvelope,
+    resolver: WitnessResolver,
+    *,
+    verified_ration_bytes: bytes | None = None,
 ) -> GrantActivationCall | None:
     """Project an approved plan into a grant-activation call, or None when it
-    cannot be projected (run proceeds without compression — fail-safe)."""
+    cannot be projected (run proceeds without compression — fail-safe).
+
+    ``verified_ration_bytes`` (from the AdmissionRecord) lets the v0 decoder
+    consume the SAME bytes admission verified — no second resolver read (S7)."""
     gov = env.governance
     if gov is None or gov.governance_status != "approved" or not gov.approval_ref:
         return None
@@ -146,7 +181,7 @@ def project_execution_request(
             return None  # governed-but-no-request: run uncompressed (fail-safe)
         request = _request_from_v1_block(env)
     elif env.plan_version == 0:  # frozen-v0 historical decoder
-        request = _request_from_v0(env, resolver)
+        request = _request_from_v0(env, resolver, verified_ration_bytes)
     else:
         # unreachable: parse only produces version 0 or 1. Fail-safe rather than
         # treat an unexpected version as legacy via a catch-all else.

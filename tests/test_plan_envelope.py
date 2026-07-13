@@ -5,6 +5,7 @@ binding. Every refusal class exercised; fakes only, no daemon."""
 from __future__ import annotations
 
 import hashlib
+import json
 
 import pytest
 
@@ -202,10 +203,15 @@ class TestExecutionAdmission:
 
     def test_fully_witnessed_approved_plan_admits(self):
         playbook_bytes = b"playbook-body"
-        ration_bytes = b"ration-body"
+        # S7: a real RationCard that CONTAINS the execution_request (docs/**),
+        # and the request cited against it — else admission refuses.
+        ration_bytes = json.dumps(
+            {"allowed_write_paths": ["docs/**"], "allowed_shell_commands": []}
+        ).encode()
         d_playbook = "sha256:" + hashlib.sha256(playbook_bytes).hexdigest()
         d_ration = "sha256:" + hashlib.sha256(ration_bytes).hexdigest()
-        front = _governed().replace(D, d_playbook).replace(D2, d_ration)
+        proj = f'  projected:\n    execution_request.write_paths: "ration_card:{d_ration}"\n'
+        front = _governed(projected=proj).replace(D, d_playbook).replace(D2, d_ration)
         env = parse_plan_envelope(_plan(front))
 
         store = {

@@ -169,7 +169,12 @@ class RunPlanCommand(Command):
             if admission.governed:
                 from maude.plan.execution_request import project_execution_request
 
-                call = project_execution_request(env, resolver)
+                # S7 — hand projection the ration bytes admission already
+                # verified, so both consume the same bytes (no second read).
+                call = project_execution_request(
+                    env, resolver,
+                    verified_ration_bytes=admission.verified_ration_bytes,
+                )
                 if call is not None:
                     try:
                         granted = await ctx.app.client.runtime_grant_activate(

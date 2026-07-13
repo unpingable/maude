@@ -27,6 +27,12 @@ from dataclasses import dataclass, field
 
 import yaml
 
+from maude.plan.ration_containment import (
+    RationParseError,
+    check_containment,
+    parse_ration,
+)
+
 # --------------------------------------------------------------------------- #
 # Refusal vocabulary (closed; defined by the M-1 spec §4 — never improvised).
 # --------------------------------------------------------------------------- #
@@ -657,6 +663,10 @@ class AdmissionRecord:
     plan_ref: str
     governed: bool
     verified: tuple[tuple[str, str], ...] = ()
+    #: S7 — the RationCard bytes admission resolved AND digest-verified. Threaded
+    #: to projection so admission and projection consume the SAME verified bytes
+    #: (no second resolver read). None for ungoverned / no-ration plans.
+    verified_ration_bytes: bytes | None = None
 
 
 def admit_for_execution(
@@ -681,6 +691,7 @@ def admit_for_execution(
         )
 
     checked: list[tuple[str, str]] = []
+    ration_bytes: bytes | None = None
     for name, citation in gov.load_bearing_citations():
         witness = witness_resolver(citation) if witness_resolver is not None else None
         if witness is None:
@@ -698,8 +709,70 @@ def admit_for_execution(
                     f"{name}: cited {citation} but the resolved witness hashes "
                     f"to {actual}",
                 )
+        if name == "ration_card_digest":
+            ration_bytes = witness  # verified: hashes to the cited digest above
         checked.append((name, "verified"))
 
+    # S7 — ration-citation containment. A v1 governed request must be BOUNDED BY
+    # the RationCard it cites, not merely cite it. Checked against the SAME bytes
+    # verified above (no second resolver read).
+    if env.plan_version == 1 and env.execution_request is not None:
+        _check_ration_containment(env, ration_bytes)
+
     return AdmissionRecord(
-        plan_ref=env.plan_ref, governed=True, verified=tuple(checked)
+        plan_ref=env.plan_ref,
+        governed=True,
+        verified=tuple(checked),
+        verified_ration_bytes=ration_bytes,
     )
+
+
+def _check_ration_containment(env: PlanEnvelope, ration_bytes: bytes | None) -> None:
+    """S7 — refuse a governed v1 plan whose execution_request is not contained by
+    its cited RationCard. Reuses the existing ``invalid_plan_envelope`` class
+    with the detail tokens ``ration_citation_required`` /
+    ``execution_request_exceeds_ration`` (no new refusal vocabulary)."""
+    block = env.execution_request
+    assert block is not None  # guarded by the caller
+    projected = env.governance.projected if env.governance else {}
+
+    # Every non-empty modelled dimension must be CITED against the ration — a
+    # request Maude cannot bound cannot be admitted (ration_citation_required).
+    if block.write_paths and "execution_request.write_paths" not in projected:
+        raise _refuse(
+            "execution_request.write_paths is not cited against the RationCard "
+            "(ration_citation_required): a governed request must declare the card "
+            "it is bounded by"
+        )
+    if block.commands and "execution_request.commands" not in projected:
+        raise _refuse(
+            "execution_request.commands is not cited against the RationCard "
+            "(ration_citation_required): a governed request must declare the card "
+            "it is bounded by"
+        )
+    if ration_bytes is None:
+        raise _refuse(
+            "no verified RationCard bytes to bound the execution_request against "
+            "(ration_citation_required)"
+        )
+    try:
+        ration = parse_ration(ration_bytes)
+    except RationParseError as exc:
+        raise _refuse(
+            f"cited RationCard could not be parsed for containment "
+            f"(ration_citation_required): {exc}"
+        ) from exc
+
+    result = check_containment(
+        write_paths=block.write_paths,
+        commands=tuple((c.program, c.argv_prefix) for c in block.commands),
+        network_requested=block.network == "requested",
+        git_requested=block.git == "requested",
+        ration=ration,
+    )
+    if not result.ok:
+        raise _refuse(
+            "execution_request exceeds the cited RationCard "
+            f"(execution_request_exceeds_ration) on {list(result.exceedances)}: "
+            f"{result.detail}"
+        )
