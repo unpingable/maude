@@ -1,14 +1,18 @@
 # SPDX-License-Identifier: Apache-2.0
 """M-2 plan ingestion — the M-1 plan-envelope contract, executable.
 
-Parses/validates plan envelopes per ``docs/specs/plan-envelope-v0.md``
-(including the CD-1a governance binding, §7) and admits them for execution.
-Format validation is not authority; governance admission reads recorded
-status and witnesses — it never adjudicates.
+Parses/validates plan envelopes per ``docs/specs/plan-envelope-v1.md`` (v1 is
+the authoring surface; ``plan-envelope-v0.md`` is the retired predecessor,
+decodable only for frozen specimens — see S6) including the CD-1a governance
+binding (§7) and admits them for execution. Format validation is not authority;
+governance admission reads recorded status and witnesses — it never adjudicates.
 """
 
 from maude.plan.envelope import (
+    FROZEN_V0_PLAN_REFS,
     AdmissionRecord,
+    CommandRequest,
+    ExecutionRequestBlock,
     GovernanceBinding,
     PlanEnvelope,
     PlanRefusal,
@@ -22,7 +26,10 @@ from maude.plan.envelope import (
 )
 
 __all__ = [
+    "FROZEN_V0_PLAN_REFS",
     "AdmissionRecord",
+    "CommandRequest",
+    "ExecutionRequestBlock",
     "GovernanceBinding",
     "PlanEnvelope",
     "PlanRefusal",

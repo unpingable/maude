@@ -60,7 +60,7 @@ def _ctx(app: FakeApp, log: FakeLog, text: str = "") -> CommandContext:
 
 HUMAN_PLAN = """\
 ---
-plan_version: 0
+plan_version: 1
 goal: "Do the thing"
 workspace: "/tmp/proj"
 submitter_kind: human
@@ -68,6 +68,8 @@ plan_origin: human_written
 provenance:
   author: "operator"
 harness: claude_code
+execution_request:
+  write_paths: ["src/**"]
 steps:
   - "step one"
 stop_conditions:
@@ -173,7 +175,7 @@ class TestRunPlanCommand:
 
     def test_invalid_envelope_refused_no_session(self, tmp_path: Path):
         plan = tmp_path / "bad.md"
-        plan.write_text("---\nplan_version: 0\n---\nno required fields\n")
+        plan.write_text("---\nplan_version: 1\n---\nno required fields\n")
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(), _ctx(app, log), str(plan))
         assert app.client.create_calls == []
@@ -234,16 +236,14 @@ class TestRunPlanCommand:
         assert "fenced from this run's" in log.text()
 
     def test_governed_approved_attaches_execution_grant(self, tmp_path: Path):
-        # S4: an approved run projects scope_allowlist + ration commands into a
-        # grant and attaches it, so in-envelope actions won't re-prompt.
-        import json as _json
-        ration = _json.dumps({"allowed_shell_commands": ["cargo test", "cargo build"]}).encode()
+        # S4/S6: an approved run projects the first-class execution_request block
+        # into a grant and attaches it, so in-envelope actions won't re-prompt.
         d1 = "sha256:" + hashlib.sha256(b"pb").hexdigest()
-        d2 = "sha256:" + hashlib.sha256(ration).hexdigest()
+        d2 = "sha256:" + hashlib.sha256(b"rc").hexdigest()
         plan = tmp_path / "gov-grant.md"
         plan.write_text(
             "---\n"
-            "plan_version: 0\n"
+            "plan_version: 1\n"
             'goal: "x"\n'
             'workspace: "/tmp/proj"\n'
             "submitter_kind: human\n"
@@ -251,8 +251,12 @@ class TestRunPlanCommand:
             "provenance:\n"
             '  author: "operator"\n'
             "harness: claude_code\n"
-            "scope_allowlist:\n"
-            '  - "crates/nightshiftd/src/**"\n'
+            "execution_request:\n"
+            "  write_paths:\n"
+            '    - "crates/nightshiftd/src/**"\n'
+            "  commands:\n"
+            "    - {program: cargo, argv_prefix: [test]}\n"
+            "    - {program: cargo, argv_prefix: [build]}\n"
             "steps:\n"
             '  - "step one"\n'
             "governance:\n"
@@ -265,7 +269,7 @@ class TestRunPlanCommand:
             "---\n\nprose.\n"
         )
         witness = b"operator approved"
-        store = {d1: b"pb", d2: ration, "operator_plan_approved": witness}
+        store = {d1: b"pb", d2: b"rc", "operator_plan_approved": witness}
         app, log = FakeApp(), FakeLog()
         _run(RunPlanCommand(witness_resolver=store.get), _ctx(app, log), str(plan))
         assert len(app.client.grant_calls) == 1

@@ -27,7 +27,7 @@ def _plan(front: str, body: str = "\nprose body\n") -> str:
     return f"---\n{front}---\n{body}"
 
 HUMAN_MIN = """\
-plan_version: 0
+plan_version: 1
 goal: "Do the thing"
 workspace: "/tmp/proj"
 submitter_kind: human
@@ -69,7 +69,7 @@ class TestParseHumanPath:
         assert e.value.refusal_class == REFUSAL_INVALID_PLAN_ENVELOPE
 
     def test_unknown_plan_version_refuses(self):
-        bad = HUMAN_MIN.replace("plan_version: 0", "plan_version: 7")
+        bad = HUMAN_MIN.replace("plan_version: 1", "plan_version: 7")
         with pytest.raises(PlanRefusal):
             parse_plan_envelope(_plan(bad))
 
@@ -79,7 +79,7 @@ class TestParseHumanPath:
 
 
 SYNTH_BASE = """\
-plan_version: 0
+plan_version: 1
 goal: "Regenerate the client"
 workspace: "/tmp/proj"
 submitter_kind: synthetic_agent
@@ -114,7 +114,7 @@ def _governed(status: str = "approved", approval: str | None = "operator:act-1",
     approval_line = f"  approval_ref: \"{approval}\"\n" if approval else ""
     return (
         HUMAN_MIN
-        + "scope_allowlist: [\"docs/**\"]\n"
+        + "execution_request:\n  write_paths: [\"docs/**\"]\n"
         + "governance:\n"
         + "  authority_system: ag\n"
         + "  playbook_id: \"chore.docs\"\n"
@@ -161,9 +161,9 @@ class TestGovernanceParsing:
         assert "copy-with-citation" in e.value.detail
 
     def test_projected_carried_field_ok(self):
-        proj = "  projected:\n    scope_allowlist: \"ration_card:%s\"\n" % D2
+        proj = "  projected:\n    execution_request.write_paths: \"ration_card:%s\"\n" % D2
         env = parse_plan_envelope(_plan(_governed(projected=proj)))
-        assert env.governance.projected["scope_allowlist"].endswith(D2)
+        assert env.governance.projected["execution_request.write_paths"].endswith(D2)
 
     def test_unknown_projected_key_refuses(self):
         proj = "  projected:\n    goal: \"x:%s\"\n" % D
@@ -220,3 +220,122 @@ class TestExecutionAdmission:
             "ration_card_digest": "verified",
             "approval_ref": "verified",
         }
+
+
+# S6 — the versioned-contract migration. plan_version is the schema
+# discriminator; v0 is retired for authorship and decodes ONLY for an explicitly
+# frozen pre-v1 specimen. "Unversioned means legacy" is closed by construction.
+#: the committed NS-1 candidate specimen's plan_ref (AG repo), registered in
+#: FROZEN_V0_PLAN_REFS and adjudicated in AG's S6 design note.
+NS1_FROZEN_PLAN_REF = (
+    "sha256:da241bc77f8b209c3a25a21866fbde22f2a8b799d1ea3b61d588a727849a1b47"
+)
+
+
+class TestVersionDiscrimination:
+    def test_missing_plan_version_refuses_no_legacy_default(self):
+        bad = HUMAN_MIN.replace("plan_version: 1\n", "")
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert e.value.refusal_class == REFUSAL_INVALID_PLAN_ENVELOPE
+        assert "plan_version_missing" in e.value.detail
+
+    def test_fresh_v0_plan_is_retired(self):
+        # a brand-new plan_version: 0 plan whose hash is not frozen refuses —
+        # you cannot author new v0 plans.
+        bad = HUMAN_MIN.replace("plan_version: 1", "plan_version: 0")
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert e.value.refusal_class == REFUSAL_INVALID_PLAN_ENVELOPE
+        assert "plan_version_retired" in e.value.detail
+
+    def test_unknown_version_refuses(self):
+        bad = HUMAN_MIN.replace("plan_version: 1", "plan_version: 9")
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert "plan_version_unknown" in e.value.detail
+
+    def test_ns1_hash_is_registered_frozen(self):
+        # pins the registration without a cross-repo file read: if the frozen
+        # set changes, this catches it.
+        from maude.plan.envelope import FROZEN_V0_PLAN_REFS
+
+        assert NS1_FROZEN_PLAN_REF in FROZEN_V0_PLAN_REFS
+
+    def test_frozen_v0_hash_decodes_via_legacy_path(self, monkeypatch):
+        # a v0 plan whose hash IS frozen decodes through the retired path with
+        # the legacy scope_allowlist surface. We freeze this exact plan's hash.
+        v0_text = _plan(
+            HUMAN_MIN.replace("plan_version: 1", "plan_version: 0")
+            + "scope_allowlist: [\"legacy/**\"]\n"
+        )
+        v0_ref = "sha256:" + hashlib.sha256(v0_text.encode()).hexdigest()
+        monkeypatch.setattr(
+            "maude.plan.envelope.FROZEN_V0_PLAN_REFS", frozenset({v0_ref})
+        )
+        env = parse_plan_envelope(v0_text)
+        assert env.plan_version == 0
+        assert env.scope_allowlist == ("legacy/**",)
+        assert env.execution_request is None
+
+    def test_v1_forbids_legacy_scope_allowlist(self):
+        bad = HUMAN_MIN + "scope_allowlist: [\"docs/**\"]\n"
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(bad))
+        assert "legacy_field_under_v1" in e.value.detail
+
+    def test_governed_v1_requires_execution_request_block(self):
+        # _governed() carries execution_request; strip it → a governed v1 plan
+        # with no first-class request refuses.
+        front = _governed().replace(
+            "execution_request:\n  write_paths: [\"docs/**\"]\n", ""
+        )
+        with pytest.raises(PlanRefusal) as e:
+            parse_plan_envelope(_plan(front))
+        assert e.value.refusal_class == REFUSAL_INVALID_PLAN_ENVELOPE
+
+    def test_ungoverned_v1_execution_request_is_optional(self):
+        # no governance block → no grant → the block is optional (uncompressed).
+        env = parse_plan_envelope(_plan(HUMAN_MIN))
+        assert env.plan_version == 1
+        assert env.execution_request is None
+        assert env.governance is None
+
+    def test_v1_execution_request_parses_structured(self):
+        front = HUMAN_MIN + (
+            "execution_request:\n"
+            "  write_paths: [\"src/**\"]\n"
+            "  commands:\n"
+            "    - {program: cargo, argv_prefix: [test]}\n"
+            "  network: requested\n"
+            "  horizon: session\n"
+        )
+        env = parse_plan_envelope(_plan(front))
+        assert env.execution_request is not None
+        block = env.execution_request
+        assert block.write_paths == ("src/**",)
+        assert block.commands[0].program == "cargo"
+        assert block.commands[0].argv_prefix == ("test",)
+        assert block.network == "requested"
+        assert block.git == "denied"
+        assert block.horizon == "session"
+
+    def test_v1_empty_execution_request_refuses(self):
+        front = HUMAN_MIN + "execution_request:\n  write_paths: []\n"
+        with pytest.raises(PlanRefusal):
+            parse_plan_envelope(_plan(front))
+
+    def test_v1_unknown_axis_value_refuses(self):
+        front = HUMAN_MIN + (
+            "execution_request:\n  write_paths: [\"src/**\"]\n  network: allowed\n"
+        )
+        with pytest.raises(PlanRefusal):
+            parse_plan_envelope(_plan(front))
+
+    def test_v1_shell_string_command_refuses(self):
+        # commands must be structured {program, argv_prefix}, never a bare string
+        front = HUMAN_MIN + (
+            "execution_request:\n  write_paths: [\"src/**\"]\n  commands: [\"cargo test\"]\n"
+        )
+        with pytest.raises(PlanRefusal):
+            parse_plan_envelope(_plan(front))

@@ -60,7 +60,7 @@ CD4B_REVIEW_PACKET = {
 
 PLAN_WITH_CRITERIA = """\
 ---
-plan_version: 0
+plan_version: 1
 goal: "Normalize the playbook docs"
 workspace: "/tmp/proj"
 submitter_kind: human
@@ -391,7 +391,7 @@ class TestReportCommand:
 
     def test_bad_plan_degrades_to_note_not_crash(self, tmp_path: Path):
         plan = tmp_path / "bad.md"
-        plan.write_text("---\nplan_version: 0\n---\nmissing fields\n")
+        plan.write_text("---\nplan_version: 1\n---\nmissing fields\n")
         client = RecordingClient()
         app, log = FakeApp(client), FakeLog()
         _run(ReportCommand(), app, log, f"sess-1 {plan}")
