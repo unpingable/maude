@@ -49,10 +49,13 @@ from maude.plan.envelope import PlanEnvelope, WitnessResolver
 
 @dataclass(frozen=True)
 class GrantActivationCall:
-    """The two RPC arguments for runtime.grant.activate."""
+    """The RPC arguments for runtime.grant.activate. ``plan_bytes`` is the exact
+    submitted plan text — AG re-hashes it and requires
+    source_plan_digest == sha256(plan_bytes) == witness.plan_ref (seam B)."""
 
     execution_request: dict[str, Any]
     witness_bytes: str
+    plan_bytes: str
 
 
 def _parse_command(cmd: str) -> dict | None:
@@ -188,4 +191,11 @@ def project_execution_request(
         return None
     request["source_plan_digest"] = env.plan_ref
     request["approval_witness_digest"] = approval_witness_digest
-    return GrantActivationCall(execution_request=request, witness_bytes=witness_str)
+    # Seam B: ship the EXACT submitted plan text AG must re-hash. env.source_text
+    # is the same bytes env.plan_ref was computed over; if absent (hand-built
+    # envelope), AG fails closed on the plan-ref mismatch — never a silent pass.
+    return GrantActivationCall(
+        execution_request=request,
+        witness_bytes=witness_str,
+        plan_bytes=env.source_text,
+    )

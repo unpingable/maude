@@ -180,6 +180,7 @@ class RunPlanCommand(Command):
                         granted = await ctx.app.client.runtime_grant_activate(
                             session_id, call.execution_request,
                             witness_bytes=call.witness_bytes,
+                            plan_bytes=call.plan_bytes,
                         )
                         if granted and granted.get("grant_id"):
                             log.write(

@@ -663,16 +663,21 @@ class GovernorClient:
         session_id: str,
         execution_request: dict[str, Any],
         witness_bytes: str | None = None,
+        plan_bytes: str | None = None,
     ) -> dict:
         """S4: attach an execution grant (approval compression) to a session.
-        The daemon re-verifies ``witness_bytes`` against the request's
-        ``approval_witness_digest`` — a forged digest is refused there."""
+        Seam B: the daemon re-hashes ``plan_bytes`` and requires
+        source_plan_digest == sha256(plan_bytes) == witness.plan_ref; both
+        ``plan_bytes`` and ``witness_bytes`` are mandatory and a plan citing
+        another plan's witness is refused there (fail-closed)."""
         params: dict[str, Any] = {
             "session_id": session_id,
             "execution_request": execution_request,
         }
         if witness_bytes is not None:
             params["witness_bytes"] = witness_bytes
+        if plan_bytes is not None:
+            params["plan_bytes"] = plan_bytes
         return await self._call("runtime.grant.activate", params)
 
     async def runtime_grant_get(self, session_id: str) -> dict | None:

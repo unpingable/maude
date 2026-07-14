@@ -41,11 +41,14 @@ class FakeClient:
         self.launch_calls.append(session_id)
         return {"status": "running", "pid": 4242}
 
-    async def runtime_grant_activate(self, session_id, execution_request, witness_bytes=None):
+    async def runtime_grant_activate(
+        self, session_id, execution_request, witness_bytes=None, plan_bytes=None,
+    ):
         self.grant_calls.append({
             "session_id": session_id,
             "execution_request": execution_request,
             "witness_bytes": witness_bytes,
+            "plan_bytes": plan_bytes,
         })
         return {"grant_id": "sgr_test000000", "enforcement": "declared-effects-only"}
 

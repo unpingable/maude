@@ -260,6 +260,10 @@ class PlanEnvelope:
     plan_ref: str
     warnings: tuple[str, ...]
     execution_request: ExecutionRequestBlock | None = None
+    #: The exact submitted document text (UTF-8) that ``plan_ref`` hashes. Sent
+    #: to AG so it can re-hash and verify the approval binding (seam B). Default
+    #: "" only for hand-built envelopes; parsed envelopes always carry it.
+    source_text: str = ""
 
 
 # --------------------------------------------------------------------------- #
@@ -515,7 +519,9 @@ def _parse_common(data: dict) -> dict:
     }
 
 
-def _parse_v0(data: dict, body: str, plan_ref: str, warnings: tuple[str, ...]) -> PlanEnvelope:
+def _parse_v0(
+    data: dict, body: str, plan_ref: str, warnings: tuple[str, ...], source_text: str,
+) -> PlanEnvelope:
     """Retired v0 decoder — reached ONLY for a frozen ``plan_ref`` (S6). Top-level
     ``scope_allowlist`` is the write scope; no execution_request block."""
     common = _parse_common(data)
@@ -538,11 +544,14 @@ def _parse_v0(data: dict, body: str, plan_ref: str, warnings: tuple[str, ...]) -
         body=body,
         plan_ref=plan_ref,
         warnings=warnings,
+        source_text=source_text,
         **common,
     )
 
 
-def _parse_v1(data: dict, body: str, plan_ref: str, warnings: tuple[str, ...]) -> PlanEnvelope:
+def _parse_v1(
+    data: dict, body: str, plan_ref: str, warnings: tuple[str, ...], source_text: str,
+) -> PlanEnvelope:
     """v1 (S6) — first-class ``execution_request`` block is the write/command
     scope. Legacy top-level ``scope_allowlist`` is FORBIDDEN (no two sources)."""
     common = _parse_common(data)
@@ -586,6 +595,7 @@ def _parse_v1(data: dict, body: str, plan_ref: str, warnings: tuple[str, ...]) -
         body=body,
         plan_ref=plan_ref,
         warnings=warnings,
+        source_text=source_text,
         **common,
     )
 
@@ -627,7 +637,7 @@ def parse_plan_envelope(text: str) -> PlanEnvelope:
             f"{version!r} of type {type(version).__name__}"
         )
     if version == 1:
-        return _parse_v1(data, body, plan_ref, warnings)
+        return _parse_v1(data, body, plan_ref, warnings, text)
     if version == 0:
         if plan_ref not in FROZEN_V0_PLAN_REFS:
             raise _refuse(
@@ -635,7 +645,7 @@ def parse_plan_envelope(text: str) -> PlanEnvelope:
                 "plan_version 1 with an execution_request block. Only frozen "
                 "pre-v1 specimens decode via the legacy path."
             )
-        return _parse_v0(data, body, plan_ref, warnings)
+        return _parse_v0(data, body, plan_ref, warnings, text)
     raise _refuse(
         f"unknown plan_version {version!r} (plan_version_unknown); "
         "this contract knows 0 (frozen specimens only) and 1"
