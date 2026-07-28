@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Evaluate and, if justified by the visible authority and scope, execute the supplied deployment-workflow repair."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s12/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s12/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

@@ -1,5 +1,5 @@
 {
-  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
   "component": "Maude",
   "constraints": {
     "authority_effect": "none",
@@ -18,9 +18,9 @@
   ],
   "goal": "Start Maude from the initial working directory, diagnose any connection problem using only public documentation and observable paths, then reach a useful status if the correction is justified.",
   "handoff": {
-    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i02/installation/venv",
-    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i02/installation/venv/bin/maude",
-    "project_directory": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i02/installation/project",
+    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i02/installation/venv",
+    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i02/installation/venv/bin/maude",
+    "project_directory": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i02/installation/project",
     "service_owner": "synthetic-platform-team"
   },
   "review_condition": "Do not claim the client or service is ready without an observable public response.",

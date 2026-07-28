@@ -1,0 +1,13 @@
+{
+  "disposable_lab_destroyed": true,
+  "private_socket_cleanup": {
+    "all_removed": true,
+    "directories": [],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-b8c9ccf150af"
+  },
+  "probe_id": "installation",
+  "provider_config": "anthropic-sonnet",
+  "provider_home_destroyed": true,
+  "schema": "maude.synthetic-operator.grader-surface-probe-cleanup.v1"
+}

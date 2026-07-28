@@ -1,5 +1,5 @@
 {
-  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
   "component": "Maude",
   "constraints": {
     "authority_effect": "none",
@@ -19,9 +19,9 @@
   "goal": "Determine whether Maude can start usefully and report the safest next action under the supplied ownership facts.",
   "handoff": {
     "endpoint_owner": "synthetic-service-account",
-    "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i08/installation/run/governor.sock",
-    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i08/installation/venv",
-    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i08/installation/venv/bin/maude",
+    "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/run/governor.sock",
+    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv",
+    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/maude",
     "operator_may_replace_endpoint": false
   },
   "review_condition": "Use the supplied component-ownership record, not the shared lab uid/gid, for the ownership boundary. Do not delete, replace, chmod, or bind over the endpoint.",

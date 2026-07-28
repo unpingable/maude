@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Pre-freeze, non-campaign probes for the Codex grader surface.
+"""Pre-freeze, non-campaign probes for supported grader surfaces.
 
-The probes exercise the two exact successor grader schemas through two fresh
-Codex processes.  They intentionally reuse the campaign runner's strict,
-read-only grader evidence boundary and provider-auth custody implementation;
-they do not execute an operator task and are never campaign runs.
+The probes exercise both exact successor grader schemas through a fresh process
+for every requested provider/schema pair. They reuse the campaign runner's
+strict read-only evidence boundary and provider-auth custody implementation;
+they do not execute operator tasks and are never campaign runs.
 
 This module writes evidence only beneath
 ``packet/grader-surface-probes``.  It refuses to run after the campaign
@@ -19,6 +19,7 @@ import inspect
 import json
 import shutil
 import sys
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -27,12 +28,14 @@ import jsonschema
 import campaign_runner as runner
 from campaign_common import (
     CAMPAIGN_ID,
-    CODEX_ONLY_MODEL_CONFIG,
     LAB_ROOT,
     MANIFEST_PATH,
     PACKET_DIR,
+    PROVIDER_MODEL_CONFIGS,
     REPO_ROOT,
+    SUPPORTED_PROVIDER_CONFIGS,
     CampaignError,
+    append_jsonl,
     ensure_safe_lab_path,
     file_record,
     inventory_files,
@@ -44,7 +47,7 @@ from campaign_common import (
 )
 
 
-PROBE_SCHEMA = "maude.synthetic-operator.grader-surface-probes.v1"
+PROBE_SCHEMA = "maude.synthetic-operator.grader-surface-probes.v2"
 PROBE_RESULT_SCHEMA = (
     "maude.synthetic-operator.grader-surface-probe-result.v1"
 )
@@ -53,7 +56,6 @@ GRADER_SYSTEM_PATH = PACKET_DIR / "prompts" / "grader-system.md"
 PROMPT_DELIMITER = "\n\n--- BEGIN EXACT USER ASSIGNMENT ---\n\n"
 MINIMUM_DELIVERED_PROMPT_BYTES = 131_073
 TARGET_DELIVERED_PROMPT_BYTES = 150_000
-PROVIDER_CONFIG = "openai-sol"
 EXPECTED_TOOL = "mcp__grader__evidence"
 EXPECTED_SERVER = "grader"
 EXPECTED_BARE_TOOL = "evidence"
@@ -76,6 +78,8 @@ _REQUIRED_RUNNER_CALLS = {
     "_action_accounting",
     "_audit_actions",
     "_claude_boundary_record",
+    "_claude_grader_boundary",
+    "_claude_mcp_isolation_preflight",
     "_codex_grader_boundary",
     "_codex_mcp_isolation_preflight",
     "_codex_mcp_transport_bwrap",
@@ -403,14 +407,18 @@ def _assert_read_only_evidence_actions(
     actions: list[dict[str, Any]],
     gate: dict[str, Any],
     probe_id: str,
+    provider_config: str,
 ) -> list[dict[str, Any]]:
     if not actions:
         raise CampaignError(
             f"{probe_id}: grader made no required read-only evidence call"
         )
+    expected_event_provider = (
+        "claude" if provider_config == "anthropic-sonnet" else "codex"
+    )
     if any(
         action.get("classification") != "declared_mcp_tool_action"
-        or action.get("provider") != "codex"
+        or action.get("provider") != expected_event_provider
         or action.get("tool") != EXPECTED_TOOL
         for action in actions
     ):
@@ -422,28 +430,66 @@ def _assert_read_only_evidence_actions(
         raise CampaignError(
             f"{probe_id}: auth-gate action evidence is incomplete"
         )
-    for action in gate_actions:
-        arguments = action.get("arguments")
-        if (
-            action.get("server") != EXPECTED_SERVER
-            or action.get("tool") != EXPECTED_BARE_TOOL
-            or action.get("completed") is not True
-            or not isinstance(arguments, dict)
-            or arguments.get("operation") not in {"read", "list"}
-        ):
-            raise CampaignError(
-                f"{probe_id}: a provider action was not a completed read-only "
-                "grader evidence operation"
-            )
-    correlations = gate.get("normalized_result_correlations")
-    if (
-        not isinstance(correlations, list)
-        or len(correlations) != len(gate_actions)
-        or any(value.get("proxy_is_error") is not False for value in correlations)
-    ):
+    if gate.get("exact_correlation_proved") is not True:
         raise CampaignError(
             f"{probe_id}: evidence action/result correlation did not pass"
         )
+    if provider_config == "anthropic-sonnet":
+        results = gate.get("tool_results")
+        if (
+            gate.get("status") != "complete"
+            or not isinstance(results, list)
+            or len(results) != len(gate_actions)
+        ):
+            raise CampaignError(
+                f"{probe_id}: Claude evidence result roster is incomplete"
+            )
+        results_by_id = {
+            result.get("tool_use_id"): result
+            for result in results
+            if isinstance(result, dict)
+        }
+        for action in gate_actions:
+            arguments = action.get("arguments")
+            result = results_by_id.get(action.get("tool_use_id"))
+            if (
+                action.get("tool") != EXPECTED_TOOL
+                or not isinstance(arguments, dict)
+                or arguments.get("operation") not in {"read", "list"}
+                or not isinstance(result, dict)
+                or result.get("is_error") is not False
+            ):
+                raise CampaignError(
+                    f"{probe_id}: Claude action was not a completed read-only "
+                    "grader evidence operation"
+                )
+    else:
+        for action in gate_actions:
+            arguments = action.get("arguments")
+            if (
+                action.get("server") != EXPECTED_SERVER
+                or action.get("tool") != EXPECTED_BARE_TOOL
+                or action.get("completed") is not True
+                or not isinstance(arguments, dict)
+                or arguments.get("operation") not in {"read", "list"}
+            ):
+                raise CampaignError(
+                    f"{probe_id}: a provider action was not a completed "
+                    "read-only grader evidence operation"
+                )
+        correlations = gate.get("normalized_result_correlations")
+        if (
+            gate.get("status") != "complete"
+            or not isinstance(correlations, list)
+            or len(correlations) != len(gate_actions)
+            or any(
+                value.get("proxy_is_error") is not False
+                for value in correlations
+            )
+        ):
+            raise CampaignError(
+                f"{probe_id}: Codex evidence result correlation did not pass"
+            )
     return gate_actions
 
 
@@ -457,11 +503,13 @@ def _probe_artifact_inventory(probe_dir: Path) -> list[dict[str, Any]]:
 def _run_one(
     probe: dict[str, str],
     *,
+    provider_config: str,
+    attempt_root: Path,
     source_schema_record: dict[str, Any],
     timeout: int,
 ) -> dict[str, Any]:
     probe_id = probe["probe_id"]
-    probe_dir = OUTPUT_ROOT / probe_id
+    probe_dir = attempt_root / provider_config / probe_id
     raw = probe_dir / "raw"
     raw.mkdir(parents=True)
     source_schema = PACKET_DIR / probe["schema_name"]
@@ -470,7 +518,11 @@ def _run_one(
         probe_dir,
         source_schema,
     )
-    lab = LAB_ROOT / f"_grader-surface-probe-{probe_id}"
+    lab_id = (
+        f"_grader-surface-probe-{provider_config}-{probe_id}-"
+        f"{uuid.uuid4().hex[:10]}"
+    )
+    lab = LAB_ROOT / lab_id
     ensure_safe_lab_path(lab)
     if lab.exists():
         raise CampaignError(
@@ -482,48 +534,117 @@ def _run_one(
     cleanup_complete = False
     copied_auth: list[str] = []
     credential_values: list[bytes] = []
+    failure_stage = "evaluator-setup"
+    provider_process_launch_state = "not-attempted"
+    process_result: dict[str, Any] | None = None
     try:
+        failure_stage = "provider-authentication"
         copied_auth, credential_values = runner._copy_provider_home(
-            PROVIDER_CONFIG,
+            provider_config,
             provider_home,
         )
-        boundary, operator_home = runner._codex_grader_boundary(
-            f"_grader-surface-probe-{probe_id}",
-            provider_home,
-            bundle,
-        )
-        bwrap_prefix = runner._codex_mcp_transport_bwrap(
-            boundary,
-            provider_home,
-            operator_home,
-        )
-        isolation = runner._codex_mcp_isolation_preflight(
-            boundary,
-            bwrap_prefix,
-        )
+        failure_stage = "isolation-setup"
+        boundary_label = lab_id
+        if provider_config == "anthropic-sonnet":
+            boundary, operator_home = runner._claude_grader_boundary(
+                boundary_label,
+                provider_home,
+                bundle,
+            )
+            bwrap_prefix: list[str] = []
+            isolation = runner._claude_mcp_isolation_preflight(boundary)
+        else:
+            boundary, operator_home = runner._codex_grader_boundary(
+                boundary_label,
+                provider_home,
+                bundle,
+            )
+            bwrap_prefix = runner._codex_mcp_transport_bwrap(
+                boundary,
+                provider_home,
+                operator_home,
+            )
+            isolation = runner._codex_mcp_isolation_preflight(
+                boundary,
+                bwrap_prefix,
+            )
         write_json(probe_dir / "isolation-result.json", isolation)
         write_json(
             probe_dir / "clean-home-before.json",
             runner._operator_home_inventory(operator_home),
         )
         provider_argv, delivery, stdin_payload = runner._provider_argv(
-            PROVIDER_CONFIG,
+            provider_config,
             system_prompt=system_prompt,
             user_prompt=user_prompt,
             cwd=bundle,
             grade_schema=bundle / source_schema.name,
             claude_boundary=boundary,
         )
-        exact_stdin = _assert_stdin_delivery(
-            provider_argv=provider_argv,
-            delivery=delivery,
-            stdin_payload=stdin_payload,
-            system_prompt=system_prompt,
-            user_prompt=user_prompt,
-            probe_id=probe_id,
-        )
-        actual_argv = [*bwrap_prefix, *provider_argv]
-        runner._validate_codex_strict_argv(actual_argv, boundary)
+        if provider_config == "openai-sol":
+            exact_prompt_payload = _assert_stdin_delivery(
+                provider_argv=provider_argv,
+                delivery=delivery,
+                stdin_payload=stdin_payload,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                probe_id=probe_id,
+            )
+            actual_argv = [*bwrap_prefix, *provider_argv]
+            runner._validate_codex_strict_argv(actual_argv, boundary)
+            prompt_transport = {
+                "method": "closed-stdin",
+                "stdin_used": True,
+                "stdin_closed_after_single_write": True,
+                "stream_json_user_event_used": False,
+                "semantic_prompt_bytes": len(exact_prompt_payload),
+                "semantic_prompt_sha256": sha256_bytes(
+                    exact_prompt_payload
+                ),
+                "semantic_prompt_bytes_in_argv": False,
+                "user_assignment_bytes_in_argv": False,
+                "system_prompt_bytes_in_argv": False,
+                "exceeds_131072_bytes": (
+                    len(exact_prompt_payload) > 131_072
+                ),
+                "provider_argv_final_argument": provider_argv[-1],
+            }
+        else:
+            exact_prompt_payload = user_prompt.encode("utf-8")
+            sentinel = f"BEGIN-INERT-PADDING-{probe_id}"
+            if (
+                stdin_payload is not None
+                or len(exact_prompt_payload)
+                < MINIMUM_DELIVERED_PROMPT_BYTES
+                or delivery.get("user_prompt_sha256")
+                != sha256_bytes(exact_prompt_payload)
+                or any(
+                    user_prompt in argument or sentinel in argument
+                    for argument in provider_argv
+                )
+            ):
+                raise CampaignError(
+                    f"{probe_id}: Claude large user assignment was not "
+                    "preserved through stream-json delivery"
+                )
+            actual_argv = provider_argv
+            prompt_transport = {
+                "method": "stream-json-user-event",
+                "stdin_used": False,
+                "stdin_closed_after_single_write": False,
+                "stream_json_user_event_used": True,
+                "semantic_prompt_bytes": len(exact_prompt_payload),
+                "semantic_prompt_sha256": sha256_bytes(
+                    exact_prompt_payload
+                ),
+                "semantic_prompt_bytes_in_argv": False,
+                "user_assignment_bytes_in_argv": False,
+                "system_prompt_bytes_in_argv": True,
+                "exceeds_131072_bytes": (
+                    len(exact_prompt_payload) > 131_072
+                ),
+                "provider_argv_final_argument": provider_argv[-1],
+            }
         write_json(
             probe_dir / "invocation.json",
             {
@@ -534,25 +655,19 @@ def _run_one(
                 "campaign_id": CAMPAIGN_ID,
                 "probe_id": probe_id,
                 "campaign_run": False,
-                "provider_config": PROVIDER_CONFIG,
-                "model_configuration": CODEX_ONLY_MODEL_CONFIG,
+                "provider_config": provider_config,
+                "model_configuration": PROVIDER_MODEL_CONFIGS[
+                    provider_config
+                ],
                 "provider_argv": provider_argv,
                 "transport_bwrap_argv": bwrap_prefix,
                 "actual_argv": actual_argv,
-                "strict_argv_validation_passed": True,
+                "strict_argv_validation_passed": (
+                    provider_config == "openai-sol"
+                ),
                 "boundary": runner._claude_boundary_record(boundary),
                 "delivery": delivery,
-                "stdin": {
-                    "used": True,
-                    "closed_after_single_write": True,
-                    "bytes": len(exact_stdin),
-                    "sha256": sha256_bytes(exact_stdin),
-                    "exceeds_131072_bytes": (
-                        len(exact_stdin) > 131_072
-                    ),
-                    "semantic_prompt_bytes_in_argv": False,
-                    "argv_prompt_selector": provider_argv[-1],
-                },
+                "prompt_transport": prompt_transport,
                 "system_prompt": file_record(
                     probe_dir / "system-prompt.md",
                     relative_to=probe_dir,
@@ -575,23 +690,43 @@ def _run_one(
                 "authority_effect": "none",
             },
         )
+        failure_stage = "provider-transport"
+        provider_process_launch_state = "attempted-outcome-unknown"
         process_result = runner._run_model_process(
             actual_argv,
             cwd=Path(boundary["transport_cwd"]),
             stdout_path=raw / "grader.stdout.jsonl",
             stderr_path=raw / "grader.stderr",
             timeout=timeout,
-            provider=PROVIDER_CONFIG,
+            provider=provider_config,
             provider_home=provider_home,
             copied_auth=copied_auth,
             credential_values=credential_values,
             gate_record_path=raw / "provider-auth-gate.json",
             claude_boundary=boundary,
             user_prompt=user_prompt,
-            process_env=None,
+            process_env=(
+                boundary["provider_environment"]
+                if provider_config == "anthropic-sonnet"
+                else None
+            ),
             codex_auth_mode="retained-private-home",
-            stdin_payload=exact_stdin,
+            stdin_payload=(
+                exact_prompt_payload
+                if provider_config == "openai-sol"
+                else None
+            ),
         )
+        provider_process_launch_state = "completed"
+        if (
+            process_result.get("returncode") != 0
+            or process_result.get("timed_out") is not False
+        ):
+            raise CampaignError(
+                f"{probe_id}: {provider_config} grader transport failed: "
+                f"returncode={process_result.get('returncode')} "
+                f"timed_out={process_result.get('timed_out')}"
+            )
         runner._quarantine_if_secret(
             [raw / "grader.stdout.jsonl", raw / "grader.stderr"],
             credential_values,
@@ -617,6 +752,7 @@ def _run_one(
             actions=actions,
             gate=process_result["provider_auth_gate"],
             probe_id=probe_id,
+            provider_config=provider_config,
         )
         if (
             safety.get("zero_auth_env_network_source_attempts") is not True
@@ -625,21 +761,29 @@ def _run_one(
             raise CampaignError(
                 f"{probe_id}: grader safety audit did not pass"
             )
-        identity = runner._session_identity(events, PROVIDER_CONFIG)
-        thread_id = identity.get("provider_thread_id")
-        if not isinstance(thread_id, str) or not thread_id:
+        identity = runner._session_identity(events, provider_config)
+        identity_value = identity.get(
+            "provider_session_id"
+        ) or identity.get("provider_thread_id")
+        if not isinstance(identity_value, str) or not identity_value:
             raise CampaignError(
-                f"{probe_id}: fresh Codex thread identity is absent"
+                f"{probe_id}: fresh {provider_config} session identity is "
+                "absent"
             )
+        failure_stage = "probe-integrity"
         if (
-            process_result.get("returncode") != 0
-            or process_result.get("timed_out") is not False
-            or process_result.get("fresh_process") is not True
+            process_result.get("fresh_process") is not True
             or process_result.get("follow_up_messages") != 0
             or process_result.get("coaching") != "none"
-            or process_result.get("semantic_prompt_bytes") != len(exact_stdin)
-            or process_result.get("semantic_prompt_sha256")
-            != sha256_bytes(exact_stdin)
+            or (
+                provider_config == "openai-sol"
+                and (
+                    process_result.get("semantic_prompt_bytes")
+                    != len(exact_prompt_payload)
+                    or process_result.get("semantic_prompt_sha256")
+                    != sha256_bytes(exact_prompt_payload)
+                )
+            )
             or not runner._has_final_answer(events)
         ):
             raise CampaignError(
@@ -663,6 +807,7 @@ def _run_one(
                 (raw / "grader.stderr").read_bytes(),
             ),
         )
+        failure_stage = "isolation-cleanup"
         cleanup_record = runner._release_private_socket_directories(boundary)
         if cleanup_record.get("all_removed") is not True:
             raise CampaignError(
@@ -692,10 +837,11 @@ def _run_one(
             "probe_id": probe_id,
             "surface": probe["surface"],
             "campaign_run": False,
+            "status": "available",
             "completed_at": process_result["completed_at"],
-            "provider": "OpenAI",
-            "provider_config": PROVIDER_CONFIG,
-            "model_configuration": CODEX_ONLY_MODEL_CONFIG,
+            "provider": PROVIDER_MODEL_CONFIGS[provider_config]["provider"],
+            "provider_config": provider_config,
+            "model_configuration": PROVIDER_MODEL_CONFIGS[provider_config],
             "campaign_runner": file_record(
                 Path(runner.__file__).resolve(),
                 relative_to=REPO_ROOT,
@@ -728,13 +874,7 @@ def _run_one(
             },
             "prompt_delivery": {
                 **delivery,
-                "stdin_used": True,
-                "stdin_closed_after_single_write": True,
-                "semantic_prompt_bytes": len(exact_stdin),
-                "semantic_prompt_sha256": sha256_bytes(exact_stdin),
-                "semantic_prompt_bytes_in_argv": False,
-                "exceeds_131072_bytes": len(exact_stdin) > 131_072,
-                "provider_argv_final_argument": provider_argv[-1],
+                **prompt_transport,
             },
             "action_boundary": {
                 "allowed_tools": [EXPECTED_TOOL],
@@ -772,13 +912,40 @@ def _run_one(
             "artifact_inventory_excluding_result": (
                 _probe_artifact_inventory(probe_dir)
             ),
-            "network_or_external_operational_effect": False,
+            "provider_network_permitted_for_probe_session": True,
+            "provider_network_attempted": True,
+            "task_level_network_or_external_operational_effect": False,
             "authority_effect": "none",
             "all_passed": True,
         }
+        failure_stage = "evidence-finalization"
         write_json(probe_dir / "result.json", result)
         return result
-    except BaseException as exc:
+    except Exception as exc:
+        failure_classification = runner._probe_failure_classification(
+            failure_stage,
+            process_result,
+        )
+        failure_identity: dict[str, Any] = {}
+        transcript_path = raw / "grader.stdout.jsonl"
+        if transcript_path.is_file():
+            try:
+                candidate_identity = runner._session_identity(
+                    runner._provider_events(transcript_path),
+                    provider_config,
+                )
+                identity_values = [
+                    value
+                    for value in (
+                        candidate_identity.get("provider_session_id"),
+                        candidate_identity.get("provider_thread_id"),
+                    )
+                    if isinstance(value, str) and value
+                ]
+                if len(identity_values) == 1:
+                    failure_identity = candidate_identity
+            except (CampaignError, OSError, ValueError):
+                failure_identity = {}
         write_json(
             probe_dir / "failure.json",
             {
@@ -788,10 +955,45 @@ def _run_one(
                 ),
                 "campaign_id": CAMPAIGN_ID,
                 "probe_id": probe_id,
+                "provider_config": provider_config,
+                "model_configuration": PROVIDER_MODEL_CONFIGS[
+                    provider_config
+                ],
                 "campaign_run": False,
+                "status": failure_classification,
+                "failure_stage": failure_stage,
+                "failure_classification": failure_classification,
                 "exception_type": type(exc).__name__,
-                "error": str(exc),
+                "diagnostic_sha256": sha256_bytes(
+                    str(exc).encode("utf-8")
+                ),
+                "provider_process_launch_state": (
+                    provider_process_launch_state
+                ),
+                "provider_process_observation": (
+                    {
+                        "returncode": process_result.get("returncode"),
+                        "timed_out": process_result.get("timed_out"),
+                    }
+                    if process_result is not None
+                    else None
+                ),
+                "provider_network_attempted": (
+                    False
+                    if provider_process_launch_state == "not-attempted"
+                    else True
+                    if provider_process_launch_state == "completed"
+                    else "unknown"
+                ),
+                "provider_network_use_observed": (
+                    "not-attempted"
+                    if provider_process_launch_state == "not-attempted"
+                    else "unknown"
+                ),
+                "session_identity": failure_identity,
+                "partial_evidence": _probe_artifact_inventory(probe_dir),
                 "partial_evidence_preserved": True,
+                "task_level_network_or_external_operational_effect": False,
                 "all_passed": False,
                 "authority_effect": "none",
             },
@@ -799,14 +1001,37 @@ def _run_one(
         raise
     finally:
         if not cleanup_complete:
-            if boundary is not None:
-                cleanup_record = runner._release_private_socket_directories(
-                    boundary
+            cleanup_errors: list[str] = []
+            try:
+                if boundary is not None:
+                    cleanup_record = (
+                        runner._release_private_socket_directories(boundary)
+                    )
+                    if cleanup_record.get("all_removed") is not True:
+                        cleanup_errors.append(
+                            "private socket cleanup did not pass"
+                        )
+            except Exception as cleanup_exc:
+                cleanup_errors.append(
+                    "private socket cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
                 )
-            if provider_home.exists():
-                shutil.rmtree(provider_home)
-            if lab.exists():
-                runner._safe_remove_lab(lab)
+            try:
+                if provider_home.exists():
+                    shutil.rmtree(provider_home)
+            except OSError as cleanup_exc:
+                cleanup_errors.append(
+                    "provider-home cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            try:
+                if lab.exists():
+                    runner._safe_remove_lab(lab)
+            except (CampaignError, OSError) as cleanup_exc:
+                cleanup_errors.append(
+                    "disposable-lab cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
             write_json(
                 probe_dir / "cleanup.json",
                 {
@@ -815,169 +1040,321 @@ def _run_one(
                         "grader-surface-probe-cleanup.v1"
                     ),
                     "probe_id": probe_id,
+                    "provider_config": provider_config,
                     "private_socket_cleanup": cleanup_record,
                     "provider_home_destroyed": not provider_home.exists(),
                     "disposable_lab_destroyed": not lab.exists(),
                 },
             )
-            if (
-                cleanup_record is not None
-                and cleanup_record.get("all_removed") is not True
-            ):
+            if cleanup_errors:
+                failure_path = probe_dir / "failure.json"
+                if failure_path.is_file():
+                    prior_failure = load_json(failure_path)
+                    cleanup_diagnostic = "; ".join(cleanup_errors)
+                    prior_failure.update(
+                        {
+                            "status": "probe-invalid",
+                            "failure_stage": "isolation-cleanup",
+                            "failure_classification": "probe-invalid",
+                            "diagnostic_sha256": sha256_bytes(
+                                cleanup_diagnostic.encode("utf-8")
+                            ),
+                            "prior_failure": {
+                                "status": prior_failure.get("status"),
+                                "failure_stage": prior_failure.get(
+                                    "failure_stage"
+                                ),
+                                "diagnostic_sha256": prior_failure.get(
+                                    "diagnostic_sha256"
+                                ),
+                            },
+                        }
+                    )
+                    write_json(failure_path, prior_failure)
                 raise CampaignError(
-                    f"{probe_id}: private socket cleanup did not pass"
+                    f"{probe_id}: grader probe cleanup did not pass"
                 )
 
 
-def _result_record(probe_id: str) -> dict[str, Any]:
-    path = OUTPUT_ROOT / probe_id / "result.json"
+def _result_record(
+    provider_config: str,
+    probe_id: str,
+    *,
+    attempt_root: Path,
+) -> dict[str, Any]:
+    path = attempt_root / provider_config / probe_id / "result.json"
     return file_record(path, relative_to=OUTPUT_ROOT)
 
 
-def run_probes(*, timeout: int = runner.DEFAULT_TIMEOUT) -> dict[str, Any]:
-    """Run both fresh Codex grader probes and write the index last."""
+def run_probes(
+    *,
+    providers: list[str] | tuple[str, ...] | None = None,
+    timeout: int = runner.DEFAULT_TIMEOUT,
+) -> dict[str, Any]:
+    """Run every requested provider/schema probe and preserve every outcome."""
 
     _assert_runner_contract()
+    selected_providers = runner._probe_provider_scope(providers)
+    capability_policy = runner._provider_capability_policy_record()
     schema_records = _validate_source_inputs()
-    OUTPUT_ROOT.mkdir(parents=True)
+    attempt_id = (
+        runner._utc_now().replace("-", "").replace(":", "")
+        + "-"
+        + uuid.uuid4().hex[:12]
+    )
+    attempt_root = OUTPUT_ROOT / "attempts" / attempt_id
+    attempt_root.mkdir(parents=True)
     results: list[dict[str, Any]] = []
-    try:
+    outcomes: list[dict[str, Any]] = []
+    for provider_config in selected_providers:
         for probe in PROBES:
-            results.append(
-                _run_one(
+            probe_id = probe["probe_id"]
+            try:
+                result = _run_one(
                     probe,
+                    provider_config=provider_config,
+                    attempt_root=attempt_root,
                     source_schema_record=schema_records[probe["probe_id"]],
                     timeout=timeout,
                 )
-            )
-        thread_ids = [
-            value["session_identity"]["provider_thread_id"] for value in results
-        ]
-        distinct = len(thread_ids) == len(set(thread_ids)) == len(PROBES)
-        if not distinct:
-            raise CampaignError(
-                "grader surface probes did not produce distinct fresh threads"
-            )
-        index = {
-            "schema": PROBE_SCHEMA,
-            "campaign_id": CAMPAIGN_ID,
-            "campaign_run": False,
-            "completed_at": runner._utc_now(),
-            "provider": "OpenAI",
-            "provider_config": PROVIDER_CONFIG,
-            "model_configuration": CODEX_ONLY_MODEL_CONFIG,
-            "campaign_runner": file_record(
-                Path(runner.__file__).resolve(),
-                relative_to=REPO_ROOT,
-            ),
-            "probe_runner": file_record(
-                Path(__file__).resolve(),
-                relative_to=REPO_ROOT,
-            ),
-            "grader_system_prompt": file_record(
-                GRADER_SYSTEM_PATH,
-                relative_to=PACKET_DIR,
-            ),
-            "probes": [
+                results.append(result)
+                outcomes.append(
+                    {
+                        "provider_config": provider_config,
+                        "probe_id": probe_id,
+                        "surface": probe["surface"],
+                        "status": "available",
+                        "session_identity": result["session_identity"],
+                        "result": _result_record(
+                            provider_config,
+                            probe_id,
+                            attempt_root=attempt_root,
+                        ),
+                        "campaign_run": False,
+                        "authority_effect": "none",
+                    }
+                )
+            except Exception:
+                failure_path = (
+                    attempt_root
+                    / provider_config
+                    / probe_id
+                    / "failure.json"
+                )
+                if not failure_path.is_file():
+                    raise CampaignError(
+                        f"{provider_config}/{probe_id}: failed without a "
+                        "preserved failure record"
+                    )
+                failure = load_json(failure_path)
+                outcomes.append(
+                    {
+                        "provider_config": provider_config,
+                        "probe_id": probe_id,
+                        "surface": probe["surface"],
+                        "status": failure.get("status"),
+                        "session_identity": failure.get(
+                            "session_identity",
+                            {},
+                        ),
+                        "failure": file_record(
+                            failure_path,
+                            relative_to=OUTPUT_ROOT,
+                        ),
+                        "campaign_run": False,
+                        "authority_effect": "none",
+                    }
+                )
+    identity_records: list[dict[str, str]] = []
+    identity_values: list[str] = []
+    for outcome in outcomes:
+        identity = outcome.get("session_identity")
+        if not isinstance(identity, dict):
+            continue
+        identity_value = identity.get(
+            "provider_session_id"
+        ) or identity.get("provider_thread_id")
+        if isinstance(identity_value, str) and identity_value:
+            identity_records.append(
                 {
-                    "probe_id": value["probe_id"],
-                    "surface": value["surface"],
-                    "session_identity": value["session_identity"],
-                    "schema": value["schema_validation"]["source"],
-                    "result": _result_record(value["probe_id"]),
-                    "campaign_run": False,
-                    "all_passed": value["all_passed"],
+                    "provider_config": outcome["provider_config"],
+                    "probe_id": outcome["probe_id"],
+                    "identity": identity_value,
                 }
+            )
+            identity_values.append(identity_value)
+    expected_attempts = len(selected_providers) * len(PROBES)
+    distinct = (
+        len(identity_values) == len(set(identity_values))
+        and len(identity_values) >= len(results)
+        and bool(identity_values)
+    )
+    successful_pairs = [
+        f"{outcome['provider_config']}/{outcome['probe_id']}"
+        for outcome in outcomes
+        if outcome["status"] == "available"
+    ]
+    failed_pairs = [
+        f"{outcome['provider_config']}/{outcome['probe_id']}"
+        for outcome in outcomes
+        if outcome["status"] != "available"
+    ]
+    unavailable_pairs = [
+        f"{outcome['provider_config']}/{outcome['probe_id']}"
+        for outcome in outcomes
+        if outcome["status"] == "provider-capability-unavailable"
+    ]
+    invalid_pairs = [
+        f"{outcome['provider_config']}/{outcome['probe_id']}"
+        for outcome in outcomes
+        if outcome["status"] == "probe-invalid"
+    ]
+    all_passed = (
+        len(results) == expected_attempts
+        and len(outcomes) == expected_attempts
+        and distinct
+    )
+    index = {
+        "schema": PROBE_SCHEMA,
+        "campaign_id": CAMPAIGN_ID,
+        "campaign_run": False,
+        "attempt_id": attempt_id,
+        "completed_at": runner._utc_now(),
+        "requested_provider_configs": list(selected_providers),
+        "not_requested_provider_configs": [
+            provider
+            for provider in SUPPORTED_PROVIDER_CONFIGS
+            if provider not in selected_providers
+        ],
+        "provider_model_configurations": {
+            provider: PROVIDER_MODEL_CONFIGS[provider]
+            for provider in selected_providers
+        },
+        "provider_capability_policy": capability_policy,
+        "campaign_runner": file_record(
+            Path(runner.__file__).resolve(),
+            relative_to=REPO_ROOT,
+        ),
+        "probe_runner": file_record(
+            Path(__file__).resolve(),
+            relative_to=REPO_ROOT,
+        ),
+        "grader_system_prompt": file_record(
+            GRADER_SYSTEM_PATH,
+            relative_to=PACKET_DIR,
+        ),
+        "provider_probe_outcomes": outcomes,
+        "successful_provider_probe_pairs": successful_pairs,
+        "failed_provider_probe_pairs": failed_pairs,
+        "unavailable_provider_probe_pairs": unavailable_pairs,
+        "invalid_probe_pairs": invalid_pairs,
+        "all_requested_provider_probe_attempts_recorded": (
+            len(outcomes) == expected_attempts
+        ),
+        "capability_observation_valid": not invalid_pairs,
+        "exact_successor_schema_digests": {
+            probe_id: record["sha256"]
+            for probe_id, record in schema_records.items()
+        },
+        "provider_session_identities": identity_records,
+        "distinct_fresh_session_identities": distinct,
+        "minimum_prompt_bytes_required": MINIMUM_DELIVERED_PROMPT_BYTES,
+        "all_prompts_exceed_131072_bytes": bool(results)
+        and all(
+            value["prompt_delivery"]["exceeds_131072_bytes"]
+            for value in results
+        ),
+        "all_large_user_assignments_excluded_from_argv": bool(results)
+        and all(
+            value["prompt_delivery"]["user_assignment_bytes_in_argv"]
+            is False
+            for value in results
+        ),
+        "prompt_transport_methods": sorted(
+            {
+                value["prompt_delivery"]["method"]
                 for value in results
-            ],
-            "exact_successor_schema_digests": {
-                probe_id: record["sha256"]
-                for probe_id, record in schema_records.items()
-            },
-            "provider_thread_ids": thread_ids,
-            "distinct_fresh_thread_ids": distinct,
-            "minimum_prompt_bytes_required": (
-                MINIMUM_DELIVERED_PROMPT_BYTES
+            }
+        ),
+        "all_schema_digests_exact": bool(results)
+        and all(
+            value["schema_validation"][
+                "exact_source_and_bundle_digest_match"
+            ]
+            for value in results
+        ),
+        "all_jsonschema_validations_passed": bool(results)
+        and all(
+            value["schema_validation"]["jsonschema_passed"]
+            for value in results
+        ),
+        "all_local_failure_class_uniqueness_checks_passed": bool(results)
+        and all(
+            value["schema_validation"][
+                "local_failure_classes_uniqueness_passed"
+            ]
+            for value in results
+        ),
+        "all_actions_read_only_evidence": bool(results)
+        and all(
+            value["action_boundary"]["all_actions_read_only_evidence"]
+            for value in results
+        ),
+        "all_provider_actions_represented_once": bool(results)
+        and all(
+            value["action_boundary"][
+                "all_provider_actions_represented_once"
+            ]
+            for value in results
+        ),
+        "no_resume_continue_followup_or_coaching": bool(results)
+        and all(
+            value["no_resume_continue_or_followup"]
+            and value["coaching"] == "none"
+            for value in results
+        ),
+        "provider_network_permitted_for_probe_sessions": True,
+        "task_level_network_or_external_operational_effect": False,
+        "authority_effect": "none",
+        "all_passed": all_passed,
+        "raw_evidence_location": str(attempt_root),
+        "raw_evidence_committed": False,
+        "artifact_inventory_excluding_indexes": inventory_files(
+            OUTPUT_ROOT,
+            exclude_names=("index.json", "attempt-index.jsonl"),
+        ),
+    }
+    attempt_index_path = attempt_root / "index.json"
+    write_json(attempt_index_path, index)
+    append_jsonl(
+        OUTPUT_ROOT / "attempt-index.jsonl",
+        {
+            "schema": (
+                "maude.synthetic-operator."
+                "grader-surface-probe-attempt-catalog.v1"
             ),
-            "all_prompts_exceed_131072_bytes": all(
-                value["prompt_delivery"]["exceeds_131072_bytes"]
-                for value in results
+            "attempt_id": attempt_id,
+            "attempt_index": file_record(
+                attempt_index_path,
+                relative_to=OUTPUT_ROOT,
             ),
-            "all_prompts_delivered_by_closed_stdin": all(
-                value["prompt_delivery"]["stdin_used"]
-                and value["prompt_delivery"]["stdin_closed_after_single_write"]
-                for value in results
-            ),
-            "semantic_prompt_bytes_in_any_argv": any(
-                value["prompt_delivery"]["semantic_prompt_bytes_in_argv"]
-                for value in results
-            ),
-            "all_schema_digests_exact": all(
-                value["schema_validation"][
-                    "exact_source_and_bundle_digest_match"
-                ]
-                for value in results
-            ),
-            "all_jsonschema_validations_passed": all(
-                value["schema_validation"]["jsonschema_passed"]
-                for value in results
-            ),
-            "all_local_failure_class_uniqueness_checks_passed": all(
-                value["schema_validation"][
-                    "local_failure_classes_uniqueness_passed"
-                ]
-                for value in results
-            ),
-            "all_actions_read_only_evidence": all(
-                value["action_boundary"]["all_actions_read_only_evidence"]
-                for value in results
-            ),
-            "all_provider_actions_represented_once": all(
-                value["action_boundary"][
-                    "all_provider_actions_represented_once"
-                ]
-                for value in results
-            ),
-            "no_resume_continue_followup_or_coaching": all(
-                value["no_resume_continue_or_followup"]
-                and value["coaching"] == "none"
-                for value in results
-            ),
-            "network_or_external_operational_effect": False,
+            "requested_provider_configs": list(selected_providers),
+            "successful_provider_probe_pairs": successful_pairs,
+            "failed_provider_probe_pairs": failed_pairs,
+            "invalid_probe_pairs": invalid_pairs,
+            "capability_observation_valid": not invalid_pairs,
+            "all_passed": all_passed,
             "authority_effect": "none",
-            "all_passed": True,
-            "artifact_inventory_excluding_index": inventory_files(
-                OUTPUT_ROOT,
-                exclude_names=("index.json",),
-            ),
-        }
-        write_json(OUTPUT_ROOT / "index.json", index)
-        errors = validate_probes()
-        if errors:
-            raise CampaignError(
-                "grader surface probe self-validation failed: "
-                + "; ".join(errors)
-            )
-        return index
-    except BaseException as exc:
-        if not (OUTPUT_ROOT / "index.json").exists():
-            write_json(
-                OUTPUT_ROOT / "failure.json",
-                {
-                    "schema": (
-                        "maude.synthetic-operator."
-                        "grader-surface-probes-failure.v1"
-                    ),
-                    "campaign_id": CAMPAIGN_ID,
-                    "campaign_run": False,
-                    "exception_type": type(exc).__name__,
-                    "error": str(exc),
-                    "partial_evidence_preserved": True,
-                    "all_passed": False,
-                    "authority_effect": "none",
-                },
-            )
-        raise
+        },
+    )
+    write_json(OUTPUT_ROOT / "index.json", index)
+    errors = validate_probes(require_all_passed=False)
+    if errors:
+        raise CampaignError(
+            "grader surface probe self-validation failed: "
+            + "; ".join(errors)
+        )
+    return index
 
 
 def _verify_file_record(
@@ -1005,8 +1382,8 @@ def _verify_file_record(
     return path
 
 
-def validate_probes() -> list[str]:
-    """Mechanically validate committed probe evidence without launching models."""
+def validate_probes(*, require_all_passed: bool = True) -> list[str]:
+    """Validate successful and failed provider-scoped evidence without models."""
 
     errors: list[str] = []
     index_path = OUTPUT_ROOT / "index.json"
@@ -1021,15 +1398,14 @@ def validate_probes() -> list[str]:
         or index.get("campaign_id") != CAMPAIGN_ID
         or index.get("campaign_run") is not False
         or index.get("authority_effect") != "none"
-        or index.get("all_passed") is not True
+        or (
+            require_all_passed
+            and index.get("all_passed") is not True
+        )
     ):
         errors.append("grader surface probe index identity/status mismatch")
     for key, path, base in (
-        (
-            "campaign_runner",
-            Path(runner.__file__).resolve(),
-            REPO_ROOT,
-        ),
+        ("campaign_runner", Path(runner.__file__).resolve(), REPO_ROOT),
         ("probe_runner", Path(__file__).resolve(), REPO_ROOT),
         ("grader_system_prompt", GRADER_SYSTEM_PATH, PACKET_DIR),
     ):
@@ -1037,168 +1413,483 @@ def validate_probes() -> list[str]:
             errors.append(
                 f"grader surface probe {key} does not bind current bytes"
             )
-    probes = index.get("probes")
-    if not isinstance(probes, list) or len(probes) != len(PROBES):
-        errors.append("grader surface probe index does not contain two probes")
-        return errors
-    expected = {value["probe_id"]: value for value in PROBES}
-    observed_ids = [value.get("probe_id") for value in probes]
-    if set(observed_ids) != set(expected) or len(observed_ids) != len(
-        set(observed_ids)
+    try:
+        expected_policy = runner._provider_capability_policy_record()
+    except CampaignError as exc:
+        errors.append(str(exc))
+        expected_policy = None
+    if index.get("provider_capability_policy") != expected_policy:
+        errors.append("grader surface probe capability policy digest mismatch")
+    requested = index.get("requested_provider_configs")
+    if (
+        not isinstance(requested, list)
+        or not requested
+        or len(requested) != len(set(requested))
+        or any(value not in SUPPORTED_PROVIDER_CONFIGS for value in requested)
     ):
-        errors.append("grader surface probe IDs are incomplete or duplicated")
-    thread_ids: list[str] = []
-    for indexed in probes:
-        probe_id = indexed.get("probe_id")
-        if probe_id not in expected:
-            continue
-        probe_dir = OUTPUT_ROOT / str(probe_id)
-        result_path = _verify_file_record(
-            indexed.get("result"),
-            base=OUTPUT_ROOT,
-            label=f"{probe_id} result",
-            errors=errors,
-        )
-        if result_path is None:
-            continue
-        try:
-            result = load_json(result_path)
-        except CampaignError as exc:
-            errors.append(str(exc))
-            continue
-        if (
-            result.get("schema") != PROBE_RESULT_SCHEMA
-            or result.get("campaign_id") != CAMPAIGN_ID
-            or result.get("probe_id") != probe_id
-            or result.get("campaign_run") is not False
-            or result.get("authority_effect") != "none"
-            or result.get("all_passed") is not True
-        ):
-            errors.append(f"{probe_id}: result identity/status mismatch")
-        identity = result.get("session_identity")
-        thread_id = (
-            identity.get("provider_thread_id")
-            if isinstance(identity, dict)
+        errors.append("grader surface probe provider request set is invalid")
+        return errors
+    if index.get("not_requested_provider_configs") != [
+        provider
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+        if provider not in requested
+    ]:
+        errors.append("grader surface probe non-requested provider set differs")
+    if index.get("provider_model_configurations") != {
+        provider: PROVIDER_MODEL_CONFIGS[provider]
+        for provider in requested
+    }:
+        errors.append("grader surface probe provider configurations differ")
+    attempt_id = index.get("attempt_id")
+    if not isinstance(attempt_id, str) or not attempt_id:
+        errors.append("grader surface probe attempt identity is missing")
+        return errors
+    attempt_root = OUTPUT_ROOT / "attempts" / attempt_id
+    attempt_index = attempt_root / "index.json"
+    if (
+        not attempt_index.is_file()
+        or attempt_index.is_symlink()
+        or load_json(attempt_index) != index
+        or index.get("raw_evidence_location") != str(attempt_root)
+    ):
+        errors.append("grader surface probe immutable attempt index differs")
+    catalog_path = OUTPUT_ROOT / "attempt-index.jsonl"
+    try:
+        catalog_lines = [
+            json.loads(line)
+            for line in catalog_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        errors.append(f"grader surface probe attempt catalog invalid: {exc}")
+        catalog_lines = []
+    if (
+        len(catalog_lines) != 1
+        or catalog_lines[0].get("attempt_id") != attempt_id
+        or catalog_lines[0].get("attempt_index")
+        != (
+            file_record(attempt_index, relative_to=OUTPUT_ROOT)
+            if attempt_index.is_file()
             else None
         )
-        if not isinstance(thread_id, str) or not thread_id:
-            errors.append(f"{probe_id}: thread identity missing")
-        else:
-            thread_ids.append(thread_id)
-        source_schema = PACKET_DIR / expected[probe_id]["schema_name"]
-        if not source_schema.is_file() or source_schema.is_symlink():
-            errors.append(f"{probe_id}: exact source schema missing")
+    ):
+        errors.append("grader surface probe attempt catalog differs")
+    expected_probes = {value["probe_id"]: value for value in PROBES}
+    expected_pairs = {
+        (provider, probe_id)
+        for provider in requested
+        for probe_id in expected_probes
+    }
+    outcomes = index.get("provider_probe_outcomes")
+    if not isinstance(outcomes, list):
+        errors.append("grader surface probe outcomes are malformed")
+        return errors
+    observed_pairs = [
+        (value.get("provider_config"), value.get("probe_id"))
+        for value in outcomes
+        if isinstance(value, dict)
+    ]
+    if (
+        set(observed_pairs) != expected_pairs
+        or len(observed_pairs) != len(set(observed_pairs))
+    ):
+        errors.append("grader surface probe outcomes are incomplete/duplicated")
+    identity_records: list[dict[str, str]] = []
+    successful_results: list[dict[str, Any]] = []
+    successful_pairs: list[str] = []
+    failed_pairs: list[str] = []
+    unavailable_pairs: list[str] = []
+    invalid_pairs: list[str] = []
+    for outcome in outcomes:
+        if not isinstance(outcome, dict):
+            errors.append("grader surface probe outcome is not an object")
             continue
-        source_record = result.get("schema_validation", {}).get("source")
-        if (
-            not isinstance(source_record, dict)
-            or source_record.get("sha256") != sha256_file(source_schema)
-            or source_record.get("bytes") != source_schema.stat().st_size
-        ):
-            errors.append(f"{probe_id}: exact source schema digest mismatch")
-        schema = load_json(source_schema)
-        if _recursive_key_locations(schema, "uniqueItems"):
-            errors.append(f"{probe_id}: source schema contains uniqueItems")
-        grade_path = probe_dir / "grade.json"
-        if not grade_path.is_file() or grade_path.is_symlink():
-            errors.append(f"{probe_id}: structured grade missing")
-        else:
+        provider = outcome.get("provider_config")
+        probe_id = outcome.get("probe_id")
+        if (provider, probe_id) not in expected_pairs:
+            continue
+        label = f"{provider}/{probe_id}"
+        status = outcome.get("status")
+        probe = expected_probes[str(probe_id)]
+        if outcome.get("surface") != probe["surface"]:
+            errors.append(f"{label}: surface differs")
+        if status == "available":
+            successful_pairs.append(label)
+            result_path = _verify_file_record(
+                outcome.get("result"),
+                base=OUTPUT_ROOT,
+                label=f"{label} result",
+                errors=errors,
+            )
+            if result_path is None:
+                continue
             try:
-                grade = load_json(grade_path)
+                result = load_json(result_path)
+            except CampaignError as exc:
+                errors.append(str(exc))
+                continue
+            successful_results.append(result)
+            if (
+                result.get("schema") != PROBE_RESULT_SCHEMA
+                or result.get("campaign_id") != CAMPAIGN_ID
+                or result.get("probe_id") != probe_id
+                or result.get("provider_config") != provider
+                or result.get("status") != "available"
+                or result.get("model_configuration")
+                != PROVIDER_MODEL_CONFIGS[provider]
+                or result.get("campaign_run") is not False
+                or result.get("authority_effect") != "none"
+                or result.get("all_passed") is not True
+            ):
+                errors.append(f"{label}: result identity/status mismatch")
+            identity = result.get("session_identity")
+            identity_value = (
+                identity.get("provider_session_id")
+                or identity.get("provider_thread_id")
+                if isinstance(identity, dict)
+                else None
+            )
+            if not isinstance(identity_value, str) or not identity_value:
+                errors.append(f"{label}: provider session identity missing")
+            else:
+                identity_records.append(
+                    {
+                        "provider_config": str(provider),
+                        "probe_id": str(probe_id),
+                        "identity": identity_value,
+                    }
+                )
+            if outcome.get("session_identity") != identity:
+                errors.append(f"{label}: outcome/result session identity differs")
+            source_schema = PACKET_DIR / probe["schema_name"]
+            source_record = result.get("schema_validation", {}).get("source")
+            if (
+                not source_schema.is_file()
+                or source_schema.is_symlink()
+                or not isinstance(source_record, dict)
+                or source_record.get("sha256") != sha256_file(source_schema)
+                or source_record.get("bytes") != source_schema.stat().st_size
+            ):
+                errors.append(f"{label}: exact source schema digest mismatch")
+                continue
+            schema = load_json(source_schema)
+            if _recursive_key_locations(schema, "uniqueItems"):
+                errors.append(f"{label}: source schema contains uniqueItems")
+            probe_dir = result_path.parent
+            try:
+                grade = load_json(probe_dir / "grade.json")
                 jsonschema.validate(grade, schema)
                 runner._validate_grade_local_invariants(grade)
-            except (CampaignError, jsonschema.ValidationError) as exc:
-                errors.append(f"{probe_id}: structured grade invalid: {exc}")
-        system_path = probe_dir / "system-prompt.md"
-        user_path = probe_dir / "user-prompt.md"
-        if not system_path.is_file() or not user_path.is_file():
-            errors.append(f"{probe_id}: exact prompt files missing")
+            except (
+                OSError,
+                CampaignError,
+                jsonschema.ValidationError,
+            ) as exc:
+                errors.append(f"{label}: structured grade invalid: {exc}")
+            system_path = probe_dir / "system-prompt.md"
+            user_path = probe_dir / "user-prompt.md"
+            invocation_path = probe_dir / "invocation.json"
+            if not all(
+                path.is_file() and not path.is_symlink()
+                for path in (system_path, user_path, invocation_path)
+            ):
+                errors.append(f"{label}: exact prompt/invocation evidence missing")
+                continue
+            system_prompt = system_path.read_text(encoding="utf-8")
+            user_prompt = user_path.read_text(encoding="utf-8")
+            invocation = load_json(invocation_path)
+            provider_argv = invocation.get("provider_argv")
+            transport = invocation.get("prompt_transport")
+            if (
+                invocation.get("provider_config") != provider
+                or not isinstance(provider_argv, list)
+                or not provider_argv
+                or not isinstance(transport, dict)
+                or transport
+                != {
+                    key: result["prompt_delivery"].get(key)
+                    for key in transport
+                }
+            ):
+                errors.append(f"{label}: invocation provider/prompt record differs")
+            elif provider == "openai-sol":
+                delivered = (
+                    system_prompt + PROMPT_DELIMITER + user_prompt
+                ).encode("utf-8")
+                if (
+                    provider_argv[-1] != "-"
+                    or transport.get("method") != "closed-stdin"
+                    or transport.get("stdin_used") is not True
+                    or transport.get("stdin_closed_after_single_write")
+                    is not True
+                    or transport.get("semantic_prompt_bytes")
+                    != len(delivered)
+                    or transport.get("semantic_prompt_sha256")
+                    != sha256_bytes(delivered)
+                    or transport.get("semantic_prompt_bytes_in_argv")
+                    is not False
+                ):
+                    errors.append(f"{label}: Codex prompt transport proof differs")
+            else:
+                delivered = user_prompt.encode("utf-8")
+                if (
+                    transport.get("method") != "stream-json-user-event"
+                    or transport.get("stdin_used") is not False
+                    or transport.get("stream_json_user_event_used") is not True
+                    or transport.get("semantic_prompt_bytes")
+                    != len(delivered)
+                    or transport.get("semantic_prompt_sha256")
+                    != sha256_bytes(delivered)
+                    or transport.get("semantic_prompt_bytes_in_argv")
+                    is not False
+                    or transport.get("user_assignment_bytes_in_argv")
+                    is not False
+                    or any(
+                        user_prompt in str(argument)
+                        or f"BEGIN-INERT-PADDING-{probe_id}"
+                        in str(argument)
+                        for argument in provider_argv
+                    )
+                ):
+                    errors.append(f"{label}: Claude prompt transport proof differs")
+            transcript_path = probe_dir / "raw" / "grader.stdout.jsonl"
+            try:
+                events = runner._provider_events(transcript_path)
+                expected_actions = runner._event_actions(events)
+                actions = load_json(
+                    probe_dir / "commands-and-actions.json"
+                )
+                accounting = load_json(
+                    probe_dir / "action-accounting.json"
+                )
+                expected_accounting = runner._action_accounting(
+                    events,
+                    expected_actions,
+                )
+                gate = load_json(
+                    probe_dir / "raw" / "provider-auth-gate.json"
+                )
+                if actions != expected_actions:
+                    errors.append(
+                        f"{label}: action capture differs from stream"
+                    )
+                if accounting != expected_accounting:
+                    errors.append(
+                        f"{label}: action accounting differs from stream"
+                    )
+                _assert_read_only_evidence_actions(
+                    actions=expected_actions,
+                    gate=gate,
+                    probe_id=str(probe_id),
+                    provider_config=str(provider),
+                )
+            except (OSError, CampaignError) as exc:
+                errors.append(f"{label}: action evidence invalid: {exc}")
             continue
-        delivered = (
-            system_path.read_text(encoding="utf-8")
-            + PROMPT_DELIMITER
-            + user_path.read_text(encoding="utf-8")
-        ).encode("utf-8")
-        invocation_path = probe_dir / "invocation.json"
-        if not invocation_path.is_file() or invocation_path.is_symlink():
-            errors.append(f"{probe_id}: invocation evidence missing")
+        failed_pairs.append(label)
+        if status == "provider-capability-unavailable":
+            unavailable_pairs.append(label)
+        elif status == "probe-invalid":
+            invalid_pairs.append(label)
+        else:
+            errors.append(f"{label}: unrecognized failure status")
+        failure_path = _verify_file_record(
+            outcome.get("failure"),
+            base=OUTPUT_ROOT,
+            label=f"{label} failure",
+            errors=errors,
+        )
+        if failure_path is None:
             continue
-        invocation = load_json(invocation_path)
-        provider_argv = invocation.get("provider_argv")
-        stdin_record = invocation.get("stdin")
+        failure = load_json(failure_path)
         if (
-            not isinstance(provider_argv, list)
-            or not provider_argv
-            or provider_argv[-1] != "-"
-            or not isinstance(stdin_record, dict)
-            or stdin_record.get("used") is not True
-            or stdin_record.get("closed_after_single_write") is not True
-            or stdin_record.get("semantic_prompt_bytes_in_argv") is not False
-            or stdin_record.get("bytes") != len(delivered)
-            or stdin_record.get("sha256") != sha256_bytes(delivered)
-            or len(delivered) < MINIMUM_DELIVERED_PROMPT_BYTES
-            or any(
-                f"BEGIN-INERT-PADDING-{probe_id}" in str(argument)
-                for argument in provider_argv
+            failure.get("provider_config") != provider
+            or failure.get("probe_id") != probe_id
+            or failure.get("model_configuration")
+            != PROVIDER_MODEL_CONFIGS[provider]
+            or failure.get("status") != status
+            or failure.get("failure_classification") != status
+            or failure.get("failure_stage") not in {
+                "evaluator-setup",
+                "provider-authentication",
+                "isolation-setup",
+                "provider-transport",
+                "probe-integrity",
+                "isolation-cleanup",
+                "evidence-finalization",
+            }
+            or not isinstance(failure.get("diagnostic_sha256"), str)
+            or "error" in failure
+            or failure.get("partial_evidence_preserved") is not True
+            or failure.get(
+                "task_level_network_or_external_operational_effect"
             )
+            is not False
+            or failure.get("session_identity")
+            != outcome.get("session_identity")
+            or failure.get("authority_effect") != "none"
         ):
-            errors.append(f"{probe_id}: stdin/no-argv prompt proof mismatch")
-        transcript_path = probe_dir / "raw" / "grader.stdout.jsonl"
-        actions_path = probe_dir / "commands-and-actions.json"
-        accounting_path = probe_dir / "action-accounting.json"
-        gate_path = probe_dir / "raw" / "provider-auth-gate.json"
-        try:
-            events = runner._provider_events(transcript_path)
-            expected_actions = runner._event_actions(events)
-            actions = load_json(actions_path)
-            accounting = load_json(accounting_path)
-            expected_accounting = runner._action_accounting(
-                events,
-                expected_actions,
+            errors.append(f"{label}: failure record is malformed")
+        failure_identity = failure.get("session_identity")
+        if failure_identity not in ({}, None):
+            identity_values_in_record = (
+                [
+                    value
+                    for value in (
+                        failure_identity.get("provider_session_id"),
+                        failure_identity.get("provider_thread_id"),
+                    )
+                    if isinstance(value, str) and value
+                ]
+                if isinstance(failure_identity, dict)
+                else []
             )
-            gate = load_json(gate_path)
-            if actions != expected_actions:
-                errors.append(f"{probe_id}: action capture differs from stream")
-            if accounting != expected_accounting:
-                errors.append(f"{probe_id}: action accounting differs from stream")
-            _assert_read_only_evidence_actions(
-                actions=expected_actions,
-                gate=gate,
-                probe_id=probe_id,
-            )
-        except (OSError, CampaignError) as exc:
-            errors.append(f"{probe_id}: action evidence invalid: {exc}")
-    if len(thread_ids) != len(PROBES) or len(set(thread_ids)) != len(PROBES):
-        errors.append("grader surface probe thread identities are not distinct")
-    if index.get("provider_thread_ids") != thread_ids:
-        errors.append("grader surface probe index thread list mismatch")
-    expected_schema_digests: dict[str, str] = {}
-    for value in PROBES:
-        path = PACKET_DIR / value["schema_name"]
-        if path.is_file() and not path.is_symlink():
-            expected_schema_digests[value["probe_id"]] = sha256_file(path)
-    if (
-        len(expected_schema_digests) == len(PROBES)
-        and index.get("exact_successor_schema_digests")
-        != expected_schema_digests
-    ):
-        errors.append("grader surface probe schema digest index mismatch")
-    boolean_requirements = (
-        "distinct_fresh_thread_ids",
-        "all_prompts_exceed_131072_bytes",
-        "all_prompts_delivered_by_closed_stdin",
-        "all_schema_digests_exact",
-        "all_jsonschema_validations_passed",
-        "all_local_failure_class_uniqueness_checks_passed",
-        "all_actions_read_only_evidence",
-        "all_provider_actions_represented_once",
-        "no_resume_continue_followup_or_coaching",
+            if len(identity_values_in_record) != 1:
+                errors.append(
+                    f"{label}: failure session identity is malformed"
+                )
+            else:
+                identity_records.append(
+                    {
+                        "provider_config": str(provider),
+                        "probe_id": str(probe_id),
+                        "identity": identity_values_in_record[0],
+                    }
+                )
+        expected_failure_status = runner._probe_failure_classification(
+            str(failure.get("failure_stage")),
+            (
+                failure.get("provider_process_observation")
+                if isinstance(
+                    failure.get("provider_process_observation"),
+                    dict,
+                )
+                else None
+            ),
+        )
+        if expected_failure_status != status:
+            errors.append(f"{label}: failure stage/classification differs")
+        partial_evidence = failure.get("partial_evidence")
+        if not isinstance(partial_evidence, list):
+            errors.append(f"{label}: partial evidence inventory is malformed")
+        else:
+            for position, record in enumerate(partial_evidence, 1):
+                _verify_file_record(
+                    record,
+                    base=failure_path.parent,
+                    label=f"{label} partial evidence {position}",
+                    errors=errors,
+                )
+    identity_values = [value["identity"] for value in identity_records]
+    distinct = (
+        len(identity_values) == len(set(identity_values))
+        and len(identity_values) >= len(successful_results)
+        and bool(successful_results)
     )
-    for key in boolean_requirements:
-        if index.get(key) is not True:
-            errors.append(f"grader surface probe index predicate false: {key}")
-    if index.get("semantic_prompt_bytes_in_any_argv") is not False:
-        errors.append("grader surface probe index reports prompt bytes in argv")
+    expected_all_passed = (
+        len(successful_results) == len(expected_pairs)
+        and len(outcomes) == len(expected_pairs)
+        and distinct
+    )
+    derived = {
+        "successful_provider_probe_pairs": successful_pairs,
+        "failed_provider_probe_pairs": failed_pairs,
+        "unavailable_provider_probe_pairs": unavailable_pairs,
+        "invalid_probe_pairs": invalid_pairs,
+        "provider_session_identities": identity_records,
+        "distinct_fresh_session_identities": distinct,
+        "all_requested_provider_probe_attempts_recorded": (
+            len(outcomes) == len(expected_pairs)
+        ),
+        "capability_observation_valid": not invalid_pairs,
+        "all_passed": expected_all_passed,
+    }
+    for key, value in derived.items():
+        if index.get(key) != value:
+            errors.append(f"grader surface probe derived field differs: {key}")
+    summary_fields = {
+        "all_prompts_exceed_131072_bytes": bool(successful_results)
+        and all(
+            value["prompt_delivery"]["exceeds_131072_bytes"]
+            for value in successful_results
+        ),
+        "all_large_user_assignments_excluded_from_argv": bool(
+            successful_results
+        )
+        and all(
+            value["prompt_delivery"]["user_assignment_bytes_in_argv"]
+            is False
+            for value in successful_results
+        ),
+        "prompt_transport_methods": sorted(
+            {
+                value["prompt_delivery"]["method"]
+                for value in successful_results
+            }
+        ),
+        "all_schema_digests_exact": bool(successful_results)
+        and all(
+            value["schema_validation"][
+                "exact_source_and_bundle_digest_match"
+            ]
+            for value in successful_results
+        ),
+        "all_jsonschema_validations_passed": bool(successful_results)
+        and all(
+            value["schema_validation"]["jsonschema_passed"]
+            for value in successful_results
+        ),
+        "all_local_failure_class_uniqueness_checks_passed": bool(
+            successful_results
+        )
+        and all(
+            value["schema_validation"][
+                "local_failure_classes_uniqueness_passed"
+            ]
+            for value in successful_results
+        ),
+        "all_actions_read_only_evidence": bool(successful_results)
+        and all(
+            value["action_boundary"]["all_actions_read_only_evidence"]
+            for value in successful_results
+        ),
+        "all_provider_actions_represented_once": bool(successful_results)
+        and all(
+            value["action_boundary"][
+                "all_provider_actions_represented_once"
+            ]
+            for value in successful_results
+        ),
+        "no_resume_continue_followup_or_coaching": bool(successful_results)
+        and all(
+            value["no_resume_continue_or_followup"]
+            and value["coaching"] == "none"
+            for value in successful_results
+        ),
+    }
+    for key, value in summary_fields.items():
+        if index.get(key) != value:
+            errors.append(f"grader surface probe summary differs: {key}")
+    if catalog_lines:
+        catalog = catalog_lines[0]
+        for key in (
+            "successful_provider_probe_pairs",
+            "failed_provider_probe_pairs",
+            "invalid_probe_pairs",
+            "capability_observation_valid",
+            "all_passed",
+        ):
+            if catalog.get(key) != index.get(key):
+                errors.append(
+                    f"grader surface probe catalog field differs: {key}"
+                )
+    expected_schema_digests = {
+        value["probe_id"]: sha256_file(PACKET_DIR / value["schema_name"])
+        for value in PROBES
+        if (PACKET_DIR / value["schema_name"]).is_file()
+    }
+    if index.get("exact_successor_schema_digests") != expected_schema_digests:
+        errors.append("grader surface probe schema digest index mismatch")
     return errors
 
 
@@ -1207,7 +1898,19 @@ def main(argv: list[str] | None = None) -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     run_parser = subparsers.add_parser(
         "run",
-        help="run both pre-freeze fresh Codex grader probes",
+        help="run both pre-freeze grader probes for requested providers",
+    )
+    run_parser.add_argument(
+        "--provider",
+        action="append",
+        dest="providers",
+        choices=SUPPORTED_PROVIDER_CONFIGS,
+        help=(
+            "pre-freeze provider capability candidate; repeat to select "
+            "multiple providers (default: "
+            + ", ".join(SUPPORTED_PROVIDER_CONFIGS)
+            + ")"
+        ),
     )
     run_parser.add_argument(
         "--timeout",
@@ -1215,19 +1918,53 @@ def main(argv: list[str] | None = None) -> int:
         default=runner.DEFAULT_TIMEOUT,
         help="per-probe provider timeout in seconds",
     )
-    subparsers.add_parser(
+    validate_parser = subparsers.add_parser(
         "validate",
         help="validate existing probe evidence without provider traffic",
+    )
+    validate_parser.add_argument(
+        "--allow-provider-capability-unavailable",
+        action="store_true",
+        help=(
+            "accept preserved provider-capability-unavailable outcomes while "
+            "still rejecting probe-invalid outcomes"
+        ),
     )
     args = parser.parse_args(argv)
     try:
         if args.command == "run":
             if args.timeout < 1:
                 raise CampaignError("timeout must be positive")
-            index = run_probes(timeout=args.timeout)
+            index = run_probes(
+                providers=args.providers,
+                timeout=args.timeout,
+            )
             print(json.dumps(index, indent=2, sort_keys=True))
+            if (
+                index.get("capability_observation_valid") is not True
+                or index.get(
+                    "all_requested_provider_probe_attempts_recorded"
+                )
+                is not True
+            ):
+                return 1
         else:
-            errors = validate_probes()
+            allow_unavailable = (
+                args.allow_provider_capability_unavailable
+            )
+            errors = validate_probes(
+                require_all_passed=not allow_unavailable
+            )
+            if allow_unavailable and not errors:
+                index = load_json(OUTPUT_ROOT / "index.json")
+                if (
+                    index.get("capability_observation_valid") is not True
+                    or index.get("invalid_probe_pairs") != []
+                ):
+                    errors.append(
+                        "provider capability observation contains an invalid "
+                        "probe"
+                    )
             if errors:
                 raise CampaignError("; ".join(errors))
             print(
@@ -1238,6 +1975,9 @@ def main(argv: list[str] | None = None) -> int:
                             "grader-surface-probe-validation.v1"
                         ),
                         "campaign_id": CAMPAIGN_ID,
+                        "provider_capability_unavailable_allowed": (
+                            allow_unavailable
+                        ),
                         "errors": [],
                         "valid": True,
                     },

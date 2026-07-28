@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Change only the menu-api container image from 2.7.3 to 2.7.4 in the Store 17 GitOps deployment."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s01/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s01/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

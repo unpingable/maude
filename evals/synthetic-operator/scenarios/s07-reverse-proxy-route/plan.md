@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Point /order-history/ at order-history-v2:8080 while preserving path and headers."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s07/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

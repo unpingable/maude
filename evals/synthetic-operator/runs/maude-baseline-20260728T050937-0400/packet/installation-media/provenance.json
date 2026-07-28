@@ -1,0 +1,961 @@
+{
+  "ag_shell_client_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+  "authority_effect": "none",
+  "build_transcript": {
+    "bytes": 251538,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/build-transcript.json",
+    "sha256": "b87fc4524f9b8c693731fee25e12adc495e5ec940caa7b6097d365e2748b7d27"
+  },
+  "cache_provenance": "each third-party body was already present in the local pip HTTP cache and selected by an exact predeclared SHA-256; no resolver or intentional network fetch populated the packet. The self-describing wheel bytes and cache-sidecar hashes are not an authenticated upstream index, signature, or TUF proof.",
+  "clean_install_validation": {
+    "bytes": 12961,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/clean-install-validation.json",
+    "sha256": "608221b266b0554c4137867d0668202d2b1d7edb0efb82dc45608fbd46b21681"
+  },
+  "copied_site_packages_used": false,
+  "editable_install_used": false,
+  "media_inventory": [
+    {
+      "bytes": 251538,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "build-transcript.json",
+      "sha256": "b87fc4524f9b8c693731fee25e12adc495e5ec940caa7b6097d365e2748b7d27"
+    },
+    {
+      "bytes": 12961,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "clean-install-validation.json",
+      "sha256": "608221b266b0554c4137867d0668202d2b1d7edb0efb82dc45608fbd46b21681"
+    },
+    {
+      "bytes": 1804,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "runtime-requirements.txt",
+      "sha256": "aadaf8a8bd73a199ef1cbf90fd87ed8474182c7550d8bb9c8b2838cd27bf6403"
+    },
+    {
+      "bytes": 61440,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "sources/ag-shell-client-0.1.0.tar",
+      "sha256": "40ffb45b2ec9d25ad4a4fd70bf87b1deebe46538b214f43008b2e76384fc899f"
+    },
+    {
+      "bytes": 327680,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "sources/maude-2.4.0.tar",
+      "sha256": "3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c"
+    },
+    {
+      "bytes": 9984,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/ag_shell_client-0.1.0-py3-none-any.whl",
+      "sha256": "2a7b85444f71463368f2154c77f78a3f751e336dcb77bc468e21d14bbb105866"
+    },
+    {
+      "bytes": 13643,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/annotated_types-0.7.0-py3-none-any.whl",
+      "sha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"
+    },
+    {
+      "bytes": 76356,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/hatchling-1.29.0-py3-none-any.whl",
+      "sha256": "50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0"
+    },
+    {
+      "bytes": 19878,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/linkify_it_py-2.1.0-py3-none-any.whl",
+      "sha256": "0d252c1594ecba2ecedc444053db5d3a9b7ec1b0dd929c8f1d74dce89f86c05e"
+    },
+    {
+      "bytes": 91687,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/markdown_it_py-4.2.0-py3-none-any.whl",
+      "sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
+    },
+    {
+      "bytes": 89993,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/maude-2.4.0-py3-none-any.whl",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+    },
+    {
+      "bytes": 66663,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/mdit_py_plugins-0.6.1-py3-none-any.whl",
+      "sha256": "214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d"
+    },
+    {
+      "bytes": 9979,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/mdurl-0.1.2-py3-none-any.whl",
+      "sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "bytes": 100195,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/packaging-26.2-py3-none-any.whl",
+      "sha256": "5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"
+    },
+    {
+      "bytes": 55206,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pathspec-1.0.4-py3-none-any.whl",
+      "sha256": "fb6ae2fd4e7c921a165808a552060e722767cfa526f99ca5156ed2ce45a5c723"
+    },
+    {
+      "bytes": 22743,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/platformdirs-4.10.0-py3-none-any.whl",
+      "sha256": "fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"
+    },
+    {
+      "bytes": 20538,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pluggy-1.6.0-py3-none-any.whl",
+      "sha256": "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
+    },
+    {
+      "bytes": 472262,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pydantic-2.13.4-py3-none-any.whl",
+      "sha256": "45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba"
+    },
+    {
+      "bytes": 2094516,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "926c9541b14b12b1681dca8a0b75feb510b06c6341b70a8e500c2fdcff837cce"
+    },
+    {
+      "bytes": 1231151,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pygments-2.20.0-py3-none-any.whl",
+      "sha256": "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
+    },
+    {
+      "bytes": 807870,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/pyyaml-6.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+    },
+    {
+      "bytes": 310654,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/rich-15.0.0-py3-none-any.whl",
+      "sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
+    },
+    {
+      "bytes": 731418,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/textual-8.2.8-py3-none-any.whl",
+      "sha256": "267375fd402dc8d981457212efa71f0e3365fd17bba144ba9bb3ed7563cb374a"
+    },
+    {
+      "bytes": 14216,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/trove_classifiers-2026.4.28.13-py3-none-any.whl",
+      "sha256": "8f4b1eb4e16296b57d612965444f87a83861cc989a0451ac97fe4265ddef03b8"
+    },
+    {
+      "bytes": 45571,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "bytes": 14611,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/typing_inspection-0.4.2-py3-none-any.whl",
+      "sha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7"
+    },
+    {
+      "bytes": 6383,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "wheelhouse/uc_micro_py-2.0.0-py3-none-any.whl",
+      "sha256": "3603a3859af53e5a39bc7677713c78ea6589ff188d70f4fee165db88e22b242c"
+    }
+  ],
+  "network_controls": "pip used --no-index and the preparation made no intentional network operation; no OS-level network namespace was imposed",
+  "operator_visible_source_archive": {
+    "bytes": 327680,
+    "media_type": "application/x-tar",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/sources/maude-2.4.0.tar",
+    "sha256": "3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c"
+  },
+  "operator_visible_wheelhouse": false,
+  "python": {
+    "argv": [
+      "/usr/bin/python3",
+      "--version"
+    ],
+    "cwd": null,
+    "environment": {},
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "Python 3.12.3\n"
+  },
+  "pythonpath_injection_used": false,
+  "reproducibility_scope": "the two first-party wheel byte streams were rebuilt twice under the same frozen inputs and compared. Temporary build and verifier path strings in transcripts are evidence, not claimed reproducible packet bytes.",
+  "runtime_requirements": {
+    "bytes": 1804,
+    "media_type": "text/plain",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt",
+    "sha256": "aadaf8a8bd73a199ef1cbf90fd87ed8474182c7550d8bb9c8b2838cd27bf6403"
+  },
+  "schema": "maude.synthetic-install-media.v1",
+  "source_repository_use": "exact Git objects were read only during packet preparation; the campaign materializer and model sessions use only these frozen archives and wheels",
+  "sources": [
+    {
+      "bytes": 327680,
+      "git_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+      "git_get_tar_commit_id": "9d5a54f476a52826379a9ae8d6710551253a6493",
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "operator_visible": true,
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/sources/maude-2.4.0.tar",
+      "purpose": "filtered installable Maude archive from the exact baseline Git commit and first-party wheel input",
+      "sha256": "3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c"
+    },
+    {
+      "bytes": 61440,
+      "git_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+      "git_get_tar_commit_id": "485e55783f9e359965e3b736e1d610c4568d45f1",
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "operator_visible": false,
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/sources/ag-shell-client-0.1.0.tar",
+      "purpose": "exact ag-shell-client first-party wheel input",
+      "sha256": "40ffb45b2ec9d25ad4a4fd70bf87b1deebe46538b214f43008b2e76384fc899f"
+    }
+  ],
+  "system_under_test_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+  "wheels": [
+    {
+      "bytes": 9984,
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "ag-shell-client",
+        "record_entries": 7,
+        "requires_dist": [
+          "pytest-timeout>=2.0; extra == 'dev'",
+          "pytest>=7.0; extra == 'dev'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "0.1.0"
+      },
+      "double_build_byte_reproducible": true,
+      "editable": false,
+      "intentional_network_operations": 0,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "origin": "sterile offline build from exact frozen Git archive",
+      "os_network_namespace_enforced": false,
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/ag_shell_client-0.1.0-py3-none-any.whl",
+      "pip_no_index": true,
+      "rebuild_sha256": "2a7b85444f71463368f2154c77f78a3f751e336dcb77bc468e21d14bbb105866",
+      "sha256": "2a7b85444f71463368f2154c77f78a3f751e336dcb77bc468e21d14bbb105866",
+      "source_commit": "485e55783f9e359965e3b736e1d610c4568d45f1"
+    },
+    {
+      "bytes": 13643,
+      "cache_body_sha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53",
+      "cache_key": "0ddcc4d907dd4d8c3307074b6869d260abb891f5178579de5abe7eff",
+      "cache_metadata_sha256": "4f19527a219408bc4ac05bd3267cf7c3aef48f14fc4fd3357b2122b8d7fb411b",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "annotated-types",
+        "record_entries": 7,
+        "requires_dist": [
+          "typing-extensions>=4.0.0; python_version < '3.9'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "0.7.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/annotated_types-0.7.0-py3-none-any.whl",
+      "sha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"
+    },
+    {
+      "bytes": 76356,
+      "cache_body_sha256": "50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0",
+      "cache_key": "adfdac1a71358ae7b47b92917f8a6af8c5acecccb52b186c45372c03",
+      "cache_metadata_sha256": "8af47ac792e2a81f7b81fff8447da7bc6aa72eacd702a6544d43d601e96891ed",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "hatchling",
+        "record_entries": 73,
+        "requires_dist": [
+          "packaging>=24.2",
+          "pathspec>=0.10.1",
+          "pluggy>=1.0.0",
+          "tomli>=1.2.2; python_version < '3.11'",
+          "trove-classifiers"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "1.29.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/hatchling-1.29.0-py3-none-any.whl",
+      "sha256": "50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0"
+    },
+    {
+      "bytes": 19878,
+      "cache_body_sha256": "0d252c1594ecba2ecedc444053db5d3a9b7ec1b0dd929c8f1d74dce89f86c05e",
+      "cache_key": "6533ded11c4ede6f1cb73f0d1e75b095038a747279a214d526511644",
+      "cache_metadata_sha256": "09350ee969ced5d4a10a098c7d2cb10ca9bffe7d6f0176ff699d7a569a358bd7",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "linkify-it-py",
+        "record_entries": 9,
+        "requires_dist": [
+          "uc-micro-py",
+          "pytest; extra == \"test\"",
+          "coverage; extra == \"test\"",
+          "pytest-cov; extra == \"test\"",
+          "pre-commit; extra == \"dev\"",
+          "isort; extra == \"dev\"",
+          "flake8; extra == \"dev\"",
+          "black; extra == \"dev\"",
+          "pyproject-flake8; extra == \"dev\"",
+          "pytest; extra == \"benchmark\"",
+          "pytest-benchmark; extra == \"benchmark\"",
+          "sphinx; extra == \"doc\"",
+          "sphinx_book_theme; extra == \"doc\"",
+          "myst-parser; extra == \"doc\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.1.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/linkify_it_py-2.1.0-py3-none-any.whl",
+      "sha256": "0d252c1594ecba2ecedc444053db5d3a9b7ec1b0dd929c8f1d74dce89f86c05e"
+    },
+    {
+      "bytes": 91687,
+      "cache_body_sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a",
+      "cache_key": "559a28d2d50a6d0988e3c56e5d0d411789da84005e4420f1a26bb23e",
+      "cache_metadata_sha256": "83ff7549cf3fd14ba602dd84a083131edee3cdc7e935bef900aa6bd81eefb74a",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "markdown-it-py",
+        "record_entries": 74,
+        "requires_dist": [
+          "mdurl~=0.1",
+          "psutil ; extra == \"benchmarking\"",
+          "pytest ; extra == \"benchmarking\"",
+          "pytest-benchmark ; extra == \"benchmarking\"",
+          "commonmark~=0.9 ; extra == \"compare\"",
+          "markdown~=3.4 ; extra == \"compare\"",
+          "mistletoe~=1.0 ; extra == \"compare\"",
+          "mistune~=3.0 ; extra == \"compare\"",
+          "panflute~=2.3 ; extra == \"compare\"",
+          "markdown-it-pyrs ; extra == \"compare\"",
+          "linkify-it-py>=1,<3 ; extra == \"linkify\"",
+          "mdit-py-plugins>=0.5.0 ; extra == \"plugins\"",
+          "gprof2dot ; extra == \"profiling\"",
+          "mdit-py-plugins>=0.5.0 ; extra == \"rtd\"",
+          "myst-parser ; extra == \"rtd\"",
+          "pyyaml ; extra == \"rtd\"",
+          "sphinx ; extra == \"rtd\"",
+          "sphinx-copybutton ; extra == \"rtd\"",
+          "sphinx-design ; extra == \"rtd\"",
+          "sphinx-book-theme~=1.0 ; extra == \"rtd\"",
+          "jupyter_sphinx ; extra == \"rtd\"",
+          "ipykernel ; extra == \"rtd\"",
+          "coverage ; extra == \"testing\"",
+          "pytest ; extra == \"testing\"",
+          "pytest-cov ; extra == \"testing\"",
+          "pytest-regressions ; extra == \"testing\"",
+          "pytest-timeout ; extra == \"testing\"",
+          "requests ; extra == \"testing\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "4.2.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/markdown_it_py-4.2.0-py3-none-any.whl",
+      "sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
+    },
+    {
+      "bytes": 89993,
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "maude",
+        "record_entries": 41,
+        "requires_dist": [
+          "ag-shell-client>=0.1.0",
+          "pydantic>=2.6.0",
+          "pyyaml>=6.0",
+          "textual>=1.0.0",
+          "pytest; extra == 'dev'",
+          "pytest-asyncio; extra == 'dev'",
+          "ruff; extra == 'dev'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.4.0"
+      },
+      "double_build_byte_reproducible": true,
+      "editable": false,
+      "intentional_network_operations": 0,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "origin": "sterile offline build from exact frozen Git archive",
+      "os_network_namespace_enforced": false,
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl",
+      "pip_no_index": true,
+      "rebuild_sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df",
+      "source_commit": "9d5a54f476a52826379a9ae8d6710551253a6493"
+    },
+    {
+      "bytes": 66663,
+      "cache_body_sha256": "214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d",
+      "cache_key": "c9c21d9afed8c91d6d4caa96c165cf9a67fd5bee7d78706d923c8f33",
+      "cache_metadata_sha256": "c0a2e4f7693971e9c242c679f699c7e4254afe47d891b45221f73a5c93609f9f",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "mdit-py-plugins",
+        "record_entries": 60,
+        "requires_dist": [
+          "markdown-it-py>=2.0.0,<5.0.0",
+          "pre-commit ; extra == \"code-style\"",
+          "myst-parser ; extra == \"rtd\"",
+          "sphinx-book-theme ; extra == \"rtd\"",
+          "coverage ; extra == \"testing\"",
+          "pytest ; extra == \"testing\"",
+          "pytest-cov ; extra == \"testing\"",
+          "pytest-regressions ; extra == \"testing\"",
+          "pytest-timeout ; extra == \"testing\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "0.6.1"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/mdit_py_plugins-0.6.1-py3-none-any.whl",
+      "sha256": "214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d"
+    },
+    {
+      "bytes": 9979,
+      "cache_body_sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8",
+      "cache_key": "bed4e7c2b407105e5c80f6f3c9c9ce06074cd1bc90409700e4489759",
+      "cache_metadata_sha256": "7805e07b75cbd6c54d8123960de73d8ea34879fabbf7f3e15ca7e1ebdc2197d6",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "mdurl",
+        "record_entries": 11,
+        "requires_dist": [],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "0.1.2"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/mdurl-0.1.2-py3-none-any.whl",
+      "sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "bytes": 100195,
+      "cache_body_sha256": "5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e",
+      "cache_key": "cdec3d0140a615c153130a37691576ea1707e32a1ab5e60ae5a540f4",
+      "cache_metadata_sha256": "6bb5c61b2787c80a983d676f7152ef20be0806189b594c5d81c48b2c3bc3d046",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "packaging",
+        "record_entries": 27,
+        "requires_dist": [],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "26.2"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/packaging-26.2-py3-none-any.whl",
+      "sha256": "5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"
+    },
+    {
+      "bytes": 55206,
+      "cache_body_sha256": "fb6ae2fd4e7c921a165808a552060e722767cfa526f99ca5156ed2ce45a5c723",
+      "cache_key": "ad344e8dcc28c72166da85db3d3c34ea7bd39531944f502465cf3a50",
+      "cache_metadata_sha256": "42498c9d0cba7c445592b5a9cafc7c43ffa1457f138de6d7b4581c53b00ef8c1",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "pathspec",
+        "record_entries": 36,
+        "requires_dist": [
+          "hyperscan >=0.7 ; extra == \"hyperscan\"",
+          "typing-extensions >=4 ; extra == \"optional\"",
+          "google-re2 >=1.1 ; extra == \"re2\"",
+          "pytest >=9 ; extra == \"tests\"",
+          "typing-extensions >=4.15 ; extra == \"tests\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "1.0.4"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pathspec-1.0.4-py3-none-any.whl",
+      "sha256": "fb6ae2fd4e7c921a165808a552060e722767cfa526f99ca5156ed2ce45a5c723"
+    },
+    {
+      "bytes": 22743,
+      "cache_body_sha256": "fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a",
+      "cache_key": "d27bd3a4a45523436fe7cd7273aa223dc7525306c94d9ce8149995b3",
+      "cache_metadata_sha256": "a8b7aed005c0f326b27c5c24acd928e6800f3b4fc81e4dff58e21852b66997cc",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "platformdirs",
+        "record_entries": 14,
+        "requires_dist": [],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "4.10.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/platformdirs-4.10.0-py3-none-any.whl",
+      "sha256": "fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"
+    },
+    {
+      "bytes": 20538,
+      "cache_body_sha256": "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746",
+      "cache_key": "0ed336d749e009fe1267c844e36c442e5b3dc645d5eb9865c545b81a",
+      "cache_metadata_sha256": "c114244f6156e5d8db840c07d582529b01bd1ac1c60fb865b50343f41b25ba51",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "pluggy",
+        "record_entries": 14,
+        "requires_dist": [
+          "pre-commit; extra == \"dev\"",
+          "tox; extra == \"dev\"",
+          "pytest; extra == \"testing\"",
+          "pytest-benchmark; extra == \"testing\"",
+          "coverage; extra == \"testing\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "1.6.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pluggy-1.6.0-py3-none-any.whl",
+      "sha256": "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
+    },
+    {
+      "bytes": 472262,
+      "cache_body_sha256": "45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba",
+      "cache_key": "3919357eca09f893629eedf3827f88304089b78068de804a1fd32edd",
+      "cache_metadata_sha256": "bc235c76ef1005da1847de0771b28050d0f3e167b07b0cef442f596311df9d37",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "pydantic",
+        "record_entries": 111,
+        "requires_dist": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.46.4",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2",
+          "email-validator>=2.0.0; extra == 'email'",
+          "tzdata; (python_version >= '3.9' and platform_system == 'Windows') and extra == 'timezone'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.13.4"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pydantic-2.13.4-py3-none-any.whl",
+      "sha256": "45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba"
+    },
+    {
+      "bytes": 2094516,
+      "cache_body_sha256": "926c9541b14b12b1681dca8a0b75feb510b06c6341b70a8e500c2fdcff837cce",
+      "cache_key": "2a165d967faadbffe92667259a54f96f6d3cbf4274c9e0bbd604a512",
+      "cache_metadata_sha256": "f4e179cefa4942e9a94d352f57d69f120b2fa214404ae544ab54924f968fde56",
+      "distribution": {
+        "filename_tags": [
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_17_x86_64"
+        ],
+        "name": "pydantic_core",
+        "record_entries": 10,
+        "requires_dist": [
+          "typing-extensions>=4.14.1"
+        ],
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-manylinux_2_17_x86_64",
+          "cp312-cp312-manylinux2014_x86_64"
+        ],
+        "version": "2.46.4"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "926c9541b14b12b1681dca8a0b75feb510b06c6341b70a8e500c2fdcff837cce"
+    },
+    {
+      "bytes": 1231151,
+      "cache_body_sha256": "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176",
+      "cache_key": "77469a77c0c5007f8e0ef36b73b2bdb8cbe7d9c8be102fd7d4efaf35",
+      "cache_metadata_sha256": "0122c1dd361864d80f85463b9702269e04d331fce75bedc1d85b4c5d3ec8e799",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "Pygments",
+        "record_entries": 345,
+        "requires_dist": [
+          "colorama>=0.4.6; extra == 'windows-terminal'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.20.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pygments-2.20.0-py3-none-any.whl",
+      "sha256": "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
+    },
+    {
+      "bytes": 807870,
+      "cache_body_sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc",
+      "cache_key": "2371fbee7eaaf73a4777e13b7f369ad0d19b8bb82d2f61085230c56c",
+      "cache_metadata_sha256": "56cda91e8e0403ef0c9fa12119b5222148116a7c6475047d3cd184f2fe4941b9",
+      "distribution": {
+        "filename_tags": [
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_17_x86_64",
+          "cp312-cp312-manylinux_2_28_x86_64"
+        ],
+        "name": "PyYAML",
+        "record_entries": 24,
+        "requires_dist": [],
+        "root_is_purelib": "false",
+        "tags": [
+          "cp312-cp312-manylinux_2_17_x86_64",
+          "cp312-cp312-manylinux2014_x86_64",
+          "cp312-cp312-manylinux_2_28_x86_64"
+        ],
+        "version": "6.0.3"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pyyaml-6.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+    },
+    {
+      "bytes": 310654,
+      "cache_body_sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb",
+      "cache_key": "9d5dfb0dedf17094821c37079d37c9f4a1256a7dc457c1192cfa1573",
+      "cache_metadata_sha256": "99c644fdae552103dce8527131a1e3d888d3228a122f12d00404608e37953155",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "rich",
+        "record_entries": 105,
+        "requires_dist": [
+          "ipywidgets (>=7.5.1,<9) ; extra == \"jupyter\"",
+          "markdown-it-py (>=2.2.0)",
+          "pygments (>=2.13.0,<3.0.0)"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "15.0.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/rich-15.0.0-py3-none-any.whl",
+      "sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
+    },
+    {
+      "bytes": 731418,
+      "cache_body_sha256": "267375fd402dc8d981457212efa71f0e3365fd17bba144ba9bb3ed7563cb374a",
+      "cache_key": "62cdd0ae47f01843b08b72494a81ae5b64c9acae85f88b91404fc143",
+      "cache_metadata_sha256": "ce1a2f631051303ff6b7084e4bb150c86e4efd9dcaa9d48c9ceb58f302682d6f",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "textual",
+        "record_entries": 268,
+        "requires_dist": [
+          "markdown-it-py[linkify] (>=2.1.0)",
+          "mdit-py-plugins",
+          "platformdirs (>=3.6.0,<5)",
+          "pygments (>=2.19.2,<3.0.0)",
+          "rich (>=14.2.0)",
+          "tree-sitter (>=0.25.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-bash (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-css (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-go (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-html (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-java (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-javascript (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-json (>=0.24.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-markdown (>=0.3.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-python (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-regex (>=0.24.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-rust (>=0.23.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-sql (>=0.3.11) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-toml (>=0.6.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-xml (>=0.7.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "tree-sitter-yaml (>=0.6.0) ; (python_version >= \"3.10\") and (extra == \"syntax\")",
+          "typing-extensions (>=4.4.0,<5.0.0)"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "8.2.8"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/textual-8.2.8-py3-none-any.whl",
+      "sha256": "267375fd402dc8d981457212efa71f0e3365fd17bba144ba9bb3ed7563cb374a"
+    },
+    {
+      "bytes": 14216,
+      "cache_body_sha256": "8f4b1eb4e16296b57d612965444f87a83861cc989a0451ac97fe4265ddef03b8",
+      "cache_key": "af924cace590eaa7f5a948286460f4a79ae9e083cd5843c70be7bcdc",
+      "cache_metadata_sha256": "4c62a083c079b9280a72d597ce590ba6a889103d58dc8e8eb26ecb12f3751e6c",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "trove-classifiers",
+        "record_entries": 9,
+        "requires_dist": [],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2026.4.28.13"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/trove_classifiers-2026.4.28.13-py3-none-any.whl",
+      "sha256": "8f4b1eb4e16296b57d612965444f87a83861cc989a0451ac97fe4265ddef03b8"
+    },
+    {
+      "bytes": 45571,
+      "cache_body_sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "cache_key": "5de74aa606aaf8588141cbe765382839ecb0982f091a947770ca6fa8",
+      "cache_metadata_sha256": "a345177067621f84383d2c8390426c1d162201f32aedb5e0ae5e1a6b88bc26ee",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "typing_extensions",
+        "record_entries": 5,
+        "requires_dist": [],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "4.16.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "bytes": 14611,
+      "cache_body_sha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7",
+      "cache_key": "d87498713c6bf3fd6cd85abc4629304b110ac53b2ab8bc415c24d41f",
+      "cache_metadata_sha256": "a7087d491c26c9f760028629493399b7fa63de8414fe264158d823ce1c382b66",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "typing-inspection",
+        "record_entries": 9,
+        "requires_dist": [
+          "typing-extensions>=4.12.0"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "0.4.2"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/typing_inspection-0.4.2-py3-none-any.whl",
+      "sha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7"
+    },
+    {
+      "bytes": 6383,
+      "cache_body_sha256": "3603a3859af53e5a39bc7677713c78ea6589ff188d70f4fee165db88e22b242c",
+      "cache_key": "bce54e4a7966f98154c04709e028cda603e8d80635f69f2e250dc8be",
+      "cache_metadata_sha256": "7878599adb42d037e47ac0c3845abe1f82d0c6bcd03d1f6740b89d3b2c753ed1",
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "uc-micro-py",
+        "record_entries": 18,
+        "requires_dist": [
+          "pytest; extra == \"test\"",
+          "coverage; extra == \"test\"",
+          "pytest-cov; extra == \"test\""
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.0.0"
+      },
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "network_used_during_packet_copy": false,
+      "origin": "pre-existing local pip HTTP cache body",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/uc_micro_py-2.0.0-py3-none-any.whl",
+      "sha256": "3603a3859af53e5a39bc7677713c78ea6589ff188d70f4fee165db88e22b242c"
+    }
+  ]
+}

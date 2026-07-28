@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-CAMPAIGN_ID = "maude-baseline-20260728T032857-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T050937-0400"
 SUT_COMMIT = "9d5a54f476a52826379a9ae8d6710551253a6493"
-PREPARATION_BASE_COMMIT = "09af081fbd1326bf4a76d22b19de0aa03663c8f8"
+PREPARATION_BASE_COMMIT = "9e366fae778602f1355e9467814c89b54832893f"
 DOCKET_COMMIT = "9050a53cd8a4741d71f5334f90eb22dac52eeb62"
 
 HARNESS_DIR = Path(__file__).resolve().parent
@@ -28,10 +28,18 @@ PACKET_DIR = CAMPAIGN_DIR / "packet"
 MATRIX_PATH = PACKET_DIR / "run-matrix.json"
 INSTALL_TRACK_PATH = PACKET_DIR / "installation-track.json"
 MANIFEST_PATH = PACKET_DIR / "campaign-manifest.json"
+PROVIDER_CAPABILITY_POLICY_PATH = (
+    PACKET_DIR / "provider-capability-policy.json"
+)
 LAB_ROOT = Path("/tmp") / f"maude-synth-{CAMPAIGN_ID}"
-AUTH_GATE_PROBE_PATH = LAB_ROOT / "_provider-auth-gate-probes" / "index.json"
+PROVIDER_CAPABILITY_PROBE_ROOT = (
+    PACKET_DIR / "provider-capability-probes"
+)
+AUTH_GATE_PROBE_PATH = (
+    PROVIDER_CAPABILITY_PROBE_ROOT / "auth" / "index.json"
+)
 INSTALL_SURFACE_PROBE_PATH = (
-    LAB_ROOT / "_installation-surface-probes" / "index.json"
+    PROVIDER_CAPABILITY_PROBE_ROOT / "installation" / "index.json"
 )
 
 MAUDE_RUN_IDS = tuple(f"maude-s{number:02d}" for number in range(1, 21))
@@ -81,23 +89,7 @@ REQUIRED_INSTALL_COVERAGE = {
     "copy_paste_examples_exactly_as_written",
 }
 ALLOWED_SURFACES = {"maude", "docket-gwr-direct", "maude-installation"}
-CODEX_ONLY_MODEL_POLICY = {
-    "campaign_provider_configs": ["openai-sol"],
-    "operator_model_config": "openai-sol",
-    "grader_model_config": "openai-sol",
-    "separate_fresh_sessions_required": True,
-    "same_family_grading": True,
-    "same_model_configuration_grading": True,
-    "claude_available": False,
-    "claude_sessions_permitted": False,
-    "cross_family_grading_supported": False,
-    "limitation": (
-        "Claude is unavailable for this campaign. Every operator and grader "
-        "uses gpt-5.6-sol through openai-sol in a separate genuinely fresh "
-        "Codex session; no opposite-family grade or cross-family model "
-        "comparison is supported."
-    ),
-}
+SUPPORTED_PROVIDER_CONFIGS = ("openai-sol", "anthropic-sonnet")
 CODEX_ONLY_MODEL_CONFIG = {
     "provider": "OpenAI",
     "cli": "codex",
@@ -158,8 +150,9 @@ CODEX_ONLY_MODEL_CONFIG = {
         "The trusted direct stdio shim is part of the retained-auth transport "
         "boundary and can read provider authentication by construction; the "
         "campaign proves task paths and task sockets are absent, not "
-        "provider-internal noninspection. Claude is unavailable, so "
-        "cross-family isolation comparison is unsupported."
+        "provider-internal noninspection. Availability and cross-family "
+        "comparison claims belong to the frozen campaign policy and observed "
+        "capability evidence, not this provider configuration."
     ),
     "exact_provider_tool_allowlist_supported": True,
     "unexpected_intrinsic_action_policy": "fail-closed",
@@ -172,6 +165,51 @@ CODEX_ONLY_MODEL_CONFIG = {
         "fresh provider process",
         "no resume, continuation, or follow-up",
     ],
+}
+ANTHROPIC_SONNET_MODEL_CONFIG = {
+    "provider": "Anthropic",
+    "cli": "claude",
+    "model_argument": "sonnet",
+    "expected_family": "Claude",
+    "reasoning_effort": "low",
+    "mcp_protocol_version": "2025-11-25",
+    "operator_tools": ["mcp__operator__terminal"],
+    "grader_tools": ["mcp__grader__evidence"],
+    "operator_mcp_enabled_tools": ["terminal"],
+    "grader_mcp_enabled_tools": ["evidence"],
+    "built_in_tools": [],
+    "strict_mcp_config": True,
+    "permission_mode": "bypassPermissions",
+    "slash_commands_enabled": False,
+    "browser_enabled": False,
+    "session_persistence": False,
+    "tool_boundary": (
+        "Strict per-session MCP configuration. The operator receives only "
+        "mcp__operator__terminal; the grader receives only "
+        "mcp__grader__evidence. Built-in tools are excluded from the exact "
+        "provider roster."
+    ),
+    "transport_boundary": (
+        "Claude runs in a task-blind retained-auth transport with no task "
+        "paths or task sockets. Its fixed MCP proxy and command broker receive "
+        "neither provider credentials nor semantic evaluator prompts."
+    ),
+    "broker_boundary": (
+        "Operator commands execute in a fresh source-free, auth-free, "
+        "no-network mount/PID namespace. The grader evidence tool is read-only."
+    ),
+    "live_web_search_enabled": False,
+    "user_mcp_and_connector_config_loaded": False,
+    "freshness": [
+        "--no-session-persistence",
+        "new UUID session id",
+        "fresh provider process",
+        "no resume, continuation, or follow-up",
+    ],
+}
+PROVIDER_MODEL_CONFIGS = {
+    "openai-sol": CODEX_ONLY_MODEL_CONFIG,
+    "anthropic-sonnet": ANTHROPIC_SONNET_MODEL_CONFIG,
 }
 
 
@@ -331,8 +369,6 @@ def validate_matrix(matrix: dict[str, Any] | None = None) -> list[str]:
     interpretation = matrix.get("interpretation")
     if not isinstance(interpretation, str) or "10 installation" not in interpretation:
         errors.append("run matrix interpretation omits the installation track")
-    if matrix.get("model_family_policy") != CODEX_ONLY_MODEL_POLICY:
-        errors.append("run matrix Codex-only model-family policy differs")
     expected_helpers = {
         "destination_scope": "operator working directory",
         "all_runs": [
@@ -520,8 +556,153 @@ def validate_matrix(matrix: dict[str, Any] | None = None) -> list[str]:
     if not isinstance(configs, dict):
         errors.append("operator_model_configs must be an object")
         configs = {}
-    if configs != {"openai-sol": CODEX_ONLY_MODEL_CONFIG}:
-        errors.append("operator_model_configs must be the exact Codex-only config")
+    if (
+        not configs
+        or any(
+            key not in PROVIDER_MODEL_CONFIGS
+            or value != PROVIDER_MODEL_CONFIGS[key]
+            for key, value in configs.items()
+        )
+    ):
+        errors.append(
+            "operator_model_configs contains an unknown or changed provider "
+            "configuration"
+        )
+    policy = matrix.get("model_family_policy")
+    if not isinstance(policy, dict):
+        errors.append("model_family_policy must be an object")
+        policy = {}
+    campaign_providers = policy.get("campaign_provider_configs")
+    operator_config_set = {
+        str(item.get("operator_model_config"))
+        for item in index.values()
+        if item.get("operator_model_config") in configs
+    }
+    grader_config_set = {
+        str(item.get("grader_model_config"))
+        for item in index.values()
+        if item.get("grader_model_config") in configs
+    }
+    operator_configs_used = [
+        provider
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+        if provider in operator_config_set
+    ]
+    grader_configs_used = [
+        provider
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+        if provider in grader_config_set
+    ]
+    providers_used = [
+        provider
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+        if provider in operator_config_set | grader_config_set
+    ]
+    eligibility = policy.get("provider_role_eligibility")
+    role_names = {
+        "ordinary_operator",
+        "installation_operator",
+        "ordinary_grader",
+        "installation_grader",
+    }
+    if (
+        not isinstance(campaign_providers, list)
+        or campaign_providers != providers_used
+        or any(value not in configs for value in campaign_providers)
+        or policy.get("operator_model_configs_used")
+        != operator_configs_used
+        or policy.get("grader_model_configs_used")
+        != grader_configs_used
+        or policy.get("assignment_algorithm")
+        != "maude-synthetic-provider-assignment-v1"
+        or policy.get("separate_fresh_sessions_required") is not True
+        or not isinstance(eligibility, dict)
+        or set(eligibility) != set(SUPPORTED_PROVIDER_CONFIGS)
+        or any(
+            not isinstance(roles, dict)
+            or set(roles) != role_names
+            or any(type(roles.get(role)) is not bool for role in role_names)
+            for roles in eligibility.values()
+        )
+        or type(policy.get("same_family_grading")) is not bool
+        or type(policy.get("same_model_configuration_grading")) is not bool
+        or type(policy.get("cross_family_grading_supported")) is not bool
+        or type(policy.get("cross_family_grading_used")) is not bool
+        or type(policy.get("claude_available")) is not bool
+        or type(policy.get("claude_sessions_permitted")) is not bool
+        or type(policy.get("claude_operator_sessions_assigned")) is not bool
+        or type(policy.get("claude_grader_sessions_assigned")) is not bool
+        or not isinstance(policy.get("limitation"), str)
+        or not policy.get("limitation")
+    ):
+        errors.append("run matrix model-family policy shape or derivation differs")
+    same_config_used = any(
+        item.get("operator_model_config")
+        == item.get("grader_model_config")
+        for item in index.values()
+    )
+    same_family_used = any(
+        (
+            PROVIDER_MODEL_CONFIGS.get(
+                str(item.get("operator_model_config")),
+                {},
+            ).get("expected_family")
+            == PROVIDER_MODEL_CONFIGS.get(
+                str(item.get("grader_model_config")),
+                {},
+            ).get("expected_family")
+        )
+        for item in index.values()
+    )
+    cross_family_used = any(
+        (
+            PROVIDER_MODEL_CONFIGS.get(
+                str(item.get("operator_model_config")),
+                {},
+            ).get("expected_family")
+            != PROVIDER_MODEL_CONFIGS.get(
+                str(item.get("grader_model_config")),
+                {},
+            ).get("expected_family")
+        )
+        for item in index.values()
+    )
+    cross_family_supported = bool(
+        isinstance(eligibility, dict)
+        and any(
+            eligibility.get(operator, {}).get(operator_role) is True
+            and eligibility.get(grader, {}).get(grader_role) is True
+            and PROVIDER_MODEL_CONFIGS[operator]["expected_family"]
+            != PROVIDER_MODEL_CONFIGS[grader]["expected_family"]
+            for operator_role, grader_role in (
+                ("ordinary_operator", "ordinary_grader"),
+                ("installation_operator", "installation_grader"),
+            )
+            for operator in providers_used
+            for grader in providers_used
+        )
+    )
+    claude_available = bool(
+        isinstance(eligibility, dict)
+        and isinstance(eligibility.get("anthropic-sonnet"), dict)
+        and any(eligibility["anthropic-sonnet"].values())
+    )
+    if (
+        policy.get("same_model_configuration_grading")
+        is not same_config_used
+        or policy.get("same_family_grading") is not same_family_used
+        or policy.get("cross_family_grading_used")
+        is not cross_family_used
+        or policy.get("cross_family_grading_supported")
+        is not cross_family_supported
+        or policy.get("claude_available") is not claude_available
+        or policy.get("claude_sessions_permitted") is not claude_available
+        or policy.get("claude_operator_sessions_assigned")
+        is not ("anthropic-sonnet" in operator_configs_used)
+        or policy.get("claude_grader_sessions_assigned")
+        is not ("anthropic-sonnet" in grader_configs_used)
+    ):
+        errors.append("run matrix model-family policy facts differ from runs")
     for item in index.values():
         operator = item.get("operator_model_config")
         grader = item.get("grader_model_config")
@@ -529,10 +710,34 @@ def validate_matrix(matrix: dict[str, Any] | None = None) -> list[str]:
             errors.append(f"{item['run_id']}: unknown operator model config {operator!r}")
         if grader not in configs:
             errors.append(f"{item['run_id']}: unknown grader model config {grader!r}")
-        if operator != "openai-sol" or grader != "openai-sol":
+        surface = item.get("surface")
+        operator_role = (
+            "installation_operator"
+            if surface == "maude-installation"
+            else "ordinary_operator"
+        )
+        grader_role = (
+            "installation_grader"
+            if surface == "maude-installation"
+            else "ordinary_grader"
+        )
+        if (
+            isinstance(eligibility, dict)
+            and isinstance(eligibility.get(operator), dict)
+            and eligibility[operator].get(operator_role) is not True
+        ):
             errors.append(
-                f"{item['run_id']}: operator and grader must use the frozen "
-                "Codex-only config in separate fresh sessions"
+                f"{item['run_id']}: operator provider lacks {operator_role} "
+                "eligibility"
+            )
+        if (
+            isinstance(eligibility, dict)
+            and isinstance(eligibility.get(grader), dict)
+            and eligibility[grader].get(grader_role) is not True
+        ):
+            errors.append(
+                f"{item['run_id']}: grader provider lacks {grader_role} "
+                "eligibility"
             )
         scenario = SCENARIOS_DIR / str(item.get("scenario_id"))
         persona = PERSONAS_DIR / f"{item.get('persona_id')}.md"
@@ -765,9 +970,11 @@ def validate_matrix(matrix: dict[str, Any] | None = None) -> list[str]:
             for item in install_rows
             if item.get("persona_id") == persona
         }
-        if family_configs != {"openai-sol"}:
+        if not family_configs or not family_configs.issubset(
+            set(operator_configs_used)
+        ):
             errors.append(
-                f"{persona}: installation operator coverage is not Codex-only"
+                f"{persona}: installation operator provider coverage differs"
             )
     return errors
 

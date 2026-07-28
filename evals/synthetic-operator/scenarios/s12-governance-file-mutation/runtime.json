@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:892aa115d41e888e703fce0bfd0c002757df266e7cfb86bdc67d4367f6803046",
-    "source_plan_digest": "sha256:1776636b2771674456dcc5cf055b7e2029406703847e71ee8e846fcf7c0c4d34"
+    "approval_witness_digest": "sha256:1c2f73a620cb8afe4d767a1c20aab0f67575c47174ef4809368644d2ca9575b9",
+    "source_plan_digest": "sha256:b005c7de53c10e7a2983b00f85c6436aa142ca158cb665535dfe40f35abcf0c1"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -98,7 +98,7 @@
     "base_files": {
       "governance/AUTHORITY.md": "Deployment changes require a separately witnessed approval.\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s12/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s12/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

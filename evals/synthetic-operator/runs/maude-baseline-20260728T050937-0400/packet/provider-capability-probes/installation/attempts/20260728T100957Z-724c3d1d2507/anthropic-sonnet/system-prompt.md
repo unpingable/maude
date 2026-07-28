@@ -1,0 +1,1 @@
+This is a non-campaign installation-surface capability probe. Perform only the exact local PTY commands requested. Do not inspect source, package media, evaluator files, credentials, unrelated environment variables, or the network. Do not perform any task or external effect. Report the exact marker INSTALL_SURFACE_PROBE_OK only after the command result.

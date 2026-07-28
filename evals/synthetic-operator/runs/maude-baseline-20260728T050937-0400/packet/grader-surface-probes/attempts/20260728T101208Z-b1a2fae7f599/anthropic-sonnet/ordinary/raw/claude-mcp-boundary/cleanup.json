@@ -1,0 +1,12 @@
+{
+  "cleanup_errors": [],
+  "private_socket_arena": {
+    "all_removed": true,
+    "directories": [],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-b8c9ccf150af"
+  },
+  "provider_auth_destroyed": true,
+  "provider_processes_remaining": [],
+  "schema": "maude.synthetic-operator.claude-boundary-cleanup.v1"
+}

@@ -29,6 +29,7 @@ from typing import Any, Callable
 
 import campaign_common as common
 import campaign_runner as runner
+import grader_surface_probe as grader_probe
 import operator_pty as pty_adapter
 
 
@@ -1384,15 +1385,21 @@ def codex_auth_absence_audit_cases() -> dict[str, Any]:
 def frozen_matrix_provider_and_grader_policy_case(
     diagnostics_root: Path,
 ) -> dict[str, Any]:
-    """Pin Codex-only probe defaults and same-family fresh grading."""
+    """Keep pre-freeze candidates independent of provisional matrix policy."""
 
-    providers = runner._configured_campaign_providers()
-    assert providers == ("openai-sol",)
-    assert runner._probe_provider_scope(None) == providers
-    assert runner._probe_provider_scope(["openai-sol"]) == providers
+    candidates = common.SUPPORTED_PROVIDER_CONFIGS
+    assert candidates == ("openai-sol", "anthropic-sonnet")
+    assert runner._probe_provider_scope(None) == candidates
+    assert runner._probe_provider_scope(["openai-sol"]) == ("openai-sol",)
+    assert runner._probe_provider_scope(["anthropic-sonnet"]) == (
+        "anthropic-sonnet",
+    )
+    assert runner._probe_provider_scope(
+        ["anthropic-sonnet", "openai-sol"]
+    ) == candidates
     rejected_provider_cases: list[str] = []
     for name, selected in (
-        ("undeclared-provider", ["anthropic-sonnet"]),
+        ("unknown-provider", ["unknown-provider"]),
         ("duplicate-provider", ["openai-sol", "openai-sol"]),
     ):
         try:
@@ -1401,31 +1408,11 @@ def frozen_matrix_provider_and_grader_policy_case(
             rejected_provider_cases.append(name)
     assert len(rejected_provider_cases) == 2
 
-    matrix = json.loads(
-        (
-            runner.PACKET_DIR / "run-matrix.json"
-        ).read_text(encoding="utf-8")
+    capability_policy_record = runner._provider_capability_policy_record()
+    assert capability_policy_record == common.file_record(
+        common.PROVIDER_CAPABILITY_POLICY_PATH,
+        relative_to=common.PACKET_DIR,
     )
-    run = dict(matrix["runs"][0])
-    metadata = runner._grading_model_family_metadata(run)
-    policy = matrix["model_family_policy"]
-    assert metadata == {
-        "separate_fresh_session_required": True,
-        "same_family_grading": True,
-        "same_model_configuration_grading": True,
-        "cross_family_grading_supported": False,
-        "same_family_limitation": policy["limitation"],
-    }
-    assert "opposite_model_family" not in metadata
-
-    mismatched_run = dict(run)
-    mismatched_run["grader_model_config"] = "anthropic-sonnet"
-    mismatch_rejected = False
-    try:
-        runner._grading_model_family_metadata(mismatched_run)
-    except runner.CampaignError:
-        mismatch_rejected = True
-    assert mismatch_rejected
 
     expected_tools = list(runner.CLAUDE_GRADER_TOOLS)
     assert expected_tools == ["mcp__grader__evidence"]
@@ -1454,14 +1441,375 @@ def frozen_matrix_provider_and_grader_policy_case(
     )
     assert "synthetic grader: declared tool roster differs" not in exact_errors
     return {
-        "configured_probe_providers": list(providers),
-        "undeclared_or_duplicate_provider_cases_rejected": (
+        "static_probe_provider_candidates": list(candidates),
+        "unknown_or_duplicate_provider_cases_rejected": (
             rejected_provider_cases
         ),
-        "grader_model_family_metadata": metadata,
-        "same_family_mismatch_rejected": mismatch_rejected,
+        "provider_capability_policy": capability_policy_record,
         "exact_grader_tools": expected_tools,
         "stale_shell_label_rejected": True,
+        "all_passed": True,
+    }
+
+
+def provider_capability_failure_evidence_case(
+    diagnostics_root: Path,
+) -> dict[str, Any]:
+    """Prove failure classification and append-only attempt custody offline."""
+
+    case_root = diagnostics_root / "provider-capability-failures"
+    case_root.mkdir(parents=True)
+    observed: dict[str, dict[str, Any]] = {}
+    cases = (
+        (
+            "nonzero-transport",
+            "provider-transport",
+            {"returncode": 17, "timed_out": False},
+            "completed",
+            "provider-capability-unavailable",
+        ),
+        (
+            "timed-out-transport",
+            "provider-transport",
+            {"returncode": -15, "timed_out": True},
+            "completed",
+            "provider-capability-unavailable",
+        ),
+        (
+            "isolation-invalid",
+            "isolation-setup",
+            None,
+            "not-attempted",
+            "probe-invalid",
+        ),
+        (
+            "post-transport-integrity-invalid",
+            "probe-integrity",
+            {"returncode": 0, "timed_out": False},
+            "completed",
+            "probe-invalid",
+        ),
+    )
+    for (
+        name,
+        stage,
+        process_result,
+        launch_state,
+        expected_status,
+    ) in cases:
+        evidence = case_root / name
+        evidence.mkdir()
+        transcript = evidence / "transcript.jsonl"
+        transcript.write_text(
+            event(
+                {
+                    "type": "thread.started",
+                    "thread_id": f"fresh-{name}",
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        stderr = evidence / "provider.stderr"
+        stderr.write_text("synthetic diagnostic\n", encoding="utf-8")
+        classification = runner._probe_failure_classification(
+            stage,
+            process_result,
+        )
+        assert classification == expected_status
+        secret_diagnostic = f"do-not-copy-diagnostic-{name}"
+        record = runner._probe_failure_record(
+            provider="openai-sol",
+            evidence_dir=evidence,
+            probe_root=case_root,
+            exc=runner.CampaignError(secret_diagnostic),
+            failure_stage=stage,
+            failure_classification=classification,
+            provider_process_launch_state=launch_state,
+            process_result=process_result,
+            transcript_path=transcript,
+            stderr_path=stderr,
+        )
+        assert record["status"] == expected_status
+        assert record["failure_stage"] == stage
+        assert secret_diagnostic not in json.dumps(record, sort_keys=True)
+        assert record["diagnostic_sha256"] == runner.sha256_bytes(
+            secret_diagnostic.encode("utf-8")
+        )
+        assert (
+            record["task_level_network_or_external_operational_effect"]
+            is False
+        )
+        if launch_state == "not-attempted":
+            assert record["provider_network_attempted"] is False
+            assert record["provider_network_use_observed"] == "not-attempted"
+        else:
+            assert record["provider_network_attempted"] is True
+            assert record["provider_network_use_observed"] == "unknown"
+        observed[name] = {
+            "status": record["status"],
+            "failure_stage": record["failure_stage"],
+            "provider_process_observation": record[
+                "provider_process_observation"
+            ],
+        }
+
+    catalog_root = case_root / "append-only-catalog"
+    attempt_root = catalog_root / "attempts" / "attempt-1"
+    attempt_root.mkdir(parents=True)
+    index = {
+        "attempt_id": "attempt-1",
+        "requested_provider_configs": list(
+            common.SUPPORTED_PROVIDER_CONFIGS
+        ),
+        "successful_provider_configs": ["openai-sol"],
+        "failed_provider_configs": ["anthropic-sonnet"],
+        "unavailable_provider_configs": ["anthropic-sonnet"],
+        "invalid_probe_provider_configs": [],
+        "capability_observation_valid": True,
+        "provider_capability_policy": (
+            runner._provider_capability_policy_record()
+        ),
+        "all_passed": False,
+        "authority_effect": "none",
+    }
+    runner._write_probe_attempt_index(
+        probe_root=catalog_root,
+        attempt_root=attempt_root,
+        index=index,
+    )
+    catalog = [
+        json.loads(line)
+        for line in (catalog_root / "attempt-index.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        if line.strip()
+    ]
+    assert len(catalog) == 1
+    assert catalog[0]["attempt_id"] == "attempt-1"
+    assert catalog[0]["failed_provider_configs"] == ["anthropic-sonnet"]
+    assert common.load_json(attempt_root / "index.json")[
+        "provider_capability_policy"
+    ] == runner._provider_capability_policy_record()
+    overwrite_rejected = False
+    try:
+        runner._write_probe_attempt_index(
+            probe_root=catalog_root,
+            attempt_root=attempt_root,
+            index=index,
+        )
+    except runner.CampaignError:
+        overwrite_rejected = True
+    assert overwrite_rejected
+    assert common.AUTH_GATE_PROBE_PATH.is_relative_to(common.PACKET_DIR)
+    assert common.INSTALL_SURFACE_PROBE_PATH.is_relative_to(
+        common.PACKET_DIR
+    )
+    return {
+        "failure_cases": observed,
+        "append_only_catalog_recorded": True,
+        "attempt_index_overwrite_rejected": overwrite_rejected,
+        "packet_durable_auth_and_install_roots": True,
+        "provider_invoked": False,
+        "network_invoked": False,
+        "all_passed": True,
+    }
+
+
+def grader_provider_action_validation_case() -> dict[str, Any]:
+    """Exercise provider-specific grader gate parsing without provider traffic."""
+
+    arguments = {
+        "operation": "read",
+        "path": "probe-facts.json",
+        "offset": 0,
+        "limit": 65536,
+    }
+    codex_actions = [
+        {
+            "classification": "declared_mcp_tool_action",
+            "provider": "codex",
+            "tool": "mcp__grader__evidence",
+        }
+    ]
+    codex_gate = {
+        "status": "complete",
+        "exact_correlation_proved": True,
+        "tool_actions": [
+            {
+                "server": "grader",
+                "tool": "evidence",
+                "completed": True,
+                "arguments": arguments,
+            }
+        ],
+        "normalized_result_correlations": [{"proxy_is_error": False}],
+    }
+    assert len(
+        grader_probe._assert_read_only_evidence_actions(
+            actions=codex_actions,
+            gate=codex_gate,
+            probe_id="offline-codex",
+            provider_config="openai-sol",
+        )
+    ) == 1
+    claude_actions = [
+        {
+            "classification": "declared_mcp_tool_action",
+            "provider": "claude",
+            "tool": "mcp__grader__evidence",
+        }
+    ]
+    claude_gate = {
+        "status": "complete",
+        "exact_correlation_proved": True,
+        "tool_actions": [
+            {
+                "tool_use_id": "tool-1",
+                "tool": "mcp__grader__evidence",
+                "arguments": arguments,
+            }
+        ],
+        "tool_results": [
+            {"tool_use_id": "tool-1", "is_error": False}
+        ],
+    }
+    assert len(
+        grader_probe._assert_read_only_evidence_actions(
+            actions=claude_actions,
+            gate=claude_gate,
+            probe_id="offline-claude",
+            provider_config="anthropic-sonnet",
+        )
+    ) == 1
+    tampered = json.loads(json.dumps(claude_gate))
+    tampered["tool_results"][0]["is_error"] = True
+    tamper_rejected = False
+    try:
+        grader_probe._assert_read_only_evidence_actions(
+            actions=claude_actions,
+            gate=tampered,
+            probe_id="offline-claude",
+            provider_config="anthropic-sonnet",
+        )
+    except runner.CampaignError:
+        tamper_rejected = True
+    assert tamper_rejected
+    return {
+        "providers": list(common.SUPPORTED_PROVIDER_CONFIGS),
+        "codex_read_only_gate_accepted": True,
+        "claude_read_only_gate_accepted": True,
+        "claude_error_result_rejected": True,
+        "provider_invoked": False,
+        "network_invoked": False,
+        "all_passed": True,
+    }
+
+
+def grader_partial_failure_preservation_case(
+    diagnostics_root: Path,
+) -> dict[str, Any]:
+    """Run the multi-provider grader orchestrator with provider-free failures."""
+
+    output_root = diagnostics_root / "grader-partial-failure-probes"
+    original_output_root = grader_probe.OUTPUT_ROOT
+    original_run_one = grader_probe._run_one
+
+    def fake_run_one(
+        probe: dict[str, str],
+        *,
+        provider_config: str,
+        attempt_root: Path,
+        source_schema_record: dict[str, Any],
+        timeout: int,
+    ) -> dict[str, Any]:
+        del source_schema_record, timeout
+        probe_dir = attempt_root / provider_config / probe["probe_id"]
+        probe_dir.mkdir(parents=True)
+        status = (
+            "provider-capability-unavailable"
+            if provider_config == "openai-sol"
+            else "probe-invalid"
+        )
+        stage = (
+            "provider-transport"
+            if status == "provider-capability-unavailable"
+            else "isolation-setup"
+        )
+        common.write_json(
+            probe_dir / "failure.json",
+            {
+                "schema": (
+                    "maude.synthetic-operator."
+                    "grader-surface-probe-failure.v1"
+                ),
+                "campaign_id": common.CAMPAIGN_ID,
+                "probe_id": probe["probe_id"],
+                "provider_config": provider_config,
+                "model_configuration": common.PROVIDER_MODEL_CONFIGS[
+                    provider_config
+                ],
+                "campaign_run": False,
+                "status": status,
+                "failure_stage": stage,
+                "failure_classification": status,
+                "exception_type": "CampaignError",
+                "diagnostic_sha256": runner.sha256_bytes(
+                    f"{provider_config}/{probe['probe_id']}".encode("utf-8")
+                ),
+                "provider_process_launch_state": "not-attempted",
+                "provider_process_observation": None,
+                "provider_network_attempted": False,
+                "provider_network_use_observed": "not-attempted",
+                "session_identity": {},
+                "partial_evidence": [],
+                "partial_evidence_preserved": True,
+                "task_level_network_or_external_operational_effect": False,
+                "all_passed": False,
+                "authority_effect": "none",
+            },
+        )
+        raise runner.CampaignError("provider-free injected probe failure")
+
+    grader_probe.OUTPUT_ROOT = output_root
+    grader_probe._run_one = fake_run_one
+    try:
+        index = grader_probe.run_probes(
+            providers=list(common.SUPPORTED_PROVIDER_CONFIGS),
+            timeout=1,
+        )
+        validation_errors = grader_probe.validate_probes(
+            require_all_passed=False
+        )
+    finally:
+        grader_probe._run_one = original_run_one
+        grader_probe.OUTPUT_ROOT = original_output_root
+    assert not validation_errors, validation_errors
+    assert index["all_passed"] is False
+    assert index["capability_observation_valid"] is False
+    assert index["all_requested_provider_probe_attempts_recorded"] is True
+    assert len(index["provider_probe_outcomes"]) == 4
+    assert index["unavailable_provider_probe_pairs"] == [
+        "openai-sol/ordinary",
+        "openai-sol/installation",
+    ]
+    assert index["invalid_probe_pairs"] == [
+        "anthropic-sonnet/ordinary",
+        "anthropic-sonnet/installation",
+    ]
+    assert len(
+        (output_root / "attempt-index.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ) == 1
+    return {
+        "provider_probe_outcome_count": 4,
+        "all_requested_attempts_recorded": True,
+        "provider_capability_failures_preserved": 2,
+        "probe_invalid_failures_preserved": 2,
+        "append_only_catalog_records": 1,
+        "provider_invoked": False,
+        "network_invoked": False,
         "all_passed": True,
     }
 
@@ -4430,6 +4778,22 @@ def main() -> int:
         (
             "frozen-matrix-provider-and-grader-policy",
             lambda: frozen_matrix_provider_and_grader_policy_case(
+                diagnostics_root
+            ),
+        ),
+        (
+            "provider-capability-failure-evidence",
+            lambda: provider_capability_failure_evidence_case(
+                diagnostics_root
+            ),
+        ),
+        (
+            "grader-provider-action-validation",
+            grader_provider_action_validation_case,
+        ),
+        (
+            "grader-partial-failure-preservation",
+            lambda: grader_partial_failure_preservation_case(
                 diagnostics_root
             ),
         ),

@@ -1,0 +1,80 @@
+{
+  "allowed_tools": [
+    "mcp__operator__terminal"
+  ],
+  "boundary_evidence": {
+    "bytes": 720,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "claude-mcp-boundary/cleanup.json",
+    "sha256": "e278b1003f3310770f46acb7ddc337a529e468fec79b919e311f8bab65c878e7"
+  },
+  "broker_cleanup": {
+    "command_broker": {
+      "exit_code": 0,
+      "forced_after_graceful_timeout": false,
+      "graceful_exit_requested": false,
+      "label": "Claude command broker",
+      "observed_processes": [
+        497926
+      ],
+      "remaining_processes": []
+    },
+    "private_socket_arena": {
+      "all_removed": true,
+      "directories": [
+        {
+          "directory": "/tmp/maude-sock-b8c9ccf150af/s-b553d51aeb31fe134d0b",
+          "remaining_entries": [],
+          "removed": true
+        }
+      ],
+      "path_budget_bytes": 100,
+      "root": "/tmp/maude-sock-b8c9ccf150af"
+    }
+  },
+  "built_in_tools_allowed": [],
+  "host_source_mounted_in_mcp_or_command": false,
+  "identity": {
+    "auth_files_present_at_identity": true,
+    "event_number": 1,
+    "provider_reported_model": "claude-sonnet-5",
+    "provider_reported_tools": [
+      "mcp__operator__terminal"
+    ],
+    "provider_session_id": "a2ae8600-b630-4991-8cae-06fdc552a560"
+  },
+  "mcp_config_sha256": "91216664e9b7bc809cc2d9d53ab98cf6170edecb87a5c7cc701820ccde9ba9cd",
+  "mcp_protocol_version": "2025-11-25",
+  "prompt_event_sha256": "c2930f26a82beefb6b54c1092aaab88f4f4d3ea4df4211a9afafc063243eb73f",
+  "prompt_sent_after_tools_list_flush": true,
+  "provider_auth_destroyed": true,
+  "provider_auth_files": [
+    ".claude.json",
+    ".claude/.credentials.json",
+    ".claude/settings.json"
+  ],
+  "provider_auth_mounted_in_mcp_or_command": false,
+  "provider_auth_retained_until_transport_exit": true,
+  "provider_auth_values_recorded": false,
+  "provider_config": "anthropic-sonnet",
+  "provider_returncode": 1,
+  "provider_timed_out": false,
+  "provider_transport_outside_task_sandbox": true,
+  "proxy_runtime_proofs": [],
+  "recorded_at": "2026-07-28T10:09:46Z",
+  "schema": "maude.synthetic-operator.claude-provider-boundary.v1",
+  "status": "complete",
+  "tool_actions": [],
+  "tool_results": [],
+  "transport_metadata_path_disclosures": [
+    {
+      "event_number": 1,
+      "event_subtype": "init",
+      "event_type": "system",
+      "json_pointer": "/memory_paths/auto",
+      "path_kind": "provider_private_home",
+      "path_sha256": "ef714739da1889aeee5c6e46a3bbf642e382ebb0434caf98e27148f954938949"
+    }
+  ]
+}

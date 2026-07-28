@@ -1,0 +1,139 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s08",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s08/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2184,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s08/operator-prompt.md",
+    "sha256": "488e2ea3bc82994a3a9c5cc82d4521a307eae392e17c8958edfc5c4ba5f138e1"
+  },
+  "visible_files": [
+    {
+      "bytes": 227,
+      "destination": "../repo/terraform/variables.tf",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/fixture/terraform/variables.tf",
+      "sha256": "73b4fe5a4cce14df3c93e8f0be5665feccd55fbe251f93515e931d3a96d6ddab"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 785,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s08/operator-task.md",
+      "sha256": "2432a55d93f00948c754726d3ef496b21b50f57a96d880de9fbd4f58c411cf4b"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-08",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/lab_approval_ux-task-08",
+      "sha256": "2ac082f66b40b870ee2449776179ff597679f62cf821fa6f2b26083dc42eba29"
+    },
+    {
+      "bytes": 610,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/packet.json",
+      "sha256": "84cfbee3fd305c1ecdfc4bf50ee6c4009c4aeba0a0598f1e6487c5871997836d"
+    },
+    {
+      "bytes": 1795,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/plan.md",
+      "sha256": "8ab275eb3e2613d008965e6cc8371052c1f5f40e9f9a1562c5df5b5a33c71ee9"
+    },
+    {
+      "bytes": 204,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/playbook.json",
+      "sha256": "73f1e9ceedc3fa47580f88112e48aea746569a23a09fefbbfc1e20a47b45dbed"
+    },
+    {
+      "bytes": 233,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/ration-card.json",
+      "sha256": "3b6cb54389ae2fc85626d079568e4712e3784d3be4f9347a35a1d95083a4073e"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s08-terraform-validation/runtime.json",
+    "evals/synthetic-operator/scenarios/s08-terraform-validation/patch.diff",
+    "evals/synthetic-operator/scenarios/s08-terraform-validation/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

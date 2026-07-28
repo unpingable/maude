@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Correct the indentation of the Python setup step without changing triggers, permissions, or third-party action versions."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s02/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

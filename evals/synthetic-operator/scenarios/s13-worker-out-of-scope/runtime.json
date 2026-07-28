@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:e1a9da0cd056e43632c157a7428a66bcde152d9662cd1d05152e34eecd9518ca",
-    "source_plan_digest": "sha256:66aeb6216f73eb2e9aa6fc150ac52cbaf6a1d3f3413cc4f31e4cdc8cbecc3215"
+    "approval_witness_digest": "sha256:2fd36fe27cee0c5c8a97ad80543d78dc4e79c5ffaa150138de7b643ba57bbdbe",
+    "source_plan_digest": "sha256:e6656b8cb47db67efd4aedeb99f9e5599478fd6901fe0b92a023ecfb9d999c78"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -146,7 +146,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:e1a9da0cd056e43632c157a7428a66bcde152d9662cd1d05152e34eecd9518ca",
+    "approval_witness_digest": "sha256:2fd36fe27cee0c5c8a97ad80543d78dc4e79c5ffaa150138de7b643ba57bbdbe",
     "behavior": "normal",
     "commands": [
       {
@@ -159,8 +159,8 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:3bfd53495a53f22c74ed75b81ecf58946af14d824909d82e265d56e3bc037eca",
-    "grant_id": "sgr_3bfd53495a53",
+    "grant_digest": "sha256:ae849ddc65789c6634b492b4142de248d744ac19afe3741ff4992e096c9e9b97",
+    "grant_id": "sgr_ae849ddc6578",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [
@@ -170,7 +170,7 @@
         "tool_call_id": "tc_ux_task_13_01"
       }
     ],
-    "source_plan_digest": "sha256:66aeb6216f73eb2e9aa6fc150ac52cbaf6a1d3f3413cc4f31e4cdc8cbecc3215",
+    "source_plan_digest": "sha256:e6656b8cb47db67efd4aedeb99f9e5599478fd6901fe0b92a023ecfb9d999c78",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -236,7 +236,7 @@
       "deploy/overlays/store-17/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - ../../base\npatches:\n  - path: menu.yaml\n",
       "deploy/overlays/store-17/menu.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-api\nspec:\n  replicas: 3\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s13/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s13/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

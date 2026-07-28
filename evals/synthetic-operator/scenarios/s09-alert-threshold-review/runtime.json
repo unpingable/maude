@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:31750b86aa0199b784434b7712d952201f10c10638b5daa7dde1c5ba6338225f",
-    "source_plan_digest": "sha256:6a2bd68dcb36b5f6338ec60b16a01cd6e8e594162d0ee9515506d306d37f2c22"
+    "approval_witness_digest": "sha256:a4b825779f2ca4eb94640db8196fc7dfaabeff9b614c1ad8550e0bfad042d36d",
+    "source_plan_digest": "sha256:219050adb110071369ff1297a488654604bec7ae9a41f88e92ee5e631fb87b51"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -235,7 +235,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:31750b86aa0199b784434b7712d952201f10c10638b5daa7dde1c5ba6338225f",
+    "approval_witness_digest": "sha256:a4b825779f2ca4eb94640db8196fc7dfaabeff9b614c1ad8550e0bfad042d36d",
     "behavior": "normal",
     "commands": [
       {
@@ -249,12 +249,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:a0f107670dfa5aae2bc869a9a97bdbc7504faf5ee2784237ecddee8ca826a8d8",
-    "grant_id": "sgr_a0f107670dfa",
+    "grant_digest": "sha256:4873e763cd161bb5f0245cbca22124676515c4b5407d066216a4a4495893c69f",
+    "grant_id": "sgr_4873e763cd16",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:6a2bd68dcb36b5f6338ec60b16a01cd6e8e594162d0ee9515506d306d37f2c22",
+    "source_plan_digest": "sha256:219050adb110071369ff1297a488654604bec7ae9a41f88e92ee5e631fb87b51",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -318,7 +318,7 @@
     "base_files": {
       "alerts/menu-latency.yaml": "groups:\n  - name: menu\n    rules:\n      - alert: MenuApiHighLatency\n        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n        for: 10m\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s09/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s09/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

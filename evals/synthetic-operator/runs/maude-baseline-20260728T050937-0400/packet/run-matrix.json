@@ -1,0 +1,851 @@
+{
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "evaluation_helpers": {
+    "all_runs": [
+      {
+        "destination": "operator-retrospective",
+        "purpose": "reveal the fixed questionnaire only after a nonempty initial disposition",
+        "source": "evals/synthetic-operator/harness/operator_retrospective.py"
+      }
+    ],
+    "destination_scope": "operator working directory",
+    "installation_runs": [
+      {
+        "destination": "operator-pty",
+        "purpose": "provide neutral persistent PTY transport for an arbitrary operator-selected command across start/read/send/status/stop calls while preserving exact PTY bytes",
+        "source": "evals/synthetic-operator/harness/operator_pty.py"
+      }
+    ],
+    "product_command_count_exclusions": [
+      "writing /home/operator/initial-disposition.md",
+      "one operator-retrospective invocation",
+      "do not double-count a PTY start and its wrapped product executable; every adapter provider action remains an interaction step"
+    ]
+  },
+  "installation_track": {
+    "direct_runtime_comparator": "not task-equivalent; this track is explicitly Maude-only",
+    "interpretation": "The five installation backgrounds are coverage constraints, not a background-by-condition cross product. Ten fresh runs isolate discovery and documented install, configuration and first use, seven common conditions, upgrade, and removal. Each background appears twice.",
+    "requirements_and_claims": "installation-track.json",
+    "run_count": 10,
+    "source_visibility": "Docs-only by default. install-i03 receives a frozen baseline release-source archive. Preinstalled runs expose only mechanically real installed distribution bytes. Every exception is explicit; no git metadata, tests, architecture notes, sibling checkout, or evaluator expectations are exposed.",
+    "track_id": "maude-installation-first-run-v1"
+  },
+  "interpretation": "Neither scaffold requires a role-by-scenario cross product. The 20 governed-task Maude scenarios are one run each and their ten roles are coverage constraints. The 10 installation and first-run specimens separately cover five installation backgrounds as coverage constraints, with each background represented twice rather than crossed with every condition. Five direct-runtime runs are additional controls for the governed-task track, not substitutes; the Maude-only installation track has no task-equivalent direct-runtime comparator.",
+  "model_family_policy": {
+    "assignment_algorithm": "maude-synthetic-provider-assignment-v1",
+    "campaign_provider_configs": [
+      "openai-sol"
+    ],
+    "capability_evidence": {
+      "auth_isolation": {
+        "bytes": 31587,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "provider-capability-probes/auth/index.json",
+        "sha256": "8aa968626747dc2b099f34c73315dc5e1232e3852e4c3a5d11f5ad32ca48cc07"
+      },
+      "grader_surfaces": {
+        "bytes": 31861,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "grader-surface-probes/index.json",
+        "sha256": "c9bc7fa0901e33c435b216976e7387a0f24a1bb07d2aa54f562cd36769687a98"
+      },
+      "installation_surface": {
+        "bytes": 179272,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "provider-capability-probes/installation/index.json",
+        "sha256": "69ccc62c1b5068cb2ae4671b6885cd309bbd1993faa2f8a44c7884103333e5e8"
+      }
+    },
+    "capability_policy": {
+      "bytes": 2970,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "provider-capability-policy.json",
+      "sha256": "45d19be1ffa384be2132b4f5fd149e1b44a2d3b79c0c523f0ca101e8dbdc7caf"
+    },
+    "claude_available": false,
+    "claude_grader_sessions_assigned": false,
+    "claude_operator_sessions_assigned": false,
+    "claude_sessions_permitted": false,
+    "cross_family_grading_supported": false,
+    "cross_family_grading_used": false,
+    "grader_model_configs_used": [
+      "openai-sol"
+    ],
+    "limitation": "Provider eligibility is role-specific. Unsupported provider/role pairs: anthropic-sonnet:ordinary_operator, anthropic-sonnet:installation_operator, anthropic-sonnet:ordinary_grader, anthropic-sonnet:installation_grader. Same-family grading used: true; cross-family grading used: false. No unsupported family comparison is claimed.",
+    "operator_model_configs_used": [
+      "openai-sol"
+    ],
+    "provider_role_eligibility": {
+      "anthropic-sonnet": {
+        "installation_grader": false,
+        "installation_operator": false,
+        "ordinary_grader": false,
+        "ordinary_operator": false
+      },
+      "openai-sol": {
+        "installation_grader": true,
+        "installation_operator": true,
+        "ordinary_grader": true,
+        "ordinary_operator": true
+      }
+    },
+    "same_family_grading": true,
+    "same_model_configuration_grading": true,
+    "separate_fresh_sessions_required": true
+  },
+  "operator_model_configs": {
+    "openai-sol": {
+      "approval_policy": "never",
+      "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+      "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+      "built_in_tools": [],
+      "cli": "codex",
+      "exact_provider_tool_allowlist_supported": true,
+      "expected_family": "GPT",
+      "freshness": [
+        "--ephemeral",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "fresh provider process",
+        "no resume, continuation, or follow-up"
+      ],
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "intrinsic_action_features_explicitly_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "live_web_search_enabled": false,
+      "mcp_auto_approval_safety": {
+        "exact_enabled_tool_count_per_role": 1,
+        "grader_evidence_tool_read_only": true,
+        "mcp_config_hash_pinned": true,
+        "operator_terminal_bounded_by_frozen_broker": true
+      },
+      "mcp_default_tools_approval_mode": "approve",
+      "mcp_protocol_version": "2025-06-18",
+      "model_argument": "gpt-5.6-sol",
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "optional_features_explicitly_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "provider": "OpenAI",
+      "reasoning_effort": "low",
+      "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+      "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+      "unexpected_intrinsic_action_policy": "fail-closed",
+      "user_mcp_and_connector_config_loaded": false
+    }
+  },
+  "round": "Round A baseline, including adversarial and fatigue specimens; no repair round is authorized",
+  "runs": [
+    {
+      "direct_comparator_run_id": "docket-s01",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "senior-devops-engineer",
+      "run_id": "maude-s01",
+      "scenario_id": "s01-kubernetes-image-update",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "production-sre-on-call",
+      "run_id": "maude-s02",
+      "scenario_id": "s02-ci-workflow-repair",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "platform-engineer",
+      "run_id": "maude-s03",
+      "scenario_id": "s03-service-resource-limit",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "retail-edge-cluster-caretaker",
+      "run_id": "maude-s04",
+      "scenario_id": "s04-health-check",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "security-conscious-operator",
+      "run_id": "maude-s05",
+      "scenario_id": "s05-configuration-reference-rotation",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "traditional-systems-administrator",
+      "run_id": "maude-s06",
+      "scenario_id": "s06-systemd-startup-option",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "senior-devops-engineer",
+      "run_id": "maude-s07",
+      "scenario_id": "s07-reverse-proxy-route",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "platform-engineer",
+      "run_id": "maude-s08",
+      "scenario_id": "s08-terraform-validation",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "security-conscious-operator",
+      "run_id": "maude-s09",
+      "scenario_id": "s09-alert-threshold-review",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "traditional-systems-administrator",
+      "run_id": "maude-s10",
+      "scenario_id": "s10-obsolete-daemon-config",
+      "surface": "maude"
+    },
+    {
+      "direct_comparator_run_id": "docket-s11",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "skeptical-first-time-user",
+      "run_id": "maude-s11",
+      "scenario_id": "s11-description-scope-mismatch",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "security-conscious-operator",
+      "run_id": "maude-s12",
+      "scenario_id": "s12-governance-file-mutation",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "platform-engineer",
+      "run_id": "maude-s13",
+      "scenario_id": "s13-worker-out-of-scope",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "experienced-authority-description-record-operator",
+      "run_id": "maude-s14",
+      "scenario_id": "s14-tests-pass-unauthorized",
+      "surface": "maude"
+    },
+    {
+      "direct_comparator_run_id": "docket-s15",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "junior-on-call-operator",
+      "run_id": "maude-s15",
+      "scenario_id": "s15-runtime-refusal-before-dispatch",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "production-sre-on-call",
+      "run_id": "maude-s16",
+      "scenario_id": "s16-execution-timeout",
+      "surface": "maude"
+    },
+    {
+      "direct_comparator_run_id": "docket-s17",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "junior-on-call-operator",
+      "run_id": "maude-s17",
+      "scenario_id": "s17-client-daemon-restart",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "maude-s18",
+      "scenario_id": "s18-direct-versus-recovery",
+      "surface": "maude"
+    },
+    {
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "retail-edge-cluster-caretaker",
+      "run_id": "maude-s19",
+      "scenario_id": "s19-discard-restoration",
+      "surface": "maude"
+    },
+    {
+      "direct_comparator_run_id": "docket-s20",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "maude-s20",
+      "scenario_id": "s20-terminal-unknown",
+      "surface": "maude"
+    },
+    {
+      "compares_to_run_id": "maude-s01",
+      "comparison_scope": "task-equivalent",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "senior-devops-engineer",
+      "run_id": "docket-s01",
+      "scenario_id": "s01-kubernetes-image-update",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "compares_to_run_id": "maude-s11",
+      "comparison_scope": "task-equivalent",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "skeptical-first-time-user",
+      "run_id": "docket-s11",
+      "scenario_id": "s11-description-scope-mismatch",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "compares_to_run_id": "maude-s15",
+      "comparison_scope": "task-equivalent",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "junior-on-call-operator",
+      "run_id": "docket-s15",
+      "scenario_id": "s15-runtime-refusal-before-dispatch",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "compares_to_run_id": "maude-s17",
+      "comparison_scope": "capability-limited: preserves the client-restart and durable-state question, but the direct surface cannot reproduce or claim Maude daemon recovery",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "junior-on-call-operator",
+      "run_id": "docket-s17",
+      "scenario_id": "s17-client-daemon-restart",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "compares_to_run_id": "maude-s20",
+      "comparison_scope": "task-equivalent",
+      "grader_model_config": "openai-sol",
+      "operator_model_config": "openai-sol",
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "docket-s20",
+      "scenario_id": "s20-terminal-unknown",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/fixture",
+      "coverage": [
+        "discovery",
+        "documented_install",
+        "configuration",
+        "first_meaningful_use",
+        "packaging"
+      ],
+      "deliberately_withheld": [
+        "product source and installed distribution",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/expected-disposition.json",
+      "faults": [
+        "source_checkout_absent",
+        "provider-tool task network denied"
+      ],
+      "first_result_target": "documented-install-and-first-use disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "documented discovery and install with no checkout or package cache",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-component-only-operator",
+      "prior_state": "none",
+      "run_id": "install-i01",
+      "scenario_id": "i01-documented-install-first-use",
+      "source_visibility": "docs-only",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "compatible Unix socket; available but expected to remain unreachable without a client",
+      "task_id": "install-task-01",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/fixture",
+      "coverage": [
+        "discovery",
+        "configuration",
+        "first_meaningful_use",
+        "wrong_path"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/expected-disposition.json",
+      "faults": [
+        "default governor path resolves incorrectly"
+      ],
+      "first_result_target": "public Maude status after an evidence-supported path correction",
+      "grader_model_config": "openai-sol",
+      "installation_case": "first run from a directory that resolves the wrong governor path",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-terminology-new-sysadmin",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution",
+      "run_id": "install-i02",
+      "scenario_id": "i02-wrong-governor-path",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "compatible Unix socket",
+      "task_id": "install-task-02",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/fixture",
+      "coverage": [
+        "documented_install",
+        "missing_dependency",
+        "packaging"
+      ],
+      "deliberately_withheld": [
+        "git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/expected-disposition.json",
+      "faults": [
+        "build or runtime dependency unavailable offline",
+        "provider-tool task network denied"
+      ],
+      "first_result_target": "exact install failure and safe next-action disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "literal editable install from frozen baseline release source with no package cache",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-source-install-developer",
+      "prior_state": "none",
+      "run_id": "install-i03",
+      "scenario_id": "i03-missing-install-dependency",
+      "source_visibility": "release-source",
+      "source_visibility_exception": "A frozen source archive of exactly the baseline commit is ordinary operator-facing installation media for this required source-install specimen. The prompt forbids inspecting internals to answer UX questions.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "none; installation does not reach first run",
+      "task_id": "install-task-03",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "task/release-handoff.json",
+        "frozen baseline release-source archive"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/fixture",
+      "coverage": [
+        "configuration",
+        "first_meaningful_use",
+        "unavailable_governor_or_sibling",
+        "packaging",
+        "component_only_composability"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/expected-disposition.json",
+      "faults": [
+        "Governor endpoint unavailable",
+        "sibling checkout unavailable and out of scope"
+      ],
+      "first_result_target": "component-readiness and ownership-boundary disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "preinstalled component-only handoff with an unavailable external Governor",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-component-only-operator",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution",
+      "run_id": "install-i04",
+      "scenario_id": "i04-governor-unavailable-component-only",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "no socket; the handed-off service is unavailable",
+      "task_id": "install-task-04",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i05-install-permission-denied/fixture",
+      "coverage": [
+        "configuration",
+        "first_meaningful_use",
+        "permissions",
+        "copy_paste_examples_exactly_as_written"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/expected-disposition.json",
+      "faults": [
+        "Governor socket connection permission denied"
+      ],
+      "first_result_target": "exact permission boundary and safe next action",
+      "grader_model_config": "openai-sol",
+      "installation_case": "literal copy/paste validation followed by first run against a Governor Unix socket the operator cannot access",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-literal-doc-operator",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution",
+      "run_id": "install-i05",
+      "scenario_id": "i05-install-permission-denied",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "Unix socket path with connection permission denied",
+      "task_id": "install-task-05",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/fixture",
+      "coverage": [
+        "configuration",
+        "first_meaningful_use",
+        "malformed_config"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/expected-disposition.json",
+      "faults": [
+        "malformed shell environment file"
+      ],
+      "first_result_target": "public Maude status using a documented explicit setting",
+      "grader_model_config": "openai-sol",
+      "installation_case": "malformed shell configuration with a separately verified endpoint handoff",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-terminology-new-sysadmin",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution",
+      "run_id": "install-i06",
+      "scenario_id": "i06-malformed-environment-config",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "compatible Unix socket",
+      "task_id": "install-task-06",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "config/settings.env",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i07-stale-state-schema/fixture",
+      "coverage": [
+        "configuration",
+        "first_meaningful_use",
+        "stale_state_or_schema",
+        "component_only_composability"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/expected-disposition.json",
+      "faults": [
+        "incompatible Governor response schema if reproducible through the public client"
+      ],
+      "first_result_target": "protocol compatibility and retained-state ownership disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "reachable external service returning an incompatible retained-state or response schema",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-shortest-path-sre",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution plus externally owned retained Governor state",
+      "run_id": "install-i07",
+      "scenario_id": "i07-stale-state-schema",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "Unix socket returning a mechanically exercised incompatible public response, or an explicit nonapplicability result",
+      "task_id": "install-task-07",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "task/state-ownership.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/fixture",
+      "coverage": [
+        "configuration",
+        "first_meaningful_use",
+        "occupied_endpoint_or_port"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/expected-disposition.json",
+      "faults": [
+        "wrong protocol or endpoint type at handed-off Unix socket",
+        "endpoint has frozen component ownership outside operator scope; the disposable lab uid is shared and is not ownership evidence"
+      ],
+      "first_result_target": "endpoint type, declared component ownership, and safe next-action disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "handed-off Unix-socket path occupied by a non-Governor endpoint",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-shortest-path-sre",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution",
+      "run_id": "install-i08",
+      "scenario_id": "i08-occupied-socket-endpoint",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "wrong-service Unix socket with a frozen external component-ownership record and explicitly shared lab uid",
+      "task_id": "install-task-08",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "task/endpoint-ownership.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture",
+      "coverage": [
+        "discovery",
+        "upgrade_from_prior_state",
+        "packaging"
+      ],
+      "deliberately_withheld": [
+        "product source and installed distribution",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/expected-disposition.json",
+      "faults": [
+        "supported prior-state and migration contract absent",
+        "prior version not mechanically present",
+        "provider-tool task network denied"
+      ],
+      "first_result_target": "upgrade support and ownership disposition",
+      "grader_model_config": "openai-sol",
+      "installation_case": "upgrade assessment with an unverified prior-version handoff and no documented support contract",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-source-install-developer",
+      "prior_state": "unverified handoff claim of 2.3.0; not declared supported",
+      "run_id": "install-i09",
+      "scenario_id": "i09-undocumented-upgrade",
+      "source_visibility": "docs-only",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "none",
+      "task_id": "install-task-09",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "state/prior-installation.json",
+        "task/state-ownership.json"
+      ]
+    },
+    {
+      "cleanroom_fixture": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture",
+      "coverage": [
+        "removal_reset_evidence",
+        "packaging",
+        "component_only_composability"
+      ],
+      "deliberately_withheld": [
+        "repository checkout, git metadata, tests, and architecture notes",
+        "host environment, config, credentials, and package cache",
+        "Agent Governor and sibling checkouts",
+        "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary"
+      ],
+      "expected_disposition_path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/expected-disposition.json",
+      "faults": [
+        "package uninstall and full-reset documentation absent"
+      ],
+      "first_result_target": "package-removal and external-state preservation evidence",
+      "grader_model_config": "openai-sol",
+      "installation_case": "bounded Maude removal with externally owned adjacent state",
+      "operator_model_config": "openai-sol",
+      "persona_id": "installation-literal-doc-operator",
+      "prior_state": "preinstalled frozen baseline 2.4.0 distribution in a dedicated environment",
+      "run_id": "install-i10",
+      "scenario_id": "i10-removal-reset-boundary",
+      "source_visibility": "installed-distribution",
+      "source_visibility_exception": "Mechanically real installed Python distribution bytes are present; no checkout, git metadata, tests, or architecture notes.",
+      "surface": "maude-installation",
+      "synthetic_governor_fixture": "none",
+      "task_id": "install-task-10",
+      "track_id": "maude-installation-first-run-v1",
+      "visible_materials": [
+        "README.md",
+        "operator-pty",
+        "operator-retrospective",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml",
+        "task/assignment.md",
+        "task/task.json",
+        "task/handoff.json",
+        "project/ownership.json",
+        "project/.governor/ownership.json",
+        "frozen installed Maude distribution and console entry point"
+      ]
+    }
+  ],
+  "schema": "maude.synthetic-operator.run-matrix.v2"
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "maude.synthetic-operator.initial-repository-observation.v1",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "repository_path": "/home/jbeck/git/agent_gov_ui/maude",
+  "observations": {
+    "repository_root": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stdout": "/home/jbeck/git/agent_gov_ui/maude\n",
+      "stderr": ""
+    },
+    "branch": {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "9e366fae778602f1355e9467814c89b54832893f\n",
+      "stderr": ""
+    },
+    "origin": {
+      "argv": [
+        "git",
+        "remote",
+        "get-url",
+        "origin"
+      ],
+      "returncode": 0,
+      "stdout": "github-unpingable:unpingable/maude.git\n",
+      "stderr": ""
+    },
+    "status_short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "upstream": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--abbrev-ref",
+        "@{upstream}"
+      ],
+      "returncode": 0,
+      "stdout": "origin/main\n",
+      "stderr": ""
+    },
+    "upstream_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "@{upstream}"
+      ],
+      "returncode": 0,
+      "stdout": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c\n",
+      "stderr": ""
+    }
+  },
+  "custody": {
+    "artifact_serialized_immediately_after_initial_inspection": true,
+    "ordering_basis": "The campaign runner captured these exact command outputs from a clean tree at the preparation commit before changing successor campaign inputs or evaluator code.",
+    "wall_clock_captured": "2026-07-28T05:09:37-04:00"
+  },
+  "authority_effect": "none"
+}

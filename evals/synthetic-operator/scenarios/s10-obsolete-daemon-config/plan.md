@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Remove only telnetd from the package list; retain chrony and jq."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s10/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s10/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

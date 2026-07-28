@@ -146,7 +146,7 @@
   "initial_sessions": [
     {
       "backend_kind": "synthetic_fixture",
-      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s14/repo",
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s14/repo",
       "exit_code": 0,
       "session_id": "sess_ux_task_14",
       "status": "exited",
@@ -211,7 +211,7 @@
       "config/api.yaml": "retries: 2\n",
       "tests/test_config.py": "from pathlib import Path\n\n\ndef test_retry_count() -> None:\n    assert Path(\"config/api.yaml\").read_text(encoding=\"utf-8\") == \"retries: 3\\n\"\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s14/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s14/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

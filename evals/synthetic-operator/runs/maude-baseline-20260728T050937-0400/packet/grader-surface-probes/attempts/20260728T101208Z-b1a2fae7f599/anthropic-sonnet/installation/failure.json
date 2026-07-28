@@ -1,0 +1,151 @@
+{
+  "all_passed": false,
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "campaign_run": false,
+  "diagnostic_sha256": "7591571b21f1f460d500bc91bc60b1ea431c8571cd0731333508ffa0ee543665",
+  "exception_type": "CampaignError",
+  "failure_classification": "provider-capability-unavailable",
+  "failure_stage": "provider-transport",
+  "model_configuration": {
+    "broker_boundary": "Operator commands execute in a fresh source-free, auth-free, no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "browser_enabled": false,
+    "built_in_tools": [],
+    "cli": "claude",
+    "expected_family": "Claude",
+    "freshness": [
+      "--no-session-persistence",
+      "new UUID session id",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_protocol_version": "2025-11-25",
+    "model_argument": "sonnet",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "permission_mode": "bypassPermissions",
+    "provider": "Anthropic",
+    "reasoning_effort": "low",
+    "session_persistence": false,
+    "slash_commands_enabled": false,
+    "strict_mcp_config": true,
+    "tool_boundary": "Strict per-session MCP configuration. The operator receives only mcp__operator__terminal; the grader receives only mcp__grader__evidence. Built-in tools are excluded from the exact provider roster.",
+    "transport_boundary": "Claude runs in a task-blind retained-auth transport with no task paths or task sockets. Its fixed MCP proxy and command broker receive neither provider credentials nor semantic evaluator prompts.",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "partial_evidence": [
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 12164,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "grade-bundle/installation-grader-output.schema.json",
+      "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+    },
+    {
+      "bytes": 1808,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "grade-bundle/probe-facts.json",
+      "sha256": "76551c1afd06ad5bc3a93aac2b7bbc1ab9692a35dd33315142697a3dce0bdcd2"
+    },
+    {
+      "bytes": 57764,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "invocation.json",
+      "sha256": "e8fd9ce382571c7354ad2c9427e91ebfa3d5acf546f00023cb4b6989e14e7bdf"
+    },
+    {
+      "bytes": 13366,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "isolation-result.json",
+      "sha256": "a5a4ffbd4369f6c0f9dce7764f222e6b3133884ac1601435f9ae600d3e1da0f0"
+    },
+    {
+      "bytes": 321,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "raw/claude-mcp-boundary/cleanup.json",
+      "sha256": "c9af8b209a0c0213255b15956a3320cd167229637210aeea2beea63e25b9aee8"
+    },
+    {
+      "bytes": 4339,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "raw/claude-mcp-boundary/declared-boundary.json",
+      "sha256": "52550be80abf5e70f9687679de2dfc3e3f4237f39a46d009a9d8f25c7ef2cdeb"
+    },
+    {
+      "bytes": 122,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "raw/grader.stderr",
+      "sha256": "d8a1e758a0885d376f7a2457d829c53f27040ef929246fb4e28105670fb743de"
+    },
+    {
+      "bytes": 0,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "raw/grader.stdout.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1244,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "raw/provider-auth-gate.json",
+      "sha256": "74560e2c5acf5c9841f076781582c650eace3a28ef40e03887a21abad9da0084"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 149233,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "user-prompt.md",
+      "sha256": "fa928ea42f2010ea690dbfd5d6627316d78f295525dd9a41c23c3af3fec2e060"
+    }
+  ],
+  "partial_evidence_preserved": true,
+  "probe_id": "installation",
+  "provider_config": "anthropic-sonnet",
+  "provider_network_attempted": "unknown",
+  "provider_network_use_observed": "unknown",
+  "provider_process_launch_state": "attempted-outcome-unknown",
+  "provider_process_observation": null,
+  "schema": "maude.synthetic-operator.grader-surface-probe-failure.v1",
+  "session_identity": {},
+  "status": "provider-capability-unavailable",
+  "task_level_network_or_external_operational_effect": false
+}

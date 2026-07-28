@@ -29,9 +29,17 @@ campaign inputs.
   manifest, records preflight facts, hashes all frozen inputs, and writes the
   immutable campaign manifest. A second `--write` is refused.
 - `campaign_runner.py` materializes isolated labs, starts the synthetic runtime
-  and persistent Maude driver, launches one genuinely fresh `openai-sol`
-  provider process per operator, captures raw evidence, launches a separate
-  genuinely fresh `openai-sol` grader, and verifies coverage and hashes.
+  and persistent Maude driver, launches the exact provider assigned to each
+  fresh operator and grader session, captures raw evidence, and verifies
+  coverage and hashes.
+- `grader_surface_probe.py` performs the non-campaign, pre-freeze
+  provider/schema capability probes for both grading surfaces.
+- `finalize_provider_assignments.py` derives the run matrix mechanically from
+  the frozen capability evidence. It balances eligible providers, prefers an
+  opposite-family grader, and mirrors each direct-runtime comparator's paired
+  Maude assignment.
+- `provider_assignment_selftest.py` exercises that derivation and its
+  fail-closed evidence checks without starting a provider process.
 - `claude_mcp_bridge.py` retains its historical filename but is the fixed
   provider-neutral MCP stdio shim. It exposes exactly one role-specific tool,
   preserves protocol and command correlations, and has no path that reads
@@ -45,13 +53,28 @@ campaign inputs.
 
 ## Freeze and execution
 
-Freeze is a preparation step and must precede every model session:
+The provider-capability policy is frozen before any provider call. Run each
+capability kind once for the complete candidate set, validate the retained
+evidence, and derive the matrix before freeze:
 
 ```text
+python3 campaign_runner.py probe-auth-gate
+python3 campaign_runner.py probe-installation-surface
+python3 grader_surface_probe.py run
+python3 grader_surface_probe.py validate --allow-provider-capability-unavailable
+python3 provider_assignment_selftest.py
+python3 finalize_provider_assignments.py --write
+python3 finalize_provider_assignments.py --validate
 python3 freeze_campaign.py --dry-run
 python3 freeze_campaign.py --write
 python3 freeze_campaign.py --validate
 ```
+
+An unavailable provider/role is retained as evidence and excluded by the
+deterministic assignment rule. A probe-integrity failure invalidates the
+generation. Any retry after an attempted capability probe requires a new
+campaign generation; probe evidence is append-only and never counts as an
+operator run or independent grade.
 
 After the frozen-input commit exists, validate or dry-run orchestration before
 execution:
@@ -79,15 +102,19 @@ evaluator-private behind the trusted public-CLI broker.
 ## Provider and session boundary
 
 Every operator and every independent grader receives a separate genuinely
-fresh `openai-sol` provider process and session using `gpt-5.6-sol`. The runner
-sends one initial user assignment, closes the input stream, and permits no
-follow-up, resume, continuation, or evaluator coaching. A grader never shares
-the operator's process or conversational state.
+fresh process and session using the exact provider configuration recorded in
+the frozen run matrix. The candidates are `openai-sol` (`gpt-5.6-sol`) and
+`anthropic-sonnet` (Claude Sonnet). Binary or credential presence alone does
+not establish capability: the predeclared role-specific probes decide which
+assignments are admissible. The runner sends one initial assignment and permits
+no follow-up, resume, continuation, or evaluator coaching. A grader never
+shares the operator's process, session identity, or conversational state.
 
-Claude is not an active campaign provider. Its capability probe reached MCP
-initialization but expired and unrefreshable OAuth prevented any tool action.
-The campaign therefore records same-family independent grading as a limitation
-and makes no cross-family evaluation claim.
+Provider network and locally configured provider credentials are permitted
+only inside the provider-session transport. Task-level network, production
+credentials, production systems, and external operational effects remain
+prohibited. Every operator command crosses into a source-contained,
+credential-free, prompt-free, no-network namespace.
 
 The Codex provider transport uses a task-blind filesystem boundary: the
 operator variant mounts no task paths, runtime sockets, repository source, or
@@ -101,21 +128,25 @@ hash-pinned implementation has no auth-reading path and the runtime proof
 records no auth read, but this is not a namespace-enforced auth boundary or an
 auth-free shim claim.
 
-Strict per-session Codex configuration makes MCP the only model action surface:
+The Claude provider transport is likewise task-blind and retains only its
+private provider authentication and provider network. Its MCP proxy is a
+separately sandboxed, credential-free, no-network process. Neither that proxy
+nor the downstream command broker receives the semantic evaluator prompt.
+
+Strict per-session configuration makes MCP the only model action surface:
 
 - operators receive exactly the hash-pinned
   `mcp__operator__terminal` tool;
 - graders receive exactly the hash-pinned
   `mcp__grader__evidence` tool;
-- no Codex built-in tools are enabled;
-- the intrinsic action features `shell_tool` and `unified_exec` are disabled;
-- optional app, plugin, browser, computer-use, image-generation, multi-agent,
-  hook, skill-dependency, and MCP-elicitation features are disabled;
-- the MCP protocol is pinned to `2025-06-18`;
-- `approval_policy="never"` applies to the provider session; and
-- `default_tools_approval_mode="approve"` applies only to the exact single
-  hash-pinned MCP tool, whose broker or read-only evidence boundary supplies
-  the recorded bounded safety basis.
+- no provider built-in tools are enabled;
+- Codex disables intrinsic and optional action features, uses
+  `approval_policy="never"`, and pins MCP protocol `2025-06-18`;
+- Claude uses strict MCP configuration, a new session UUID,
+  `--no-session-persistence`, disabled slash/browser surfaces, and MCP protocol
+  `2025-11-25`; and
+- provider-specific action/result correlations must validate exactly before a
+  capability or campaign session is accepted.
 
 The operator terminal tool crosses into a credential-free, prompt-free trusted
 broker. That broker launches each model-selected command in a fresh

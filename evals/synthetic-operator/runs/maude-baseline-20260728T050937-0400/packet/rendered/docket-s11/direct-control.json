@@ -1,0 +1,29 @@
+{
+  "allowed_paths": [
+    "apps/menu/deployment.yaml",
+    "apps/payments/deployment.yaml"
+  ],
+  "assigned_actor": "operator-ux-task-11",
+  "attempt_id": "d11dff5fa59130bf177f6557307c8e49",
+  "authority_effect": "synthetic fixture only; none outside this disposable lab",
+  "basis_commit": "cdcae3c55fdddfc4d5992fd1c6308d9b12dc7464",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "candidate_digest": "757db27ab8a5e8d942d7edd2d7335bc9c2299656cfda7b37575d9351393dda73",
+  "candidate_id": "eaee8b573c2ea7662a8494b96656d46e",
+  "candidate_patch": "candidate.patch",
+  "prepared_attempt_digest": "a556c9477bb478b4c9ce6e63cdb1e51694269f82b1576763d9ba306aa2030ad3",
+  "repository_id": "repo-0000000000000000000000000000000b",
+  "repository_path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s11/repo",
+  "run_id": "docket-s11",
+  "schema": "maude.synthetic-docket-operator-control.v1",
+  "setup_reservation_ttl_ms": null,
+  "standing_actor": "operator-ux-task-11",
+  "standing_grant_id": "79f732e3bcab859f48233a6b76f7ca45",
+  "standing_token": "15:gwr-standing-v132:79f732e3bcab859f48233a6b76f7ca4532:d8e217471df7c6e975f357d865fc390f6:ratify68:/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s11/repo64:a556c9477bb478b4c9ce6e63cdb1e51694269f82b1576763d9ba306aa2030ad313:1787822301301|e1a8b655ca7e35ff8fc096570b270af8b05524c102d5e46c07b32a3c3248b249",
+  "standing_ttl_ms": 2592000000,
+  "state_path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s11/state",
+  "surface": "Docket/GWR direct CLI",
+  "target_ref": "refs/gwr/target",
+  "task_id": "ux-task-11",
+  "work_request_id": "3e67f58686f7d16abfa34ebb11b6455c"
+}

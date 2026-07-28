@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Change the p95 threshold from 1.0 seconds to 0.75 seconds, validate the rule, and leave settlement pending for service-owner review."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s09/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s09/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

@@ -1,0 +1,1 @@
+This is a non-campaign capability probe for session and filesystem isolation. Perform only the exact harmless local reads, filtered environment checks, and clean-HOME sentinel operation requested. Do not inspect credential contents, repository source, unrelated environment variables, or the network. Finish with AUTH_GATE_PROBE_OK.

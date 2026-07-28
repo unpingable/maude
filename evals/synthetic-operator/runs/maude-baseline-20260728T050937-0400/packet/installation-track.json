@@ -1,0 +1,309 @@
+{
+  "applicability": {
+    "bare_entrypoint_after_install": "The baseline Quick Start does not activate `.venv` before invoking bare `maude`. Installed-state specimens keep the clean system PATH with unrelated host Maude masked and hand the exact installed entrypoint path to the operator; they do not silently improve the documented sequence.",
+    "nq": "Excluded. No NQ materials or claims are supplied; none of the fully read Maude installation documents requires NQ.",
+    "occupied_endpoint_or_port": "Covered as an occupied Unix-socket endpoint in install-i08. No TCP-port collision is invented because the baseline documents Maude as a Unix-socket client and calls TCP future work.",
+    "synthetic_endpoint_ownership": "install-i08 uses a frozen component-ownership record. The endpoint process and operator share the disposable lab uid, which is explicitly not treated as ownership evidence.",
+    "upgrade_from_supported_prior_state": "No supported prior state is documented. install-i09 tests the safe response to that absence; it does not declare 2.3.0 supported."
+  },
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "clean_room_contract": {
+    "candidate_installation_destinations": [
+      "operator/.venv",
+      "operator/venv",
+      "work/.venv",
+      "work/venv"
+    ],
+    "evaluation_helper_boundary": "The PTY adapter and delayed retrospective helper are frozen, operator-visible campaign transports rather than Maude product features. The disposition write and retrospective invocation are excluded from interaction-step counts. Every PTY start/read/send/status/stop provider action remains one interaction step; a start and its wrapped product executable are not double-counted. The persistent PTY permits output-guided input across separate provider tool actions. Reading the retrospective helper before freezing an initial disposition is evaluator contamination.",
+    "grader_sessions": "one separate genuinely fresh context per run",
+    "host_leakage": "clear environment; fresh HOME; no host config, source tree, credential, package cache, or sibling checkout mounts",
+    "installation_fidelity": "No package-command wrapper, mirror rewrite, hidden pip setting, or simulated installation is permitted. Runs use literal system Python, pip, git, and frozen Maude distributions or the filtered installable Git archive. A run may claim installation success only from the resulting mechanically observed package, module, entry-point, and version agreement. If those materials cannot be frozen, execution stops as a capability gap.",
+    "network": "Provider transport remains available only to the model client. Provider-tool task network is denied and audited.",
+    "operator_sessions": "one genuinely fresh context per run",
+    "production": "no endpoints, systems, credentials, or side effects",
+    "source_boundary": "Docs-only runs receive no product bytes. install-i03 receives one filtered installable archive from the exact baseline Git commit. Runs beginning from a mechanically real installed distribution necessarily expose installed Python module bytes. Every exception is declared per run; no git metadata, tests, architecture notes, sibling source, or evaluator expectations are mounted.",
+    "visible_roots": [
+      "neutral task and handoff files",
+      "exact baseline README/operator docs/package metadata",
+      "one filtered installable baseline Git archive only for install-i03",
+      "mechanically real installed distributions where declared",
+      "per-run public shell and Maude surface",
+      "one neutral evaluator PTY adapter for arbitrary commands with persistent start/read/send/status/stop interaction and an exact PTY byte transcript",
+      "one evaluator retrospective helper that reveals its fixed questions only after an initial disposition"
+    ],
+    "withheld": [
+      "environment.json and expected-disposition.json",
+      "evaluation rubric and failure taxonomy",
+      "implementation source and architecture notes, except the declared install-i03 release-source archive and installed distribution bytes for installed-state runs",
+      "other prompts, transcripts, and findings",
+      "host environment, package cache, credentials, and config",
+      "Agent Governor and other sibling checkouts"
+    ]
+  },
+  "coverage_mapping": {
+    "component_only_composability": [
+      "install-i04",
+      "install-i07",
+      "install-i10"
+    ],
+    "configuration": [
+      "install-i01",
+      "install-i02",
+      "install-i04",
+      "install-i05",
+      "install-i06",
+      "install-i07",
+      "install-i08"
+    ],
+    "copy_paste_examples_exactly_as_written": [
+      "install-i05"
+    ],
+    "discovery": [
+      "install-i01",
+      "install-i02",
+      "install-i09"
+    ],
+    "documented_install": [
+      "install-i01",
+      "install-i03"
+    ],
+    "first_meaningful_use": [
+      "install-i01",
+      "install-i02",
+      "install-i04",
+      "install-i05",
+      "install-i06",
+      "install-i07",
+      "install-i08"
+    ],
+    "malformed_config": [
+      "install-i06"
+    ],
+    "missing_dependency": [
+      "install-i03"
+    ],
+    "occupied_endpoint_or_port": [
+      "install-i08"
+    ],
+    "packaging": [
+      "install-i01",
+      "install-i03",
+      "install-i04",
+      "install-i09",
+      "install-i10"
+    ],
+    "permissions": [
+      "install-i05"
+    ],
+    "removal_reset_evidence": [
+      "install-i10"
+    ],
+    "stale_state_or_schema": [
+      "install-i07"
+    ],
+    "unavailable_governor_or_sibling": [
+      "install-i04"
+    ],
+    "upgrade_from_prior_state": [
+      "install-i09"
+    ],
+    "wrong_path": [
+      "install-i02"
+    ]
+  },
+  "direct_runtime_comparison": {
+    "reason": "This addendum is explicitly Maude-only. Installing Docket/GWR would not be a task-equivalent comparison of installing the Maude component.",
+    "required": false
+  },
+  "documented_claims": [
+    {
+      "citations": [
+        "README.md:79-86"
+      ],
+      "claim": "Quick Start prescribes cloning the Maude repository, changing into it, creating .venv, and running `.venv/bin/pip install -e .`.",
+      "claim_id": "install-claim-01",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "pyproject.toml:1-20",
+        "pyproject.toml:26-27"
+      ],
+      "claim": "The baseline package is maude 2.4.0, requires Python >=3.11, uses hatchling, declares four runtime dependencies, and installs the `maude` console entry point.",
+      "claim_id": "install-claim-02",
+      "kind": "package_metadata"
+    },
+    {
+      "citations": [
+        "README.md:88-91"
+      ],
+      "claim": "Quick Start next assumes an Agent Governor checkout at `../agent_gov`, installs it editable, and runs `governor serve`.",
+      "claim_id": "install-claim-03",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "docs/configuration.md:131-147"
+      ],
+      "claim": "Maude requires a running Governor daemon with a configured backend; context initialization is said to happen on first use.",
+      "claim_id": "install-claim-04",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "docs/configuration.md:1-3",
+        "docs/configuration.md:7-49",
+        "docs/configuration.md:75-83"
+      ],
+      "claim": "Configuration is by environment or CLI, CLI wins, and socket resolution prefers explicit socket, then governor directory, then the current directory and its .governor child.",
+      "claim_id": "install-claim-05",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "README.md:93-97",
+        "docs/commands.md:8-13"
+      ],
+      "claim": "The ordinary first-use path is `help`, followed by `supervised launch <task>` or `go <task>`.",
+      "claim_id": "install-claim-06",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "README.md:120-134",
+        "docs/configuration.md:149-151"
+      ],
+      "claim": "The default transport is a client connection over a Unix socket; TCP is future work, so Maude does not document a listening port for installation.",
+      "claim_id": "install-claim-07",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "docs/commands.md:63-66",
+        "docs/commands.md:89-91",
+        "README.md:40-43"
+      ],
+      "claim": "`clear` or `reset` starts a fresh context session; session delete removes a session; supervised reject reverts workspace changes. None is documented as package uninstall or full-state removal.",
+      "claim_id": "install-claim-08",
+      "kind": "documented_limited_semantics"
+    },
+    {
+      "citations": [
+        "README.md",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml"
+      ],
+      "claim": "The fully read baseline README, operator documentation, and package metadata define no supported prior Maude version, upgrade command, compatibility promise, or state-migration procedure.",
+      "claim_id": "install-claim-09",
+      "kind": "documented_absence"
+    },
+    {
+      "citations": [
+        "README.md",
+        "docs/README.md",
+        "docs/commands.md",
+        "docs/configuration.md",
+        "pyproject.toml"
+      ],
+      "claim": "The fully read baseline README, operator documentation, and package metadata define no Maude uninstall procedure and no ownership-safe full reset procedure.",
+      "claim_id": "install-claim-10",
+      "kind": "documented_absence"
+    },
+    {
+      "citations": [
+        "README.md:67-75",
+        "docs/configuration.md:149-161"
+      ],
+      "claim": "The documentation describes Maude and Governor as separate repositories across an RPC boundary and also describes an injectable Transport for custom integration.",
+      "claim_id": "install-claim-11",
+      "kind": "documented"
+    },
+    {
+      "citations": [
+        "README.md:79-97"
+      ],
+      "claim": "Quick Start creates `.venv` and installs with its absolute pip path, does not activate or prepend that environment, and later invokes bare `maude`; the campaign must preserve this package/binary/documentation agreement question.",
+      "claim_id": "install-claim-12",
+      "kind": "documented_sequence"
+    }
+  ],
+  "interpretation": "The five requested backgrounds are coverage constraints, not a role-by-condition cross product. Ten fresh operator runs isolate documented discovery/installation, configuration and first use, seven common conditions, upgrade, and removal. Each background appears twice.",
+  "required_installation_evidence": [
+    "exact prompts and model/session configuration",
+    "complete unedited transcript and interface actions",
+    "filesystem and package inventories before and after",
+    "resolved executable and version before and after",
+    "clean-room environment allowlist",
+    "configuration source and resolved endpoint",
+    "public Maude response or exact blocking error",
+    "network, production, source, credential, and sibling isolation checks",
+    "ownership-boundary evidence for upgrade, removal, or reset",
+    "fresh independent grade under the frozen campaign rubric"
+  ],
+  "role_mapping": {
+    "installation-component-only-operator": [
+      "install-i01",
+      "install-i04"
+    ],
+    "installation-literal-doc-operator": [
+      "install-i05",
+      "install-i10"
+    ],
+    "installation-shortest-path-sre": [
+      "install-i07",
+      "install-i08"
+    ],
+    "installation-source-install-developer": [
+      "install-i03",
+      "install-i09"
+    ],
+    "installation-terminology-new-sysadmin": [
+      "install-i02",
+      "install-i06"
+    ]
+  },
+  "run_ids": [
+    "install-i01",
+    "install-i02",
+    "install-i03",
+    "install-i04",
+    "install-i05",
+    "install-i06",
+    "install-i07",
+    "install-i08",
+    "install-i09",
+    "install-i10"
+  ],
+  "schema": "maude.synthetic-install-track.v1",
+  "source_documents": {
+    "README.md": {
+      "bytes": 12981,
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    "docs/README.md": {
+      "bytes": 1938,
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    "docs/commands.md": {
+      "bytes": 4437,
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    "docs/configuration.md": {
+      "bytes": 4203,
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    "pyproject.toml": {
+      "bytes": 817,
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    }
+  },
+  "system_under_test": {
+    "commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+    "name": "maude",
+    "version": "2.4.0"
+  },
+  "track_id": "maude-installation-first-run-v1"
+}

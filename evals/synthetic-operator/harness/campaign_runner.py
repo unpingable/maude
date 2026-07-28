@@ -44,9 +44,13 @@ from campaign_common import (
     LAB_ROOT,
     MANIFEST_PATH,
     PACKET_DIR,
+    PROVIDER_CAPABILITY_POLICY_PATH,
+    PROVIDER_MODEL_CONFIGS,
     REPO_ROOT,
     SCENARIOS_DIR,
+    SUPPORTED_PROVIDER_CONFIGS,
     CampaignError,
+    append_jsonl,
     ensure_safe_lab_path,
     file_record,
     inventory_files,
@@ -7522,7 +7526,13 @@ def _run_model_process(
 def _probe_provider_scope(
     providers: Iterable[str] | None,
 ) -> tuple[str, ...]:
-    available = _configured_campaign_providers()
+    """Select pre-freeze capability candidates without consulting a matrix.
+
+    Provider capability is an input to the generation's model-family policy,
+    so using a provisional or superseded run matrix here would be circular.
+    """
+
+    available = SUPPORTED_PROVIDER_CONFIGS
     selected = tuple(providers or available)
     if (
         not selected
@@ -7530,10 +7540,281 @@ def _probe_provider_scope(
         or any(value not in available for value in selected)
     ):
         raise CampaignError(
-            "probe providers must be a nonempty unique subset of "
+            "probe providers must be a nonempty unique subset of the static "
+            "candidate universe "
             f"{available!r}"
         )
-    return selected
+    return tuple(
+        provider for provider in available if provider in set(selected)
+    )
+
+
+def _provider_capability_policy_record() -> dict[str, Any]:
+    policy = load_json(PROVIDER_CAPABILITY_POLICY_PATH)
+    if (
+        not isinstance(policy, dict)
+        or policy.get("schema")
+        != "maude.synthetic-operator.provider-capability-policy.v1"
+        or policy.get("campaign_id") != CAMPAIGN_ID
+        or policy.get("candidate_provider_configs")
+        != list(SUPPORTED_PROVIDER_CONFIGS)
+        or policy.get("decision_rule_frozen_before_provider_probes")
+        is not True
+        or policy.get("authority_effect") != "none"
+    ):
+        raise CampaignError(
+            "provider capability policy identity or candidate universe differs"
+        )
+    retry = policy.get("freshness_and_retry")
+    if (
+        not isinstance(retry, dict)
+        or retry.get(
+            "maximum_attempts_per_provider_and_probe_kind_in_this_campaign_id"
+        )
+        != 1
+        or retry.get("failed_and_partial_attempts_must_be_preserved") is not True
+        or retry.get("retry_after_any_attempt_requires_a_new_campaign_generation")
+        is not True
+    ):
+        raise CampaignError("provider capability retry policy differs")
+    return file_record(
+        PROVIDER_CAPABILITY_POLICY_PATH,
+        relative_to=PACKET_DIR,
+    )
+
+
+def _probe_failure_classification(
+    failure_stage: str,
+    process_result: dict[str, Any] | None = None,
+) -> str:
+    """Classify capability failures without laundering probe defects.
+
+    A completed nonzero or timed-out provider process remains a transport
+    capability failure. Isolation, evaluator, cleanup, and evidence-integrity
+    failures invalidate the observation instead of excluding the provider.
+    """
+
+    if failure_stage in {
+        "provider-authentication",
+        "provider-transport",
+    }:
+        # A zero-return process can still lack the required authenticated
+        # provider identity, so transport-stage classification remains a
+        # capability failure until the caller advances to probe-integrity.
+        _ = process_result
+        return "provider-capability-unavailable"
+    return "probe-invalid"
+
+
+def _probe_failure_record(
+    *,
+    provider: str,
+    evidence_dir: Path,
+    probe_root: Path,
+    exc: Exception,
+    failure_stage: str,
+    failure_classification: str,
+    provider_process_launch_state: str,
+    process_result: dict[str, Any] | None = None,
+    transcript_path: Path | None = None,
+    stderr_path: Path | None = None,
+) -> dict[str, Any]:
+    """Preserve a provider capability failure without copying exception text.
+
+    Provider exceptions may contain transport diagnostics. The immutable raw
+    files remain available by digest, while the index records only a stable
+    failure class and the digest of the diagnostic text.
+    """
+
+    if failure_classification not in {
+        "provider-capability-unavailable",
+        "probe-invalid",
+    }:
+        raise CampaignError(
+            "probe failure classification must distinguish provider "
+            "capability from probe validity"
+        )
+    if provider_process_launch_state not in {
+        "not-attempted",
+        "attempted-outcome-unknown",
+        "completed",
+    }:
+        raise CampaignError("probe provider process launch state is invalid")
+    existing_records = inventory_files(
+        evidence_dir,
+        exclude_names=("failure.json",),
+    )
+    identity: dict[str, Any] = {}
+    if transcript_path is not None and transcript_path.is_file():
+        try:
+            identity = _session_identity(
+                _provider_events(transcript_path),
+                provider,
+            )
+        except (CampaignError, OSError, ValueError):
+            identity = {}
+    result = {
+        "schema": "maude.synthetic-operator.provider-capability-failure.v1",
+        "provider_config": provider,
+        "model_configuration": PROVIDER_MODEL_CONFIGS[provider],
+        "campaign_run": False,
+        "status": failure_classification,
+        "failure_stage": failure_stage,
+        "failure_classification": failure_classification,
+        "exception_type": type(exc).__name__,
+        "diagnostic_sha256": sha256_bytes(str(exc).encode("utf-8")),
+        "provider_process_launch_state": provider_process_launch_state,
+        "provider_process_observation": (
+            {
+                "returncode": process_result.get("returncode"),
+                "timed_out": process_result.get("timed_out"),
+            }
+            if process_result is not None
+            else None
+        ),
+        "provider_network_attempted": (
+            False
+            if provider_process_launch_state == "not-attempted"
+            else True
+            if provider_process_launch_state == "completed"
+            else "unknown"
+        ),
+        "provider_network_use_observed": (
+            "not-attempted"
+            if provider_process_launch_state == "not-attempted"
+            else "unknown"
+        ),
+        "session_identity": identity,
+        "provider_session_identity_observed": bool(
+            identity.get("provider_session_id")
+            or identity.get("provider_thread_id")
+        ),
+        "raw_transcript": (
+            file_record(transcript_path, relative_to=probe_root)
+            if transcript_path is not None and transcript_path.is_file()
+            else None
+        ),
+        "raw_stderr": (
+            file_record(stderr_path, relative_to=probe_root)
+            if stderr_path is not None and stderr_path.is_file()
+            else None
+        ),
+        "partial_evidence": existing_records,
+        "partial_evidence_preserved": True,
+        "retry_or_provider_selection_decision_made": False,
+        "task_level_network_or_external_operational_effect": False,
+        "authority_effect": "none",
+    }
+    write_json(evidence_dir / "failure.json", result)
+    return result
+
+
+def _write_probe_attempt_index(
+    *,
+    probe_root: Path,
+    attempt_root: Path,
+    index: dict[str, Any],
+) -> None:
+    """Write one immutable attempt index and append its digest to the catalog."""
+
+    attempt_index = attempt_root / "index.json"
+    if attempt_index.exists():
+        raise CampaignError(
+            f"probe attempt index already exists: {attempt_index}"
+        )
+    write_json(attempt_index, index)
+    append_jsonl(
+        probe_root / "attempt-index.jsonl",
+        {
+            "schema": "maude.synthetic-operator.probe-attempt-catalog.v1",
+            "attempt_id": index["attempt_id"],
+            "attempt_index": file_record(
+                attempt_index,
+                relative_to=probe_root,
+            ),
+            "requested_provider_configs": index[
+                "requested_provider_configs"
+            ],
+            "successful_provider_configs": index[
+                "successful_provider_configs"
+            ],
+            "failed_provider_configs": index["failed_provider_configs"],
+            "unavailable_provider_configs": index.get(
+                "unavailable_provider_configs",
+                [],
+            ),
+            "invalid_probe_provider_configs": index.get(
+                "invalid_probe_provider_configs",
+                [],
+            ),
+            "capability_observation_valid": index.get(
+                "capability_observation_valid",
+                False,
+            ),
+            "all_passed": index["all_passed"],
+            "authority_effect": "none",
+        },
+    )
+
+
+def _replace_probe_outcome_with_cleanup_failure(
+    *,
+    provider: str,
+    evidence_dir: Path,
+    probe_root: Path,
+    exc: Exception,
+    provider_process_launch_state: str,
+    process_result: dict[str, Any] | None,
+    transcript_path: Path,
+    stderr_path: Path,
+    results: list[dict[str, Any]],
+    outcomes: list[dict[str, Any]],
+) -> None:
+    """Make a cleanup defect invalidate the provider observation in place."""
+
+    failure_path = evidence_dir / "failure.json"
+    prior_failure = load_json(failure_path) if failure_path.is_file() else None
+    failure = _probe_failure_record(
+        provider=provider,
+        evidence_dir=evidence_dir,
+        probe_root=probe_root,
+        exc=exc,
+        failure_stage="isolation-cleanup",
+        failure_classification="probe-invalid",
+        provider_process_launch_state=provider_process_launch_state,
+        process_result=process_result,
+        transcript_path=transcript_path,
+        stderr_path=stderr_path,
+    )
+    if isinstance(prior_failure, dict):
+        failure["prior_failure"] = {
+            "status": prior_failure.get("status"),
+            "failure_stage": prior_failure.get("failure_stage"),
+            "diagnostic_sha256": prior_failure.get("diagnostic_sha256"),
+        }
+        write_json(failure_path, failure)
+    results[:] = [
+        result
+        for result in results
+        if result.get("provider_config") != provider
+    ]
+    outcomes[:] = [
+        outcome
+        for outcome in outcomes
+        if outcome.get("provider_config") != provider
+    ]
+    outcomes.append(
+        {
+            "provider_config": provider,
+            "status": "probe-invalid",
+            "failure": file_record(
+                failure_path,
+                relative_to=probe_root,
+            ),
+            "session_identity": failure["session_identity"],
+            "authority_effect": "none",
+        }
+    )
 
 
 def _frozen_model_family_policy() -> dict[str, Any]:
@@ -7543,6 +7824,15 @@ def _frozen_model_family_policy() -> dict[str, Any]:
     if not isinstance(policy, dict) or not isinstance(configs, dict):
         raise CampaignError("frozen matrix model-family policy is malformed")
     providers = policy.get("campaign_provider_configs")
+    operator_used = policy.get("operator_model_configs_used")
+    grader_used = policy.get("grader_model_configs_used")
+    eligibility = policy.get("provider_role_eligibility")
+    role_names = {
+        "ordinary_operator",
+        "installation_operator",
+        "ordinary_grader",
+        "installation_grader",
+    }
     if (
         not isinstance(providers, list)
         or not providers
@@ -7551,16 +7841,37 @@ def _frozen_model_family_policy() -> dict[str, Any]:
             isinstance(value, str) and value in configs
             for value in providers
         )
+        or not isinstance(operator_used, list)
+        or not operator_used
+        or any(value not in providers for value in operator_used)
+        or not isinstance(grader_used, list)
+        or not grader_used
+        or any(value not in providers for value in grader_used)
+        or policy.get("assignment_algorithm")
+        != "maude-synthetic-provider-assignment-v1"
         or policy.get("separate_fresh_sessions_required") is not True
         or type(policy.get("same_family_grading")) is not bool
         or type(policy.get("same_model_configuration_grading")) is not bool
         or type(policy.get("cross_family_grading_supported")) is not bool
-        or not isinstance(policy.get("operator_model_config"), str)
-        or policy["operator_model_config"] not in configs
-        or not isinstance(policy.get("grader_model_config"), str)
-        or policy["grader_model_config"] not in configs
+        or type(policy.get("cross_family_grading_used")) is not bool
+        or type(policy.get("claude_available")) is not bool
+        or type(policy.get("claude_sessions_permitted")) is not bool
+        or type(policy.get("claude_operator_sessions_assigned")) is not bool
+        or type(policy.get("claude_grader_sessions_assigned")) is not bool
+        or not isinstance(eligibility, dict)
+        or set(eligibility) != set(SUPPORTED_PROVIDER_CONFIGS)
+        or any(
+            not isinstance(roles, dict)
+            or set(roles) != role_names
+            or any(type(roles.get(role)) is not bool for role in role_names)
+            for roles in eligibility.values()
+        )
         or not isinstance(policy.get("limitation"), str)
         or not policy["limitation"]
+        or any(
+            configs.get(provider) != PROVIDER_MODEL_CONFIGS.get(provider)
+            for provider in providers
+        )
     ):
         raise CampaignError("frozen matrix model-family policy differs")
     return policy
@@ -7576,33 +7887,51 @@ def _grading_model_family_metadata(
     run: dict[str, Any],
 ) -> dict[str, Any]:
     policy = _frozen_model_family_policy()
+    operator = run.get("operator_model_config")
+    grader = run.get("grader_model_config")
+    surface = run.get("surface")
+    eligibility = policy["provider_role_eligibility"]
+    operator_role = (
+        "installation_operator"
+        if surface == "maude-installation"
+        else "ordinary_operator"
+    )
+    grader_role = (
+        "installation_grader"
+        if surface == "maude-installation"
+        else "ordinary_grader"
+    )
     if (
-        run.get("operator_model_config")
-        != policy["operator_model_config"]
-        or run.get("grader_model_config")
-        != policy["grader_model_config"]
-        or (
-            run.get("operator_model_config")
-            == run.get("grader_model_config")
-        )
-        is not policy["same_model_configuration_grading"]
+        operator not in policy["operator_model_configs_used"]
+        or grader not in policy["grader_model_configs_used"]
+        or eligibility[operator].get(operator_role) is not True
+        or eligibility[grader].get(grader_role) is not True
     ):
         raise CampaignError(
             f"{run.get('run_id')}: run/model-family policy differs"
         )
-    return {
+    operator_family = PROVIDER_MODEL_CONFIGS[operator]["expected_family"]
+    grader_family = PROVIDER_MODEL_CONFIGS[grader]["expected_family"]
+    same_family = operator_family == grader_family
+    metadata = {
         "separate_fresh_session_required": (
             policy["separate_fresh_sessions_required"]
         ),
-        "same_family_grading": policy["same_family_grading"],
-        "same_model_configuration_grading": (
-            policy["same_model_configuration_grading"]
-        ),
+        "operator_model_family": operator_family,
+        "grader_model_family": grader_family,
+        "same_family_grading": same_family,
+        "same_model_configuration_grading": operator == grader,
         "cross_family_grading_supported": (
             policy["cross_family_grading_supported"]
         ),
-        "same_family_limitation": policy["limitation"],
+        "cross_family_grading_used": not same_family,
+        "same_family_limitation": (
+            policy["limitation"] if same_family else None
+        ),
     }
+    if not same_family:
+        metadata["opposite_model_family"] = grader_family
+    return metadata
 
 
 def _probe_terminal_arguments_are_exact(
@@ -7707,14 +8036,16 @@ def run_auth_gate_probes(
     """Prove the credential gate with fresh non-campaign provider sessions."""
 
     selected_providers = _probe_provider_scope(providers)
+    capability_policy = _provider_capability_policy_record()
     if MANIFEST_PATH.exists():
         raise CampaignError(
             "provider auth-gate probes are pre-freeze only; campaign manifest exists"
         )
     probe_root = AUTH_GATE_PROBE_PATH.parent
-    if AUTH_GATE_PROBE_PATH.exists():
+    if probe_root.exists():
         raise CampaignError(
-            "provider auth-gate probe index already exists; refusing to overwrite"
+            "provider auth-gate probe evidence already exists; refusing to "
+            "overwrite an append-only capability observation"
         )
     attempt_id = (
         datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -7724,6 +8055,7 @@ def run_auth_gate_probes(
     attempt_root = probe_root / "attempts" / attempt_id
     attempt_root.mkdir(parents=True)
     results: list[dict[str, Any]] = []
+    outcomes: list[dict[str, Any]] = []
     system_prompt = (
         "This is a non-campaign capability probe for session and filesystem "
         "isolation. Perform only the exact harmless local reads, filtered "
@@ -7771,15 +8103,23 @@ def run_auth_gate_probes(
         operator = lab / "operator"
         provider_home = lab / "private-provider-home"
         boundary: dict[str, Any] | None = None
+        credential_values: list[bytes] = []
+        stdout_path = provider_evidence / "transcript.jsonl"
+        stderr_path = provider_evidence / "provider.stderr"
+        failure_stage = "evaluator-setup"
+        provider_process_launch_state = "not-attempted"
+        process_result: dict[str, Any] | None = None
         try:
             operator.mkdir(parents=True)
             write_text(
                 operator / "README.md",
                 "Non-campaign auth-gate capability probe. No task state.\n",
             )
+            failure_stage = "provider-authentication"
             copied_auth, credential_values = _copy_provider_home(
                 provider, provider_home
             )
+            failure_stage = "isolation-setup"
             operator_home = lab / "private-operator-home"
             if provider == "anthropic-sonnet":
                 _prepare_clean_operator_home(operator_home)
@@ -7856,8 +8196,8 @@ def run_auth_gate_probes(
                 ),
                 claude_boundary=boundary,
             )
-            stdout_path = provider_evidence / "transcript.jsonl"
-            stderr_path = provider_evidence / "provider.stderr"
+            failure_stage = "provider-transport"
+            provider_process_launch_state = "attempted-outcome-unknown"
             process_result = _run_model_process(
                 (
                     provider_argv
@@ -7883,6 +8223,16 @@ def run_auth_gate_probes(
                 codex_auth_mode="retained-private-home",
                 stdin_payload=stdin_payload,
             )
+            provider_process_launch_state = "completed"
+            if (
+                process_result["returncode"] != 0
+                or process_result["timed_out"]
+            ):
+                raise CampaignError(
+                    f"{provider} auth-gate provider transport failed: "
+                    f"returncode={process_result['returncode']} "
+                    f"timed_out={process_result['timed_out']}"
+                )
             _quarantine_if_secret(
                 [stdout_path, stderr_path],
                 credential_values,
@@ -7916,6 +8266,11 @@ def run_auth_gate_probes(
             identity_value = identity.get(
                 "provider_session_id"
             ) or identity.get("provider_thread_id")
+            if not identity_value:
+                raise CampaignError(
+                    f"{provider} auth-gate provider session identity is absent"
+                )
+            failure_stage = "probe-integrity"
             marker_answers = [
                 record
                 for record in final_answers
@@ -7993,6 +8348,8 @@ def run_auth_gate_probes(
                 )
             result = {
                 "provider_config": provider,
+                "status": "available",
+                "model_configuration": PROVIDER_MODEL_CONFIGS[provider],
                 "campaign_run": False,
                 "fresh_process": True,
                 "session_identity": identity,
@@ -8049,20 +8406,133 @@ def run_auth_gate_probes(
                     provider_evidence / "auth-gate.json",
                     relative_to=probe_root,
                 ),
+                "provider_network_permitted_for_probe_session": True,
+                "provider_network_attempted": True,
+                "task_level_network_or_external_operational_effect": False,
                 "authority_effect": "none",
             }
+            failure_stage = "evidence-finalization"
             write_json(provider_evidence / "result.json", result)
             results.append(result)
+            outcomes.append(
+                {
+                    "provider_config": provider,
+                    "status": "available",
+                    "result": file_record(
+                        provider_evidence / "result.json",
+                        relative_to=probe_root,
+                    ),
+                    "session_identity": identity,
+                    "authority_effect": "none",
+                }
+            )
+        except Exception as caught_exc:
+            failure_exc = caught_exc
+            partial_outputs = [
+                path
+                for path in (stdout_path, stderr_path)
+                if path.is_file()
+            ]
+            if partial_outputs:
+                try:
+                    _quarantine_if_secret(
+                        partial_outputs,
+                        credential_values,
+                        run_id=f"auth-gate-{provider}-failed",
+                        evidence_dir=provider_evidence,
+                    )
+                except CampaignError as quarantine_exc:
+                    failure_exc = quarantine_exc
+                    failure_stage = "probe-integrity"
+            failure = _probe_failure_record(
+                provider=provider,
+                evidence_dir=provider_evidence,
+                probe_root=probe_root,
+                exc=failure_exc,
+                failure_stage=failure_stage,
+                failure_classification=_probe_failure_classification(
+                    failure_stage,
+                    process_result,
+                ),
+                provider_process_launch_state=(
+                    provider_process_launch_state
+                ),
+                process_result=process_result,
+                transcript_path=stdout_path,
+                stderr_path=stderr_path,
+            )
+            outcomes.append(
+                {
+                    "provider_config": provider,
+                    "status": failure["status"],
+                    "failure": file_record(
+                        provider_evidence / "failure.json",
+                        relative_to=probe_root,
+                    ),
+                    "session_identity": failure["session_identity"],
+                    "authority_effect": "none",
+                }
+            )
         finally:
-            boundary_cleanup = _release_private_socket_directories(boundary)
-            if not boundary_cleanup["all_removed"]:
-                raise CampaignError(
-                    "auth-gate probe left a private Claude socket arena"
+            cleanup_errors: list[str] = []
+            try:
+                boundary_cleanup = _release_private_socket_directories(
+                    boundary
                 )
-            if lab.exists():
-                shutil.rmtree(lab)
+                if not boundary_cleanup["all_removed"]:
+                    cleanup_errors.append(
+                        "auth-gate probe left a private socket arena"
+                    )
+            except Exception as cleanup_exc:
+                cleanup_errors.append(
+                    "auth-gate socket cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            try:
+                if lab.exists():
+                    shutil.rmtree(lab)
+            except OSError as cleanup_exc:
+                cleanup_errors.append(
+                    "auth-gate disposable-lab cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            if cleanup_errors:
+                _replace_probe_outcome_with_cleanup_failure(
+                    provider=provider,
+                    evidence_dir=provider_evidence,
+                    probe_root=probe_root,
+                    exc=CampaignError("; ".join(cleanup_errors)),
+                    provider_process_launch_state=(
+                        provider_process_launch_state
+                    ),
+                    process_result=process_result,
+                    transcript_path=stdout_path,
+                    stderr_path=stderr_path,
+                    results=results,
+                    outcomes=outcomes,
+                )
+    successful_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "available"
+    ]
+    failed_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] != "available"
+    ]
+    unavailable_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "provider-capability-unavailable"
+    ]
+    invalid_probe_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "probe-invalid"
+    ]
     index = {
-        "schema": "maude.synthetic-operator.provider-auth-gate-probes.v1",
+        "schema": "maude.synthetic-operator.provider-auth-gate-probes.v2",
         "campaign_id": CAMPAIGN_ID,
         "campaign_run": False,
         "attempt_id": attempt_id,
@@ -8070,17 +8540,39 @@ def run_auth_gate_probes(
         "campaign_runner": file_record(
             Path(__file__).resolve(), relative_to=REPO_ROOT
         ),
+        "provider_capability_policy": capability_policy,
         "requested_provider_configs": list(selected_providers),
-        "not_requested_provider_configs": sorted(
-            set(_configured_campaign_providers())
-            - set(selected_providers)
-        ),
+        "provider_model_configurations": {
+            provider: PROVIDER_MODEL_CONFIGS[provider]
+            for provider in selected_providers
+        },
+        "not_requested_provider_configs": [
+            provider
+            for provider in SUPPORTED_PROVIDER_CONFIGS
+            if provider not in selected_providers
+        ],
         "providers": results,
+        "provider_outcomes": outcomes,
+        "successful_provider_configs": successful_provider_configs,
+        "failed_provider_configs": failed_provider_configs,
+        "unavailable_provider_configs": unavailable_provider_configs,
+        "invalid_probe_provider_configs": invalid_probe_provider_configs,
+        "capability_observation_valid": not invalid_probe_provider_configs,
+        "all_requested_provider_attempts_recorded": (
+            len(outcomes) == len(selected_providers)
+        ),
         "all_passed": len(results) == len(selected_providers),
         "raw_evidence_location": str(attempt_root),
         "raw_evidence_committed": False,
+        "provider_network_permitted_for_probe_sessions": True,
+        "task_level_network_or_external_operational_effect": False,
         "authority_effect": "none",
     }
+    _write_probe_attempt_index(
+        probe_root=probe_root,
+        attempt_root=attempt_root,
+        index=index,
+    )
     write_json(AUTH_GATE_PROBE_PATH, index)
     return index
 
@@ -8472,23 +8964,26 @@ def run_installation_surface_probes(
     """Prove real installed Maude/PTY/socket use in fresh provider contexts."""
 
     selected_providers = _probe_provider_scope(providers)
+    capability_policy = _provider_capability_policy_record()
     if MANIFEST_PATH.exists():
         raise CampaignError(
             "installation-surface probes are pre-freeze only; manifest exists"
         )
-    if INSTALL_SURFACE_PROBE_PATH.exists():
+    probe_root = INSTALL_SURFACE_PROBE_PATH.parent
+    if probe_root.exists():
         raise CampaignError(
-            "installation-surface probe index exists; refusing to overwrite"
+            "installation-surface probe evidence exists; refusing to "
+            "overwrite an append-only capability observation"
         )
     attempt_id = (
         datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         + "-"
         + uuid.uuid4().hex[:12]
     )
-    probe_root = INSTALL_SURFACE_PROBE_PATH.parent
     attempt_root = probe_root / "attempts" / attempt_id
     attempt_root.mkdir(parents=True)
     results: list[dict[str, Any]] = []
+    outcomes: list[dict[str, Any]] = []
     system_prompt = (
         "This is a non-campaign installation-surface capability probe. "
         "Perform only the exact local PTY commands requested. Do not inspect "
@@ -8514,6 +9009,14 @@ def run_installation_surface_probes(
         runtime_process: ManagedProcess | None = None
         boundary: dict[str, Any] | None = None
         probe_socket_directory: Path | None = None
+        credential_values: list[bytes] = []
+        stdout_path = provider_evidence / "transcript.jsonl"
+        stderr_path = provider_evidence / "provider.stderr"
+        typescript: Path | None = None
+        trace_path: Path | None = None
+        failure_stage = "evaluator-setup"
+        provider_process_launch_state = "not-attempted"
+        process_result: dict[str, Any] | None = None
         try:
             for path in (
                 work,
@@ -8589,10 +9092,12 @@ def run_installation_surface_probes(
                 runtime_state / "runtime-ready.json",
                 runtime_process,
             )
+            failure_stage = "provider-authentication"
             copied_auth, credential_values = _copy_provider_home(
                 provider,
                 provider_home,
             )
+            failure_stage = "isolation-setup"
             _prepare_clean_operator_home(operator_home)
             write_json(
                 provider_evidence / "clean-home-before.json",
@@ -8744,8 +9249,8 @@ def run_installation_surface_probes(
                 ),
                 claude_boundary=boundary,
             )
-            stdout_path = provider_evidence / "transcript.jsonl"
-            stderr_path = provider_evidence / "provider.stderr"
+            failure_stage = "provider-transport"
+            provider_process_launch_state = "attempted-outcome-unknown"
             process_result = _run_model_process(
                 (
                     provider_argv
@@ -8771,6 +9276,16 @@ def run_installation_surface_probes(
                 codex_auth_mode="retained-private-home",
                 stdin_payload=stdin_payload,
             )
+            provider_process_launch_state = "completed"
+            if (
+                process_result["returncode"] != 0
+                or process_result["timed_out"]
+            ):
+                raise CampaignError(
+                    f"{provider} installation provider transport failed: "
+                    f"returncode={process_result['returncode']} "
+                    f"timed_out={process_result['timed_out']}"
+                )
             _quarantine_if_secret(
                 [stdout_path, stderr_path, typescript],
                 credential_values,
@@ -8787,6 +9302,12 @@ def run_installation_surface_probes(
             identity_value = identity.get(
                 "provider_session_id"
             ) or identity.get("provider_thread_id")
+            if not identity_value:
+                raise CampaignError(
+                    f"{provider} installation provider session identity is "
+                    "absent"
+                )
+            failure_stage = "probe-integrity"
             answers = _final_answer_records(events)
             marker_present = any(
                 "INSTALL_SURFACE_PROBE_OK" in record["text"]
@@ -9054,6 +9575,8 @@ def run_installation_surface_probes(
             _copy_tree(pty_state, preserved_pty_state)
             result = {
                 "provider_config": provider,
+                "status": "available",
+                "model_configuration": PROVIDER_MODEL_CONFIGS[provider],
                 "campaign_run": False,
                 "fresh_process": True,
                 "session_identity": identity,
@@ -9171,7 +9694,9 @@ def run_installation_surface_probes(
                 "release_source_archive_mounted": False,
                 "installation_media_mounted": False,
                 "expected_answer_or_task_supplied": False,
-                "network_or_external_effect": False,
+                "provider_network_permitted_for_probe_session": True,
+                "provider_network_attempted": True,
+                "task_level_network_or_external_operational_effect": False,
                 "final_marker_present": True,
                 "raw_transcript": file_record(
                     stdout_path,
@@ -9183,32 +9708,169 @@ def run_installation_surface_probes(
                 ),
                 "authority_effect": "none",
             }
+            failure_stage = "evidence-finalization"
             write_json(provider_evidence / "result.json", result)
             results.append(result)
-        finally:
-            if runtime_process is not None:
-                runtime_process.stop()
-            boundary_cleanup = _release_private_socket_directories(boundary)
-            if not boundary_cleanup["all_removed"]:
-                raise CampaignError(
-                    "installation probe left a private Claude socket arena"
-                )
-            if probe_socket_directory is not None:
-                probe_socket_cleanup = _release_private_socket_directories(
-                    {
-                        "private_socket_directories": [
-                            probe_socket_directory
-                        ]
-                    }
-                )
-                if not probe_socket_cleanup["all_removed"]:
-                    raise CampaignError(
-                        "installation probe left its Governor socket arena"
+            outcomes.append(
+                {
+                    "provider_config": provider,
+                    "status": "available",
+                    "result": file_record(
+                        provider_evidence / "result.json",
+                        relative_to=probe_root,
+                    ),
+                    "session_identity": identity,
+                    "authority_effect": "none",
+                }
+            )
+        except Exception as caught_exc:
+            failure_exc = caught_exc
+            partial_outputs = [
+                path
+                for path in (stdout_path, stderr_path, typescript)
+                if path is not None and path.is_file()
+            ]
+            if partial_outputs:
+                try:
+                    _quarantine_if_secret(
+                        partial_outputs,
+                        credential_values,
+                        run_id=f"installation-surface-{provider}-failed",
+                        evidence_dir=provider_evidence,
                     )
-            if provider_home.exists():
-                shutil.rmtree(provider_home)
-            if lab.exists():
-                shutil.rmtree(lab)
+                except CampaignError as quarantine_exc:
+                    failure_exc = quarantine_exc
+                    failure_stage = "probe-integrity"
+            if typescript is not None and typescript.is_file():
+                _copy_file(
+                    typescript,
+                    provider_evidence / "partial-pty.typescript",
+                )
+            if trace_path is not None and trace_path.is_file():
+                _copy_file(
+                    trace_path,
+                    provider_evidence / "partial-rpc-transcript.jsonl",
+                )
+            failure = _probe_failure_record(
+                provider=provider,
+                evidence_dir=provider_evidence,
+                probe_root=probe_root,
+                exc=failure_exc,
+                failure_stage=failure_stage,
+                failure_classification=_probe_failure_classification(
+                    failure_stage,
+                    process_result,
+                ),
+                provider_process_launch_state=(
+                    provider_process_launch_state
+                ),
+                process_result=process_result,
+                transcript_path=stdout_path,
+                stderr_path=stderr_path,
+            )
+            outcomes.append(
+                {
+                    "provider_config": provider,
+                    "status": failure["status"],
+                    "failure": file_record(
+                        provider_evidence / "failure.json",
+                        relative_to=probe_root,
+                    ),
+                    "session_identity": failure["session_identity"],
+                    "authority_effect": "none",
+                }
+            )
+        finally:
+            cleanup_errors: list[str] = []
+            try:
+                if runtime_process is not None:
+                    runtime_process.stop()
+            except Exception as cleanup_exc:
+                cleanup_errors.append(
+                    "installation runtime cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            try:
+                boundary_cleanup = _release_private_socket_directories(
+                    boundary
+                )
+                if not boundary_cleanup["all_removed"]:
+                    cleanup_errors.append(
+                        "installation probe left a private provider socket "
+                        "arena"
+                    )
+            except Exception as cleanup_exc:
+                cleanup_errors.append(
+                    "installation provider-boundary cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            try:
+                if probe_socket_directory is not None:
+                    probe_socket_cleanup = (
+                        _release_private_socket_directories(
+                            {
+                                "private_socket_directories": [
+                                    probe_socket_directory
+                                ]
+                            }
+                        )
+                    )
+                    if not probe_socket_cleanup["all_removed"]:
+                        cleanup_errors.append(
+                            "installation probe left its Governor socket arena"
+                        )
+            except Exception as cleanup_exc:
+                cleanup_errors.append(
+                    "installation Governor-socket cleanup failed: "
+                    f"{type(cleanup_exc).__name__}"
+                )
+            for cleanup_path, label in (
+                (provider_home, "provider home"),
+                (lab, "disposable lab"),
+            ):
+                try:
+                    if cleanup_path.exists():
+                        shutil.rmtree(cleanup_path)
+                except OSError as cleanup_exc:
+                    cleanup_errors.append(
+                        f"installation {label} cleanup failed: "
+                        f"{type(cleanup_exc).__name__}"
+                    )
+            if cleanup_errors:
+                _replace_probe_outcome_with_cleanup_failure(
+                    provider=provider,
+                    evidence_dir=provider_evidence,
+                    probe_root=probe_root,
+                    exc=CampaignError("; ".join(cleanup_errors)),
+                    provider_process_launch_state=(
+                        provider_process_launch_state
+                    ),
+                    process_result=process_result,
+                    transcript_path=stdout_path,
+                    stderr_path=stderr_path,
+                    results=results,
+                    outcomes=outcomes,
+                )
+    successful_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "available"
+    ]
+    failed_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] != "available"
+    ]
+    unavailable_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "provider-capability-unavailable"
+    ]
+    invalid_probe_provider_configs = [
+        outcome["provider_config"]
+        for outcome in outcomes
+        if outcome["status"] == "probe-invalid"
+    ]
     identities = {
         result["session_identity"].get("provider_session_id")
         or result["session_identity"].get("provider_thread_id")
@@ -9220,7 +9882,7 @@ def run_installation_surface_probes(
         if str(record["distribution"]["name"]).casefold() == "maude"
     )
     index = {
-        "schema": "maude.synthetic-operator.installation-surface-probes.v2",
+        "schema": "maude.synthetic-operator.installation-surface-probes.v3",
         "campaign_id": CAMPAIGN_ID,
         "campaign_run": False,
         "attempt_id": attempt_id,
@@ -9229,6 +9891,7 @@ def run_installation_surface_probes(
             Path(__file__).resolve(),
             relative_to=REPO_ROOT,
         ),
+        "provider_capability_policy": capability_policy,
         "installation_media_provenance": file_record(INSTALL_PROVENANCE),
         "maude_wheel": {
             "path": maude_wheel["path"],
@@ -9237,11 +9900,25 @@ def run_installation_surface_probes(
             "distribution": maude_wheel["distribution"],
         },
         "requested_provider_configs": list(selected_providers),
-        "not_requested_provider_configs": sorted(
-            set(_configured_campaign_providers())
-            - set(selected_providers)
-        ),
+        "provider_model_configurations": {
+            provider: PROVIDER_MODEL_CONFIGS[provider]
+            for provider in selected_providers
+        },
+        "not_requested_provider_configs": [
+            provider
+            for provider in SUPPORTED_PROVIDER_CONFIGS
+            if provider not in selected_providers
+        ],
         "providers": results,
+        "provider_outcomes": outcomes,
+        "successful_provider_configs": successful_provider_configs,
+        "failed_provider_configs": failed_provider_configs,
+        "unavailable_provider_configs": unavailable_provider_configs,
+        "invalid_probe_provider_configs": invalid_probe_provider_configs,
+        "capability_observation_valid": not invalid_probe_provider_configs,
+        "all_requested_provider_attempts_recorded": (
+            len(outcomes) == len(selected_providers)
+        ),
         "stateful_pty_contract": {
             "exact_operation_sequence_proved": [
                 "start",
@@ -9256,17 +9933,20 @@ def run_installation_surface_probes(
             "one_child_across_separate_provider_tool_actions": all(
                 result["same_pty_process_across_provider_tool_actions"]
                 for result in results
-            ),
+            )
+            and bool(results),
             "separate_read_focus_send_command_send_read_stop_read_order_proved": all(
                 result[
                     "read_focus_send_command_send_read_stop_read_order_proved"
                 ]
                 for result in results
-            ),
+            )
+            and bool(results),
             "typed_status_rpc_sequence_proved": all(
                 result["typed_status_rpc_sequence_in_order"]
                 for result in results
-            ),
+            )
+            and bool(results),
             "predeclared_command_sequence": True,
             "claim_scope": (
                 "Proves cross-call PTY persistence and application handling "
@@ -9277,7 +9957,8 @@ def run_installation_surface_probes(
             "exact_pty_bytes_preserved": all(
                 bool(result["pty_typescript"].get("sha256"))
                 for result in results
-            ),
+            )
+            and bool(results),
         },
         "distinct_session_identities": (
             len(identities) == len(selected_providers)
@@ -9288,8 +9969,15 @@ def run_installation_surface_probes(
         ),
         "raw_evidence_location": str(attempt_root),
         "raw_evidence_committed": False,
+        "provider_network_permitted_for_probe_sessions": True,
+        "task_level_network_or_external_operational_effect": False,
         "authority_effect": "none",
     }
+    _write_probe_attempt_index(
+        probe_root=probe_root,
+        attempt_root=attempt_root,
+        index=index,
+    )
     write_json(INSTALL_SURFACE_PROBE_PATH, index)
     return index
 
@@ -15538,18 +16226,16 @@ def main() -> int:
     installation_probe_parser = subparsers.add_parser(
         "probe-installation-surface"
     )
-    configured_probe_providers = _configured_campaign_providers()
     for probe_parser in (auth_probe_parser, installation_probe_parser):
         probe_parser.add_argument(
             "--provider",
             action="append",
             dest="providers",
-            choices=configured_probe_providers,
+            choices=SUPPORTED_PROVIDER_CONFIGS,
             help=(
-                "provider configuration declared by the frozen matrix; "
-                "repeat only when the matrix declares multiple providers "
-                "(default: "
-                + ", ".join(configured_probe_providers)
+                "pre-freeze provider capability candidate; repeat to select "
+                "multiple providers (default: "
+                + ", ".join(SUPPORTED_PROVIDER_CONFIGS)
                 + ")"
             ),
         )
@@ -15576,23 +16262,41 @@ def main() -> int:
 
     try:
         if args.command == "probe-auth-gate":
+            index = run_auth_gate_probes(args.providers)
             print(
                 json.dumps(
-                    run_auth_gate_probes(args.providers),
+                    index,
                     indent=2,
                     sort_keys=True,
                 )
             )
-            return 0
+            return (
+                0
+                if index.get("capability_observation_valid") is True
+                and index.get(
+                    "all_requested_provider_attempts_recorded"
+                )
+                is True
+                else 1
+            )
         if args.command == "probe-installation-surface":
+            index = run_installation_surface_probes(args.providers)
             print(
                 json.dumps(
-                    run_installation_surface_probes(args.providers),
+                    index,
                     indent=2,
                     sort_keys=True,
                 )
             )
-            return 0
+            return (
+                0
+                if index.get("capability_observation_valid") is True
+                and index.get(
+                    "all_requested_provider_attempts_recorded"
+                )
+                is True
+                else 1
+            )
         manifest = _validate_or_raise()
         if args.command == "validate":
             print(

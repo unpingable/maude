@@ -1,0 +1,1179 @@
+{
+  "all_capability_probe_session_identities_distinct": true,
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "deterministic_provider_assignment_validation": {
+    "algorithm": "maude-synthetic-provider-assignment-v1",
+    "authority_effect": "none",
+    "finalizer": {
+      "bytes": 33348,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/finalize_provider_assignments.py",
+      "sha256": "3c07353b33848694ca809e95e17f8a5bd8f9999c339f3e3529d53c338fd474b0"
+    },
+    "valid": true,
+    "validation_errors": []
+  },
+  "grader_surface_capability_probes": {
+    "all_observed_session_identities": [
+      "019fa835-dc58-7c00-bf6a-5d478682c412",
+      "019fa836-7cd2-7971-8324-e39a66acfe0e"
+    ],
+    "all_passed": false,
+    "attempt_id": "20260728T101208Z-b1a2fae7f599",
+    "authority_effect": "none",
+    "campaign_run": false,
+    "campaign_runner": {
+      "bytes": 624423,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
+    },
+    "capability_observation_valid": true,
+    "completed_at": "2026-07-28T10:13:36Z",
+    "distinct_fresh_session_identities": true,
+    "exact_successor_schemas_accepted": true,
+    "large_prompts_delivered_by_provider_transport": true,
+    "probe_index": {
+      "bytes": 31861,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/grader-surface-probes/index.json",
+      "sha256": "c9bc7fa0901e33c435b216976e7387a0f24a1bb07d2aa54f562cd36769687a98"
+    },
+    "probe_runner": {
+      "bytes": 76821,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/grader_surface_probe.py",
+      "sha256": "7e28828f00a98333975ae5dfb9a42a0d8c8941ab332917185a617717b300e854"
+    },
+    "probes": [
+      {
+        "all_passed": true,
+        "probe_id": "ordinary",
+        "prompt_transport_method": "closed-stdin",
+        "provider_config": "openai-sol",
+        "read_only_evidence_actions": 1,
+        "result": {
+          "bytes": 22565,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "attempts/20260728T101208Z-b1a2fae7f599/openai-sol/ordinary/result.json",
+          "sha256": "a228796b7f0873c50e6cf7141635321d8350fcf344b6b59b1ad97d1b30177f82"
+        },
+        "schema": {
+          "bytes": 7414,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "grader-output.schema.json",
+          "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+        },
+        "semantic_prompt_bytes": 150006,
+        "semantic_prompt_sha256": "16e03da8b648709cf479d46afd63e5f4b917e2789c4aaf36296259a34f51de46",
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa835-dc58-7c00-bf6a-5d478682c412"
+        },
+        "surface": "maude"
+      },
+      {
+        "all_passed": true,
+        "probe_id": "installation",
+        "prompt_transport_method": "closed-stdin",
+        "provider_config": "openai-sol",
+        "read_only_evidence_actions": 1,
+        "result": {
+          "bytes": 23038,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "attempts/20260728T101208Z-b1a2fae7f599/openai-sol/installation/result.json",
+          "sha256": "d6e7fd3fb9f701a07e9a7b4180b6eded0071f0d1656920ba6ea19a559b56f4e5"
+        },
+        "schema": {
+          "bytes": 12164,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "installation-grader-output.schema.json",
+          "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+        },
+        "semantic_prompt_bytes": 150049,
+        "semantic_prompt_sha256": "8da269537759c34b5cfaa7e0758457d2a415def18cd57df868900410642294fc",
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa836-7cd2-7971-8324-e39a66acfe0e"
+        },
+        "surface": "maude-installation"
+      }
+    ],
+    "provider_network_permitted": true,
+    "raw_probe_evidence_frozen_in_packet": true,
+    "read_only_evidence_boundary": true,
+    "schema": "maude.synthetic-operator.grader-surface-probe-summary.v2",
+    "semantic_user_assignment_bytes_in_argv": false,
+    "successful_provider_configs_by_probe": {
+      "installation": [
+        "openai-sol"
+      ],
+      "ordinary": [
+        "openai-sol"
+      ]
+    },
+    "task_level_network_or_external_operational_effect": false,
+    "unavailable_probes": [
+      {
+        "failure": {
+          "bytes": 5296,
+          "sha256": "8760010dbdfed5b10b857ba83cc4ae73ceec1c499ba11f59a57bfce1c7a16bc3"
+        },
+        "failure_classification": "provider-capability-unavailable",
+        "failure_stage": "provider-transport",
+        "probe_id": "ordinary",
+        "provider_config": "anthropic-sonnet",
+        "provider_network_attempted": "unknown",
+        "provider_network_use_observed": "unknown",
+        "provider_process_launch_state": "attempted-outcome-unknown",
+        "session_identity": {}
+      },
+      {
+        "failure": {
+          "bytes": 5314,
+          "sha256": "b40bcf68e8432e7c5d250780dfd8c4609c5bc18d6bf06a625fba3175509af1c0"
+        },
+        "failure_classification": "provider-capability-unavailable",
+        "failure_stage": "provider-transport",
+        "probe_id": "installation",
+        "provider_config": "anthropic-sonnet",
+        "provider_network_attempted": "unknown",
+        "provider_network_use_observed": "unknown",
+        "provider_process_launch_state": "attempted-outcome-unknown",
+        "session_identity": {}
+      }
+    ],
+    "unavailable_provider_configs_by_probe": {
+      "installation": [
+        "anthropic-sonnet"
+      ],
+      "ordinary": [
+        "anthropic-sonnet"
+      ]
+    }
+  },
+  "installation_surface_capability_probes": {
+    "all_observed_session_identities": [
+      "019fa833-f247-73a2-ad11-2ba5f6bbc204",
+      "908e43c5-704a-42a6-b801-cdad341de2e6"
+    ],
+    "all_passed": false,
+    "attempt_id": "20260728T100957Z-724c3d1d2507",
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 624423,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
+    },
+    "capability_observation_valid": true,
+    "completed_at": "2026-07-28T10:11:04Z",
+    "installation_media_provenance": {
+      "bytes": 39860,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/provenance.json",
+      "sha256": "94f96abb72f5dcc98e79b2fcb887dd8d10e5b2a841d89438c96b03e1d8cedcac"
+    },
+    "installed_distribution_exception": "The exact installed Python distribution is mounted and its module source is readable; no host checkout, release-source archive, or installation media is mounted.",
+    "maude_wheel": {
+      "bytes": 89993,
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "maude",
+        "record_entries": 41,
+        "requires_dist": [
+          "ag-shell-client>=0.1.0",
+          "pydantic>=2.6.0",
+          "pyyaml>=6.0",
+          "textual>=1.0.0",
+          "pytest; extra == 'dev'",
+          "pytest-asyncio; extra == 'dev'",
+          "ruff; extra == 'dev'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.4.0"
+      },
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+    },
+    "mcp_stdio_shim": {
+      "bytes": 56742,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/claude_mcp_bridge.py",
+      "sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
+    },
+    "operator_pty": {
+      "bytes": 32867,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_pty.py",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    "probe_index": {
+      "bytes": 179272,
+      "sha256": "69ccc62c1b5068cb2ae4671b6885cd309bbd1993faa2f8a44c7884103333e5e8"
+    },
+    "providers": [
+      {
+        "authority_effect": "none",
+        "clean_home_before_and_after": true,
+        "delivery": {
+          "allowed_unix_sockets": [],
+          "codex_approval_argv": [
+            "--config",
+            "approval_policy=\"never\""
+          ],
+          "codex_approval_config_override": "approval_policy=\"never\"",
+          "codex_approval_policy": "never",
+          "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+          "codex_mcp_default_tools_approval_mode": "approve",
+          "delivered_prompt_bytes": 3243,
+          "delivered_prompt_sha256": "cf6c95df0606c0c81392d3e9a50c44d62f45b17cec49166ee3aa985b1f32ae37",
+          "exact_provider_tool_allowlist_supported": true,
+          "intrinsic_action_features_explicitly_disabled": [
+            "shell_tool",
+            "unified_exec"
+          ],
+          "live_web_search_enabled": false,
+          "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+          "mcp_enabled_tools": [
+            "terminal"
+          ],
+          "mcp_protocol_version": "2025-06-18",
+          "mcp_server": "operator",
+          "mcp_tool_approval_safety_basis": {
+            "exact_enabled_tool_count": 1,
+            "grader_evidence_tool_read_only": false,
+            "mcp_config_hash_pinned": true,
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "noninteractive_approval_safety_basis": {
+            "grader_evidence_tool_read_only": false,
+            "intrinsic_action_features_disabled": [
+              "shell_tool",
+              "unified_exec"
+            ],
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "optional_features_explicitly_disabled": [
+            "apps",
+            "plugins",
+            "remote_plugin",
+            "browser_use",
+            "browser_use_external",
+            "browser_use_full_cdp_access",
+            "computer_use",
+            "image_generation",
+            "multi_agent",
+            "multi_agent_v2",
+            "hooks",
+            "skill_mcp_dependency_install",
+            "tool_call_mcp_elicitation"
+          ],
+          "provider": "OpenAI",
+          "provider_task_paths_added": [],
+          "provider_transport_cwd": "/home/operator",
+          "requested_model": "gpt-5.6-sol",
+          "semantic_prompt_bytes_in_argv": false,
+          "system_prompt_delivery": "concatenated first in single CLI prompt",
+          "unexpected_intrinsic_action_policy": "fail-closed",
+          "user_mcp_and_connector_config_loaded": false,
+          "user_prompt_delivery": "concatenated after exact delimiter and delivered through closed stdin; no semantic prompt bytes appear in argv"
+        },
+        "exact_installed_entrypoint": {
+          "module_inside_venv": true,
+          "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/_install-surface-openai-sol-037501099b/installation/venv/bin/maude",
+          "sha256": "31516fb09c16d2f71455689f17fbfd04bd0451ca31d5a094c4ddda42ba3ad11a",
+          "version": "2.4.0"
+        },
+        "fresh_process": true,
+        "governor_status_attribution": "Maude polls governor.now. In this isolated probe, the separately focused literal status input is the only trigger for governor.status followed by runtime.session.list; their ordered successful responses prove application handling beyond PTY byte acknowledgement.",
+        "host_checkout_release_source_and_media_absent": true,
+        "installed_distribution_mounted": true,
+        "installed_python_module_source_readable": true,
+        "isolation_record": {
+          "bytes": 14734,
+          "sha256": "e1938553fa214230851dca6ee5e8ce888328b7948c273977789b1533ba80ba95"
+        },
+        "persistent_child_identity": {
+          "child_pid": 5,
+          "daemon_pid": 4
+        },
+        "provider_auth_retained_until_transport_exit": true,
+        "provider_boundary_kind": "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-per-command-sandbox-and-pty-broker",
+        "provider_config": "openai-sol",
+        "pty_transcript": {
+          "bytes": 82955,
+          "sha256": "52e4f8c88567786036cf181312bb8cd0872f40e45e2a920f58999266696cf7c2"
+        },
+        "raw_result": {
+          "bytes": 165311,
+          "sha256": "7aa49f77a9b471872780037bfda68537ea1869ff0ef44fe3cdc73361e98dac8c"
+        },
+        "raw_stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "raw_transcript": {
+          "bytes": 130056,
+          "sha256": "1a06a4ee50846ae0ddf42e1aecbe7822d78e74c55d31170cc3ea4ced2f2243e5"
+        },
+        "returncode": 0,
+        "rpc_transcript": {
+          "bytes": 8462,
+          "sha256": "cc6aed2f9bf9485e253e98721655fd89a116499ac90991a9d18dbe512f607845"
+        },
+        "runtime_trace_contract_predicates": {
+          "all_runtime_trace_responses_are_results": true,
+          "empty_startup_chat_session_create_observed": true,
+          "runtime_trace_nonempty": true,
+          "scheduled_governor_now_poll_observed": true,
+          "startup_chat_sessions_list_observed": true,
+          "startup_governor_hello_observed": true,
+          "startup_rpc_sequence_exact_prefix": true,
+          "typed_status_governor_status_observed": true,
+          "typed_status_rpc_sequence_in_order": true,
+          "typed_status_runtime_session_list_observed": true
+        },
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa833-f247-73a2-ad11-2ba5f6bbc204"
+        },
+        "startup_scheduled_and_typed_status_rpc_contract_proved": true,
+        "stateful_pty_actions": 8,
+        "strict_mcp_per_command_and_pty_sandboxes_proved": true,
+        "system_prompt": {
+          "bytes": 355,
+          "sha256": "fc8fd07560ea953ee615a1d1592d303f5f1937a13c056a63fab66ead23c595ed"
+        },
+        "timed_out": false,
+        "trusted_stdio_shim_auth_read_observed": false,
+        "user_prompt": {
+          "bytes": 2849,
+          "sha256": "ee0b053f5bdfe6d5ffc4d13838a7af083419e4da0bcc44e0461308b752fe763a"
+        },
+        "zero_safety_attempts": true
+      }
+    ],
+    "raw_probe_evidence_committed": false,
+    "raw_probe_evidence_verified_in_tmp": true,
+    "schema": "maude.synthetic-operator.installation-surface-probe-summary.v1",
+    "session_identities_distinct_from_auth_probes": true,
+    "stateful_pty_contract": {
+      "claim_scope": "Proves cross-call PTY persistence and application handling of the predeclared status command after explicit input focus; it does not claim the probe model chose an unplanned input.",
+      "exact_operation_sequence_proved": [
+        "start",
+        "read",
+        "send-tab-focus",
+        "send-status-command",
+        "read",
+        "stop",
+        "read",
+        "status"
+      ],
+      "exact_pty_bytes_preserved": true,
+      "one_child_across_separate_provider_tool_actions": true,
+      "predeclared_command_sequence": true,
+      "separate_read_focus_send_command_send_read_stop_read_order_proved": true,
+      "typed_status_rpc_sequence_proved": true
+    },
+    "successful_provider_configs": [
+      "openai-sol"
+    ],
+    "unavailable_provider_configs": [
+      "anthropic-sonnet"
+    ],
+    "unavailable_provider_failures": {
+      "anthropic-sonnet": {
+        "failure_classification": "provider-capability-unavailable",
+        "failure_stage": "provider-transport",
+        "provider_network_attempted": true,
+        "provider_network_use_observed": "unknown",
+        "provider_process_launch_state": "completed",
+        "provider_session_identity_observed": true
+      }
+    }
+  },
+  "isolation_capability_probe": {
+    "external_operational_side_effects_permitted": false,
+    "limitation": "Provider eligibility is role-specific. Unsupported provider/role pairs: anthropic-sonnet:ordinary_operator, anthropic-sonnet:installation_operator, anthropic-sonnet:ordinary_grader, anthropic-sonnet:installation_grader. Same-family grading used: true; cross-family grading used: false. No unsupported family comparison is claimed.",
+    "locally_configured_provider_credentials_permitted_only_for_provider_session_transport": true,
+    "mechanism": "bubblewrap",
+    "production_task_systems_or_credentials_permitted": false,
+    "provider_boundaries": {
+      "openai-sol": {
+        "built_in_tools": [],
+        "grader_evidence_surface_read_only": true,
+        "grader_tools": [
+          "mcp__grader__evidence"
+        ],
+        "mcp_protocol_version": "2025-06-18",
+        "operator_command_broker_receives_credentials": false,
+        "operator_command_broker_receives_semantic_prompt": false,
+        "operator_command_task_level_network": false,
+        "operator_tools": [
+          "mcp__operator__terminal"
+        ],
+        "provider_auth_retained_until_transport_exit": true,
+        "provider_boundary_kind": "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-and-per-command-sandbox"
+      }
+    },
+    "provider_capability_unavailable_configs": [
+      "anthropic-sonnet"
+    ],
+    "provider_cli_startup_passed_provider_configs": [
+      "openai-sol"
+    ],
+    "provider_network_permitted_only_for_provider_session_transport": true,
+    "provider_role_assignments": {
+      "all_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "all_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "installation_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "installation_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "ordinary_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "ordinary_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "per_provider": {
+        "anthropic-sonnet": {
+          "installation_grader_run_ids": [],
+          "installation_operator_run_ids": [],
+          "ordinary_grader_run_ids": [],
+          "ordinary_operator_run_ids": []
+        },
+        "openai-sol": {
+          "installation_grader_run_ids": [
+            "install-i01",
+            "install-i02",
+            "install-i03",
+            "install-i04",
+            "install-i05",
+            "install-i06",
+            "install-i07",
+            "install-i08",
+            "install-i09",
+            "install-i10"
+          ],
+          "installation_operator_run_ids": [
+            "install-i01",
+            "install-i02",
+            "install-i03",
+            "install-i04",
+            "install-i05",
+            "install-i06",
+            "install-i07",
+            "install-i08",
+            "install-i09",
+            "install-i10"
+          ],
+          "ordinary_grader_run_ids": [
+            "docket-s01",
+            "docket-s11",
+            "docket-s15",
+            "docket-s17",
+            "docket-s20",
+            "maude-s01",
+            "maude-s02",
+            "maude-s03",
+            "maude-s04",
+            "maude-s05",
+            "maude-s06",
+            "maude-s07",
+            "maude-s08",
+            "maude-s09",
+            "maude-s10",
+            "maude-s11",
+            "maude-s12",
+            "maude-s13",
+            "maude-s14",
+            "maude-s15",
+            "maude-s16",
+            "maude-s17",
+            "maude-s18",
+            "maude-s19",
+            "maude-s20"
+          ],
+          "ordinary_operator_run_ids": [
+            "docket-s01",
+            "docket-s11",
+            "docket-s15",
+            "docket-s17",
+            "docket-s20",
+            "maude-s01",
+            "maude-s02",
+            "maude-s03",
+            "maude-s04",
+            "maude-s05",
+            "maude-s06",
+            "maude-s07",
+            "maude-s08",
+            "maude-s09",
+            "maude-s10",
+            "maude-s11",
+            "maude-s12",
+            "maude-s13",
+            "maude-s14",
+            "maude-s15",
+            "maude-s16",
+            "maude-s17",
+            "maude-s18",
+            "maude-s19",
+            "maude-s20"
+          ]
+        }
+      }
+    },
+    "repository_source_absent": true,
+    "resolver_mount": "Each task-blind provider transport may retain resolver access needed only for provider traffic. Per-command and persistent-PTY task namespaces have no external network; only explicitly declared synthetic Unix sockets may be bound.",
+    "result": "passed for every provider role assigned by the final matrix; stable provider-capability-unavailable observations remain recorded for any excluded candidate role",
+    "task_level_network_permitted": false
+  },
+  "model_family_policy": {
+    "assignment_algorithm": "maude-synthetic-provider-assignment-v1",
+    "campaign_provider_configs": [
+      "openai-sol"
+    ],
+    "capability_evidence": {
+      "auth_isolation": {
+        "bytes": 31587,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "provider-capability-probes/auth/index.json",
+        "sha256": "8aa968626747dc2b099f34c73315dc5e1232e3852e4c3a5d11f5ad32ca48cc07"
+      },
+      "grader_surfaces": {
+        "bytes": 31861,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "grader-surface-probes/index.json",
+        "sha256": "c9bc7fa0901e33c435b216976e7387a0f24a1bb07d2aa54f562cd36769687a98"
+      },
+      "installation_surface": {
+        "bytes": 179272,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "provider-capability-probes/installation/index.json",
+        "sha256": "69ccc62c1b5068cb2ae4671b6885cd309bbd1993faa2f8a44c7884103333e5e8"
+      }
+    },
+    "capability_policy": {
+      "bytes": 2970,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "provider-capability-policy.json",
+      "sha256": "45d19be1ffa384be2132b4f5fd149e1b44a2d3b79c0c523f0ca101e8dbdc7caf"
+    },
+    "claude_available": false,
+    "claude_grader_sessions_assigned": false,
+    "claude_operator_sessions_assigned": false,
+    "claude_sessions_permitted": false,
+    "cross_family_grading_supported": false,
+    "cross_family_grading_used": false,
+    "grader_model_configs_used": [
+      "openai-sol"
+    ],
+    "limitation": "Provider eligibility is role-specific. Unsupported provider/role pairs: anthropic-sonnet:ordinary_operator, anthropic-sonnet:installation_operator, anthropic-sonnet:ordinary_grader, anthropic-sonnet:installation_grader. Same-family grading used: true; cross-family grading used: false. No unsupported family comparison is claimed.",
+    "operator_model_configs_used": [
+      "openai-sol"
+    ],
+    "provider_role_eligibility": {
+      "anthropic-sonnet": {
+        "installation_grader": false,
+        "installation_operator": false,
+        "ordinary_grader": false,
+        "ordinary_operator": false
+      },
+      "openai-sol": {
+        "installation_grader": true,
+        "installation_operator": true,
+        "ordinary_grader": true,
+        "ordinary_operator": true
+      }
+    },
+    "same_family_grading": true,
+    "same_model_configuration_grading": true,
+    "separate_fresh_sessions_required": true
+  },
+  "observation_custody": "Initial Git facts are preserved in a separately pinned command record captured at the clean preparation-base commit before successor inputs or evaluator code changed. Provider/isolation and installed-surface probes are exact later pre-freeze observations, and live Git identity fields are rechecked by this freezer.",
+  "observed_at": "2026-07-28T10:21:21Z",
+  "provider_assignment_provider_free_selftest": {
+    "all_passed": true,
+    "authority_effect": "none",
+    "finalizer": {
+      "bytes": 33348,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/finalize_provider_assignments.py",
+      "sha256": "3c07353b33848694ca809e95e17f8a5bd8f9999c339f3e3529d53c338fd474b0"
+    },
+    "provider_sessions_started": 0,
+    "result": {
+      "authority_effect": "none",
+      "campaign_id": "maude-baseline-20260728T050937-0400",
+      "checks_passed": 11,
+      "provider_sessions_started": 0,
+      "schema": "maude.synthetic-operator.provider-assignment-selftest-result.v1",
+      "task_network_used": false,
+      "valid": true
+    },
+    "schema": "maude.synthetic-operator.provider-assignment-selftest-summary.v1",
+    "selftest": {
+      "bytes": 26215,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/provider_assignment_selftest.py",
+      "sha256": "62f69b5f7a124a6143fd927a425dc5aa70ec79b808791e172f93259159ae8387"
+    },
+    "task_network_used": false
+  },
+  "provider_auth_gate_fake_process_selftest": {
+    "all_passed": true,
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 624423,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
+    },
+    "checks": [
+      {
+        "name": "baseline-gate-cases",
+        "passed": true
+      },
+      {
+        "name": "stop-before-persistence",
+        "passed": true
+      },
+      {
+        "name": "action-and-marker-matrix",
+        "passed": true
+      },
+      {
+        "name": "claude-retained-boundary-cases",
+        "passed": true
+      },
+      {
+        "name": "mcp-protocol-negotiation-cases",
+        "passed": true
+      },
+      {
+        "name": "codex-auth-absence-audit-cases",
+        "passed": true
+      },
+      {
+        "name": "frozen-matrix-provider-and-grader-policy",
+        "passed": true
+      },
+      {
+        "name": "provider-capability-failure-evidence",
+        "passed": true
+      },
+      {
+        "name": "grader-provider-action-validation",
+        "passed": true
+      },
+      {
+        "name": "grader-partial-failure-preservation",
+        "passed": true
+      },
+      {
+        "name": "codex-offline-prompt-input",
+        "passed": true
+      },
+      {
+        "name": "codex-strict-mcp-boundary-cases",
+        "passed": true
+      },
+      {
+        "name": "codex-committed-broker-verifier",
+        "passed": true
+      },
+      {
+        "name": "public-cli-broker-case",
+        "passed": true
+      },
+      {
+        "name": "installation-static-visible-paths",
+        "passed": true
+      },
+      {
+        "name": "retrospective-action-deduplication",
+        "passed": true
+      },
+      {
+        "name": "retrospective-separation-cases",
+        "passed": true
+      },
+      {
+        "name": "public-socket-policy",
+        "passed": true
+      },
+      {
+        "name": "suffixless-operator-helper-media-type",
+        "passed": true
+      },
+      {
+        "name": "grade-failure-class-uniqueness",
+        "passed": true
+      },
+      {
+        "name": "installation-terminal-action-sequence",
+        "passed": true
+      },
+      {
+        "name": "installation-broker-result-parser",
+        "passed": true
+      },
+      {
+        "name": "installation-rpc-contract",
+        "passed": true
+      },
+      {
+        "name": "pty-graceful-cleanup",
+        "passed": true
+      },
+      {
+        "name": "unix-socket-path-budget",
+        "passed": true
+      },
+      {
+        "name": "injected-exception-matrix",
+        "passed": true
+      }
+    ],
+    "raw_result_committed": false,
+    "result": {
+      "bytes": 38080,
+      "sha256": "89acd672dd216c179ac6ca9831d3a556e84e3c561e4232f67da7c380bcf77daf"
+    },
+    "schema": "maude.synthetic-operator.auth-gate-selftest-summary.v1",
+    "source": {
+      "bytes": 172944,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/auth_gate_selftest.py",
+      "sha256": "d09cdd0b06d59feabfe1216375cf8645bfa0ad585388c2faba38d319b0e53f7e"
+    }
+  },
+  "provider_capability_policy": {
+    "bytes": 2970,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/provider-capability-policy.json",
+    "sha256": "45d19be1ffa384be2132b4f5fd149e1b44a2d3b79c0c523f0ca101e8dbdc7caf"
+  },
+  "provider_session_capability_probes": {
+    "all_observed_session_identities": [
+      "019fa833-6907-7191-8cff-2d3120194a73",
+      "a2ae8600-b630-4991-8cae-06fdc552a560"
+    ],
+    "all_passed": false,
+    "attempt_id": "20260728T100928Z-214c91faeaad",
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 624423,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
+    },
+    "capability_observation_valid": true,
+    "completed_at": "2026-07-28T10:09:46Z",
+    "mcp_stdio_shim": {
+      "bytes": 56742,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/claude_mcp_bridge.py",
+      "sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
+    },
+    "probe_index": {
+      "bytes": 31587,
+      "sha256": "8aa968626747dc2b099f34c73315dc5e1232e3852e4c3a5d11f5ad32ca48cc07"
+    },
+    "providers": [
+      {
+        "clean_home_write_and_read_proved": true,
+        "final_marker_after_tool_results": true,
+        "fresh_process": true,
+        "gate_record": {
+          "bytes": 7806,
+          "sha256": "acb8f4ceeac9545bc2473bc37a1da13db9d9587ca67a3717a6edbecb6b3aa10e"
+        },
+        "operator_action_boundary_provider_auth_absence_proved": true,
+        "provider_auth_retained_until_transport_exit": true,
+        "provider_boundary_kind": "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-and-per-command-sandbox",
+        "provider_config": "openai-sol",
+        "raw_stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "raw_transcript": {
+          "bytes": 3795,
+          "sha256": "cfea52d43e7778d202b66ced7f32286d29389691c237dfbf395d63792a5c0583"
+        },
+        "returncode": 0,
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa833-6907-7191-8cff-2d3120194a73"
+        },
+        "strict_mcp_and_per_command_sandbox_proved": true,
+        "successful_action_results": 2,
+        "timed_out": false,
+        "tool_actions_after_gate": 2,
+        "trusted_stdio_shim_auth_read_observed": false
+      }
+    ],
+    "raw_probe_evidence_committed": false,
+    "schema": "maude.synthetic-operator.provider-probe-summary.v1",
+    "successful_provider_configs": [
+      "openai-sol"
+    ],
+    "unavailable_provider_configs": [
+      "anthropic-sonnet"
+    ],
+    "unavailable_provider_failures": {
+      "anthropic-sonnet": {
+        "failure_classification": "provider-capability-unavailable",
+        "failure_stage": "provider-transport",
+        "provider_network_attempted": true,
+        "provider_network_use_observed": "unknown",
+        "provider_process_launch_state": "completed",
+        "provider_session_identity_observed": true
+      }
+    }
+  },
+  "related_runtime_repositories": {
+    "agent_governor": {
+      "head": "485e55783f9e359965e3b736e1d610c4568d45f1",
+      "role": "protocol reference only; not written by campaign",
+      "state": "clean when inspected",
+      "version": "2.8.1"
+    },
+    "docket": {
+      "broker_binary_sha256": "559d86cb79ae9a426b2873aa0d8ad28056cff59f967fa5ec4f3374379c65f41e",
+      "build_toolchain": "Rust 1.94.0; cargo --locked --offline --release",
+      "cargo_lock_sha256": "5c38063663027eb81c1098e91a46008e53ed7b8feb55bd440c22a4b7c785a373",
+      "frozen_binary_sha256": "1fa41093c5a9b37c7607eeeaf2db73b8a703d7d8b0e4dcc93076f9a0b6aabbc6",
+      "frozen_head_after_external_transition": "9050a53cd8a4741d71f5334f90eb22dac52eeb62",
+      "initial_observed_head": "6349b5c1e03b91137d5978bcc127900411bc1588",
+      "initial_observed_state": "dirty",
+      "later_external_state": "origin/main advanced to the same 9050a53 commit; local and upstream now agree",
+      "role": "frozen direct-runtime comparator; not written by campaign",
+      "source_archive_git_commit_id": "9050a53cd8a4741d71f5334f90eb22dac52eeb62",
+      "source_archive_sha256": "bf7307e46678abba93ffa93bb527721af8d752d2a298ddee37f3b0008a4c53b7",
+      "state_at_fixture_freeze": "clean local main, then one commit ahead of upstream",
+      "transition_attribution": "all Docket worktree and remote transitions were external to this campaign"
+    }
+  },
+  "repository": {
+    "branch": "main",
+    "clean_at_campaign_start": true,
+    "head": "9e366fae778602f1355e9467814c89b54832893f",
+    "initial_git_status_short": "",
+    "initial_observation": {
+      "bytes": 1980,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/initial-repository-observation.json",
+      "sha256": "13c8928a4ddf499a27b09ca7e59ea4ed9fd75c4d683fbc45a868bb40f73defd0"
+    },
+    "initial_observation_wall_clock_captured": true,
+    "initial_state_observed_before_campaign_artifact_creation": true,
+    "live_recheck_commands": {
+      "branch": {
+        "argv": [
+          "git",
+          "branch",
+          "--show-current"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "main\n"
+      },
+      "head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "9e366fae778602f1355e9467814c89b54832893f\n"
+      },
+      "origin": {
+        "argv": [
+          "git",
+          "remote",
+          "get-url",
+          "origin"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "github-unpingable:unpingable/maude.git\n"
+      },
+      "upstream": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "--abbrev-ref",
+          "@{upstream}"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "origin/main\n"
+      },
+      "upstream_head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "@{upstream}"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c\n"
+      }
+    },
+    "origin": "github-unpingable:unpingable/maude.git",
+    "path": "/home/jbeck/git/agent_gov_ui/maude",
+    "preparation_base_commit": "9e366fae778602f1355e9467814c89b54832893f",
+    "upstream": "origin/main",
+    "upstream_head": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c"
+  },
+  "required_baseline": "9d5a54f476a52826379a9ae8d6710551253a6493",
+  "required_preparation_base": "9e366fae778602f1355e9467814c89b54832893f",
+  "role_assignment_capability_validation": {
+    "all_assigned_roles_capability_proved": true,
+    "assignments": {
+      "all_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "all_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "installation_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "installation_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "ordinary_grader_provider_configs": [
+        "openai-sol"
+      ],
+      "ordinary_operator_provider_configs": [
+        "openai-sol"
+      ],
+      "per_provider": {
+        "anthropic-sonnet": {
+          "installation_grader_run_ids": [],
+          "installation_operator_run_ids": [],
+          "ordinary_grader_run_ids": [],
+          "ordinary_operator_run_ids": []
+        },
+        "openai-sol": {
+          "installation_grader_run_ids": [
+            "install-i01",
+            "install-i02",
+            "install-i03",
+            "install-i04",
+            "install-i05",
+            "install-i06",
+            "install-i07",
+            "install-i08",
+            "install-i09",
+            "install-i10"
+          ],
+          "installation_operator_run_ids": [
+            "install-i01",
+            "install-i02",
+            "install-i03",
+            "install-i04",
+            "install-i05",
+            "install-i06",
+            "install-i07",
+            "install-i08",
+            "install-i09",
+            "install-i10"
+          ],
+          "ordinary_grader_run_ids": [
+            "docket-s01",
+            "docket-s11",
+            "docket-s15",
+            "docket-s17",
+            "docket-s20",
+            "maude-s01",
+            "maude-s02",
+            "maude-s03",
+            "maude-s04",
+            "maude-s05",
+            "maude-s06",
+            "maude-s07",
+            "maude-s08",
+            "maude-s09",
+            "maude-s10",
+            "maude-s11",
+            "maude-s12",
+            "maude-s13",
+            "maude-s14",
+            "maude-s15",
+            "maude-s16",
+            "maude-s17",
+            "maude-s18",
+            "maude-s19",
+            "maude-s20"
+          ],
+          "ordinary_operator_run_ids": [
+            "docket-s01",
+            "docket-s11",
+            "docket-s15",
+            "docket-s17",
+            "docket-s20",
+            "maude-s01",
+            "maude-s02",
+            "maude-s03",
+            "maude-s04",
+            "maude-s05",
+            "maude-s06",
+            "maude-s07",
+            "maude-s08",
+            "maude-s09",
+            "maude-s10",
+            "maude-s11",
+            "maude-s12",
+            "maude-s13",
+            "maude-s14",
+            "maude-s15",
+            "maude-s16",
+            "maude-s17",
+            "maude-s18",
+            "maude-s19",
+            "maude-s20"
+          ]
+        }
+      }
+    },
+    "authority_effect": "none",
+    "proved_capabilities": {
+      "auth": [
+        "openai-sol"
+      ],
+      "installation_grader": [
+        "openai-sol"
+      ],
+      "installation_operator": [
+        "openai-sol"
+      ],
+      "ordinary_grader": [
+        "openai-sol"
+      ]
+    },
+    "provider_role_eligibility": {
+      "anthropic-sonnet": {
+        "installation_grader": false,
+        "installation_operator": false,
+        "ordinary_grader": false,
+        "ordinary_operator": false
+      },
+      "openai-sol": {
+        "installation_grader": true,
+        "installation_operator": true,
+        "ordinary_grader": true,
+        "ordinary_operator": true
+      }
+    },
+    "required_capabilities": {
+      "auth": [
+        "openai-sol"
+      ],
+      "installation_grader": [
+        "openai-sol"
+      ],
+      "installation_operator": [
+        "openai-sol"
+      ],
+      "ordinary_grader": [
+        "openai-sol"
+      ]
+    },
+    "unsupported_candidate_roles_excluded": true
+  },
+  "schema": "maude.synthetic-operator.preflight.v1",
+  "successor_lineage": {
+    "bytes": 4180,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/successor-lineage.json",
+    "sha256": "406d43f05c7499a93fb9d419baf3f79783ffe611c58fb5a53c1df2869a0943c0"
+  },
+  "versions": {
+    "claude": {
+      "argv": [
+        "claude",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "2.1.220 (Claude Code)\n"
+    },
+    "codex": {
+      "argv": [
+        "codex",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "codex-cli 0.145.0\n"
+    },
+    "frozen_docket": {
+      "argv": [
+        "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/direct-runtime/bin/docket",
+        "--version"
+      ],
+      "returncode": 1,
+      "stderr": "refused/error: unknown command []; commands: repository register, repository relocate, repository alias, repository show, repository migrate-attempt, request create, prepare start, prepare poll, candidate admit, grant standing, ratify, reserve, dispatch, observe, rely review-queue, reconcile, recover fact, recover resolve, authz request, authz accept, docket list, docket show, docket journal, continuity subject\n",
+      "stdout": ""
+    },
+    "maude": "2.4.0",
+    "python": "3.12.3",
+    "synthetic_runtime_schema": "maude.synthetic-runtime.v1"
+  },
+  "write_scope": {
+    "ephemeral_synthetic_tmp_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400",
+    "ephemeral_synthetic_tmp_writes": true,
+    "other_repository_writes": false,
+    "persistent_writes_outside_repository": false,
+    "remote_writes": false,
+    "repository_writes": "/home/jbeck/git/agent_gov_ui/maude"
+  }
+}

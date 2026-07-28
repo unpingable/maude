@@ -1,0 +1,14 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "chmod": "0660",
+  "generated_directories": [
+    "project/.governor"
+  ],
+  "governor_dir": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i02/installation/project/.governor",
+  "mode": "compatible",
+  "run_id": "install-i02",
+  "schema": "maude.synthetic-installation-endpoint-plan.v1",
+  "socket_strategy": "default_governor_dir",
+  "task_id": "install-task-02"
+}

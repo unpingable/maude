@@ -20,11 +20,10 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import grader_surface_probe
+import finalize_provider_assignments
 from campaign_common import (
     AUTH_GATE_PROBE_PATH,
     CAMPAIGN_ID,
-    CODEX_ONLY_MODEL_CONFIG,
-    CODEX_ONLY_MODEL_POLICY,
     DIRECT_RUN_IDS,
     DOCKET_COMMIT,
     EVAL_ROOT,
@@ -37,9 +36,12 @@ from campaign_common import (
     PACKET_DIR,
     PERSONAS_DIR,
     PREPARATION_BASE_COMMIT,
+    PROVIDER_CAPABILITY_POLICY_PATH,
+    PROVIDER_MODEL_CONFIGS,
     REPO_ROOT,
     SCENARIOS_DIR,
     SUT_COMMIT,
+    SUPPORTED_PROVIDER_CONFIGS,
     CampaignError,
     file_record,
     inventory_files,
@@ -73,23 +75,16 @@ INSTALL_OPERATOR_DOC_SOURCES = (
 )
 INSTALL_DOC_PACKET_DIR = PACKET_DIR / "installation-docs"
 INSTALL_MEDIA_DIR = PACKET_DIR / "installation-media"
-INITIAL_REPOSITORY_OBSERVATION = (
-    PACKET_DIR / "initial-repository-observation.json"
-)
+INITIAL_REPOSITORY_OBSERVATION = PACKET_DIR / "initial-repository-observation.json"
 SUCCESSOR_LINEAGE = PACKET_DIR / "successor-lineage.json"
-REJECTED_GRADER_PROBE_STATUS = (
-    PACKET_DIR
-    / "grader-surface-probes-failed-20260728T0755Z"
-    / "probe-attempt-status.json"
-)
 INSTALL_MEDIA_PROVENANCE = INSTALL_MEDIA_DIR / "provenance.json"
-INSTALL_SOURCE_ARCHIVE = (
-    INSTALL_MEDIA_DIR / "sources" / "maude-2.4.0.tar"
-)
+INSTALL_SOURCE_ARCHIVE = INSTALL_MEDIA_DIR / "sources" / "maude-2.4.0.tar"
 OPERATOR_RETROSPECTIVE = HARNESS_DIR / "operator_retrospective.py"
 OPERATOR_PTY = HARNESS_DIR / "operator_pty.py"
 CLAUDE_MCP_BRIDGE = HARNESS_DIR / "claude_mcp_bridge.py"
 PUBLIC_CLI_BROKER = HARNESS_DIR / "public_cli_broker.py"
+FINALIZE_PROVIDER_ASSIGNMENTS = HARNESS_DIR / "finalize_provider_assignments.py"
+PROVIDER_ASSIGNMENT_SELFTEST = HARNESS_DIR / "provider_assignment_selftest.py"
 CLAUDE_MCP_PROTOCOL_VERSION = "2025-11-25"
 CODEX_MCP_PROTOCOL_VERSION = "2025-06-18"
 SUPPORTED_MCP_PROTOCOL_VERSIONS = [
@@ -128,25 +123,27 @@ CLAUDE_BRIDGE_SHA256 = (
     "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
 )
 CLAUDE_RUNNER_SHA256 = (
-    "eaf8112aee1d836e263b3ec4c89ac2c391e100ecbfeac8f58487b64970678f31"
+    "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
 )
-OPERATOR_PTY_SHA256 = (
-    "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
-)
-PUBLIC_CLI_SHA256 = (
-    "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
-)
+OPERATOR_PTY_SHA256 = "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+PUBLIC_CLI_SHA256 = "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
 PUBLIC_CLI_BROKER_SHA256 = (
     "fafe3e530fa91ca0ec0e7164c1607ad76d53527d109375934139e36998eac575"
 )
 AUTH_GATE_SELFTEST_SHA256 = (
-    "90ffca4c9c0251a5df89ecd43de18d897eec9b9a4eb033655841fd465cb04235"
+    "d09cdd0b06d59feabfe1216375cf8645bfa0ad585388c2faba38d319b0e53f7e"
 )
 CAMPAIGN_COMMON_SHA256 = (
-    "bd601eac71e924754bf8cd628dd6c7bff0d33cd2ea3177399fb3f8cf1340418d"
+    "bb134e1457993830799e1ffa251ae5af21a5e00b303ff35779387bdcaa37b66c"
 )
 GRADER_SURFACE_PROBE_SHA256 = (
-    "721e22b87c823c4edd0f224714cf2ef74c7b0d5fe0575032d5a6ae06930cbde4"
+    "7e28828f00a98333975ae5dfb9a42a0d8c8941ab332917185a617717b300e854"
+)
+FINALIZE_PROVIDER_ASSIGNMENTS_SHA256 = (
+    "3c07353b33848694ca809e95e17f8a5bd8f9999c339f3e3529d53c338fd474b0"
+)
+PROVIDER_ASSIGNMENT_SELFTEST_SHA256 = (
+    "62f69b5f7a124a6143fd927a425dc5aa70ec79b808791e172f93259159ae8387"
 )
 HOST_SOURCE_ROOT = Path("/home/jbeck/git/agent_gov_ui")
 INSTALL_ENDPOINT_DIR = PACKET_DIR / "installation-endpoints"
@@ -170,9 +167,7 @@ INSTALL_FIXTURE_DESTINATIONS = {
     "state/prior-installation.json": "state/prior-installation.json",
     "run/endpoint-ownership.json": "task/endpoint-ownership.json",
     "project/ownership.json": "project/ownership.json",
-    (
-        "project/.governor/ownership.json"
-    ): "project/.governor/ownership.json",
+    ("project/.governor/ownership.json"): "project/.governor/ownership.json",
 }
 VISIBLE_SCENARIO_NAMES = (
     "packet.json",
@@ -235,6 +230,8 @@ evaluator session.
 Return only the required JSON object. Do not inspect any path outside the
 grade bundle. The hidden expected-disposition file is not supplied.
 """
+
+
 def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
@@ -348,13 +345,9 @@ bypass a refusal, use a live endpoint, or perform an external side effect.
 def _render_install_task(run: dict[str, Any]) -> str:
     """Render only fields in the neutral, operator-visible task document."""
 
-    source = load_json(
-        SCENARIOS_DIR / run["scenario_id"] / "task.json"
-    )
+    source = load_json(SCENARIOS_DIR / run["scenario_id"] / "task.json")
     if source.get("task_id") != run.get("task_id"):
-        raise CampaignError(
-            f"{run['run_id']}: installation task identity mismatch"
-        )
+        raise CampaignError(f"{run['run_id']}: installation task identity mismatch")
     handoff = json.dumps(
         source.get("handoff", {}),
         indent=2,
@@ -367,22 +360,20 @@ def _render_install_task(run: dict[str, Any]) -> str:
         ensure_ascii=False,
         sort_keys=True,
     )
-    evidence = "\n".join(
-        f"- {item}" for item in source.get("evidence_requested", [])
-    )
+    evidence = "\n".join(f"- {item}" for item in source.get("evidence_requested", []))
     return f"""\
 # Maude installation task
 
-**Task ID:** `{source['task_id']}`
-**Component:** `{source['component']}`
+**Task ID:** `{source["task_id"]}`
+**Component:** `{source["component"]}`
 
 ## Situation
 
-{source['situation']}
+{source["situation"]}
 
 ## Goal
 
-{source['goal']}
+{source["goal"]}
 
 ## Handoff
 
@@ -402,7 +393,7 @@ def _render_install_task(run: dict[str, Any]) -> str:
 
 ## Review condition
 
-{source['review_condition']}
+{source["review_condition"]}
 """
 
 
@@ -437,9 +428,7 @@ def _regular_files(root: Path, *, label: str) -> list[Path]:
     files: list[Path] = []
     for path in sorted(root.rglob("*")):
         if path.is_symlink() or not (path.is_file() or path.is_dir()):
-            raise CampaignError(
-                f"{label}: non-regular path is forbidden: {path}"
-            )
+            raise CampaignError(f"{label}: non-regular path is forbidden: {path}")
         if path.is_file():
             files.append(path)
     return files
@@ -551,7 +540,7 @@ Governor service or retained state.
 
 **Campaign:** `{CAMPAIGN_ID}`
 **Run:** `{run_id}`
-**Surface:** `{run['surface']}`
+**Surface:** `{run["surface"]}`
 
 ## Operator role
 
@@ -586,8 +575,8 @@ def _render_grader_assignment(run: dict[str, Any]) -> str:
 # Frozen grader assignment
 
 **Campaign:** `{CAMPAIGN_ID}`
-**Run:** `{run['run_id']}`
-**Surface:** `{run['surface']}`
+**Run:** `{run["run_id"]}`
+**Surface:** `{run["surface"]}`
 **Rubric:** `{rubric_id}`
 **Taxonomy:** `maude-synthetic-failure-taxonomy-v1`
 
@@ -618,9 +607,7 @@ def _copy_operator_docs() -> None:
 def _copy_install_operator_docs() -> None:
     for source, relative in INSTALL_OPERATOR_DOC_SOURCES:
         if not source.is_file():
-            raise CampaignError(
-                f"missing installation operator document: {source}"
-            )
+            raise CampaignError(f"missing installation operator document: {source}")
         target = INSTALL_DOC_PACKET_DIR / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
@@ -676,22 +663,12 @@ def _installation_endpoint_plan(run: dict[str, Any]) -> dict[str, Any]:
         )
     task = load_json(SCENARIOS_DIR / run["scenario_id"] / "task.json")
     if task.get("task_id") != run.get("task_id"):
-        raise CampaignError(
-            f"{run['run_id']}: endpoint plan task identity mismatch"
-        )
+        raise CampaignError(f"{run['run_id']}: endpoint plan task identity mismatch")
     generated_directories = (
-        ["project/.governor"]
-        if socket_strategy == "default_governor_dir"
-        else []
+        ["project/.governor"] if socket_strategy == "default_governor_dir" else []
     )
     governor_dir = (
-        str(
-            LAB_ROOT
-            / run["run_id"]
-            / "installation"
-            / "project"
-            / ".governor"
-        )
+        str(LAB_ROOT / run["run_id"] / "installation" / "project" / ".governor")
         if socket_strategy == "default_governor_dir"
         else None
     )
@@ -711,9 +688,7 @@ def _installation_endpoint_plan(run: dict[str, Any]) -> dict[str, Any]:
 
 def _render_installation_endpoint_plans(matrix: dict[str, Any]) -> None:
     install_runs = [
-        run
-        for run in matrix_runs(matrix)
-        if run["surface"] == "maude-installation"
+        run for run in matrix_runs(matrix) if run["surface"] == "maude-installation"
     ]
     actual_ids = {run["run_id"] for run in install_runs}
     if actual_ids != set(INSTALL_ENDPOINT_SPECS):
@@ -734,9 +709,7 @@ def _validate_installation_endpoint_plans(
     matrix: dict[str, Any],
 ) -> list[str]:
     errors: list[str] = []
-    expected_names = {
-        f"{run_id}.json" for run_id in INSTALL_ENDPOINT_SPECS
-    }
+    expected_names = {f"{run_id}.json" for run_id in INSTALL_ENDPOINT_SPECS}
     if not INSTALL_ENDPOINT_DIR.is_dir():
         return [f"installation endpoint-plan directory absent: {INSTALL_ENDPOINT_DIR}"]
     try:
@@ -772,22 +745,15 @@ def _render_prompts(matrix: dict[str, Any]) -> None:
     prompt_root = PACKET_DIR / "rendered"
     for run in matrix_runs(matrix):
         target = prompt_root / run["run_id"]
-        operator_system = _read(
-            PACKET_DIR / "prompts" / "operator-system.md"
-        )
+        operator_system = _read(PACKET_DIR / "prompts" / "operator-system.md")
         if run["surface"] == "maude-installation":
             operator_system = _read(
-                PACKET_DIR
-                / "prompts"
-                / "installation-operator-system.md"
+                PACKET_DIR / "prompts" / "installation-operator-system.md"
             )
         elif run["surface"] == "docket-gwr-direct":
             operator_system = _direct_task_text(operator_system)
             source_control = load_json(
-                PACKET_DIR
-                / "direct-runtime"
-                / "fixtures"
-                / f"{run['run_id']}.json"
+                PACKET_DIR / "direct-runtime" / "fixtures" / f"{run['run_id']}.json"
             )
             allowed_control_fields = (
                 "surface",
@@ -828,9 +794,7 @@ def _render_prompts(matrix: dict[str, Any]) -> None:
         write_text(target / "operator-task.md", _render_operator_task(run))
         write_text(target / "operator-system.md", operator_system)
         write_text(target / "operator-prompt.md", _render_operator_prompt(run))
-        write_text(
-            target / "grader-assignment.md", _render_grader_assignment(run)
-        )
+        write_text(target / "grader-assignment.md", _render_grader_assignment(run))
         write_json(target / "supplied-inputs.json", _frozen_supplied_inputs(run))
         write_json(target / "session-config.json", _frozen_session_config(run, matrix))
     write_text(PACKET_DIR / "prompts" / "grader-request-template.md", GRADER_TEMPLATE)
@@ -983,9 +947,7 @@ def _validate_operator_surface_sanitization(
 
 def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
     scenario = SCENARIOS_DIR / run["scenario_id"]
-    operator_task = (
-        PACKET_DIR / "rendered" / run["run_id"] / "operator-task.md"
-    )
+    operator_task = PACKET_DIR / "rendered" / run["run_id"] / "operator-task.md"
     task_record = file_record(operator_task)
     task_record["destination"] = (
         "task/assignment.md"
@@ -1065,10 +1027,7 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
             (direct / "bin" / "docket", "bin/docket"),
             (direct / "bin" / "gwr-git-broker", "bin/gwr-git-broker"),
             (
-                PACKET_DIR
-                / "rendered"
-                / run["run_id"]
-                / "direct-control.json",
+                PACKET_DIR / "rendered" / run["run_id"] / "direct-control.json",
                 "control.json",
             ),
             (SCENARIOS_DIR / run["scenario_id"] / "patch.diff", "candidate.patch"),
@@ -1081,9 +1040,7 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
             record = file_record(path)
             record["destination"] = destination
             files.append(record)
-        fixture_archive = file_record(
-            direct / "fixtures" / f"{run['run_id']}.tar"
-        )
+        fixture_archive = file_record(direct / "fixtures" / f"{run['run_id']}.tar")
     else:
         pty_record = file_record(OPERATOR_PTY)
         pty_record["destination"] = "operator/operator-pty"
@@ -1109,24 +1066,18 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
                 else "none"
             ),
             "destination": (
-                "venv"
-                if run["source_visibility"] == "installed-distribution"
-                else None
+                "venv" if run["source_visibility"] == "installed-distribution" else None
             ),
             "materializer": (
                 "literal system venv and pip --no-index --require-hashes"
                 if run["source_visibility"] == "installed-distribution"
                 else None
             ),
-            "installation_media_provenance": file_record(
-                INSTALL_MEDIA_PROVENANCE
-            ),
+            "installation_media_provenance": file_record(INSTALL_MEDIA_PROVENANCE),
             "wheelhouse_mounted_for_operator": False,
             "setup_transcript_mounted_for_operator": False,
         }
-    system = (
-        PACKET_DIR / "rendered" / run["run_id"] / "operator-system.md"
-    )
+    system = PACKET_DIR / "rendered" / run["run_id"] / "operator-system.md"
     prompt = PACKET_DIR / "rendered" / run["run_id"] / "operator-prompt.md"
     return {
         "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
@@ -1157,16 +1108,95 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _session_provider_boundary(
+    *,
+    provider_config: str,
+    role: str,
+    execution_config: dict[str, Any],
+) -> dict[str, Any]:
+    if role not in {"operator", "grader"}:
+        raise CampaignError(f"unknown provider session role: {role}")
+    tool_key = "operator_tools" if role == "operator" else "grader_tools"
+    boundary = {
+        "provider_config": provider_config,
+        "provider": execution_config["provider"],
+        "role": role,
+        "tools": execution_config[tool_key],
+        "built_in_tools": execution_config["built_in_tools"],
+        "mcp_protocol_version": execution_config["mcp_protocol_version"],
+        "provider_network_permitted_for_session_transport": True,
+        "locally_configured_provider_credentials_permitted_only_for_session_transport": (
+            True
+        ),
+        "task_paths_or_task_sockets_visible_to_provider_transport": False,
+        "task_level_network_permitted": False,
+        "production_task_systems_or_credentials_permitted": False,
+        "external_operational_effect_permitted": False,
+        "fresh_process": True,
+        "resume_continuation_or_follow_up": False,
+    }
+    if provider_config == "openai-sol":
+        boundary.update(
+            {
+                "kind": (
+                    "task-blind-retained-auth-codex-transport-with-"
+                    "hash-pinned-stdio-mcp"
+                ),
+                "bare_mcp_tools": (
+                    CODEX_OPERATOR_TOOLS if role == "operator" else CODEX_GRADER_TOOLS
+                ),
+                "intrinsic_action_features_disabled": (
+                    CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+                ),
+                "optional_features_disabled": (CODEX_DISABLED_OPTIONAL_FEATURES),
+                "approval_policy": CODEX_APPROVAL_POLICY,
+                "mcp_default_tools_approval_mode": (
+                    CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
+                ),
+                "trusted_stdio_shim_shares_retained_auth_transport": True,
+                "trusted_stdio_shim_auth_read_observed": False,
+            }
+        )
+    else:
+        boundary.update(
+            {
+                "kind": (
+                    "task-blind-retained-auth-claude-transport-with-"
+                    "credential-free-mcp-proxy"
+                ),
+                "strict_mcp_config": True,
+                "permission_mode": "bypassPermissions",
+                "slash_commands_enabled": False,
+                "browser_enabled": False,
+                "session_persistence": False,
+                "mcp_proxy_receives_provider_credentials": False,
+                "mcp_proxy_has_external_network": False,
+            }
+        )
+    if role == "operator":
+        boundary.update(
+            {
+                "command_broker_receives_provider_credentials": False,
+                "command_broker_receives_semantic_prompt": False,
+                "each_command_uses_fresh_no_network_mount_pid_namespace": True,
+            }
+        )
+    else:
+        boundary.update(
+            {
+                "evidence_bundle_read_only": True,
+                "command_broker_present": False,
+            }
+        )
+    return boundary
+
+
 def _frozen_session_config(
     run: dict[str, Any], matrix: dict[str, Any]
 ) -> dict[str, Any]:
     configs = _model_execution_configs(matrix)
-    operator_config = json.loads(
-        json.dumps(configs[run["operator_model_config"]])
-    )
-    grader_config = json.loads(
-        json.dumps(configs[run["grader_model_config"]])
-    )
+    operator_config = json.loads(json.dumps(configs[run["operator_model_config"]]))
+    grader_config = json.loads(json.dumps(configs[run["grader_model_config"]]))
     installation_socket = (
         _installation_socket_path(run)
         if run["surface"] == "maude-installation"
@@ -1183,8 +1213,9 @@ def _frozen_session_config(
         "follow_up_messages": 0,
         "coaching": "none",
         "filesystem_isolation": (
-            "task-blind Codex transport plus strict one-tool MCP and a fresh "
-            "per-command no-network Bubblewrap namespace"
+            "task-blind provider transport plus an exact one-tool MCP "
+            "surface; every operator command uses a fresh source-free, "
+            "credential-free, no-network Bubblewrap namespace"
         ),
         "provider_transport_task_paths": [],
         "operator_command_mounts": (
@@ -1223,54 +1254,21 @@ def _frozen_session_config(
             if run["surface"] == "maude"
             else None
         ),
-        "codex_boundary": {
-            "operator_tools": CLAUDE_OPERATOR_TOOLS,
-            "grader_tools": CLAUDE_GRADER_TOOLS,
-            "operator_bare_mcp_tools": CODEX_OPERATOR_TOOLS,
-            "grader_bare_mcp_tools": CODEX_GRADER_TOOLS,
-            "built_in_tools": [],
-            "mcp_protocol_version": CODEX_MCP_PROTOCOL_VERSION,
-            "intrinsic_action_features_disabled": (
-                CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+        "provider_boundaries": {
+            "operator": _session_provider_boundary(
+                provider_config=run["operator_model_config"],
+                role="operator",
+                execution_config=operator_config,
             ),
-            "optional_features_disabled": (
-                CODEX_DISABLED_OPTIONAL_FEATURES
+            "grader": _session_provider_boundary(
+                provider_config=run["grader_model_config"],
+                role="grader",
+                execution_config=grader_config,
             ),
-            "approval_policy": CODEX_APPROVAL_POLICY,
-            "mcp_default_tools_approval_mode": (
-                CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-            ),
-            "provider_transport": (
-                "task-blind Bubblewrap transport retains private provider auth "
-                "and network only until transport exit; source and operator "
-                "task paths are absent"
-            ),
-            "trusted_stdio_shim": (
-                "hash-pinned direct MCP shim shares provider transport but is "
-                "proved not to read provider auth"
-            ),
-            "operator_action_surface": (
-                "strict operator MCP terminal -> credential-free broker -> "
-                "one fresh no-network bubblewrap namespace per command"
-            ),
-            "grader_action_surface": (
-                "strict grader MCP evidence reader in a read-only, "
-                "task-scoped bundle; no command broker"
-            ),
-            "semantic_prompt_delivery": (
-                "one initial prompt through a fresh ephemeral Codex process; "
-                "no follow-up, resume, or continuation"
-            ),
-            "provider_task_paths_added": [],
-            "operator_command_provider_credentials_received": False,
-            "operator_command_semantic_prompt_received": False,
-            "operator_command_external_network": False,
         },
     }
     if run["surface"] == "maude-installation":
-        endpoint_plan = (
-            INSTALL_ENDPOINT_DIR / f"{run['run_id']}.json"
-        )
+        endpoint_plan = INSTALL_ENDPOINT_DIR / f"{run['run_id']}.json"
         result["installation_endpoint_plan"] = file_record(endpoint_plan)
         socket_path = installation_socket
         result["installation_socket_path"] = (
@@ -1297,13 +1295,9 @@ def _installation_socket_path(run: dict[str, Any]) -> Path | None:
     if strategy == "task_handoff":
         value = handoff.get("governor_socket")
         if not isinstance(value, str) or not value:
-            raise CampaignError(
-                f"{run['run_id']}: task handoff socket is absent"
-            )
+            raise CampaignError(f"{run['run_id']}: task handoff socket is absent")
         socket_path = Path(value)
-        expected_parent = (
-            LAB_ROOT / run["run_id"] / "installation" / "run"
-        )
+        expected_parent = LAB_ROOT / run["run_id"] / "installation" / "run"
         if socket_path.parent != expected_parent:
             raise CampaignError(
                 f"{run['run_id']}: task socket escapes the owned run directory"
@@ -1315,13 +1309,9 @@ def _installation_socket_path(run: dict[str, Any]) -> Path | None:
             raise CampaignError(
                 f"{run['run_id']}: default governor directory is absent"
             )
-        runtime_dir = (
-            LAB_ROOT / run["run_id"] / "installation" / "run" / "xdg"
-        )
+        runtime_dir = LAB_ROOT / run["run_id"] / "installation" / "run" / "xdg"
         governor_path = Path(governor_dir).resolve() / ".governor"
-        digest = hashlib.sha256(
-            str(governor_path).encode("utf-8")
-        ).hexdigest()[:12]
+        digest = hashlib.sha256(str(governor_path).encode("utf-8")).hexdigest()[:12]
         return runtime_dir / f"governor-{digest}.sock"
     raise CampaignError(
         f"{run['run_id']}: unknown endpoint socket strategy {strategy!r}"
@@ -1329,9 +1319,7 @@ def _installation_socket_path(run: dict[str, Any]) -> Path | None:
 
 
 def _direct_commands(run: dict[str, Any]) -> list[dict[str, Any]]:
-    metadata_path = (
-        PACKET_DIR / "direct-runtime" / "fixtures" / f"{run['run_id']}.json"
-    )
+    metadata_path = PACKET_DIR / "direct-runtime" / "fixtures" / f"{run['run_id']}.json"
     control = load_json(metadata_path)
     binary = "./bin/docket"
     state = control["state_path"]
@@ -1447,10 +1435,7 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
         visible = [
             str(
                 (
-                    PACKET_DIR
-                    / "rendered"
-                    / run["run_id"]
-                    / "operator-task.md"
+                    PACKET_DIR / "rendered" / run["run_id"] / "operator-task.md"
                 ).relative_to(REPO_ROOT)
             )
         ] + [
@@ -1477,9 +1462,9 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
         run_id = run["run_id"]
         visible = [
             str(
-                (
-                    PACKET_DIR / "rendered" / run_id / "operator-task.md"
-                ).relative_to(REPO_ROOT)
+                (PACKET_DIR / "rendered" / run_id / "operator-task.md").relative_to(
+                    REPO_ROOT
+                )
             ),
             str((scenario / "packet.json").relative_to(REPO_ROOT)),
             "evals/synthetic-operator/harness/operator_retrospective.py",
@@ -1488,10 +1473,7 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
                 f"evals/synthetic-operator/runs/{CAMPAIGN_ID}/packet/direct-runtime/bin/gwr-git-broker",
                 str(
                     (
-                        PACKET_DIR
-                        / "rendered"
-                        / run_id
-                        / "direct-control.json"
+                        PACKET_DIR / "rendered" / run_id / "direct-control.json"
                     ).relative_to(REPO_ROOT)
                 ),
                 str((scenario / "patch.diff").relative_to(REPO_ROOT)),
@@ -1514,12 +1496,9 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
         run_id = run["run_id"]
         visible = [
             str(
-                (
-                    PACKET_DIR
-                    / "rendered"
-                    / run_id
-                    / "operator-task.md"
-                ).relative_to(REPO_ROOT)
+                (PACKET_DIR / "rendered" / run_id / "operator-task.md").relative_to(
+                    REPO_ROOT
+                )
             ),
             str((scenario / "task.json").relative_to(REPO_ROOT)),
             "evals/synthetic-operator/harness/operator_retrospective.py",
@@ -1538,11 +1517,7 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
         withheld = [
             str((scenario / "README.md").relative_to(REPO_ROOT)),
             str((scenario / "environment.json").relative_to(REPO_ROOT)),
-            str(
-                (scenario / "expected-disposition.json").relative_to(
-                    REPO_ROOT
-                )
-            ),
+            str((scenario / "expected-disposition.json").relative_to(REPO_ROOT)),
             *run["deliberately_withheld"],
             "installation wheelhouse, build transcript, and materializer logs",
             "other installation runs and setup evidence",
@@ -1577,9 +1552,7 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
             "simulated_installation": False,
             "source_visibility": run["source_visibility"],
             "generic_pty_adapter": {
-                "artifact": (
-                    "evals/synthetic-operator/harness/operator_pty.py"
-                ),
+                "artifact": ("evals/synthetic-operator/harness/operator_pty.py"),
                 "destination": "operator-pty",
                 "purpose": (
                     "neutral persistent PTY transport for an arbitrary "
@@ -1588,14 +1561,10 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
                     "exact PTY transcript, and add no Maude command semantics"
                 ),
             },
-            "media_provenance": str(
-                INSTALL_MEDIA_PROVENANCE.relative_to(REPO_ROOT)
-            ),
+            "media_provenance": str(INSTALL_MEDIA_PROVENANCE.relative_to(REPO_ROOT)),
         }
     result["post_task_retrospective"] = {
-        "artifact": (
-            "evals/synthetic-operator/harness/operator_retrospective.py"
-        ),
+        "artifact": ("evals/synthetic-operator/harness/operator_retrospective.py"),
         "destination": "operator-retrospective",
         "questions_hidden_until_initial_disposition": True,
         "invocation_excluded_from_product_command_counts": True,
@@ -1605,96 +1574,97 @@ def _run_supplied_material(run: dict[str, Any]) -> dict[str, Any]:
 
 def _model_execution_configs(matrix: dict[str, Any]) -> dict[str, Any]:
     declared = matrix["operator_model_configs"]
-    return {
-        "openai-sol": {
-            **declared["openai-sol"],
-            "resolved_executable": "/opt/node/bin/codex",
-            "operator_flags": [
-                "exec",
-                "--ephemeral",
-                "--ignore-user-config",
-                "--ignore-rules",
-                "--strict-config",
-                "--skip-git-repo-check",
-                "--sandbox",
-                "workspace-write",
-                "--json",
-                "--model",
-                "gpt-5.6-sol",
-                "--config",
-                'model_reasoning_effort="low"',
-                "--config",
-                CODEX_APPROVAL_CONFIG,
-                "<then exact strict-MCP configuration, every intrinsic and "
-                "optional feature disable, and one combined prompt>",
-            ],
-            "grader_flags": [
-                "exec",
-                "--ephemeral",
-                "--ignore-user-config",
-                "--ignore-rules",
-                "--strict-config",
-                "--skip-git-repo-check",
-                "--sandbox",
-                "read-only",
-                "--json",
-                "--model",
-                "gpt-5.6-sol",
-                "--config",
-                'model_reasoning_effort="low"',
-                "--config",
-                CODEX_APPROVAL_CONFIG,
-                "<then exact strict-MCP configuration, every intrinsic and "
-                "optional feature disable, output schema, and one combined prompt>",
-            ],
-            "operator_tools": CLAUDE_OPERATOR_TOOLS,
-            "grader_tools": CLAUDE_GRADER_TOOLS,
-            "operator_bare_mcp_tools": CODEX_OPERATOR_TOOLS,
-            "grader_bare_mcp_tools": CODEX_GRADER_TOOLS,
-            "built_in_tools": [],
-            "mcp_protocol_version": CODEX_MCP_PROTOCOL_VERSION,
-            "intrinsic_action_features_explicitly_disabled": (
-                CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+    used_set = {
+        str(run[field])
+        for run in matrix_runs(matrix)
+        for field in ("operator_model_config", "grader_model_config")
+    }
+    used = [provider for provider in SUPPORTED_PROVIDER_CONFIGS if provider in used_set]
+    if (
+        not isinstance(declared, dict)
+        or list(declared) != used
+        or any(
+            declared[provider] != PROVIDER_MODEL_CONFIGS[provider] for provider in used
+        )
+    ):
+        raise CampaignError(
+            "matrix provider configurations differ from the exact frozen "
+            "provider configurations actually used by campaign runs"
+        )
+    result: dict[str, Any] = {}
+    for provider in used:
+        config = json.loads(json.dumps(declared[provider]))
+        common = {
+            **config,
+            "provider_network_scope": (
+                "permitted only for the provider transport used by capability "
+                "probes and fresh operator/grader sessions"
             ),
-            "optional_features_explicitly_disabled": (
-                CODEX_DISABLED_OPTIONAL_FEATURES
+            "locally_configured_provider_credentials_scope": (
+                "permitted only for provider-session transport"
             ),
-            "approval_policy": CODEX_APPROVAL_POLICY,
-            "mcp_default_tools_approval_mode": (
-                CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-            ),
-            "live_web_search_enabled": False,
-            "user_mcp_and_connector_config_loaded": False,
-            "exact_provider_tool_allowlist_supported": True,
-            "system_prompt_delivery": (
-                "operator/grader system text is concatenated ahead of the exact "
-                "user prompt because codex exec exposes one initial prompt"
-            ),
-            "provider_task_boundary": (
-                "task-blind provider Bubblewrap retains private auth and network "
-                "until exit; a hash-pinned direct stdio MCP shim exposes one "
-                "role-specific tool"
-            ),
+            "task_level_network": False,
+            "production_task_systems_or_credentials": False,
+            "external_operational_effect": False,
             "operator_boundary": (
-                "credential-free, prompt-free broker launches every terminal "
-                "request in a fresh no-network mount/PID namespace"
+                "one bounded terminal MCP tool backed by a credential-free, "
+                "prompt-free command broker and source-free no-network "
+                "command namespace"
             ),
             "grader_boundary": (
                 "one read-only evidence MCP tool over the frozen grade bundle; "
-                "no command broker"
+                "no operator command broker"
             ),
-            "trusted_shim_limitation": (
-                "the direct stdio MCP shim shares the provider transport "
-                "namespace and its auth/network mounts, but is proved not to "
-                "read provider auth; no stronger auth-free or offline claim is made"
-            ),
-        },
-    }
+        }
+        if provider == "openai-sol":
+            common.update(
+                {
+                    "resolved_executable": "/opt/node/bin/codex",
+                    "operator_invocation_contract": (
+                        "fresh ephemeral strict-config Codex exec; exact "
+                        "role-specific MCP configuration; all intrinsic and "
+                        "optional action features disabled; combined prompt "
+                        "delivered through closed stdin"
+                    ),
+                    "grader_invocation_contract": (
+                        "fresh ephemeral strict-config Codex exec with one "
+                        "read-only evidence MCP tool and exact output schema"
+                    ),
+                    "trusted_transport_component_limitation": (
+                        "the hash-pinned direct stdio MCP shim shares the "
+                        "retained-auth provider transport and is proved not "
+                        "to read provider authentication"
+                    ),
+                }
+            )
+        else:
+            common.update(
+                {
+                    "resolved_executable": (
+                        "/home/jbeck/.local/share/claude/versions/2.1.220"
+                    ),
+                    "operator_invocation_contract": (
+                        "fresh no-persistence Claude session with strict MCP "
+                        "configuration, exact terminal-tool allowlist, disabled "
+                        "slash/browser surfaces, and a new session UUID"
+                    ),
+                    "grader_invocation_contract": (
+                        "fresh no-persistence Claude session with strict MCP "
+                        "configuration, one read-only evidence tool, and the "
+                        "exact JSON schema"
+                    ),
+                    "trusted_transport_component_limitation": (
+                        "provider authentication remains only in the "
+                        "task-blind transport; the separately sandboxed MCP "
+                        "proxy and command broker receive no credentials"
+                    ),
+                }
+            )
+        result[provider] = common
+    return result
 
 
-def _build_manifest(
-    matrix: dict[str, Any], *, frozen_at: str
-) -> dict[str, Any]:
+def _build_manifest(matrix: dict[str, Any], *, frozen_at: str) -> dict[str, Any]:
     run_records: list[dict[str, Any]] = []
     for run in matrix_runs(matrix):
         scenario = SCENARIOS_DIR / run["scenario_id"]
@@ -1716,34 +1686,22 @@ def _build_manifest(
             "operator_working_directory": str(operator_working_directory),
             "rendered_operator_prompt": str(
                 (
-                    PACKET_DIR
-                    / "rendered"
-                    / run["run_id"]
-                    / "operator-prompt.md"
+                    PACKET_DIR / "rendered" / run["run_id"] / "operator-prompt.md"
                 ).relative_to(REPO_ROOT)
             ),
             "rendered_grader_assignment": str(
                 (
-                    PACKET_DIR
-                    / "rendered"
-                    / run["run_id"]
-                    / "grader-assignment.md"
+                    PACKET_DIR / "rendered" / run["run_id"] / "grader-assignment.md"
                 ).relative_to(REPO_ROOT)
             ),
             "rendered_supplied_inputs": str(
                 (
-                    PACKET_DIR
-                    / "rendered"
-                    / run["run_id"]
-                    / "supplied-inputs.json"
+                    PACKET_DIR / "rendered" / run["run_id"] / "supplied-inputs.json"
                 ).relative_to(REPO_ROOT)
             ),
             "rendered_session_config": str(
                 (
-                    PACKET_DIR
-                    / "rendered"
-                    / run["run_id"]
-                    / "session-config.json"
+                    PACKET_DIR / "rendered" / run["run_id"] / "session-config.json"
                 ).relative_to(REPO_ROOT)
             ),
             "fixture_identity": {
@@ -1757,10 +1715,7 @@ def _build_manifest(
         }
         if run["surface"] == "docket-gwr-direct":
             direct_metadata = load_json(
-                PACKET_DIR
-                / "direct-runtime"
-                / "fixtures"
-                / f"{run['run_id']}.json"
+                PACKET_DIR / "direct-runtime" / "fixtures" / f"{run['run_id']}.json"
             )
             record["direct_runtime_fixture"] = {
                 "archive": direct_metadata["archive"],
@@ -1770,9 +1725,7 @@ def _build_manifest(
                 "dossier_format": direct_metadata["dossier_format"],
                 "setup_state": direct_metadata["setup_state"],
                 "standing_ttl_ms": direct_metadata["standing_ttl_ms"],
-                "setup_reservation_ttl_ms": direct_metadata[
-                    "setup_reservation_ttl_ms"
-                ],
+                "setup_reservation_ttl_ms": direct_metadata["setup_reservation_ttl_ms"],
                 "comparison_scope": run["comparison_scope"],
             }
             record["direct_runtime_comparator_commands"] = _direct_commands(run)
@@ -1811,9 +1764,7 @@ def _build_manifest(
                     if run["source_visibility"] == "installed-distribution"
                     else "none"
                 ),
-                "media_provenance": file_record(
-                    INSTALL_MEDIA_PROVENANCE
-                ),
+                "media_provenance": file_record(INSTALL_MEDIA_PROVENANCE),
                 "endpoint_plan": file_record(
                     INSTALL_ENDPOINT_DIR / f"{run['run_id']}.json"
                 ),
@@ -1822,6 +1773,40 @@ def _build_manifest(
             }
         run_records.append(record)
 
+    assignments = _provider_role_assignments(matrix)
+    run_pairs = [
+        (run["operator_model_config"], run["grader_model_config"])
+        for run in matrix_runs(matrix)
+    ]
+    same_config_used = any(operator == grader for operator, grader in run_pairs)
+    same_family_used = any(
+        PROVIDER_MODEL_CONFIGS[operator]["expected_family"]
+        == PROVIDER_MODEL_CONFIGS[grader]["expected_family"]
+        for operator, grader in run_pairs
+    )
+    cross_family_runs = sorted(
+        run["run_id"]
+        for run in matrix_runs(matrix)
+        if PROVIDER_MODEL_CONFIGS[run["operator_model_config"]]["expected_family"]
+        != PROVIDER_MODEL_CONFIGS[run["grader_model_config"]]["expected_family"]
+    )
+    used_provider_set = set(assignments["all_operator_provider_configs"]) | set(
+        assignments["all_grader_provider_configs"]
+    )
+    providers_used = [
+        provider
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+        if provider in used_provider_set
+    ]
+    family_policy = matrix["model_family_policy"]
+    if (
+        family_policy.get("same_model_configuration_grading") is not same_config_used
+        or family_policy.get("same_family_grading") is not same_family_used
+        or family_policy.get("cross_family_grading_used") is not bool(cross_family_runs)
+    ):
+        raise CampaignError(
+            "manifest model-family incidence differs from the finalized matrix"
+        )
     return {
         "schema": MANIFEST_SCHEMA,
         "campaign_id": CAMPAIGN_ID,
@@ -1845,11 +1830,11 @@ def _build_manifest(
         },
         "preparation_history": {
             "successor_lineage": file_record(SUCCESSOR_LINEAGE),
-            "rejected_grader_surface_probe_attempt": file_record(
-                REJECTED_GRADER_PROBE_STATUS
-            ),
-            "rejected_attempt_counts_as_campaign_evidence": False,
+            "prior_generations_count_as_campaign_evidence": False,
+            "prior_generations_count_toward_campaign_completion": False,
+            "current_generation_full_matrix_rerun_required": True,
         },
+        "provider_capability_policy": (_provider_capability_policy_record()),
         "system_under_test": {
             "name": "Maude",
             "surface": (
@@ -1891,12 +1876,11 @@ def _build_manifest(
         "coverage_interpretation": matrix["interpretation"],
         "round": matrix["round"],
         "run_matrix": str(MATRIX_PATH.relative_to(REPO_ROOT)),
-        "installation_track": str(
-            INSTALL_TRACK_PATH.relative_to(REPO_ROOT)
-        ),
+        "installation_track": str(INSTALL_TRACK_PATH.relative_to(REPO_ROOT)),
         "runs": run_records,
         "model_session_configs": _model_execution_configs(matrix),
         "model_family_policy": matrix["model_family_policy"],
+        "provider_role_assignments": assignments,
         "audited_campaign_boundary_artifacts": [
             file_record(path)
             for path in (
@@ -1905,58 +1889,61 @@ def _build_manifest(
                 HARNESS_DIR / "operator_pty.py",
                 HARNESS_DIR / "public_cli.py",
                 HARNESS_DIR / "public_cli_broker.py",
+                HARNESS_DIR / "grader_surface_probe.py",
                 HARNESS_DIR / "auth_gate_selftest.py",
                 HARNESS_DIR / "campaign_common.py",
+                FINALIZE_PROVIDER_ASSIGNMENTS,
+                PROVIDER_ASSIGNMENT_SELFTEST,
             )
         ],
         "fresh_session_contract": {
             "one_new_provider_process_per_run": True,
             "no_resume_or_continue": True,
             "no_follow_up_messages": True,
-            "operator_and_grader_model_families_opposite": False,
-            "operator_and_grader_same_model_family": True,
-            "operator_and_grader_same_model_config": "openai-sol",
+            "same_family_grading_used": same_family_used,
+            "same_model_configuration_grading_used": same_config_used,
+            "cross_family_run_ids": cross_family_runs,
             "independent_fresh_grader_session_required": True,
-            "cross_family_coverage_available": False,
+            "cross_family_coverage_available": bool(cross_family_runs),
             "raw_provider_jsonl_and_stderr_preserved": True,
-            "codex_operator_tools": CLAUDE_OPERATOR_TOOLS,
-            "codex_grader_tools": CLAUDE_GRADER_TOOLS,
-            "codex_operator_bare_mcp_tools": CODEX_OPERATOR_TOOLS,
-            "codex_grader_bare_mcp_tools": CODEX_GRADER_TOOLS,
-            "codex_built_in_tools": [],
-            "codex_mcp_protocol_version": CODEX_MCP_PROTOCOL_VERSION,
-            "codex_intrinsic_action_features_explicitly_disabled": (
-                CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
-            ),
-            "codex_optional_features_explicitly_disabled": (
-                CODEX_DISABLED_OPTIONAL_FEATURES
-            ),
-            "codex_approval_policy": CODEX_APPROVAL_POLICY,
-            "codex_mcp_default_tools_approval_mode": (
-                CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-            ),
-            "codex_exact_provider_tool_allowlist_supported": True,
+            "provider_configs_used": providers_used,
+            "provider_specific_boundaries": {
+                provider: {
+                    "operator_tools": PROVIDER_MODEL_CONFIGS[provider][
+                        "operator_tools"
+                    ],
+                    "grader_tools": PROVIDER_MODEL_CONFIGS[provider]["grader_tools"],
+                    "built_in_tools": PROVIDER_MODEL_CONFIGS[provider][
+                        "built_in_tools"
+                    ],
+                    "mcp_protocol_version": PROVIDER_MODEL_CONFIGS[provider][
+                        "mcp_protocol_version"
+                    ],
+                }
+                for provider in providers_used
+            },
         },
         "filesystem_isolation": {
             "mechanism": "bubblewrap",
             "required": True,
             "namespaces": (
-                "The task-blind Codex provider transport has isolated PID, IPC, "
-                "and UTS namespaces with a private /proc. Every brokered "
-                "operator command uses a further fresh mount/PID/no-network "
-                "namespace. Provider network remains available only to the "
-                "transport and its trusted direct stdio MCP shim."
+                "Each provider uses its audited task-blind transport and exact "
+                "role-specific MCP boundary. Every brokered operator command "
+                "uses a further fresh source-free, credential-free "
+                "mount/PID/no-network namespace. Provider network is permitted "
+                "only to the provider session transport."
             ),
             "mount_policy": [
                 "read-only /usr, /bin, /lib, /lib64, /etc",
                 "read-only /run/systemd/resolve only; no other host /run sockets",
                 "private /tmp containing only the selected run bindings",
-                "private Codex auth is retained only by the task-blind transport "
-                "until exit and then destroyed",
-                "the hash-pinned direct stdio MCP shim shares that transport but "
-                "is proved not to read provider auth",
-                "strict Codex operator/grader MCP rosters expose one tool and no "
-                "built-in or intrinsic action surface",
+                "private provider auth is retained only by the task-blind "
+                "provider transport until exit and then destroyed",
+                "provider-specific MCP boundaries expose exactly one "
+                "role-specific tool and no built-in action surface",
+                "Codex uses a hash-pinned direct stdio shim whose non-use of "
+                "provider auth is verified; Claude uses a separately sandboxed "
+                "credential-free and no-network MCP proxy",
                 "operator commands receive a fresh no-network mount/PID namespace "
                 "through a credential-free, prompt-free broker",
                 "distinct per-run writable operator HOME, XDG, cache, state, and tmp",
@@ -1971,16 +1958,18 @@ def _build_manifest(
                 "no bind for /home/jbeck/git/agent_gov_ui or Maude source",
             ],
             "network_policy": (
-                "Codex provider transport and its trusted stdio shim retain "
-                "provider network. The shim exposes only the hash-pinned MCP "
-                "tool; the trusted broker receives no semantic prompt or "
-                "provider credential, and every operator command has no network."
+                "Provider network is authorized only for the pre-freeze "
+                "capability probes and later fresh model sessions. No operator "
+                "task, command broker, persistent PTY, synthetic runtime, or "
+                "grader evidence tool receives task-level external network; "
+                "production systems and external operational effects remain "
+                "prohibited."
             ),
             "preflight": (
-                "campaign_runner must prove the Codex retained-auth transport, "
-                "exact role-specific MCP roster and readiness, trusted-shim "
-                "non-use of auth, source/task-path absence, normalized "
-                "provider/proxy results, per-command namespaces and descriptors, "
+                "campaign_runner must prove each assigned provider's exact "
+                "role-specific MCP roster and readiness, authentication "
+                "custody, source/task-path absence, provider/proxy/broker "
+                "correlations, per-command namespaces and descriptors, "
                 "broker/PTY correlations, and graceful or forced cleanup"
             ),
             "unix_socket_addressing": {
@@ -1995,32 +1984,26 @@ def _build_manifest(
         "grading": {
             "rubric_id": "maude-synthetic-operator-rubric-v1",
             "failure_taxonomy_id": "maude-synthetic-failure-taxonomy-v1",
-            "rubric": str(
-                (PACKET_DIR / "grading-rubric.md").relative_to(REPO_ROOT)
-            ),
+            "rubric": str((PACKET_DIR / "grading-rubric.md").relative_to(REPO_ROOT)),
             "taxonomy": str(
                 (PACKET_DIR / "failure-taxonomy.json").relative_to(REPO_ROOT)
             ),
             "schema": str(
                 (PACKET_DIR / "grader-output.schema.json").relative_to(REPO_ROOT)
             ),
-            "installation_rubric_id": (
-                "maude-synthetic-installation-rubric-v1"
-            ),
+            "installation_rubric_id": ("maude-synthetic-installation-rubric-v1"),
             "installation_rubric": str(
-                (
-                    PACKET_DIR / "installation-grading-rubric.md"
-                ).relative_to(REPO_ROOT)
+                (PACKET_DIR / "installation-grading-rubric.md").relative_to(REPO_ROOT)
             ),
             "installation_schema": str(
-                (
-                    PACKET_DIR / "installation-grader-output.schema.json"
-                ).relative_to(REPO_ROOT)
+                (PACKET_DIR / "installation-grader-output.schema.json").relative_to(
+                    REPO_ROOT
+                )
             ),
             "grader_request_template": str(
-                (
-                    PACKET_DIR / "prompts" / "grader-request-template.md"
-                ).relative_to(REPO_ROOT)
+                (PACKET_DIR / "prompts" / "grader-request-template.md").relative_to(
+                    REPO_ROOT
+                )
             ),
             "expected_dispositions_deliberately_withheld": True,
         },
@@ -2033,11 +2016,13 @@ def _build_manifest(
             "verify_codex_tool_proxy_broker_correlations": True,
             "verify_codex_normalized_result_correlations": True,
             "verify_codex_per_command_namespace_and_descriptor_proofs": True,
+            "verify_claude_tool_proxy_broker_correlations": True,
+            "verify_claude_per_command_namespace_and_descriptor_proofs": True,
             "verify_public_cli_request_queue_response_correlations": True,
             "preserve_public_timeout_as_retained_unknown": True,
             "verify_boundary_cleanup_and_no_orphans": True,
-            "codex_exact_one_tool_roster_proved": True,
-            "codex_per_command_namespace_claim": True,
+            "provider_exact_one_role_specific_tool_roster_proved": True,
+            "provider_per_command_namespace_claim": True,
         },
         "measurement_definitions": {
             "elapsed_interaction_steps": (
@@ -2059,7 +2044,7 @@ def _build_manifest(
         },
         "known_campaign_limitations": [
             "Generation 1 (`maude-baseline-20260726T233054-0400`) is preserved as aborted evaluator-infrastructure history. Its 25 operator sessions, 24 failed grader-provider sessions, and 10 pre-provider installation failures do not count as successor evidence or completion; this generation reruns the full 35-run matrix.",
-            "One successor pre-freeze grader-surface probe attempt completed two fresh schema-valid provider sessions but was rejected because its wrapper looked for byte bindings at the wrong JSON level. The raw attempt and both thread identities are preserved as preparation history, count as neither campaign evidence nor completion, and were replaced by two new fresh passing probes after the evaluator-only fix.",
+            "Generation 2 (`maude-baseline-20260728T032857-0400`) is preserved as aborted evaluator-infrastructure history. Its 15 completed operator sessions, 2 interrupted provider sessions, 18 unstarted runs, and 0 grades do not count as successor evidence or completion because the frozen verifier accepted missing or semantically invalid command-broker evidence and the retrospective wrapper misclassified all 15 completed runs; this generation reruns the full 35-run matrix.",
             "This campaign is Round A baseline only. Product and documentation repair is prohibited, so no Round B post-repair comparison or changed-command/display example can be produced in this campaign; those absences must remain explicit in findings.",
             "The Agent Governor service is deterministic synthetic protocol state, not a live daemon.",
             "The Maude terminal is driven headlessly at 120x40; terminal adapter actions are recorded.",
@@ -2080,12 +2065,39 @@ def _build_manifest(
             "Frozen Docket standing and pre-reservation are time-bounded to 30 days from fixture generation; later reproduction requires a new packet rather than reuse of expired authority bytes.",
             "Provider API calls are necessary to create model sessions; operator tasks have no live endpoints.",
             "Codex exec exposes a single initial prompt, so the preserved system text is concatenated before the user assignment.",
-            "Only OpenAI Codex gpt-5.6-sol was usable at campaign freeze. A Claude Sonnet capability attempt reached exact MCP initialization but its OAuth session was expired and could not be refreshed before any tool action. Claude is not a campaign operator or grader, and restoring it requires a new immutable campaign generation.",
-            "Every independent grade uses a separate genuinely fresh Codex session of the same model family and configuration as its operator. Opposite-family grading and cross-family generalizability are unavailable; no finding may claim reproduction across model families.",
-            "Codex provider transport retains copied private authentication and provider network until exit. The hash-pinned direct stdio MCP shim shares that namespace but is proved not to read provider auth; this is not an auth-free or offline shim claim.",
-            "Codex exposes exactly one role-specific MCP tool and disables built-in and intrinsic action features. Operator commands run in distinct no-network mount/PID namespaces through a credential-free, prompt-free broker; graders expose only a read-only evidence tool. Installation runs add a separately sandboxed persistent PTY broker.",
+            (
+                "The provider capability and assignment decision was frozen "
+                "before campaign sessions. Candidate capability failures are "
+                "preserved and exclude only unsupported provider roles; the "
+                "final matrix uses operator providers "
+                f"{assignments['all_operator_provider_configs']!r} and grader "
+                f"providers {assignments['all_grader_provider_configs']!r}."
+            ),
+            (
+                "Every independent grade uses a separate genuinely fresh "
+                "provider session. Actual same-family, same-configuration, "
+                "cross-family support, and cross-family use are exactly those "
+                "recorded in the frozen model_family_policy; findings must not "
+                "generalize beyond that incidence."
+            ),
+            (
+                "Locally configured provider credentials and provider network "
+                "are permitted only inside task-blind provider-session "
+                "transports. No operator command, grader evidence tool, "
+                "synthetic task, or runtime receives task-level network, "
+                "production credentials, or external operational authority."
+            ),
+            (
+                "Codex uses a hash-pinned direct stdio shim inside its retained-"
+                "auth transport; Claude uses a separately sandboxed credential-"
+                "free MCP proxy. Both expose exactly one role-specific tool, "
+                "run operator commands in source/auth-free no-network mount/PID "
+                "namespaces, and expose graders only to read-only evidence. "
+                "Installation capability probes add a separately sandboxed "
+                "persistent PTY broker."
+            ),
             "Evaluation-only Unix sockets use owner-private short host arenas and reject encoded paths over 100 bytes before bind or connect. This transport indirection does not relocate or shorten canonical lab, transcript, or evidence paths, and every arena must be removed after use.",
-            "The campaign records exact Codex MCP readiness, tool rosters, approval policy, provider/proxy/broker correlations, normalized result equality, per-command namespace and descriptor proofs, and cleanup. This does not claim that provider transport or its trusted stdio shim is offline.",
+            "The campaign records provider-specific MCP readiness, exact tool rosters, transport/proxy/broker correlations, normalized result equality, per-command namespace and descriptor proofs, and cleanup. Provider-session transport is deliberately network-capable; task operations are not.",
             "Provider-reported model version and session identity are observable only after a session starts.",
             "Synthetic model latency is excluded from UX grading.",
         ],
@@ -2164,15 +2176,11 @@ def _initial_repository_observation() -> dict[str, Any]:
             or record.get("stdout") != stdout
             or record.get("stderr") != ""
         ):
-            raise CampaignError(
-                f"initial repository observation differs for {name}"
-            )
+            raise CampaignError(f"initial repository observation differs for {name}")
     custody = observation.get("custody")
     if (
         not isinstance(custody, dict)
-        or custody.get(
-            "artifact_serialized_immediately_after_initial_inspection"
-        )
+        or custody.get("artifact_serialized_immediately_after_initial_inspection")
         is not True
         or not isinstance(custody.get("wall_clock_captured"), str)
         or not custody["wall_clock_captured"]
@@ -2181,33 +2189,281 @@ def _initial_repository_observation() -> dict[str, Any]:
     return observation
 
 
-def _provider_probe_summary() -> dict[str, Any]:
-    if not AUTH_GATE_PROBE_PATH.is_file():
-        raise CampaignError(
-            "current provider auth/isolation probe index is absent; run "
-            "`campaign_runner.py auth-probes` after finalizing runner bytes"
-        )
-    index = load_json(AUTH_GATE_PROBE_PATH)
+def _provider_capability_policy() -> dict[str, Any]:
+    """Load the exact predeclared provider capability and assignment rule."""
+
     if (
-        index.get("schema")
-        != "maude.synthetic-operator.provider-auth-gate-probes.v1"
-        or index.get("campaign_id") != CAMPAIGN_ID
-        or index.get("campaign_run") is not False
-        or index.get("all_passed") is not True
-        or index.get("raw_evidence_committed") is not False
-        or index.get("authority_effect") != "none"
+        not PROVIDER_CAPABILITY_POLICY_PATH.is_file()
+        or PROVIDER_CAPABILITY_POLICY_PATH.is_symlink()
     ):
-        raise CampaignError("provider auth/isolation probe index is not a pass")
+        raise CampaignError("provider capability policy is absent or unsafe")
+    expected = {
+        "schema": ("maude.synthetic-operator.provider-capability-policy.v1"),
+        "campaign_id": CAMPAIGN_ID,
+        "candidate_provider_configs": list(SUPPORTED_PROVIDER_CONFIGS),
+        "decision_rule_frozen_before_provider_probes": True,
+        "capability_rules": {
+            "basic_operator_eligibility": (
+                "The provider's fresh auth/isolation probe must pass with a "
+                "fresh session identity and the exact bounded terminal-tool "
+                "contract."
+            ),
+            "installation_operator_eligibility": (
+                "The provider must satisfy basic operator eligibility and "
+                "its fresh installation-surface probe must pass."
+            ),
+            "ordinary_grader_eligibility": (
+                "The provider must satisfy its fresh auth/isolation probe "
+                "and a fresh ordinary-grader schema/surface probe."
+            ),
+            "installation_grader_eligibility": (
+                "The provider must satisfy its fresh auth/isolation probe "
+                "and a fresh installation-grader schema/surface probe."
+            ),
+            "binary_or_credential_presence_is_not_capability": True,
+            "a_provider_failure_does_not_imply_another_provider_passed": True,
+            "a_probe_integrity_failure_invalidates_preparation": True,
+            "a_capability_failure_excludes_only_the_unsupported_provider_role": (True),
+            "at_least_one_operator_and_grader_path_must_remain": True,
+        },
+        "assignment_rules": {
+            "when_both_families_are_fully_eligible": {
+                "use_both_families_for_representative_ordinary_and_installation_runs": (
+                    True
+                ),
+                "prefer_opposite_family_independent_grading": True,
+                "balance_assignments_deterministically": True,
+            },
+            "when_capability_is_partial": {
+                "assign_only_roles_proved_by_the_corresponding_probe": True,
+                "record_same_family_grading_where_unavoidable": True,
+                "make_no_unsupported_cross_family_claim": True,
+            },
+            "direct_runtime_comparators_mirror_paired_maude_operator_and_grader_configs": (
+                True
+            ),
+        },
+        "freshness_and_retry": {
+            "every_probe_uses_a_fresh_provider_process": True,
+            "a_session_counts_as_fresh_only_with_a_provider_session_identity": (True),
+            "no_resume_continuation_or_follow_up": True,
+            "maximum_attempts_per_provider_and_probe_kind_in_this_campaign_id": (1),
+            "failed_and_partial_attempts_must_be_preserved": True,
+            "retry_after_any_attempt_requires_a_new_campaign_generation": True,
+        },
+        "network_and_effect_boundary": {
+            "provider_network_permitted_for_capability_probes_and_later_fresh_campaign_sessions": (
+                True
+            ),
+            "locally_configured_provider_credentials_permitted_only_for_provider_session_transport": (
+                True
+            ),
+            "task_level_network_permitted": False,
+            "production_task_systems_or_credentials_permitted": False,
+            "external_operational_side_effects_permitted": False,
+            "synthetic_local_fixture_effects_only": True,
+        },
+        "campaign_evidence_boundary": {
+            "capability_probe_sessions_count_as_campaign_runs": False,
+            "capability_probe_sessions_count_toward_role_or_scenario_coverage": (False),
+            "capability_probe_sessions_count_as_independent_grades": False,
+        },
+        "authority_effect": "none",
+    }
+    policy = load_json(PROVIDER_CAPABILITY_POLICY_PATH)
+    if policy != expected:
+        raise CampaignError(
+            "provider capability policy differs from the exact predeclared rule"
+        )
+    return policy
+
+
+def _provider_capability_policy_record(
+    *,
+    relative_to: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    _provider_capability_policy()
+    return file_record(
+        PROVIDER_CAPABILITY_POLICY_PATH,
+        relative_to=relative_to,
+    )
+
+
+def _provider_role_assignments(
+    matrix: dict[str, Any],
+) -> dict[str, Any]:
+    runs = matrix_runs(matrix)
+    ordinary = [run for run in runs if run["surface"] != "maude-installation"]
+    installation = [run for run in runs if run["surface"] == "maude-installation"]
+
+    def providers(selected: list[dict[str, Any]], field: str) -> list[str]:
+        used = {str(run[field]) for run in selected}
+        return [provider for provider in SUPPORTED_PROVIDER_CONFIGS if provider in used]
+
+    per_provider: dict[str, dict[str, Any]] = {}
+    for provider in SUPPORTED_PROVIDER_CONFIGS:
+        per_provider[provider] = {
+            "ordinary_operator_run_ids": sorted(
+                run["run_id"]
+                for run in ordinary
+                if run["operator_model_config"] == provider
+            ),
+            "installation_operator_run_ids": sorted(
+                run["run_id"]
+                for run in installation
+                if run["operator_model_config"] == provider
+            ),
+            "ordinary_grader_run_ids": sorted(
+                run["run_id"]
+                for run in ordinary
+                if run["grader_model_config"] == provider
+            ),
+            "installation_grader_run_ids": sorted(
+                run["run_id"]
+                for run in installation
+                if run["grader_model_config"] == provider
+            ),
+        }
+    return {
+        "ordinary_operator_provider_configs": providers(
+            ordinary, "operator_model_config"
+        ),
+        "installation_operator_provider_configs": providers(
+            installation, "operator_model_config"
+        ),
+        "ordinary_grader_provider_configs": providers(ordinary, "grader_model_config"),
+        "installation_grader_provider_configs": providers(
+            installation, "grader_model_config"
+        ),
+        "all_operator_provider_configs": providers(runs, "operator_model_config"),
+        "all_grader_provider_configs": providers(runs, "grader_model_config"),
+        "per_provider": per_provider,
+    }
+
+
+def _validate_capability_assignment(
+    *,
+    matrix: dict[str, Any],
+    auth_successes: set[str],
+    installation_successes: set[str],
+    ordinary_grader_successes: set[str],
+    installation_grader_successes: set[str],
+) -> dict[str, Any]:
+    assignments = _provider_role_assignments(matrix)
+    required = {
+        "auth": set(assignments["all_operator_provider_configs"])
+        | set(assignments["all_grader_provider_configs"]),
+        "installation_operator": set(
+            assignments["installation_operator_provider_configs"]
+        ),
+        "ordinary_grader": set(assignments["ordinary_grader_provider_configs"]),
+        "installation_grader": set(assignments["installation_grader_provider_configs"]),
+    }
+    observed = {
+        "auth": auth_successes,
+        "installation_operator": installation_successes,
+        "ordinary_grader": ordinary_grader_successes,
+        "installation_grader": installation_grader_successes,
+    }
+    expected_eligibility = {
+        provider: {
+            "ordinary_operator": provider in auth_successes,
+            "installation_operator": (
+                provider in auth_successes and provider in installation_successes
+            ),
+            "ordinary_grader": (
+                provider in auth_successes and provider in ordinary_grader_successes
+            ),
+            "installation_grader": (
+                provider in auth_successes and provider in installation_grader_successes
+            ),
+        }
+        for provider in SUPPORTED_PROVIDER_CONFIGS
+    }
+    if (
+        matrix.get("model_family_policy", {}).get("provider_role_eligibility")
+        != expected_eligibility
+    ):
+        raise CampaignError(
+            "matrix provider-role eligibility differs from exact capability "
+            "probe evidence"
+        )
+    errors = {
+        role: sorted(providers - observed[role])
+        for role, providers in required.items()
+        if providers - observed[role]
+    }
+    if errors:
+        raise CampaignError(
+            "matrix assigns provider roles without passing capability "
+            f"evidence: {errors}"
+        )
+    if not required["auth"] or not (
+        required["ordinary_grader"] | required["installation_grader"]
+    ):
+        raise CampaignError("matrix leaves no proved operator and grader path")
+    return {
+        "assignments": assignments,
+        "required_capabilities": {
+            key: [
+                provider for provider in SUPPORTED_PROVIDER_CONFIGS if provider in value
+            ]
+            for key, value in required.items()
+        },
+        "proved_capabilities": {
+            key: [
+                provider for provider in SUPPORTED_PROVIDER_CONFIGS if provider in value
+            ]
+            for key, value in observed.items()
+        },
+        "provider_role_eligibility": expected_eligibility,
+        "unsupported_candidate_roles_excluded": True,
+        "all_assigned_roles_capability_proved": True,
+        "authority_effect": "none",
+    }
+
+
+def _validate_operator_capability_index(
+    *,
+    index_path: Path,
+    expected_schema: str,
+    label: str,
+) -> dict[str, Any]:
+    """Validate one append-only operator capability observation.
+
+    Provider unavailability is admissible evidence. Probe-invalid is not.
+    The matrix-role check separately proves that no unavailable capability is
+    assigned to a campaign run.
+    """
+
+    if not index_path.is_file() or index_path.is_symlink():
+        raise CampaignError(f"{label} index is absent or unsafe")
+    probe_root = index_path.parent
+    if not probe_root.is_dir() or probe_root.is_symlink():
+        raise CampaignError(f"{label} root is unsafe")
+    index = load_json(index_path)
     expected_runner = file_record(HARNESS_DIR / "campaign_runner.py")
     if expected_runner["sha256"] != CLAUDE_RUNNER_SHA256:
         raise CampaignError(
             "current campaign_runner.py bytes differ from the audited boundary"
         )
-    if index.get("campaign_runner") != expected_runner:
-        raise CampaignError(
-            "provider auth/isolation probes do not bind the exact current "
-            "campaign_runner.py bytes"
-        )
+    candidates = list(SUPPORTED_PROVIDER_CONFIGS)
+    if (
+        index.get("schema") != expected_schema
+        or index.get("campaign_id") != CAMPAIGN_ID
+        or index.get("campaign_run") is not False
+        or index.get("campaign_runner") != expected_runner
+        or index.get("provider_capability_policy")
+        != _provider_capability_policy_record(relative_to=PACKET_DIR)
+        or index.get("requested_provider_configs") != candidates
+        or index.get("not_requested_provider_configs") != []
+        or index.get("all_requested_provider_attempts_recorded") is not True
+        or index.get("capability_observation_valid") is not True
+        or index.get("invalid_probe_provider_configs") != []
+        or index.get("raw_evidence_committed") is not False
+        or index.get("authority_effect") != "none"
+    ):
+        raise CampaignError(f"{label} identity, policy, scope, or validity differs")
     attempt_id = index.get("attempt_id")
     if (
         not isinstance(attempt_id, str)
@@ -2216,43 +2472,206 @@ def _provider_probe_summary() -> dict[str, Any]:
         or not isinstance(index.get("completed_at"), str)
         or not index["completed_at"]
     ):
-        raise CampaignError("provider auth/isolation probe identity is unsafe")
-    probe_root = AUTH_GATE_PROBE_PATH.parent
+        raise CampaignError(f"{label} attempt identity is unsafe")
     attempt_root = probe_root / "attempts" / attempt_id
     if (
         index.get("raw_evidence_location") != str(attempt_root)
+        or (probe_root / "attempts").is_symlink()
         or not attempt_root.is_dir()
         or attempt_root.is_symlink()
     ):
-        raise CampaignError(
-            "provider auth/isolation raw evidence location differs"
-        )
-    providers = index.get("providers")
+        raise CampaignError(f"{label} raw evidence location differs")
+    attempt_index = attempt_root / "index.json"
     if (
-        index.get("requested_provider_configs") != ["openai-sol"]
-        or index.get("not_requested_provider_configs") != []
-        or not isinstance(providers, list)
-        or len(providers) != 1
+        not attempt_index.is_file()
+        or attempt_index.is_symlink()
+        or load_json(attempt_index) != index
     ):
-        raise CampaignError(
-            "provider auth/isolation probe set must contain only the requested "
-            "Codex capability run from the frozen Codex-only provider universe"
+        raise CampaignError(f"{label} immutable attempt index differs")
+    catalog_path = probe_root / "attempt-index.jsonl"
+    catalog = _load_jsonl_records(catalog_path, label=f"{label} attempt catalog")
+    if len(catalog) != 1:
+        raise CampaignError(f"{label} must contain exactly one pre-freeze attempt")
+    catalog_record = catalog[0]
+    if (
+        catalog_record.get("schema")
+        != "maude.synthetic-operator.probe-attempt-catalog.v1"
+        or catalog_record.get("attempt_id") != attempt_id
+        or catalog_record.get("attempt_index")
+        != file_record(attempt_index, relative_to=probe_root)
+        or catalog_record.get("requested_provider_configs") != candidates
+        or catalog_record.get("capability_observation_valid") is not True
+        or catalog_record.get("authority_effect") != "none"
+    ):
+        raise CampaignError(f"{label} attempt catalog differs")
+
+    providers = index.get("providers")
+    outcomes = index.get("provider_outcomes")
+    if not isinstance(providers, list) or not isinstance(outcomes, list):
+        raise CampaignError(f"{label} provider records are malformed")
+    if len(outcomes) != len(candidates) or not all(
+        isinstance(value, dict) for value in outcomes
+    ):
+        raise CampaignError(f"{label} provider outcomes are incomplete")
+    outcome_configs = [value.get("provider_config") for value in outcomes]
+    if outcome_configs != candidates or len(set(outcome_configs)) != len(
+        outcome_configs
+    ):
+        raise CampaignError(f"{label} provider outcome order or set differs")
+
+    available: dict[str, dict[str, Any]] = {}
+    unavailable: dict[str, dict[str, Any]] = {}
+    identities: set[str] = set()
+    for outcome in outcomes:
+        provider = str(outcome["provider_config"])
+        status = outcome.get("status")
+        provider_root = attempt_root / provider
+        if not provider_root.is_dir() or provider_root.is_symlink():
+            raise CampaignError(f"{label} {provider} evidence directory is unsafe")
+        if outcome.get("authority_effect") != "none" or status not in {
+            "available",
+            "provider-capability-unavailable",
+        }:
+            raise CampaignError(f"{label} {provider} outcome is invalid")
+        if status == "available":
+            if set(outcome) != {
+                "provider_config",
+                "status",
+                "result",
+                "session_identity",
+                "authority_effect",
+            }:
+                raise CampaignError(f"{label} {provider} success outcome shape differs")
+            result_path = _exact_external_probe_record(
+                outcome["result"],
+                base=probe_root,
+                label=f"{label} {provider} result",
+            )
+            if result_path != provider_root / "result.json":
+                raise CampaignError(f"{label} {provider} result path differs")
+            result = load_json(result_path)
+            identity = outcome.get("session_identity")
+            if (
+                result.get("provider_config") != provider
+                or result.get("status") != "available"
+                or result.get("model_configuration") != PROVIDER_MODEL_CONFIGS[provider]
+                or result.get("campaign_run") is not False
+                or result.get("session_identity") != identity
+                or result.get("authority_effect") != "none"
+                or not isinstance(identity, dict)
+            ):
+                raise CampaignError(f"{label} {provider} result identity differs")
+            identity_value = _probe_identity(identity)
+            if identity_value in identities:
+                raise CampaignError(f"{label} reused a provider session identity")
+            identities.add(identity_value)
+            available[provider] = result
+            continue
+        if set(outcome) != {
+            "provider_config",
+            "status",
+            "failure",
+            "session_identity",
+            "authority_effect",
+        }:
+            raise CampaignError(f"{label} {provider} failure outcome shape differs")
+        failure_path = _exact_external_probe_record(
+            outcome["failure"],
+            base=probe_root,
+            label=f"{label} {provider} failure",
         )
-    expected_providers = {"openai-sol"}
-    actual_providers = {
-        item.get("provider_config")
-        for item in providers
-        if isinstance(item, dict)
+        if failure_path != provider_root / "failure.json":
+            raise CampaignError(f"{label} {provider} failure path differs")
+        failure = load_json(failure_path)
+        failure_identity = _optional_probe_identity(
+            outcome.get("session_identity"),
+            label=f"{label} {provider} capability failure",
+        )
+        if (
+            failure.get("schema")
+            != "maude.synthetic-operator.provider-capability-failure.v1"
+            or failure.get("provider_config") != provider
+            or failure.get("model_configuration") != PROVIDER_MODEL_CONFIGS[provider]
+            or failure.get("campaign_run") is not False
+            or failure.get("status") != status
+            or failure.get("failure_classification") != status
+            or failure.get("session_identity") != outcome.get("session_identity")
+            or failure.get("provider_session_identity_observed")
+            is not (failure_identity is not None)
+            or failure.get("partial_evidence_preserved") is not True
+            or failure.get("retry_or_provider_selection_decision_made") is not False
+            or failure.get("task_level_network_or_external_operational_effect")
+            is not False
+            or failure.get("authority_effect") != "none"
+            or not _is_sha256(failure.get("diagnostic_sha256"))
+        ):
+            raise CampaignError(f"{label} {provider} capability failure differs")
+        if failure_identity is not None:
+            if failure_identity in identities:
+                raise CampaignError(f"{label} reused a provider session identity")
+            identities.add(failure_identity)
+        unavailable[provider] = failure
+
+    provider_by_config = {
+        value.get("provider_config"): value
+        for value in providers
+        if isinstance(value, dict)
     }
-    if actual_providers != expected_providers:
-        raise CampaignError(
-            "provider auth/isolation probe provider set differs: "
-            f"{actual_providers!r}"
+    if (
+        len(provider_by_config) != len(providers)
+        or set(provider_by_config) != set(available)
+        or any(
+            provider_by_config[provider] != result
+            for provider, result in available.items()
         )
+    ):
+        raise CampaignError(f"{label} successful provider records differ from outcomes")
+    successful = [provider for provider in candidates if provider in available]
+    failed = [provider for provider in candidates if provider in unavailable]
+    if (
+        index.get("successful_provider_configs") != successful
+        or index.get("failed_provider_configs") != failed
+        or index.get("unavailable_provider_configs") != failed
+        or index.get("all_passed") is not (not bool(failed))
+        or catalog_record.get("successful_provider_configs") != successful
+        or catalog_record.get("failed_provider_configs") != failed
+        or catalog_record.get("unavailable_provider_configs") != failed
+        or catalog_record.get("invalid_probe_provider_configs") != []
+        or catalog_record.get("all_passed") is not (not bool(failed))
+    ):
+        raise CampaignError(f"{label} capability outcome summaries differ")
+    return {
+        "index": index,
+        "attempt_root": attempt_root,
+        "expected_runner": expected_runner,
+        "available": available,
+        "unavailable": unavailable,
+        "successful_provider_configs": successful,
+        "unavailable_provider_configs": failed,
+        "session_identities": identities,
+    }
+
+
+def _provider_probe_summary() -> dict[str, Any]:
+    observation = _validate_operator_capability_index(
+        index_path=AUTH_GATE_PROBE_PATH,
+        expected_schema=("maude.synthetic-operator.provider-auth-gate-probes.v2"),
+        label="provider auth/isolation probe",
+    )
+    index = observation["index"]
+    expected_runner = observation["expected_runner"]
+    probe_root = AUTH_GATE_PROBE_PATH.parent
+    attempt_root = observation["attempt_root"]
+    providers = list(observation["available"].values())
 
     sanitized: list[dict[str, Any]] = []
     identities: set[str] = set()
-    for item in sorted(providers, key=lambda value: value["provider_config"]):
+    for item in sorted(
+        providers,
+        key=lambda value: list(SUPPORTED_PROVIDER_CONFIGS).index(
+            value["provider_config"]
+        ),
+    ):
         provider = item["provider_config"]
         provider_root = attempt_root / provider
         if not provider_root.is_dir() or provider_root.is_symlink():
@@ -2262,8 +2681,7 @@ def _provider_probe_summary() -> dict[str, Any]:
         safety = item.get("safety_audit")
         delivery = item.get("delivery")
         if not all(
-            isinstance(value, dict)
-            for value in (process, identity, safety, delivery)
+            isinstance(value, dict) for value in (process, identity, safety, delivery)
         ):
             raise CampaignError(f"{provider}: malformed probe result")
         gate = process.get("provider_auth_gate")
@@ -2277,8 +2695,16 @@ def _provider_probe_summary() -> dict[str, Any]:
         if identity_value in identities:
             raise CampaignError("provider probes reused a session identity")
         identities.add(identity_value)
-        auth_absence_check = item.get(
-            "authorized_codex_auth_absence_check"
+        auth_absence_check = item.get("authorized_codex_auth_absence_check")
+        codex_absence_facts = (
+            isinstance(auth_absence_check, dict)
+            and auth_absence_check.get("accepted_argument_key_sets")
+            == [["command"], ["command", "timeout_seconds"]]
+            and auth_absence_check.get("optional_explicit_timeout_seconds")
+            == CODEX_PROBE_TERMINAL_TIMEOUT_SECONDS
+            and _is_sha256(auth_absence_check.get("command_sha256"))
+            if provider == "openai-sol"
+            else auth_absence_check is None
         )
         common_facts = (
             process.get("returncode") == 0,
@@ -2304,26 +2730,7 @@ def _provider_probe_summary() -> dict[str, Any]:
             },
             item.get("missing_clean_home_markers") == [],
             item.get("authorized_auth_path_absence_checks_only") is True,
-            isinstance(auth_absence_check, dict),
-            (
-                auth_absence_check.get("accepted_argument_key_sets")
-                if isinstance(auth_absence_check, dict)
-                else None
-            )
-            == [["command"], ["command", "timeout_seconds"]],
-            (
-                auth_absence_check.get(
-                    "optional_explicit_timeout_seconds"
-                )
-                if isinstance(auth_absence_check, dict)
-                else None
-            )
-            == CODEX_PROBE_TERMINAL_TIMEOUT_SECONDS,
-            (
-                _is_sha256(auth_absence_check.get("command_sha256"))
-                if isinstance(auth_absence_check, dict)
-                else False
-            ),
+            codex_absence_facts,
             item.get("unauthorized_auth_probe_reads") == [],
             safety.get("environment_read_attempts") == [],
             safety.get("network_command_attempts") == [],
@@ -2334,83 +2741,110 @@ def _provider_probe_summary() -> dict[str, Any]:
             raise CampaignError(
                 f"{provider}: provider auth/isolation proof facts are incomplete"
             )
-        expected_delivery_provider = "OpenAI"
-        expected_model = "gpt-5.6-sol"
+        config = PROVIDER_MODEL_CONFIGS[provider]
+        expected_delivery_provider = config["provider"]
+        expected_model = config["model_argument"]
         if (
             delivery.get("provider") != expected_delivery_provider
             or delivery.get("requested_model") != expected_model
         ):
             raise CampaignError(f"{provider}: auth-probe delivery differs")
-        if (
-            not _is_sha256(delivery.get("delivered_prompt_sha256"))
-            or delivery.get("allowed_unix_sockets") != []
-            or delivery.get("intrinsic_action_features_explicitly_disabled")
-            != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
-            or delivery.get("optional_features_explicitly_disabled")
-            != CODEX_DISABLED_OPTIONAL_FEATURES
-            or delivery.get("live_web_search_enabled") is not False
-            or delivery.get("provider_task_paths_added") != []
-            or delivery.get("user_mcp_and_connector_config_loaded") is not False
-            or delivery.get("mcp_server") != "operator"
-            or delivery.get("mcp_protocol_version")
-            != CODEX_MCP_PROTOCOL_VERSION
-            or delivery.get("mcp_config_sha256")
-            != gate.get("mcp_config_sha256")
-            or delivery.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
-            or delivery.get("codex_approval_argv")
-            != CODEX_APPROVAL_CONFIG_ARGV
-            or delivery.get("codex_approval_config_override")
-            != CODEX_APPROVAL_CONFIG
-            or delivery.get("codex_approval_policy") != CODEX_APPROVAL_POLICY
-            or delivery.get("noninteractive_approval_safety_basis")
-            != _codex_approval_safety_basis(tool="terminal")
-            or delivery.get("codex_mcp_default_tools_approval_mode")
-            != CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-            or delivery.get("codex_mcp_approval_config_override")
-            != (
-                "mcp_servers.operator.default_tools_approval_mode=\"approve\""
-            )
-            or delivery.get("mcp_tool_approval_safety_basis")
-            != _codex_mcp_tool_approval_safety_basis(tool="terminal")
-            or delivery.get("exact_provider_tool_allowlist_supported") is not True
-            or delivery.get("unexpected_intrinsic_action_policy")
-            != "fail-closed"
-        ):
-            raise CampaignError(f"{provider}: auth-probe Codex delivery differs")
-        _validate_codex_provider_boundary(
-            provider=provider,
-            process=process,
-            gate=gate,
-            provider_root=provider_root,
-            expected_tool_actions=2,
-            expect_pty_broker=False,
-        )
         gate_actions = gate.get("tool_actions")
-        absence_arguments = (
-            gate_actions[1].get("arguments")
-            if isinstance(gate_actions, list)
-            and len(gate_actions) == 2
-            and isinstance(gate_actions[1], dict)
-            else None
-        )
-        if (
-            not isinstance(absence_arguments, dict)
-            or hashlib.sha256(
-                absence_arguments["command"].encode("utf-8")
-            ).hexdigest()
-            != auth_absence_check["command_sha256"]
-        ):
-            raise CampaignError(
-                f"{provider}: auth-absence command evidence differs"
+        if provider == "openai-sol":
+            if (
+                not _is_sha256(delivery.get("delivered_prompt_sha256"))
+                or delivery.get("allowed_unix_sockets") != []
+                or delivery.get("intrinsic_action_features_explicitly_disabled")
+                != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+                or delivery.get("optional_features_explicitly_disabled")
+                != CODEX_DISABLED_OPTIONAL_FEATURES
+                or delivery.get("live_web_search_enabled") is not False
+                or delivery.get("provider_task_paths_added") != []
+                or delivery.get("user_mcp_and_connector_config_loaded") is not False
+                or delivery.get("mcp_server") != "operator"
+                or delivery.get("mcp_protocol_version") != CODEX_MCP_PROTOCOL_VERSION
+                or delivery.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
+                or delivery.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
+                or delivery.get("codex_approval_argv") != CODEX_APPROVAL_CONFIG_ARGV
+                or delivery.get("codex_approval_config_override")
+                != CODEX_APPROVAL_CONFIG
+                or delivery.get("codex_approval_policy") != CODEX_APPROVAL_POLICY
+                or delivery.get("noninteractive_approval_safety_basis")
+                != _codex_approval_safety_basis(tool="terminal")
+                or delivery.get("codex_mcp_default_tools_approval_mode")
+                != CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
+                or delivery.get("codex_mcp_approval_config_override")
+                != ('mcp_servers.operator.default_tools_approval_mode="approve"')
+                or delivery.get("mcp_tool_approval_safety_basis")
+                != _codex_mcp_tool_approval_safety_basis(tool="terminal")
+                or delivery.get("exact_provider_tool_allowlist_supported") is not True
+                or delivery.get("unexpected_intrinsic_action_policy") != "fail-closed"
+            ):
+                raise CampaignError(f"{provider}: auth-probe Codex delivery differs")
+            _validate_codex_provider_boundary(
+                provider=provider,
+                process=process,
+                gate=gate,
+                provider_root=provider_root,
+                expected_tool_actions=2,
+                expect_pty_broker=False,
             )
-        if gate.get("identity", {}).get("provider_thread_id") != identity_value:
-            raise CampaignError(
-                f"{provider}: auth-probe boundary identity differs"
+            absence_arguments = (
+                gate_actions[1].get("arguments")
+                if isinstance(gate_actions, list)
+                and len(gate_actions) == 2
+                and isinstance(gate_actions[1], dict)
+                else None
             )
-        boundary_kind = (
-            "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-"
-            "and-per-command-sandbox"
-        )
+            if (
+                not isinstance(absence_arguments, dict)
+                or hashlib.sha256(
+                    absence_arguments["command"].encode("utf-8")
+                ).hexdigest()
+                != auth_absence_check["command_sha256"]
+            ):
+                raise CampaignError(
+                    f"{provider}: auth-absence command evidence differs"
+                )
+            boundary_identity = gate.get("identity", {}).get("provider_thread_id")
+            boundary_kind = (
+                "task-blind-retained-auth-codex-transport-with-exact-"
+                "stdio-mcp-and-per-command-sandbox"
+            )
+        else:
+            if (
+                not isinstance(delivery.get("requested_session_id"), str)
+                or not delivery["requested_session_id"]
+                or delivery.get("system_prompt_delivery") != "system"
+                or delivery.get("user_prompt_delivery")
+                != (
+                    "single stream-json user event after flushed MCP "
+                    "tools/list readiness; stdin then closed"
+                )
+                or not _is_sha256(delivery.get("user_prompt_sha256"))
+                or delivery.get("mcp_protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
+                or delivery.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
+                or delivery.get("allowed_tools") != CLAUDE_OPERATOR_TOOLS
+                or delivery.get("built_in_tools") != []
+                or delivery.get("provider_task_paths_added") != []
+                or delivery.get("provider_unix_sockets_added") != []
+            ):
+                raise CampaignError(f"{provider}: auth-probe Claude delivery differs")
+            _validate_claude_boundary(
+                provider=provider,
+                process=process,
+                gate=gate,
+                provider_root=provider_root,
+                expected_tool_actions=2,
+                expect_pty_broker=False,
+            )
+            boundary_identity = gate.get("identity", {}).get("provider_session_id")
+            boundary_kind = (
+                "task-blind-retained-auth-claude-transport-with-"
+                "credential-free-mcp-proxy-and-per-command-sandbox"
+            )
+        if boundary_identity != identity_value:
+            raise CampaignError(f"{provider}: auth-probe boundary identity differs")
         gate_path = _exact_external_probe_record(
             item.get("gate_record"),
             base=probe_root,
@@ -2430,9 +2864,7 @@ def _provider_probe_summary() -> dict[str, Any]:
                 label=f"{provider} auth-probe {field}",
             )
             if path != provider_root / name:
-                raise CampaignError(
-                    f"{provider}: auth-probe {field} path differs"
-                )
+                raise CampaignError(f"{provider}: auth-probe {field} path differs")
         result_path = provider_root / "result.json"
         if (
             not result_path.is_file()
@@ -2449,15 +2881,18 @@ def _provider_probe_summary() -> dict[str, Any]:
             "transcript.jsonl",
             "user-prompt.md",
         }
-        expected_files |= _codex_boundary_files(include_pty=False)
+        expected_files |= (
+            _codex_boundary_files(include_pty=False)
+            if provider == "openai-sol"
+            else _claude_boundary_files(include_pty=False)
+        )
         actual_files = {
             path.relative_to(provider_root).as_posix()
             for path in provider_root.rglob("*")
             if path.is_file() and not path.is_symlink()
         }
-        if (
-            actual_files != expected_files
-            or any(path.is_symlink() for path in provider_root.rglob("*"))
+        if actual_files != expected_files or any(
+            path.is_symlink() for path in provider_root.rglob("*")
         ):
             raise CampaignError(f"{provider}: raw auth-probe file set differs")
         sanitized.append(
@@ -2479,16 +2914,13 @@ def _provider_probe_summary() -> dict[str, Any]:
                 "strict_mcp_and_per_command_sandbox_proved": True,
                 "final_marker_after_tool_results": True,
                 "raw_transcript": {
-                    key: item["raw_transcript"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["raw_transcript"][key] for key in ("bytes", "sha256")
                 },
                 "raw_stderr": {
-                    key: item["raw_stderr"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["raw_stderr"][key] for key in ("bytes", "sha256")
                 },
                 "gate_record": {
-                    key: item["gate_record"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["gate_record"][key] for key in ("bytes", "sha256")
                 },
             }
         )
@@ -2503,27 +2935,51 @@ def _provider_probe_summary() -> dict[str, Any]:
         "campaign_runner": expected_runner,
         "mcp_stdio_shim": file_record(CLAUDE_MCP_BRIDGE),
         "providers": sanitized,
+        "successful_provider_configs": observation["successful_provider_configs"],
+        "unavailable_provider_configs": observation["unavailable_provider_configs"],
+        "all_observed_session_identities": sorted(observation["session_identities"]),
+        "unavailable_provider_failures": {
+            provider: {
+                "failure_stage": failure["failure_stage"],
+                "failure_classification": failure["failure_classification"],
+                "provider_process_launch_state": failure[
+                    "provider_process_launch_state"
+                ],
+                "provider_session_identity_observed": failure[
+                    "provider_session_identity_observed"
+                ],
+                "provider_network_attempted": failure["provider_network_attempted"],
+                "provider_network_use_observed": failure[
+                    "provider_network_use_observed"
+                ],
+            }
+            for provider, failure in sorted(observation["unavailable"].items())
+        },
+        "capability_observation_valid": True,
         "raw_probe_evidence_committed": False,
-        "all_passed": True,
+        "all_passed": index["all_passed"],
         "authority_effect": "none",
     }
 
 
 def _grader_surface_probe_summary() -> dict[str, Any]:
-    """Validate and summarize both exact-schema pre-freeze grader probes."""
+    """Validate and summarize provider-scoped pre-freeze grader probes.
 
-    errors = grader_surface_probe.validate_probes()
+    A stable provider-capability failure is admissible evidence.  An invalid
+    probe is not.  The later role-assignment check proves that the frozen
+    matrix does not assign a grader role to an unavailable provider/probe
+    pair.
+    """
+
+    errors = grader_surface_probe.validate_probes(require_all_passed=False)
     if errors:
         raise CampaignError(
-            "grader-surface capability probes are incomplete: "
-            + "; ".join(errors)
+            "grader-surface capability probes are incomplete: " + "; ".join(errors)
         )
     index_path = grader_surface_probe.OUTPUT_ROOT / "index.json"
     index = load_json(index_path)
     expected_runner = file_record(HARNESS_DIR / "campaign_runner.py")
-    expected_probe_runner = file_record(
-        HARNESS_DIR / "grader_surface_probe.py"
-    )
+    expected_probe_runner = file_record(HARNESS_DIR / "grader_surface_probe.py")
     if (
         expected_runner["sha256"] != CLAUDE_RUNNER_SHA256
         or index.get("campaign_runner") != expected_runner
@@ -2537,22 +2993,216 @@ def _grader_surface_probe_summary() -> dict[str, Any]:
         or index.get("probe_runner") != expected_probe_runner
     ):
         raise CampaignError(
-            "grader-surface probes do not bind the final audited probe-runner "
-            "bytes"
+            "grader-surface probes do not bind the final audited probe-runner bytes"
         )
-    probes = index.get("probes")
-    if not isinstance(probes, list) or len(probes) != 2:
-        raise CampaignError("grader-surface probe set is not exact")
+    candidates = list(SUPPORTED_PROVIDER_CONFIGS)
+    expected_probe_ids = ("ordinary", "installation")
+    if (
+        index.get("schema") != "maude.synthetic-operator.grader-surface-probes.v2"
+        or index.get("campaign_id") != CAMPAIGN_ID
+        or index.get("campaign_run") is not False
+        or index.get("requested_provider_configs") != candidates
+        or index.get("not_requested_provider_configs") != []
+        or index.get("provider_model_configurations")
+        != {provider: PROVIDER_MODEL_CONFIGS[provider] for provider in candidates}
+        or index.get("provider_capability_policy")
+        != _provider_capability_policy_record(relative_to=PACKET_DIR)
+        or index.get("all_requested_provider_probe_attempts_recorded") is not True
+        or index.get("capability_observation_valid") is not True
+        or index.get("invalid_probe_pairs") != []
+        or index.get("distinct_fresh_session_identities") is not True
+        or index.get("provider_network_permitted_for_probe_sessions") is not True
+        or index.get("task_level_network_or_external_operational_effect") is not False
+        or index.get("raw_evidence_committed") is not False
+        or index.get("authority_effect") != "none"
+    ):
+        raise CampaignError(
+            "grader-surface probe identity, policy, scope, or validity differs"
+        )
+    attempt_id = index.get("attempt_id")
+    if (
+        not isinstance(attempt_id, str)
+        or not attempt_id
+        or Path(attempt_id).name != attempt_id
+        or not isinstance(index.get("completed_at"), str)
+        or not index["completed_at"]
+    ):
+        raise CampaignError("grader-surface attempt identity is unsafe")
+    probe_root = grader_surface_probe.OUTPUT_ROOT
+    attempt_root = probe_root / "attempts" / attempt_id
+    if (
+        index.get("raw_evidence_location") != str(attempt_root)
+        or not attempt_root.is_dir()
+        or attempt_root.is_symlink()
+    ):
+        raise CampaignError("grader-surface raw evidence location differs")
+    attempt_index = attempt_root / "index.json"
+    if (
+        not attempt_index.is_file()
+        or attempt_index.is_symlink()
+        or load_json(attempt_index) != index
+    ):
+        raise CampaignError("grader-surface immutable attempt index differs")
+    catalog = _load_jsonl_records(
+        probe_root / "attempt-index.jsonl",
+        label="grader-surface attempt catalog",
+    )
+    if len(catalog) != 1:
+        raise CampaignError(
+            "grader-surface probes must contain exactly one pre-freeze attempt"
+        )
+    catalog_record = catalog[0]
+    if (
+        catalog_record.get("schema")
+        != ("maude.synthetic-operator.grader-surface-probe-attempt-catalog.v1")
+        or catalog_record.get("attempt_id") != attempt_id
+        or catalog_record.get("attempt_index")
+        != file_record(attempt_index, relative_to=probe_root)
+        or catalog_record.get("requested_provider_configs") != candidates
+        or catalog_record.get("invalid_probe_pairs") != []
+        or catalog_record.get("capability_observation_valid") is not True
+        or catalog_record.get("authority_effect") != "none"
+    ):
+        raise CampaignError("grader-surface attempt catalog differs")
+
+    outcomes = index.get("provider_probe_outcomes")
+    expected_pairs = [
+        (provider, probe_id)
+        for provider in candidates
+        for probe_id in expected_probe_ids
+    ]
+    if (
+        not isinstance(outcomes, list)
+        or not all(isinstance(value, dict) for value in outcomes)
+        or [(value.get("provider_config"), value.get("probe_id")) for value in outcomes]
+        != expected_pairs
+    ):
+        raise CampaignError(
+            "grader-surface provider/probe outcome order or set differs"
+        )
+
     summarized: list[dict[str, Any]] = []
-    for record in probes:
-        probe_id = record.get("probe_id")
-        if probe_id not in {"ordinary", "installation"}:
-            raise CampaignError("grader-surface probe identity differs")
-        result_path = (
-            grader_surface_probe.OUTPUT_ROOT
-            / str(probe_id)
-            / "result.json"
+    unavailable: list[dict[str, Any]] = []
+    identities: set[str] = set()
+    identity_records: list[dict[str, str]] = []
+    successful_pairs: list[str] = []
+    failed_pairs: list[str] = []
+    unavailable_pairs: list[str] = []
+    for outcome in outcomes:
+        provider = str(outcome["provider_config"])
+        probe_id = str(outcome["probe_id"])
+        pair = f"{provider}/{probe_id}"
+        status = outcome.get("status")
+        expected_surface = "maude" if probe_id == "ordinary" else "maude-installation"
+        if (
+            outcome.get("surface") != expected_surface
+            or outcome.get("campaign_run") is not False
+            or outcome.get("authority_effect") != "none"
+            or status not in {"available", "provider-capability-unavailable"}
+        ):
+            raise CampaignError(f"{pair}: grader outcome differs")
+        provider_probe_root = attempt_root / provider / probe_id
+        if not provider_probe_root.is_dir() or provider_probe_root.is_symlink():
+            raise CampaignError(f"{pair}: grader evidence root is unsafe")
+        if status != "available":
+            if set(outcome) != {
+                "provider_config",
+                "probe_id",
+                "surface",
+                "status",
+                "session_identity",
+                "failure",
+                "campaign_run",
+                "authority_effect",
+            }:
+                raise CampaignError(f"{pair}: grader failure outcome shape differs")
+            failed_pairs.append(pair)
+            unavailable_pairs.append(pair)
+            failure_path = _exact_external_probe_record(
+                outcome.get("failure"),
+                base=probe_root,
+                label=f"{pair} grader capability failure",
+            )
+            if failure_path != provider_probe_root / "failure.json":
+                raise CampaignError(f"{pair}: grader failure path differs")
+            failure = load_json(failure_path)
+            failure_identity = _optional_probe_identity(
+                outcome.get("session_identity"),
+                label=f"{pair} grader capability failure",
+            )
+            if (
+                failure.get("schema")
+                != ("maude.synthetic-operator.grader-surface-probe-failure.v1")
+                or failure.get("campaign_id") != CAMPAIGN_ID
+                or failure.get("probe_id") != probe_id
+                or failure.get("provider_config") != provider
+                or failure.get("model_configuration")
+                != PROVIDER_MODEL_CONFIGS[provider]
+                or failure.get("campaign_run") is not False
+                or failure.get("status") != status
+                or failure.get("failure_classification") != status
+                or failure.get("session_identity") != outcome.get("session_identity")
+                or failure.get("partial_evidence_preserved") is not True
+                or failure.get("task_level_network_or_external_operational_effect")
+                is not False
+                or failure.get("all_passed") is not False
+                or failure.get("authority_effect") != "none"
+                or not _is_sha256(failure.get("diagnostic_sha256"))
+            ):
+                raise CampaignError(f"{pair}: grader capability failure differs")
+            if failure_identity is not None:
+                if failure_identity in identities:
+                    raise CampaignError(
+                        "grader capability probes reused a session identity"
+                    )
+                identities.add(failure_identity)
+                identity_records.append(
+                    {
+                        "provider_config": provider,
+                        "probe_id": probe_id,
+                        "identity": failure_identity,
+                    }
+                )
+            unavailable.append(
+                {
+                    "provider_config": provider,
+                    "probe_id": probe_id,
+                    "failure_stage": failure["failure_stage"],
+                    "failure_classification": status,
+                    "session_identity": outcome["session_identity"],
+                    "provider_process_launch_state": failure[
+                        "provider_process_launch_state"
+                    ],
+                    "provider_network_attempted": failure["provider_network_attempted"],
+                    "provider_network_use_observed": failure[
+                        "provider_network_use_observed"
+                    ],
+                    "failure": {
+                        key: outcome["failure"][key] for key in ("bytes", "sha256")
+                    },
+                }
+            )
+            continue
+
+        if set(outcome) != {
+            "provider_config",
+            "probe_id",
+            "surface",
+            "status",
+            "session_identity",
+            "result",
+            "campaign_run",
+            "authority_effect",
+        }:
+            raise CampaignError(f"{pair}: grader success outcome shape differs")
+        successful_pairs.append(pair)
+        result_path = _exact_external_probe_record(
+            outcome.get("result"),
+            base=probe_root,
+            label=f"{pair} grader result",
         )
+        if result_path != provider_probe_root / "result.json":
+            raise CampaignError(f"{pair}: grader result path differs")
         result = load_json(result_path)
         delivery = result.get("prompt_delivery")
         boundary = result.get("action_boundary")
@@ -2562,91 +3212,162 @@ def _grader_surface_probe_summary() -> dict[str, Any]:
             isinstance(value, dict)
             for value in (delivery, boundary, identity, validation)
         ):
-            raise CampaignError(
-                f"{probe_id}: grader-surface result is malformed"
-            )
+            raise CampaignError(f"{pair}: grader-surface result is malformed")
         if (
-            delivery.get("stdin_used") is not True
-            or delivery.get("stdin_closed_after_single_write") is not True
-            or delivery.get("semantic_prompt_bytes_in_argv") is not False
+            result.get("schema")
+            != "maude.synthetic-operator.grader-surface-probe-result.v1"
+            or result.get("campaign_id") != CAMPAIGN_ID
+            or result.get("probe_id") != probe_id
+            or result.get("provider_config") != provider
+            or result.get("model_configuration") != PROVIDER_MODEL_CONFIGS[provider]
+            or result.get("status") != "available"
             or delivery.get("exceeds_131072_bytes") is not True
-            or delivery.get("provider_argv_final_argument") != "-"
             or not _is_sha256(delivery.get("semantic_prompt_sha256"))
             or boundary.get("all_actions_read_only_evidence") is not True
             or boundary.get("all_provider_actions_represented_once") is not True
             or boundary.get("zero_auth_env_network_source_attempts") is not True
             or validation.get("jsonschema_passed") is not True
-            or validation.get(
-                "local_failure_classes_uniqueness_passed"
-            )
-            is not True
+            or validation.get("local_failure_classes_uniqueness_passed") is not True
             or validation.get("successor_schema_has_no_uniqueItems") is not True
-            or record.get("all_passed") is not True
             or result.get("campaign_run") is not False
+            or result.get("task_level_network_or_external_operational_effect")
+            is not False
+            or result.get("all_passed") is not True
             or result.get("authority_effect") != "none"
         ):
+            raise CampaignError(f"{pair}: grader-surface capability predicates differ")
+        identity_value = _probe_identity(identity)
+        if identity_value in identities:
             raise CampaignError(
-                f"{probe_id}: grader-surface capability predicates differ"
+                f"{pair}: grader-surface fresh session identity was reused"
             )
-        thread_id = identity.get("provider_thread_id")
-        if not isinstance(thread_id, str) or not thread_id:
-            raise CampaignError(
-                f"{probe_id}: grader-surface fresh thread identity is absent"
-            )
+        identities.add(identity_value)
+        identity_records.append(
+            {
+                "provider_config": provider,
+                "probe_id": probe_id,
+                "identity": identity_value,
+            }
+        )
+        if outcome.get("session_identity") != identity:
+            raise CampaignError(f"{pair}: grader outcome identity differs")
+        if provider == "openai-sol":
+            if (
+                delivery.get("method") != "closed-stdin"
+                or delivery.get("stdin_used") is not True
+                or delivery.get("stdin_closed_after_single_write") is not True
+                or delivery.get("semantic_prompt_bytes_in_argv") is not False
+                or delivery.get("provider_argv_final_argument") != "-"
+            ):
+                raise CampaignError(f"{pair}: Codex grader prompt transport differs")
+        elif (
+            delivery.get("method") != "stream-json-user-event"
+            or delivery.get("stdin_used") is not False
+            or delivery.get("stream_json_user_event_used") is not True
+            or delivery.get("user_assignment_bytes_in_argv") is not False
+        ):
+            raise CampaignError(f"{pair}: Claude grader prompt transport differs")
         summarized.append(
             {
+                "provider_config": provider,
                 "probe_id": probe_id,
-                "surface": record["surface"],
+                "surface": expected_surface,
                 "session_identity": identity,
                 "schema": validation["source"],
-                "semantic_prompt_bytes": delivery[
-                    "semantic_prompt_bytes"
-                ],
-                "semantic_prompt_sha256": delivery[
-                    "semantic_prompt_sha256"
-                ],
+                "semantic_prompt_bytes": delivery["semantic_prompt_bytes"],
+                "semantic_prompt_sha256": delivery["semantic_prompt_sha256"],
                 "read_only_evidence_actions": boundary["action_count"],
-                "result": file_record(result_path),
+                "prompt_transport_method": delivery["method"],
+                "result": file_record(result_path, relative_to=probe_root),
                 "all_passed": True,
             }
         )
-    thread_ids = [
-        item["session_identity"]["provider_thread_id"] for item in summarized
-    ]
-    if len(set(thread_ids)) != 2:
-        raise CampaignError(
-            "grader-surface capability probes reused a provider thread"
-        )
+    successful_by_probe = {
+        probe_id: [
+            provider
+            for provider in candidates
+            if f"{provider}/{probe_id}" in successful_pairs
+        ]
+        for probe_id in expected_probe_ids
+    }
+    unavailable_by_probe = {
+        probe_id: [
+            provider
+            for provider in candidates
+            if f"{provider}/{probe_id}" in unavailable_pairs
+        ]
+        for probe_id in expected_probe_ids
+    }
+    if (
+        index.get("successful_provider_probe_pairs") != successful_pairs
+        or index.get("failed_provider_probe_pairs") != failed_pairs
+        or index.get("unavailable_provider_probe_pairs") != unavailable_pairs
+        or catalog_record.get("successful_provider_probe_pairs") != successful_pairs
+        or catalog_record.get("failed_provider_probe_pairs") != failed_pairs
+        or catalog_record.get("all_passed") is not (not bool(failed_pairs))
+        or index.get("all_passed") is not (not bool(failed_pairs))
+    ):
+        raise CampaignError("grader-surface capability outcome summaries differ")
+    if index.get("provider_session_identities") != identity_records:
+        raise CampaignError("grader-surface capability identity index differs")
     return {
-        "schema": (
-            "maude.synthetic-operator.grader-surface-probe-summary.v1"
-        ),
+        "schema": ("maude.synthetic-operator.grader-surface-probe-summary.v2"),
+        "attempt_id": attempt_id,
+        "completed_at": index["completed_at"],
         "probe_index": file_record(index_path),
         "campaign_runner": expected_runner,
         "probe_runner": expected_probe_runner,
         "probes": sorted(
             summarized,
-            key=lambda value: value["probe_id"],
+            key=lambda value: (
+                candidates.index(value["provider_config"]),
+                expected_probe_ids.index(value["probe_id"]),
+            ),
         ),
-        "distinct_fresh_thread_ids": True,
+        "unavailable_probes": unavailable,
+        "successful_provider_configs_by_probe": successful_by_probe,
+        "unavailable_provider_configs_by_probe": unavailable_by_probe,
+        "all_observed_session_identities": sorted(identities),
+        "distinct_fresh_session_identities": True,
         "exact_successor_schemas_accepted": True,
-        "large_prompts_delivered_by_closed_stdin": True,
-        "semantic_prompt_bytes_in_argv": False,
+        "large_prompts_delivered_by_provider_transport": True,
+        "semantic_user_assignment_bytes_in_argv": False,
         "read_only_evidence_boundary": True,
         "campaign_run": False,
+        "provider_network_permitted": True,
+        "task_level_network_or_external_operational_effect": False,
         "raw_probe_evidence_frozen_in_packet": True,
-        "all_passed": True,
+        "capability_observation_valid": True,
+        "all_passed": index["all_passed"],
         "authority_effect": "none",
     }
 
 
 def _probe_identity(value: dict[str, Any]) -> str:
-    identity = value.get("provider_session_id") or value.get(
-        "provider_thread_id"
-    )
+    identity = value.get("provider_session_id") or value.get("provider_thread_id")
     if not isinstance(identity, str) or not identity:
         raise CampaignError("provider probe session identity is absent")
     return identity
+
+
+def _optional_probe_identity(value: Any, *, label: str) -> str | None:
+    if value == {}:
+        return None
+    if not isinstance(value, dict):
+        raise CampaignError(f"{label}: provider session identity is malformed")
+    values = [
+        identity
+        for identity in (
+            value.get("provider_session_id"),
+            value.get("provider_thread_id"),
+        )
+        if isinstance(identity, str) and identity
+    ]
+    if len(values) != 1:
+        raise CampaignError(
+            f"{label}: provider session identity is ambiguous or malformed"
+        )
+    return values[0]
 
 
 def _is_sha256(value: Any) -> bool:
@@ -2711,17 +3432,13 @@ def _load_jsonl_records(path: Path, *, label: str) -> list[dict[str, Any]]:
     return records
 
 
-def _record_bytes_match_copy(
-    record: Any, copied: Path, *, label: str
-) -> None:
+def _record_bytes_match_copy(record: Any, copied: Path, *, label: str) -> None:
     if not isinstance(record, dict):
         raise CampaignError(f"{label}: source file record is malformed")
     actual = file_record(copied, relative_to=copied.parent)
     for key in ("media_type", "bytes", "sha256", "mode"):
         if record.get(key) != actual.get(key):
-            raise CampaignError(
-                f"{label}: copied bytes differ for record field {key}"
-            )
+            raise CampaignError(f"{label}: copied bytes differ for record field {key}")
 
 
 def _codex_approval_safety_basis(*, tool: str) -> dict[str, Any]:
@@ -2777,9 +3494,7 @@ def _codex_normalized_mcp_result_text(result: Any) -> str:
         or block.get("type") != "text"
         or not isinstance(block.get("text"), str)
     ):
-        raise CampaignError(
-            "Codex MCP result content is not one exact text block"
-        )
+        raise CampaignError("Codex MCP result content is not one exact text block")
     return block["text"]
 
 
@@ -2842,9 +3557,7 @@ def _exact_json_object(text: str, *, label: str) -> dict[str, Any]:
     return value
 
 
-def _validate_installation_pty_state(
-    value: Any, *, label: str
-) -> dict[str, Any]:
+def _validate_installation_pty_state(value: Any, *, label: str) -> dict[str, Any]:
     if not isinstance(value, dict) or set(value) != _PTY_STATE_KEYS:
         raise CampaignError(f"{label} PTY state key set differs")
     if (
@@ -2898,22 +3611,16 @@ def _parse_installation_broker_result(
         or not isinstance(broker_result.get("stdout"), str)
         or not isinstance(broker_result.get("stderr"), str)
     ):
-        raise CampaignError(
-            "installation-probe command-broker result contract differs"
-        )
+        raise CampaignError("installation-probe command-broker result contract differs")
     metadata_stream = "stdout" if payload_kind == "state" else "stderr"
     payload = _exact_json_object(
         broker_result[metadata_stream],
         label=f"installation-probe {payload_kind} payload",
     )
     if payload_kind == "state":
-        _validate_installation_pty_state(
-            payload, label="installation-probe state"
-        )
+        _validate_installation_pty_state(payload, label="installation-probe state")
         if broker_result["stderr"] != "":
-            raise CampaignError(
-                "installation-probe state result has unexpected stderr"
-            )
+            raise CampaignError("installation-probe state result has unexpected stderr")
     elif payload_kind == "read":
         if (
             set(payload) != _PTY_READ_KEYS
@@ -2923,19 +3630,15 @@ def _parse_installation_broker_result(
             or payload["from_offset"] < 0
             or type(payload.get("next_offset")) is not int
             or payload["next_offset"] <= payload["from_offset"]
-            or payload["next_offset"] - payload["from_offset"]
-            != payload["bytes_read"]
+            or payload["next_offset"] - payload["from_offset"] != payload["bytes_read"]
             or payload.get("status") not in {"running", "completed"}
             or not broker_result["stdout"]
         ):
-            raise CampaignError(
-                "installation-probe PTY read payload contract differs"
-            )
+            raise CampaignError("installation-probe PTY read payload contract differs")
     else:
         if (
             set(payload) != _PTY_ACK_KEYS
-            or payload.get("schema")
-            != "maude.synthetic-operator.stateful-pty-ack.v1"
+            or payload.get("schema") != "maude.synthetic-operator.stateful-pty-ack.v1"
             or payload.get("accepted") is not True
             or payload.get("error") is not None
             or type(payload.get("inputs_sent")) is not int
@@ -2973,7 +3676,7 @@ def _validate_codex_provider_boundary(
     expected_tool = "terminal"
     expected_server = "operator"
     expected_mcp_approval_config = (
-        "mcp_servers.operator.default_tools_approval_mode=\"approve\""
+        'mcp_servers.operator.default_tools_approval_mode="approve"'
     )
     boundary_root = provider_root / "codex-mcp-boundary"
     if not boundary_root.is_dir() or boundary_root.is_symlink():
@@ -2997,8 +3700,7 @@ def _validate_codex_provider_boundary(
         gate.get("provider_task_paths_mounted") == [],
         gate.get("intrinsic_action_features_disabled")
         == CODEX_DISABLED_INTRINSIC_ACTION_FEATURES,
-        gate.get("optional_features_disabled")
-        == CODEX_DISABLED_OPTIONAL_FEATURES,
+        gate.get("optional_features_disabled") == CODEX_DISABLED_OPTIONAL_FEATURES,
         gate.get("codex_approval_argv") == CODEX_APPROVAL_CONFIG_ARGV,
         gate.get("codex_approval_config_override") == CODEX_APPROVAL_CONFIG,
         gate.get("codex_approval_policy") == CODEX_APPROVAL_POLICY,
@@ -3006,8 +3708,7 @@ def _validate_codex_provider_boundary(
         == _codex_approval_safety_basis(tool=expected_tool),
         gate.get("codex_mcp_default_tools_approval_mode")
         == CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE,
-        gate.get("codex_mcp_approval_config_override")
-        == expected_mcp_approval_config,
+        gate.get("codex_mcp_approval_config_override") == expected_mcp_approval_config,
         gate.get("mcp_tool_approval_safety_basis")
         == _codex_mcp_tool_approval_safety_basis(tool=expected_tool),
         gate.get("unexpected_intrinsic_action_policy") == "fail-closed",
@@ -3024,9 +3725,7 @@ def _validate_codex_provider_boundary(
         isinstance(boundary, dict),
     )
     if not all(facts):
-        raise CampaignError(
-            f"{label} lifecycle or exact-tool facts are incomplete"
-        )
+        raise CampaignError(f"{label} lifecycle or exact-tool facts are incomplete")
     assert isinstance(boundary, dict)
     broker = boundary.get("command_broker")
     pty_broker = boundary.get("pty_broker")
@@ -3050,13 +3749,10 @@ def _validate_codex_provider_boundary(
         or boundary.get("mcp_server") != expected_server
         or boundary.get("allowed_tools") != CLAUDE_OPERATOR_TOOLS
         or boundary.get("built_in_tools") != []
-        or boundary.get("mcp_config_sha256")
-        != gate.get("mcp_config_sha256")
+        or boundary.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
         or boundary.get("bridge_sha256") != CLAUDE_BRIDGE_SHA256
-        or boundary.get("codex_approval_argv")
-        != CODEX_APPROVAL_CONFIG_ARGV
-        or boundary.get("codex_approval_config_override")
-        != CODEX_APPROVAL_CONFIG
+        or boundary.get("codex_approval_argv") != CODEX_APPROVAL_CONFIG_ARGV
+        or boundary.get("codex_approval_config_override") != CODEX_APPROVAL_CONFIG
         or boundary.get("codex_approval_policy") != CODEX_APPROVAL_POLICY
         or boundary.get("noninteractive_approval_safety_basis")
         != _codex_approval_safety_basis(tool=expected_tool)
@@ -3072,18 +3768,13 @@ def _validate_codex_provider_boundary(
         or boundary.get("trusted_stdio_shim_reads_provider_auth") is not False
         or boundary.get("provider_auth_mounted_in_command") is not False
         or boundary.get("host_source_mounted_in_proxy_or_command") is not False
-        or boundary.get("external_network_available_to_proxy_or_command")
-        is not True
+        or boundary.get("external_network_available_to_proxy_or_command") is not True
         or boundary.get("external_network_available_to_command") is not False
         or boundary.get("proxy_bwrap_argv") != []
         or not isinstance(socket_contract, dict)
         or socket_contract.get("path_budget_bytes") != 100
-        or not isinstance(
-            socket_contract.get("private_arena_root"), str
-        )
-        or not socket_contract["private_arena_root"].startswith(
-            "/tmp/maude-sock-"
-        )
+        or not isinstance(socket_contract.get("private_arena_root"), str)
+        or not socket_contract["private_arena_root"].startswith("/tmp/maude-sock-")
         or not isinstance(command_socket_host, str)
         or socket_contract.get("command_socket_host_bytes")
         != len(command_socket_host.encode())
@@ -3171,26 +3862,20 @@ def _validate_codex_provider_boundary(
     ]
     proxy_calls = [value for value in proxy_trace if "tool" in value]
     if (
-        ready.get("schema")
-        != "maude.synthetic-operator.claude-mcp-ready.v1"
-        or ready.get("protocol_version_requested")
-        != CODEX_MCP_PROTOCOL_VERSION
-        or ready.get("protocol_version_negotiated")
-        != CODEX_MCP_PROTOCOL_VERSION
+        ready.get("schema") != "maude.synthetic-operator.claude-mcp-ready.v1"
+        or ready.get("protocol_version_requested") != CODEX_MCP_PROTOCOL_VERSION
+        or ready.get("protocol_version_negotiated") != CODEX_MCP_PROTOCOL_VERSION
         or ready.get("tools") != [expected_tool]
         or len(initialize) != 1
         or len(initialized) != 1
         or len(tools_list) != 1
         or len(proxy_calls) != expected_tool_actions
         or initialize[0].get("initialize_accepted") is not True
-        or initialize[0].get("protocol_version_requested")
-        != CODEX_MCP_PROTOCOL_VERSION
+        or initialize[0].get("protocol_version_requested") != CODEX_MCP_PROTOCOL_VERSION
         or initialize[0].get("protocol_version_negotiated")
         != CODEX_MCP_PROTOCOL_VERSION
-        or initialized[0].get("protocol_version")
-        != CODEX_MCP_PROTOCOL_VERSION
-        or tools_list[0].get("protocol_version")
-        != CODEX_MCP_PROTOCOL_VERSION
+        or initialized[0].get("protocol_version") != CODEX_MCP_PROTOCOL_VERSION
+        or tools_list[0].get("protocol_version") != CODEX_MCP_PROTOCOL_VERSION
         or ready.get("initialize_message_ordinal")
         != initialize[0].get("message_ordinal")
         or ready.get("tools_list_message_ordinal")
@@ -3235,8 +3920,7 @@ def _validate_codex_provider_boundary(
             )
             or event_numbers != sorted(set(event_numbers))
             or not isinstance(arguments, dict)
-            or set(arguments)
-            not in ({"command"}, {"command", "timeout_seconds"})
+            or set(arguments) not in ({"command"}, {"command", "timeout_seconds"})
             or not isinstance(arguments.get("command"), str)
             or not arguments["command"]
             or (
@@ -3245,8 +3929,7 @@ def _validate_codex_provider_boundary(
             )
             or (
                 "timeout_seconds" in arguments
-                and arguments["timeout_seconds"]
-                != CODEX_PROBE_TERMINAL_TIMEOUT_SECONDS
+                and arguments["timeout_seconds"] != CODEX_PROBE_TERMINAL_TIMEOUT_SECONDS
             )
             or action.get("status") != "completed"
             or action.get("error") is not None
@@ -3263,8 +3946,7 @@ def _validate_codex_provider_boundary(
             or action.get("tool") != proxy_call.get("tool")
             or action.get("arguments_sha256")
             != _canonical_json_sha256(action.get("arguments"))
-            or action.get("arguments_sha256")
-            != proxy_call.get("arguments_sha256")
+            or action.get("arguments_sha256") != proxy_call.get("arguments_sha256")
             or proxy_call.get("arguments_sha256")
             != _canonical_json_sha256(proxy_call.get("arguments"))
             or action.get("completed") is not True
@@ -3300,10 +3982,8 @@ def _validate_codex_provider_boundary(
             broker_call.get("schema")
             != "maude.synthetic-operator.command-broker-event.v1"
             or broker_call.get("ordinal") != ordinal
-            or broker_call.get("request_id")
-            != proxy_call.get("correlation_id")
-            or broker_call.get("result_sha256")
-            != _canonical_json_sha256(broker_result)
+            or broker_call.get("request_id") != proxy_call.get("correlation_id")
+            or broker_call.get("result_sha256") != _canonical_json_sha256(broker_result)
             or proxy_call.get("result_text_sha256")
             != _canonical_json_sha256(broker_result)
             or not isinstance(broker_result, dict)
@@ -3325,20 +4005,16 @@ def _validate_codex_provider_boundary(
         isolation.get("schema")
         != "maude.synthetic-operator.codex-mcp-isolation-result.v1"
         or isolation.get("source_root_absent") is not True
-        or isolation.get(
-            "provider_auth_present_only_for_transport_and_trusted_shim"
-        )
+        or isolation.get("provider_auth_present_only_for_transport_and_trusted_shim")
         is not True
         or isolation.get("provider_task_paths_mounted") != []
         or isolation.get("intrinsic_action_features_disabled")
         != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
         or isolation.get("unexpected_intrinsic_action_policy") != "fail-closed"
         or isolation.get("mcp_server") != expected_server
-        or isolation.get("mcp_protocol_version")
-        != CODEX_MCP_PROTOCOL_VERSION
+        or isolation.get("mcp_protocol_version") != CODEX_MCP_PROTOCOL_VERSION
         or isolation.get("mcp_enabled_tools") != [expected_tool]
-        or isolation.get("mcp_config_sha256")
-        != gate.get("mcp_config_sha256")
+        or isolation.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
         or not isinstance(policy_validation, dict)
         or policy_validation.get("schema")
         != "maude.synthetic-operator.command-broker-policy.v1"
@@ -3353,8 +4029,7 @@ def _validate_codex_provider_boundary(
     command_cleanup = cleanup.get("command_broker")
     socket_cleanup = cleanup.get("private_socket_arena")
     if (
-        cleanup.get("schema")
-        != "maude.synthetic-operator.codex-boundary-cleanup.v1"
+        cleanup.get("schema") != "maude.synthetic-operator.codex-boundary-cleanup.v1"
         or cleanup.get("provider_auth_destroyed") is not True
         or cleanup.get("provider_processes_remaining") != []
         or cleanup.get("cleanup_errors") != []
@@ -3378,7 +4053,8 @@ def _validate_codex_provider_boundary(
             or record.get("remaining_entries") != []
             for record in socket_cleanup.get("directories", [])
         )
-        or gate.get("broker_cleanup") != {
+        or gate.get("broker_cleanup")
+        != {
             key: value
             for key, value in cleanup.items()
             if key
@@ -3409,9 +4085,7 @@ def _validate_codex_provider_boundary(
             else None
         )
         cleanup_record = (
-            managed.get("cleanup_report")
-            if isinstance(managed, dict)
-            else None
+            managed.get("cleanup_report") if isinstance(managed, dict) else None
         )
         invocation_argv = pty_invocation.get("argv")
         shutdown_pairs = (
@@ -3425,8 +4099,7 @@ def _validate_codex_provider_boundary(
         )
         copied_cleanup_path = boundary_root / "pty-broker-cleanup.json"
         if (
-            pty_ready.get("schema")
-            != "maude.synthetic-operator.pty-broker-ready.v1"
+            pty_ready.get("schema") != "maude.synthetic-operator.pty-broker-ready.v1"
             or pty_ready.get("operations")
             != ["start", "read", "send", "stop", "status"]
             or pty_cleanup.get("schema")
@@ -3439,8 +4112,7 @@ def _validate_codex_provider_boundary(
             or pty_cleanup.get("shutdown_request_removed") is not True
             or pty_cleanup.get("socket_removed") is not True
             or any(
-                not isinstance(value, dict)
-                or value.get("remaining") is not False
+                not isinstance(value, dict) or value.get("remaining") is not False
                 for value in pty_cleanup.get("tracked_ptys", [])
             )
             or cleanup.get("pty_cleanup") != pty_cleanup
@@ -3456,9 +4128,7 @@ def _validate_codex_provider_boundary(
                 "created_after_provider_absent_or_exited": True,
                 "contains_authority_or_secret": False,
                 "request_fields": ["request_id", "requested_at", "schema"],
-                "tamper_or_preexistence_policy": (
-                    "fail-closed-then-force-stop"
-                ),
+                "tamper_or_preexistence_policy": ("fail-closed-then-force-stop"),
             }
             or not isinstance(managed.get("observed_processes"), list)
             or not managed["observed_processes"]
@@ -3472,8 +4142,7 @@ def _validate_codex_provider_boundary(
             or not request["requested_at"]
             or not isinstance(cleanup_record, dict)
             or cleanup_record.get("bytes") != copied_cleanup_path.stat().st_size
-            or cleanup_record.get("sha256")
-            != sha256_file(copied_cleanup_path)
+            or cleanup_record.get("sha256") != sha256_file(copied_cleanup_path)
             or pty_invocation.get("provider_auth_mounted") is not False
             or pty_invocation.get("host_source_mounted") is not False
             or pty_invocation.get("external_network") is not False
@@ -3489,8 +4158,7 @@ def _validate_codex_provider_boundary(
         ):
             raise CampaignError(f"{label} persistent PTY cleanup differs")
     elif (
-        cleanup.get("pty_broker") is not None
-        or cleanup.get("pty_cleanup") is not None
+        cleanup.get("pty_broker") is not None or cleanup.get("pty_cleanup") is not None
     ):
         raise CampaignError(f"{label} unexpectedly contains a PTY broker")
 
@@ -3531,11 +4199,7 @@ def _validate_command_namespace_proof(
     if (
         not isinstance(host_fds, list)
         or not {0, 1, 2}
-        <= {
-            value.get("fd")
-            for value in host_fds
-            if isinstance(value, dict)
-        }
+        <= {value.get("fd") for value in host_fds if isinstance(value, dict)}
         or any(
             not isinstance(value, dict)
             or not isinstance(value.get("fd"), int)
@@ -3588,8 +4252,7 @@ def _validate_claude_boundary(
         process.get("follow_up_messages") == 0,
         process.get("coaching") == "none",
         isinstance(boundary, dict),
-        gate.get("schema")
-        == "maude.synthetic-operator.claude-provider-boundary.v1",
+        gate.get("schema") == "maude.synthetic-operator.claude-provider-boundary.v1",
         gate.get("provider_config") == "anthropic-sonnet",
         gate.get("status") == "complete",
         gate.get("provider_transport_outside_task_sandbox") is True,
@@ -3619,22 +4282,18 @@ def _validate_claude_boundary(
     pty_broker = boundary.get("pty_broker")
     proxy_argv = boundary.get("proxy_bwrap_argv")
     if (
-        boundary.get("schema")
-        != "maude.synthetic-operator.claude-mcp-boundary.v1"
+        boundary.get("schema") != "maude.synthetic-operator.claude-mcp-boundary.v1"
         or boundary.get("mode") != "operator"
         or boundary.get("bridge_sha256") != expected_bridge
-        or boundary.get("mcp_protocol_version")
-        != CLAUDE_MCP_PROTOCOL_VERSION
+        or boundary.get("mcp_protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
         or boundary.get("mcp_server") != "operator"
         or boundary.get("allowed_tools") != CLAUDE_OPERATOR_TOOLS
         or boundary.get("built_in_tools") != []
-        or boundary.get("mcp_config_sha256")
-        != gate.get("mcp_config_sha256")
+        or boundary.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
         or boundary.get("provider_transport_outside_task_sandbox") is not True
         or boundary.get("provider_auth_mounted_in_proxy_or_command") is not False
         or boundary.get("host_source_mounted_in_proxy_or_command") is not False
-        or boundary.get("external_network_available_to_proxy_or_command")
-        is not False
+        or boundary.get("external_network_available_to_proxy_or_command") is not False
         or not isinstance(proxy_argv, list)
         or not {"--unshare-pid", "--unshare-net", "--clearenv"} <= set(proxy_argv)
         or any(str(HOST_SOURCE_ROOT) in value for value in proxy_argv)
@@ -3671,9 +4330,7 @@ def _validate_claude_boundary(
     ):
         raise CampaignError(f"{label} action/result proof count differs")
     result_by_id = {
-        value.get("tool_use_id"): value
-        for value in results
-        if isinstance(value, dict)
+        value.get("tool_use_id"): value for value in results if isinstance(value, dict)
     }
     if len(result_by_id) != expected_tool_actions:
         raise CampaignError(f"{label} result identities are not unique")
@@ -3693,15 +4350,9 @@ def _validate_claude_boundary(
             or (
                 "timeout_seconds" in action["arguments"]
                 and (
-                    not isinstance(
-                        action["arguments"]["timeout_seconds"], int
-                    )
-                    or isinstance(
-                        action["arguments"]["timeout_seconds"], bool
-                    )
-                    or not 1
-                    <= action["arguments"]["timeout_seconds"]
-                    <= 600
+                    not isinstance(action["arguments"]["timeout_seconds"], int)
+                    or isinstance(action["arguments"]["timeout_seconds"], bool)
+                    or not 1 <= action["arguments"]["timeout_seconds"] <= 600
                 )
             )
             or action.get("arguments_sha256")
@@ -3776,8 +4427,7 @@ def _validate_claude_boundary(
         or isolation.get("provider_reported_tool_roster_required")
         != CLAUDE_OPERATOR_TOOLS
         or isolation.get("built_in_tools_allowed") != []
-        or isolation.get("mcp_protocol_version")
-        != CLAUDE_MCP_PROTOCOL_VERSION
+        or isolation.get("mcp_protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
         or isolation.get("bridge_sha256") != expected_bridge
         or not isinstance(policy_validation, dict)
         or policy_validation.get("schema")
@@ -3797,15 +4447,18 @@ def _validate_claude_boundary(
     )
     policy = load_json(copied_policy)
     forbidden = policy.get("forbidden_prefixes")
-    provider_forbidden = [
-        value
-        for value in forbidden
-        if isinstance(value, str) and "private-provider-home" in value
-    ] if isinstance(forbidden, list) else []
+    provider_forbidden = (
+        [
+            value
+            for value in forbidden
+            if isinstance(value, str) and "private-provider-home" in value
+        ]
+        if isinstance(forbidden, list)
+        else []
+    )
     serialized_policy = json.dumps(policy, sort_keys=True)
     if (
-        policy.get("schema")
-        != "maude.synthetic-operator.command-broker-policy.v1"
+        policy.get("schema") != "maude.synthetic-operator.command-broker-policy.v1"
         or policy.get("bwrap") != "/usr/bin/bwrap"
         or policy.get("home") != "/home/operator"
         or not isinstance(policy.get("cwd"), str)
@@ -3829,19 +4482,15 @@ def _validate_claude_boundary(
         raise CampaignError(f"{label} command policy differs")
     ready = load_json(boundary_root / "proxy-ready.json")
     if (
-        ready.get("schema")
-        != "maude.synthetic-operator.claude-mcp-ready.v1"
+        ready.get("schema") != "maude.synthetic-operator.claude-mcp-ready.v1"
         or ready.get("mode") != "operator"
         or ready.get("tools") != ["terminal"]
-        or ready.get("protocol_version_requested")
-        != CLAUDE_MCP_PROTOCOL_VERSION
-        or ready.get("protocol_version_negotiated")
-        != CLAUDE_MCP_PROTOCOL_VERSION
+        or ready.get("protocol_version_requested") != CLAUDE_MCP_PROTOCOL_VERSION
+        or ready.get("protocol_version_negotiated") != CLAUDE_MCP_PROTOCOL_VERSION
         or not isinstance(ready.get("initialize_message_ordinal"), int)
         or not isinstance(ready.get("tools_list_message_ordinal"), int)
         or ready["initialize_message_ordinal"] < 1
-        or ready["tools_list_message_ordinal"]
-        <= ready["initialize_message_ordinal"]
+        or ready["tools_list_message_ordinal"] <= ready["initialize_message_ordinal"]
         or not _is_sha256(ready.get("tools_list_response_sha256"))
         or not isinstance(ready.get("pid"), int)
         or ready["pid"] <= 0
@@ -3859,32 +4508,24 @@ def _validate_claude_boundary(
     ]
     for record, event in zip(proxy_trace[:3], protocol_events, strict=True):
         if (
-            record.get("schema")
-            != "maude.synthetic-operator.mcp-correlation-event.v1"
+            record.get("schema") != "maude.synthetic-operator.mcp-correlation-event.v1"
             or record.get("protocol_event") != event
             or not isinstance(record.get("message_ordinal"), int)
         ):
             raise CampaignError(f"{label} MCP protocol ordering differs")
-    protocol_ordinals = [
-        record["message_ordinal"] for record in proxy_trace[:3]
-    ]
+    protocol_ordinals = [record["message_ordinal"] for record in proxy_trace[:3]]
     if (
         protocol_ordinals != sorted(set(protocol_ordinals))
-        or proxy_trace[0].get("message_ordinal")
-        != ready["initialize_message_ordinal"]
-        or proxy_trace[2].get("message_ordinal")
-        != ready["tools_list_message_ordinal"]
+        or proxy_trace[0].get("message_ordinal") != ready["initialize_message_ordinal"]
+        or proxy_trace[2].get("message_ordinal") != ready["tools_list_message_ordinal"]
         or proxy_trace[0].get("protocol_version_requested")
         != CLAUDE_MCP_PROTOCOL_VERSION
         or proxy_trace[0].get("protocol_version_negotiated")
         != CLAUDE_MCP_PROTOCOL_VERSION
-        or proxy_trace[1].get("protocol_version")
-        != CLAUDE_MCP_PROTOCOL_VERSION
-        or proxy_trace[2].get("protocol_version")
-        != CLAUDE_MCP_PROTOCOL_VERSION
+        or proxy_trace[1].get("protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
+        or proxy_trace[2].get("protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
         or proxy_trace[2].get("tools") != ["terminal"]
-        or proxy_trace[2].get("response_sha256")
-        != ready["tools_list_response_sha256"]
+        or proxy_trace[2].get("response_sha256") != ready["tools_list_response_sha256"]
     ):
         raise CampaignError(f"{label} MCP protocol facts differ")
     proxy_calls = proxy_trace[3:]
@@ -3899,11 +4540,9 @@ def _validate_claude_boundary(
             or proxy_call.get("mode") != "operator"
             or proxy_call.get("tool") != "terminal"
             or proxy_call.get("arguments") != action["arguments"]
-            or proxy_call.get("arguments_sha256")
-            != action["arguments_sha256"]
+            or proxy_call.get("arguments_sha256") != action["arguments_sha256"]
             or proxy_call.get("result_text") != result["result_text"]
-            or proxy_call.get("result_text_sha256")
-            != result["result_text_sha256"]
+            or proxy_call.get("result_text_sha256") != result["result_text_sha256"]
             or proxy_call.get("is_error") is not False
             or not isinstance(proxy_call.get("correlation_id"), str)
             or not proxy_call["correlation_id"]
@@ -3912,8 +4551,7 @@ def _validate_claude_boundary(
             raise CampaignError(f"{label} MCP correlation {ordinal} differs")
     broker_ready = load_json(boundary_root / "command-broker-ready.json")
     if (
-        broker_ready.get("schema")
-        != "maude.synthetic-operator.command-broker-ready.v1"
+        broker_ready.get("schema") != "maude.synthetic-operator.command-broker-ready.v1"
         or broker_ready.get("policy_sha256") != sha256_file(copied_policy)
         or not _is_sha256(broker_ready.get("token_sha256"))
         or not isinstance(broker_ready.get("pid"), int)
@@ -3936,12 +4574,10 @@ def _validate_claude_boundary(
             broker_call.get("schema")
             != "maude.synthetic-operator.command-broker-event.v1"
             or broker_call.get("ordinal") != ordinal
-            or broker_call.get("request_id")
-            != proxy_call.get("correlation_id")
+            or broker_call.get("request_id") != proxy_call.get("correlation_id")
             or not isinstance(command, str)
             or broker_call.get("command") != command
-            or broker_call.get("result_sha256")
-            != _canonical_json_sha256(broker_result)
+            or broker_call.get("result_sha256") != _canonical_json_sha256(broker_result)
             or not _is_sha256(broker_call.get("request_sha256"))
             or not isinstance(broker_result, dict)
             or broker_result.get("returncode") != 0
@@ -3958,8 +4594,7 @@ def _validate_claude_boundary(
                 ).encode("utf-8")
             ).hexdigest()
             or not isinstance(bwrap_argv, list)
-            or not {"--unshare-pid", "--unshare-net", "--clearenv"}
-            <= set(bwrap_argv)
+            or not {"--unshare-pid", "--unshare-net", "--clearenv"} <= set(bwrap_argv)
             or any(str(HOST_SOURCE_ROOT) in value for value in bwrap_argv)
             or any("/run/provider-auth" in value for value in bwrap_argv)
         ):
@@ -3972,16 +4607,14 @@ def _validate_claude_boundary(
     cleanup = load_json(boundary_root / "cleanup.json")
     command_cleanup = cleanup.get("command_broker")
     if (
-        cleanup.get("schema")
-        != "maude.synthetic-operator.claude-boundary-cleanup.v1"
+        cleanup.get("schema") != "maude.synthetic-operator.claude-boundary-cleanup.v1"
         or cleanup.get("provider_auth_destroyed") is not True
         or cleanup.get("provider_processes_remaining") != []
         or cleanup.get("cleanup_errors") != []
         or not isinstance(command_cleanup, dict)
         or command_cleanup.get("exit_code") != 0
         or command_cleanup.get("remaining_processes") != []
-        or gate.get("broker_cleanup", {}).get("command_broker")
-        != command_cleanup
+        or gate.get("broker_cleanup", {}).get("command_broker") != command_cleanup
     ):
         raise CampaignError(f"{label} cleanup differs")
     boundary_record = gate.get("boundary_evidence")
@@ -3999,15 +4632,13 @@ def _validate_claude_boundary(
         managed_pty_cleanup = cleanup.get("pty_broker")
         if (
             not isinstance(pty_argv, list)
-            or not {"--unshare-pid", "--unshare-net", "--clearenv"}
-            <= set(pty_argv)
+            or not {"--unshare-pid", "--unshare-net", "--clearenv"} <= set(pty_argv)
             or any(str(HOST_SOURCE_ROOT) in value for value in pty_argv)
             or any("/run/provider-auth" in value for value in pty_argv)
             or invocation.get("provider_auth_mounted") is not False
             or invocation.get("host_source_mounted") is not False
             or invocation.get("external_network") is not False
-            or pty_ready.get("schema")
-            != "maude.synthetic-operator.pty-broker-ready.v1"
+            or pty_ready.get("schema") != "maude.synthetic-operator.pty-broker-ready.v1"
             or pty_ready.get("operations")
             != ["start", "read", "send", "stop", "status"]
             or pty_cleanup.get("schema")
@@ -4016,19 +4647,19 @@ def _validate_claude_boundary(
             or pty_cleanup.get("all_tracked_ptys_stopped") is not True
             or pty_cleanup.get("socket_removed") is not True
             or any(
-                not isinstance(value, dict)
-                or value.get("remaining") is not False
+                not isinstance(value, dict) or value.get("remaining") is not False
                 for value in pty_cleanup.get("tracked_ptys", [])
             )
             or cleanup.get("pty_cleanup") != pty_cleanup
-            or gate.get("broker_cleanup", {}).get("pty_cleanup")
-            != pty_cleanup
+            or gate.get("broker_cleanup", {}).get("pty_cleanup") != pty_cleanup
             or not isinstance(managed_pty_cleanup, dict)
             or managed_pty_cleanup.get("exit_code") != 0
             or managed_pty_cleanup.get("remaining_processes") != []
         ):
             raise CampaignError(f"{label} persistent PTY boundary differs")
-    elif cleanup.get("pty_broker") is not None or cleanup.get("pty_cleanup") is not None:
+    elif (
+        cleanup.get("pty_broker") is not None or cleanup.get("pty_cleanup") is not None
+    ):
         raise CampaignError(f"{label} unexpectedly contains a PTY broker")
 
 
@@ -4085,40 +4716,14 @@ def _codex_boundary_files(*, include_pty: bool) -> set[str]:
 def _installation_surface_probe_summary(
     provider_probe_summary: dict[str, Any],
 ) -> dict[str, Any]:
-    if (
-        not INSTALL_SURFACE_PROBE_PATH.is_file()
-        or INSTALL_SURFACE_PROBE_PATH.is_symlink()
-    ):
-        raise CampaignError(
-            "current installation-surface probe index is absent; run "
-            "`campaign_runner.py probe-installation-surface` after finalizing "
-            "runner and operator_pty bytes"
-        )
+    observation = _validate_operator_capability_index(
+        index_path=INSTALL_SURFACE_PROBE_PATH,
+        expected_schema=("maude.synthetic-operator.installation-surface-probes.v3"),
+        label="installation-surface probe",
+    )
+    index = observation["index"]
     probe_root = INSTALL_SURFACE_PROBE_PATH.parent
-    if not probe_root.is_dir() or probe_root.is_symlink():
-        raise CampaignError("installation-surface probe root is unsafe")
-    index = load_json(INSTALL_SURFACE_PROBE_PATH)
-    if (
-        index.get("schema")
-        != "maude.synthetic-operator.installation-surface-probes.v2"
-        or index.get("campaign_id") != CAMPAIGN_ID
-        or index.get("campaign_run") is not False
-        or index.get("distinct_session_identities") is not True
-        or index.get("all_passed") is not True
-        or index.get("raw_evidence_committed") is not False
-        or index.get("authority_effect") != "none"
-    ):
-        raise CampaignError("installation-surface probe index is not a pass")
-    expected_runner = file_record(HARNESS_DIR / "campaign_runner.py")
-    if expected_runner["sha256"] != CLAUDE_RUNNER_SHA256:
-        raise CampaignError(
-            "current campaign_runner.py bytes differ from the audited boundary"
-        )
-    if index.get("campaign_runner") != expected_runner:
-        raise CampaignError(
-            "installation-surface probes do not bind the exact current "
-            "campaign_runner.py bytes"
-        )
+    expected_runner = observation["expected_runner"]
     expected_adapter = file_record(OPERATOR_PTY)
     if expected_adapter["sha256"] != OPERATOR_PTY_SHA256:
         raise CampaignError(
@@ -4141,8 +4746,7 @@ def _installation_surface_probe_summary(
         raise CampaignError("frozen installation media has no unique Maude wheel")
     maude_wheel = maude_wheels[0]
     expected_wheel = {
-        key: maude_wheel[key]
-        for key in ("path", "bytes", "sha256", "distribution")
+        key: maude_wheel[key] for key in ("path", "bytes", "sha256", "distribution")
     }
     if (
         index.get("maude_wheel") != expected_wheel
@@ -4153,9 +4757,8 @@ def _installation_surface_probe_summary(
     ):
         raise CampaignError("installation-surface Maude wheel binding is wrong")
     wheel_relative = Path(str(maude_wheel["path"]))
-    if (
-        wheel_relative.is_absolute()
-        or any(part in {"", ".", ".."} for part in wheel_relative.parts)
+    if wheel_relative.is_absolute() or any(
+        part in {"", ".", ".."} for part in wheel_relative.parts
     ):
         raise CampaignError("installation-surface Maude wheel path is unsafe")
     wheel_path = REPO_ROOT / wheel_relative
@@ -4179,10 +4782,7 @@ def _installation_surface_probe_summary(
             "status",
         ],
         "one_child_across_separate_provider_tool_actions": True,
-        (
-            "separate_read_focus_send_command_send_read_stop_read_"
-            "order_proved"
-        ): True,
+        ("separate_read_focus_send_command_send_read_stop_read_order_proved"): True,
         "typed_status_rpc_sequence_proved": True,
         "predeclared_command_sequence": True,
         "claim_scope": (
@@ -4193,60 +4793,27 @@ def _installation_surface_probe_summary(
         "exact_pty_bytes_preserved": True,
     }:
         raise CampaignError("installation-surface stateful PTY contract is wrong")
-    attempt_id = index.get("attempt_id")
-    if (
-        not isinstance(attempt_id, str)
-        or not attempt_id
-        or Path(attempt_id).name != attempt_id
-        or not isinstance(index.get("completed_at"), str)
-        or not index["completed_at"]
+    attempt_id = index["attempt_id"]
+    attempt_root = observation["attempt_root"]
+    auth_identities = set(
+        provider_probe_summary.get("all_observed_session_identities", [])
+    )
+    if len(auth_identities) != len(
+        provider_probe_summary.get("all_observed_session_identities", [])
     ):
-        raise CampaignError(
-            "installation-surface probe identity or completion time is unsafe"
-        )
-    attempt_root = probe_root / "attempts" / attempt_id
-    if (
-        index.get("raw_evidence_location") != str(attempt_root)
-        or (probe_root / "attempts").is_symlink()
-        or not attempt_root.is_dir()
-        or attempt_root.is_symlink()
-    ):
-        raise CampaignError(
-            "installation-surface raw evidence location differs"
-        )
-    auth_identities = {
-        _probe_identity(item["session_identity"])
-        for item in provider_probe_summary.get("providers", [])
-        if isinstance(item, dict)
-        and isinstance(item.get("session_identity"), dict)
-    }
-    if len(auth_identities) != 1:
         raise CampaignError("provider auth-probe identities are incomplete")
-    providers = index.get("providers")
-    if (
-        index.get("requested_provider_configs") != ["openai-sol"]
-        or index.get("not_requested_provider_configs") != []
-        or not isinstance(providers, list)
-        or len(providers) != 1
-    ):
-        raise CampaignError(
-            "installation-surface probe set must contain only the requested "
-            "Codex capability run from the frozen Codex-only provider universe"
-        )
-    expected_providers = {"openai-sol"}
-    actual_providers = {
-        item.get("provider_config")
-        for item in providers
-        if isinstance(item, dict)
-    }
-    if actual_providers != expected_providers:
-        raise CampaignError(
-            "installation-surface probe provider set differs"
-        )
+    if auth_identities & observation["session_identities"]:
+        raise CampaignError("installation probe reused an auth-probe session identity")
+    providers = list(observation["available"].values())
 
     identities: set[str] = set()
     sanitized: list[dict[str, Any]] = []
-    for item in sorted(providers, key=lambda value: value["provider_config"]):
+    for item in sorted(
+        providers,
+        key=lambda value: list(SUPPORTED_PROVIDER_CONFIGS).index(
+            value["provider_config"]
+        ),
+    ):
         provider = item["provider_config"]
         provider_root = attempt_root / provider
         if not provider_root.is_dir() or provider_root.is_symlink():
@@ -4256,22 +4823,20 @@ def _installation_surface_probe_summary(
         safety = item.get("safety_audit")
         delivery = item.get("delivery")
         if not all(
-            isinstance(value, dict)
-            for value in (identity, process, safety, delivery)
+            isinstance(value, dict) for value in (identity, process, safety, delivery)
         ):
             raise CampaignError(f"{provider}: installation probe is malformed")
         identity_value = _probe_identity(identity)
-        expected_model = "gpt-5.6-sol"
+        config = PROVIDER_MODEL_CONFIGS[provider]
+        expected_model = config["model_argument"]
         if (
             identity.get("configured_model") != expected_model
             or identity_value in identities
             or identity_value in auth_identities
         ):
-            raise CampaignError(
-                f"{provider}: installation probe session is not fresh"
-            )
+            raise CampaignError(f"{provider}: installation probe session is not fresh")
         identities.add(identity_value)
-        expected_delivery_provider = "OpenAI"
+        expected_delivery_provider = config["provider"]
         if (
             delivery.get("provider") != expected_delivery_provider
             or delivery.get("requested_model") != expected_model
@@ -4279,59 +4844,88 @@ def _installation_surface_probe_summary(
             raise CampaignError(
                 f"{provider}: installation probe model delivery differs"
             )
-        if (
-            not _is_sha256(delivery.get("delivered_prompt_sha256"))
-            or delivery.get("allowed_unix_sockets") != []
-            or delivery.get("intrinsic_action_features_explicitly_disabled")
-            != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
-            or delivery.get("optional_features_explicitly_disabled")
-            != CODEX_DISABLED_OPTIONAL_FEATURES
-            or delivery.get("live_web_search_enabled") is not False
-            or delivery.get("provider_task_paths_added") != []
-            or delivery.get("user_mcp_and_connector_config_loaded") is not False
-            or delivery.get("mcp_server") != "operator"
-            or delivery.get("mcp_protocol_version")
-            != CODEX_MCP_PROTOCOL_VERSION
-            or delivery.get("mcp_config_sha256")
-            != process.get("provider_auth_gate", {}).get("mcp_config_sha256")
-            or delivery.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
-            or delivery.get("codex_approval_argv")
-            != CODEX_APPROVAL_CONFIG_ARGV
-            or delivery.get("codex_approval_config_override")
-            != CODEX_APPROVAL_CONFIG
-            or delivery.get("codex_approval_policy") != CODEX_APPROVAL_POLICY
-            or delivery.get("noninteractive_approval_safety_basis")
-            != _codex_approval_safety_basis(tool="terminal")
-            or delivery.get("codex_mcp_default_tools_approval_mode")
-            != CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-            or delivery.get("codex_mcp_approval_config_override")
-            != (
-                "mcp_servers.operator.default_tools_approval_mode=\"approve\""
-            )
-            or delivery.get("mcp_tool_approval_safety_basis")
-            != _codex_mcp_tool_approval_safety_basis(tool="terminal")
-            or delivery.get("exact_provider_tool_allowlist_supported") is not True
-            or delivery.get("unexpected_intrinsic_action_policy")
-            != "fail-closed"
-        ):
-            raise CampaignError(
-                f"{provider}: installation Codex delivery differs"
-            )
         gate = process.get("provider_auth_gate")
         if not isinstance(gate, dict):
             raise CampaignError(f"{provider}: installation probe gate is absent")
-        _validate_codex_provider_boundary(
-            provider=provider,
-            process=process,
-            gate=gate,
-            provider_root=provider_root,
-            expected_tool_actions=8,
-            expect_pty_broker=True,
-        )
-        if gate.get("identity", {}).get("provider_thread_id") != identity_value:
-            raise CampaignError(
-                f"{provider}: installation boundary identity differs"
+        if provider == "openai-sol":
+            if (
+                not _is_sha256(delivery.get("delivered_prompt_sha256"))
+                or delivery.get("allowed_unix_sockets") != []
+                or delivery.get("intrinsic_action_features_explicitly_disabled")
+                != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+                or delivery.get("optional_features_explicitly_disabled")
+                != CODEX_DISABLED_OPTIONAL_FEATURES
+                or delivery.get("live_web_search_enabled") is not False
+                or delivery.get("provider_task_paths_added") != []
+                or delivery.get("user_mcp_and_connector_config_loaded") is not False
+                or delivery.get("mcp_server") != "operator"
+                or delivery.get("mcp_protocol_version") != CODEX_MCP_PROTOCOL_VERSION
+                or delivery.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
+                or delivery.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
+                or delivery.get("codex_approval_argv") != CODEX_APPROVAL_CONFIG_ARGV
+                or delivery.get("codex_approval_config_override")
+                != CODEX_APPROVAL_CONFIG
+                or delivery.get("codex_approval_policy") != CODEX_APPROVAL_POLICY
+                or delivery.get("noninteractive_approval_safety_basis")
+                != _codex_approval_safety_basis(tool="terminal")
+                or delivery.get("codex_mcp_default_tools_approval_mode")
+                != CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
+                or delivery.get("codex_mcp_approval_config_override")
+                != ('mcp_servers.operator.default_tools_approval_mode="approve"')
+                or delivery.get("mcp_tool_approval_safety_basis")
+                != _codex_mcp_tool_approval_safety_basis(tool="terminal")
+                or delivery.get("exact_provider_tool_allowlist_supported") is not True
+                or delivery.get("unexpected_intrinsic_action_policy") != "fail-closed"
+            ):
+                raise CampaignError(f"{provider}: installation Codex delivery differs")
+            _validate_codex_provider_boundary(
+                provider=provider,
+                process=process,
+                gate=gate,
+                provider_root=provider_root,
+                expected_tool_actions=8,
+                expect_pty_broker=True,
             )
+            boundary_identity = gate.get("identity", {}).get("provider_thread_id")
+            boundary_kind = (
+                "task-blind-retained-auth-codex-transport-with-exact-"
+                "stdio-mcp-per-command-sandbox-and-pty-broker"
+            )
+        else:
+            if (
+                not isinstance(delivery.get("requested_session_id"), str)
+                or not delivery["requested_session_id"]
+                or delivery.get("system_prompt_delivery") != "system"
+                or delivery.get("user_prompt_delivery")
+                != (
+                    "single stream-json user event after flushed MCP "
+                    "tools/list readiness; stdin then closed"
+                )
+                or not _is_sha256(delivery.get("user_prompt_sha256"))
+                or delivery.get("mcp_protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
+                or delivery.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
+                or delivery.get("allowed_tools") != CLAUDE_OPERATOR_TOOLS
+                or delivery.get("built_in_tools") != []
+                or delivery.get("provider_task_paths_added") != []
+                or delivery.get("provider_unix_sockets_added") != []
+            ):
+                raise CampaignError(f"{provider}: installation Claude delivery differs")
+            _validate_claude_boundary(
+                provider=provider,
+                process=process,
+                gate=gate,
+                provider_root=provider_root,
+                expected_tool_actions=8,
+                expect_pty_broker=True,
+            )
+            boundary_identity = gate.get("identity", {}).get("provider_session_id")
+            boundary_kind = (
+                "task-blind-retained-auth-claude-transport-with-"
+                "credential-free-mcp-proxy-per-command-sandbox-and-"
+                "pty-broker"
+            )
+        if boundary_identity != identity_value:
+            raise CampaignError(f"{provider}: installation boundary identity differs")
         gate_path = _exact_external_probe_record(
             item.get("gate_record"),
             base=probe_root,
@@ -4352,39 +4946,9 @@ def _installation_surface_probe_summary(
             any(value != [] for value in safety_lists)
             or safety.get("zero_auth_env_network_source_attempts") is not True
         ):
-            raise CampaignError(
-                f"{provider}: installation probe has a safety attempt"
-            )
-        required_true = (
-            "campaign_run",
-            "fresh_process",
-            "exact_terminal_commands_match_positionally",
-            "read_before_input_proved",
-            "tab_focus_send_proved",
-            "status_command_send_proved",
-            "read_after_input_proved",
-            "read_after_status_input_proved",
-            "read_after_stop_proved",
-            "all_read_results_nonempty",
-            "read_focus_send_command_send_read_stop_read_order_proved",
-            "same_pty_process_across_provider_tool_actions",
-            "real_governor_hello_request_response",
-            "real_sessions_list_request_response",
-            "real_sessions_create_request_response",
-            "real_governor_now_request_response",
-            "real_governor_status_request_response",
-            "command_linked_runtime_session_list_request_response",
-            "typed_status_rpc_sequence_in_order",
-            "installed_distribution_mounted",
-            "installed_python_module_source_readable",
-            "host_repository_checkout_mounted",
-            "release_source_archive_mounted",
-            "installation_media_mounted",
-            "expected_answer_or_task_supplied",
-            "network_or_external_effect",
-            "final_marker_present",
-        )
+            raise CampaignError(f"{provider}: installation probe has a safety attempt")
         expected_values = {
+            "status": "available",
             "campaign_run": False,
             "fresh_process": True,
             "exact_terminal_commands_match_positionally": True,
@@ -4410,15 +4974,15 @@ def _installation_surface_probe_summary(
             "release_source_archive_mounted": False,
             "installation_media_mounted": False,
             "expected_answer_or_task_supplied": False,
-            "network_or_external_effect": False,
+            "task_level_network_or_external_operational_effect": False,
             "final_marker_present": True,
         }
-        if any(item.get(key) is not value for key, value in expected_values.items()):
-            differing = [
-                key
-                for key in required_true
-                if item.get(key) is not expected_values[key]
-            ]
+        differing = [
+            key
+            for key, expected in expected_values.items()
+            if type(item.get(key)) is not type(expected) or item.get(key) != expected
+        ]
+        if differing:
             raise CampaignError(
                 f"{provider}: installation probe facts differ: {differing!r}"
             )
@@ -4428,12 +4992,11 @@ def _installation_surface_probe_summary(
             or item.get("stateful_pty_actions") != 8
             or item.get("pty_command_returncode") != 0
         ):
-            raise CampaignError(
-                f"{provider}: installation PTY action result differs"
-            )
+            raise CampaignError(f"{provider}: installation PTY action result differs")
         command_digests = item.get("exact_pty_command_sha256")
         output_digests = item.get("successful_action_output_sha256")
         gate_actions = gate.get("tool_actions")
+        gate_results = gate.get("tool_results")
         if (
             not isinstance(command_digests, list)
             or len(command_digests) != 8
@@ -4443,10 +5006,12 @@ def _installation_surface_probe_summary(
             or not all(_is_sha256(value) for value in output_digests)
             or not isinstance(gate_actions, list)
             or len(gate_actions) != 8
-        ):
-            raise CampaignError(
-                f"{provider}: installation PTY action digests differ"
+            or (
+                provider == "anthropic-sonnet"
+                and (not isinstance(gate_results, list) or len(gate_results) != 8)
             )
+        ):
+            raise CampaignError(f"{provider}: installation PTY action digests differ")
         completed = item.get("completed_action_events")
         successful = item.get("successful_completed_action_events")
         if (
@@ -4462,22 +5027,46 @@ def _installation_surface_probe_summary(
             or [value["event_number"] for value in completed]
             != sorted({value["event_number"] for value in completed})
         ):
-            raise CampaignError(
-                f"{provider}: completed installation actions differ"
-            )
-        expected_completed_actions = [
-            {
-                "event_number": action["event_numbers"][-1],
-                "provider": "codex",
-                "action_id": action["action_id"],
-                "tool": "mcp__operator__terminal",
-                "completion_kind": "item.completed",
-                "status": "completed",
-                "exit_code": None,
-                "succeeded": True,
+            raise CampaignError(f"{provider}: completed installation actions differ")
+        if provider == "openai-sol":
+            expected_completed_actions = [
+                {
+                    "event_number": action["event_numbers"][-1],
+                    "provider": "codex",
+                    "action_id": action["action_id"],
+                    "tool": "mcp__operator__terminal",
+                    "completion_kind": "item.completed",
+                    "status": "completed",
+                    "exit_code": None,
+                    "succeeded": True,
+                }
+                for action in gate_actions
+            ]
+        else:
+            assert isinstance(gate_results, list)
+            completed_result_by_id = {
+                result.get("tool_use_id"): result
+                for result in gate_results
+                if isinstance(result, dict)
             }
-            for action in gate_actions
-        ]
+            if len(completed_result_by_id) != 8:
+                raise CampaignError(
+                    f"{provider}: completed installation result identities differ"
+                )
+            expected_completed_actions = [
+                {
+                    "event_number": completed_result_by_id[action["tool_use_id"]][
+                        "event_number"
+                    ],
+                    "provider": "claude",
+                    "action_id": action["tool_use_id"],
+                    "tool": "mcp__operator__terminal",
+                    "completion_kind": "tool_result",
+                    "is_error": False,
+                    "succeeded": True,
+                }
+                for action in gate_actions
+            ]
         if completed != expected_completed_actions:
             raise CampaignError(
                 f"{provider}: completed installation action identity differs"
@@ -4489,8 +5078,7 @@ def _installation_surface_probe_summary(
             or len(process_pairs) != 1
             or not isinstance(process_pairs[0], dict)
             or not isinstance(pty_state, dict)
-            or pty_state.get("schema")
-            != "maude.synthetic-operator.stateful-pty.v1"
+            or pty_state.get("schema") != "maude.synthetic-operator.stateful-pty.v1"
             or pty_state.get("status") != "completed"
             or pty_state.get("exit_code") != 0
             or process_pairs[0].get("daemon_pid") != pty_state.get("daemon_pid")
@@ -4501,9 +5089,7 @@ def _installation_surface_probe_summary(
             or pty_state["child_pid"] <= 0
             or pty_state["daemon_pid"] == pty_state["child_pid"]
         ):
-            raise CampaignError(
-                f"{provider}: persistent PTY process identity differs"
-            )
+            raise CampaignError(f"{provider}: persistent PTY process identity differs")
         entrypoint = item.get("entrypoint")
         if (
             not isinstance(entrypoint, dict)
@@ -4514,9 +5100,7 @@ def _installation_surface_probe_summary(
             or not entrypoint["path"].startswith(
                 f"{LAB_ROOT}/_install-surface-{provider}-"
             )
-            or not entrypoint["path"].endswith(
-                "/installation/venv/bin/maude"
-            )
+            or not entrypoint["path"].endswith("/installation/venv/bin/maude")
             or pty_state.get("command") != [entrypoint["path"]]
         ):
             raise CampaignError(
@@ -4536,20 +5120,64 @@ def _installation_surface_probe_summary(
         parsed_broker_results: list[dict[str, Any]] = []
         action_commands: list[str] = []
         action_outputs: list[str] = []
+        claude_result_by_id = (
+            {
+                result.get("tool_use_id"): result
+                for result in gate_results
+                if isinstance(result, dict)
+            }
+            if isinstance(gate_results, list)
+            else {}
+        )
+        expected_terminal_action_records: list[dict[str, Any]] = []
         for ordinal, (action, payload_kind) in enumerate(
             zip(gate_actions, payload_kinds, strict=True), 1
         ):
             arguments = action.get("arguments") if isinstance(action, dict) else None
-            command = (
-                arguments.get("command")
-                if isinstance(arguments, dict)
-                else None
-            )
+            command = arguments.get("command") if isinstance(arguments, dict) else None
             if not isinstance(command, str) or not command:
                 raise CampaignError(
                     f"{provider}: installation command {ordinal} is absent"
                 )
-            output = _codex_normalized_mcp_result_text(action.get("result"))
+            if provider == "openai-sol":
+                output = _codex_normalized_mcp_result_text(action.get("result"))
+                expected_terminal_action_records.append(
+                    {
+                        "position": ordinal,
+                        "provider": "codex",
+                        "action_reference": (f"codex:{action['action_id']}"),
+                        "event_numbers": action["event_numbers"],
+                        "command_sha256": command_digests[ordinal - 1],
+                        "argument_keys": sorted(action["arguments"]),
+                        "explicit_timeout_seconds": action["arguments"].get(
+                            "timeout_seconds"
+                        ),
+                        "same_command_in_started_and_completed": True,
+                    }
+                )
+            else:
+                result = claude_result_by_id.get(action.get("tool_use_id"))
+                if not isinstance(result, dict) or not isinstance(
+                    result.get("result_text"), str
+                ):
+                    raise CampaignError(
+                        f"{provider}: installation result {ordinal} is absent"
+                    )
+                output = result["result_text"]
+                expected_terminal_action_records.append(
+                    {
+                        "position": ordinal,
+                        "provider": "claude",
+                        "action_reference": (f"claude:{action['tool_use_id']}"),
+                        "event_numbers": [action["event_number"]],
+                        "command_sha256": command_digests[ordinal - 1],
+                        "argument_keys": sorted(action["arguments"]),
+                        "explicit_timeout_seconds": action["arguments"].get(
+                            "timeout_seconds"
+                        ),
+                        "same_command_in_started_and_completed": None,
+                    }
+                )
             parsed_broker_results.append(
                 _parse_installation_broker_result(
                     output,
@@ -4560,44 +5188,22 @@ def _installation_surface_probe_summary(
             )
             action_commands.append(command)
             action_outputs.append(output)
-        if (
-            command_digests
-            != [
-                hashlib.sha256(command.encode("utf-8")).hexdigest()
-                for command in action_commands
-            ]
-            or output_digests
-            != [
-                hashlib.sha256(output.encode("utf-8")).hexdigest()
-                for output in action_outputs
-            ]
-        ):
+        if command_digests != [
+            hashlib.sha256(command.encode("utf-8")).hexdigest()
+            for command in action_commands
+        ] or output_digests != [
+            hashlib.sha256(output.encode("utf-8")).hexdigest()
+            for output in action_outputs
+        ]:
             raise CampaignError(
                 f"{provider}: nested broker evidence differs from action digests"
             )
         terminal_action_records = item.get("terminal_action_records")
-        expected_terminal_action_records = [
-            {
-                "position": ordinal,
-                "provider": "codex",
-                "action_reference": f"codex:{action['action_id']}",
-                "event_numbers": action["event_numbers"],
-                "command_sha256": command_digests[ordinal - 1],
-                "argument_keys": sorted(action["arguments"]),
-                "explicit_timeout_seconds": action["arguments"].get(
-                    "timeout_seconds"
-                ),
-                "same_command_in_started_and_completed": True,
-            }
-            for ordinal, action in enumerate(gate_actions, 1)
-        ]
         if terminal_action_records != expected_terminal_action_records:
             raise CampaignError(
                 f"{provider}: positional terminal action evidence differs"
             )
-        parsed_payloads = [
-            record["payload"] for record in parsed_broker_results
-        ]
+        parsed_payloads = [record["payload"] for record in parsed_broker_results]
         state_payloads = [
             parsed_payloads[0],
             parsed_payloads[2]["state"],
@@ -4606,10 +5212,7 @@ def _installation_surface_probe_summary(
             parsed_payloads[7],
         ]
         if (
-            {
-                (value["daemon_pid"], value["child_pid"])
-                for value in state_payloads
-            }
+            {(value["daemon_pid"], value["child_pid"]) for value in state_payloads}
             != {
                 (
                     process_pairs[0]["daemon_pid"],
@@ -4621,9 +5224,7 @@ def _installation_surface_probe_summary(
             or parsed_payloads[5].get("operation") != "stop"
             or parsed_payloads[7] != pty_state
         ):
-            raise CampaignError(
-                f"{provider}: nested PTY payload sequence differs"
-            )
+            raise CampaignError(f"{provider}: nested PTY payload sequence differs")
         adapter_record = item.get("pty_adapter")
         expected_provider_adapter = {
             **expected_adapter,
@@ -4631,9 +5232,7 @@ def _installation_surface_probe_summary(
             "media_type": "text/plain",
         }
         if adapter_record != expected_provider_adapter:
-            raise CampaignError(
-                f"{provider}: PTY adapter does not match current bytes"
-            )
+            raise CampaignError(f"{provider}: PTY adapter does not match current bytes")
         typescript_path = _exact_external_probe_record(
             item.get("pty_typescript"),
             base=probe_root,
@@ -4641,16 +5240,13 @@ def _installation_surface_probe_summary(
         )
         if (
             typescript_path.stat().st_size <= 0
-            or pty_state.get("captured_bytes")
-            != typescript_path.stat().st_size
+            or pty_state.get("captured_bytes") != typescript_path.stat().st_size
             or pty_state.get("output") is None
             or not str(pty_state["output"]).endswith(
                 "/installation/work/pty.typescript"
             )
         ):
-            raise CampaignError(
-                f"{provider}: exact PTY transcript evidence differs"
-            )
+            raise CampaignError(f"{provider}: exact PTY transcript evidence differs")
         state_root = provider_root / "pty-state"
         state_records = item.get("pty_state_artifacts")
         if (
@@ -4659,9 +5255,7 @@ def _installation_surface_probe_summary(
             or not isinstance(state_records, list)
             or inventory_files(state_root) != state_records
         ):
-            raise CampaignError(
-                f"{provider}: PTY state artifact inventory differs"
-            )
+            raise CampaignError(f"{provider}: PTY state artifact inventory differs")
         for record in state_records:
             _exact_external_probe_record(
                 record,
@@ -4686,13 +5280,10 @@ def _installation_surface_probe_summary(
             or state_paths != required_state_paths | set(ack_paths)
             or load_json(state_root / "state.json") != pty_state
         ):
-            raise CampaignError(
-                f"{provider}: PTY state artifact set differs"
-            )
+            raise CampaignError(f"{provider}: PTY state artifact set differs")
         ready = load_json(state_root / "ready.json")
         if (
-            ready.get("schema")
-            != "maude.synthetic-operator.stateful-pty-ready.v1"
+            ready.get("schema") != "maude.synthetic-operator.stateful-pty-ready.v1"
             or ready.get("daemon_pid") != pty_state["daemon_pid"]
             or ready.get("child_pid") != pty_state["child_pid"]
         ):
@@ -4719,22 +5310,15 @@ def _installation_surface_probe_summary(
             {value.get("request_id") for value in acknowledgements}
             != {value.get("id") for value in request_lines}
             or any(
-                value.get("schema")
-                != "maude.synthetic-operator.stateful-pty-ack.v1"
+                value.get("schema") != "maude.synthetic-operator.stateful-pty-ack.v1"
                 or value.get("accepted") is not True
                 or value.get("error") is not None
                 for value in acknowledgements
             )
-            or int(
-                (state_root / "read-offset")
-                .read_text(encoding="ascii")
-                .strip()
-            )
+            or int((state_root / "read-offset").read_text(encoding="ascii").strip())
             != typescript_path.stat().st_size
         ):
-            raise CampaignError(
-                f"{provider}: PTY request acknowledgement differs"
-            )
+            raise CampaignError(f"{provider}: PTY request acknowledgement differs")
         runtime_pairs = item.get("runtime_trace_pairs")
         status_attribution = (
             "Maude polls governor.now. In this isolated probe, the separately "
@@ -4761,9 +5345,7 @@ def _installation_surface_probe_summary(
             else []
         )
         status_method_index = (
-            methods.index("governor.status")
-            if "governor.status" in methods
-            else -1
+            methods.index("governor.status") if "governor.status" in methods else -1
         )
         runtime_list_method_index = (
             methods.index("runtime.session.list", status_method_index + 1)
@@ -4773,8 +5355,7 @@ def _installation_surface_probe_summary(
         )
         if (
             not runtime_pairs
-            or methods[:3]
-            != ["governor.hello", "sessions.list", "sessions.create"]
+            or methods[:3] != ["governor.hello", "sessions.list", "sessions.create"]
             or "governor.now" not in methods
             or item.get("runtime_trace_contract_predicates")
             != expected_trace_predicates
@@ -4827,9 +5408,7 @@ def _installation_surface_probe_summary(
             or clean_before.get("symlinks") != []
             or set(clean_before.get("directories", [])) != required_home_dirs
         ):
-            raise CampaignError(
-                f"{provider}: clean operator HOME evidence differs"
-            )
+            raise CampaignError(f"{provider}: clean operator HOME evidence differs")
         _exact_external_probe_record(
             item.get("raw_transcript"),
             base=probe_root,
@@ -4862,28 +5441,42 @@ def _installation_surface_probe_summary(
                 f"{provider}: raw probe input/isolation record is absent"
             )
         isolation = load_json(isolation_path)
-        if (
+        if provider == "openai-sol":
+            if (
+                isolation.get("schema")
+                != "maude.synthetic-operator.codex-mcp-isolation-result.v1"
+                or isolation.get("source_root_absent") is not True
+                or isolation.get(
+                    "provider_auth_present_only_for_transport_and_trusted_shim"
+                )
+                is not True
+                or isolation.get("provider_task_paths_mounted") != []
+                or isolation.get("intrinsic_action_features_disabled")
+                != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
+                or isolation.get("unexpected_intrinsic_action_policy") != "fail-closed"
+                or isolation.get("mcp_server") != "operator"
+                or isolation.get("mcp_protocol_version") != CODEX_MCP_PROTOCOL_VERSION
+                or isolation.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
+                or isolation.get("mcp_config_sha256") != gate.get("mcp_config_sha256")
+            ):
+                raise CampaignError(
+                    f"{provider}: Codex clean-room isolation evidence differs"
+                )
+        elif (
             isolation.get("schema")
-            != "maude.synthetic-operator.codex-mcp-isolation-result.v1"
+            != "maude.synthetic-operator.claude-mcp-isolation-result.v1"
             or isolation.get("source_root_absent") is not True
-            or isolation.get(
-                "provider_auth_present_only_for_transport_and_trusted_shim"
-            )
-            is not True
-            or isolation.get("provider_task_paths_mounted") != []
-            or isolation.get("intrinsic_action_features_disabled")
-            != CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
-            or isolation.get("unexpected_intrinsic_action_policy")
-            != "fail-closed"
-            or isolation.get("mcp_server") != "operator"
-            or isolation.get("mcp_protocol_version")
-            != CODEX_MCP_PROTOCOL_VERSION
-            or isolation.get("mcp_enabled_tools") != CODEX_OPERATOR_TOOLS
-            or isolation.get("mcp_config_sha256")
-            != process.get("provider_auth_gate", {}).get("mcp_config_sha256")
+            or isolation.get("provider_auth_mount_absent") is not True
+            or isolation.get("provider_transport_inside_task_namespace") is not False
+            or isolation.get("proxy_external_network_absent") is not True
+            or isolation.get("bare_tool_roster") != ["terminal"]
+            or isolation.get("provider_reported_tool_roster_required")
+            != CLAUDE_OPERATOR_TOOLS
+            or isolation.get("built_in_tools_allowed") != []
+            or isolation.get("mcp_protocol_version") != CLAUDE_MCP_PROTOCOL_VERSION
         ):
             raise CampaignError(
-                f"{provider}: Codex clean-room isolation evidence differs"
+                f"{provider}: Claude clean-room isolation evidence differs"
             )
         expected_files = {
             "auth-gate.json",
@@ -4899,21 +5492,19 @@ def _installation_surface_probe_summary(
             "user-prompt.md",
             *{f"pty-state/{path}" for path in state_paths},
         }
-        expected_files |= _codex_boundary_files(include_pty=True)
+        expected_files |= (
+            _codex_boundary_files(include_pty=True)
+            if provider == "openai-sol"
+            else _claude_boundary_files(include_pty=True)
+        )
         actual_files = {
             path.relative_to(provider_root).as_posix()
             for path in provider_root.rglob("*")
             if path.is_file() and not path.is_symlink()
         }
-        symlinks = [
-            path
-            for path in provider_root.rglob("*")
-            if path.is_symlink()
-        ]
+        symlinks = [path for path in provider_root.rglob("*") if path.is_symlink()]
         if actual_files != expected_files or symlinks:
-            raise CampaignError(
-                f"{provider}: raw probe file set differs"
-            )
+            raise CampaignError(f"{provider}: raw probe file set differs")
         sanitized.append(
             {
                 "provider_config": provider,
@@ -4929,70 +5520,49 @@ def _installation_surface_probe_summary(
                 "installed_python_module_source_readable": True,
                 "host_checkout_release_source_and_media_absent": True,
                 "startup_scheduled_and_typed_status_rpc_contract_proved": True,
-                "runtime_trace_contract_predicates": (
-                    expected_trace_predicates
-                ),
+                "runtime_trace_contract_predicates": (expected_trace_predicates),
                 "governor_status_attribution": status_attribution,
                 "clean_home_before_and_after": True,
-                "provider_boundary_kind": (
-                    "task-blind-retained-auth-codex-transport-with-exact-"
-                    "stdio-mcp-per-command-sandbox-and-pty-broker"
-                ),
+                "provider_boundary_kind": boundary_kind,
                 "provider_auth_retained_until_transport_exit": True,
                 "trusted_stdio_shim_auth_read_observed": False,
                 "strict_mcp_per_command_and_pty_sandboxes_proved": True,
                 "zero_safety_attempts": True,
                 "raw_result": {
-                    key: file_record(
-                        result_path, relative_to=probe_root
-                    )[key]
+                    key: file_record(result_path, relative_to=probe_root)[key]
                     for key in ("bytes", "sha256")
                 },
                 "raw_transcript": {
-                    key: item["raw_transcript"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["raw_transcript"][key] for key in ("bytes", "sha256")
                 },
                 "raw_stderr": {
-                    key: item["raw_stderr"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["raw_stderr"][key] for key in ("bytes", "sha256")
                 },
                 "pty_transcript": {
-                    key: item["pty_typescript"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["pty_typescript"][key] for key in ("bytes", "sha256")
                 },
                 "rpc_transcript": {
-                    key: item["rpc_transcript"][key]
-                    for key in ("bytes", "sha256")
+                    key: item["rpc_transcript"][key] for key in ("bytes", "sha256")
                 },
                 "isolation_record": {
-                    key: file_record(
-                        isolation_path, relative_to=probe_root
-                    )[key]
+                    key: file_record(isolation_path, relative_to=probe_root)[key]
                     for key in ("bytes", "sha256")
                 },
                 "system_prompt": {
-                    key: file_record(
-                        system_prompt_path, relative_to=probe_root
-                    )[key]
+                    key: file_record(system_prompt_path, relative_to=probe_root)[key]
                     for key in ("bytes", "sha256")
                 },
                 "user_prompt": {
-                    key: file_record(
-                        user_prompt_path, relative_to=probe_root
-                    )[key]
+                    key: file_record(user_prompt_path, relative_to=probe_root)[key]
                     for key in ("bytes", "sha256")
                 },
                 "authority_effect": "none",
             }
         )
-    if len(identities) != 1:
-        raise CampaignError(
-            "installation-surface probes reused a session identity"
-        )
+    if len(identities) != len(providers):
+        raise CampaignError("installation-surface probes reused a session identity")
     return {
-        "schema": (
-            "maude.synthetic-operator.installation-surface-probe-summary.v1"
-        ),
+        "schema": ("maude.synthetic-operator.installation-surface-probe-summary.v1"),
         "attempt_id": attempt_id,
         "completed_at": index.get("completed_at"),
         "probe_index": {
@@ -5006,6 +5576,26 @@ def _installation_surface_probe_summary(
         "maude_wheel": expected_wheel,
         "stateful_pty_contract": contract,
         "providers": sanitized,
+        "successful_provider_configs": observation["successful_provider_configs"],
+        "unavailable_provider_configs": observation["unavailable_provider_configs"],
+        "all_observed_session_identities": sorted(observation["session_identities"]),
+        "unavailable_provider_failures": {
+            provider: {
+                "failure_stage": failure["failure_stage"],
+                "failure_classification": failure["failure_classification"],
+                "provider_process_launch_state": failure[
+                    "provider_process_launch_state"
+                ],
+                "provider_session_identity_observed": failure[
+                    "provider_session_identity_observed"
+                ],
+                "provider_network_attempted": failure["provider_network_attempted"],
+                "provider_network_use_observed": failure[
+                    "provider_network_use_observed"
+                ],
+            }
+            for provider, failure in sorted(observation["unavailable"].items())
+        },
         "session_identities_distinct_from_auth_probes": True,
         "raw_probe_evidence_verified_in_tmp": True,
         "raw_probe_evidence_committed": False,
@@ -5014,7 +5604,8 @@ def _installation_surface_probe_summary(
             "source is readable; no host checkout, release-source archive, or "
             "installation media is mounted."
         ),
-        "all_passed": True,
+        "capability_observation_valid": True,
+        "all_passed": index["all_passed"],
         "authority_effect": "none",
     }
 
@@ -5050,8 +5641,7 @@ def _auth_gate_selftest_summary() -> dict[str, Any]:
         or not isinstance(checks, list)
         or not checks
         or not all(
-            isinstance(item, dict) and item.get("passed") is True
-            for item in checks
+            isinstance(item, dict) and item.get("passed") is True for item in checks
         )
     ):
         raise CampaignError("provider auth-gate fake-process self-test did not pass")
@@ -5063,10 +5653,53 @@ def _auth_gate_selftest_summary() -> dict[str, Any]:
             "bytes": result_path.stat().st_size,
             "sha256": sha256_file(result_path),
         },
-        "checks": [
-            {"name": item.get("name"), "passed": True} for item in checks
-        ],
+        "checks": [{"name": item.get("name"), "passed": True} for item in checks],
         "raw_result_committed": False,
+        "all_passed": True,
+        "authority_effect": "none",
+    }
+
+
+def _provider_assignment_selftest_summary() -> dict[str, Any]:
+    completed = subprocess.run(
+        ["python3", "-B", str(PROVIDER_ASSIGNMENT_SELFTEST)],
+        cwd=HARNESS_DIR,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    try:
+        result = json.loads(completed.stdout)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise CampaignError(
+            "provider assignment self-test did not emit exact JSON"
+        ) from exc
+    if (
+        completed.returncode != 0
+        or not isinstance(result, dict)
+        or result.get("schema")
+        != ("maude.synthetic-operator.provider-assignment-selftest-result.v1")
+        or result.get("campaign_id") != CAMPAIGN_ID
+        or not isinstance(result.get("checks_passed"), int)
+        or isinstance(result.get("checks_passed"), bool)
+        or result["checks_passed"] < 11
+        or result.get("provider_sessions_started") != 0
+        or result.get("task_network_used") is not False
+        or result.get("authority_effect") != "none"
+        or result.get("valid") is not True
+    ):
+        raise CampaignError(
+            "provider assignment provider-free self-test failed: "
+            f"{completed.stderr.strip()}"
+        )
+    return {
+        "schema": ("maude.synthetic-operator.provider-assignment-selftest-summary.v1"),
+        "finalizer": file_record(FINALIZE_PROVIDER_ASSIGNMENTS),
+        "selftest": file_record(PROVIDER_ASSIGNMENT_SELFTEST),
+        "result": result,
+        "provider_sessions_started": 0,
+        "task_network_used": False,
         "all_passed": True,
         "authority_effect": "none",
     }
@@ -5075,18 +5708,12 @@ def _auth_gate_selftest_summary() -> dict[str, Any]:
 def _write_preflight(*, frozen_at: str) -> None:
     initial_observation = _initial_repository_observation()
     git_head = _command_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT)
-    git_branch = _command_output(
-        ["git", "branch", "--show-current"], cwd=REPO_ROOT
-    )
+    git_branch = _command_output(["git", "branch", "--show-current"], cwd=REPO_ROOT)
     git_upstream = _command_output(
         ["git", "rev-parse", "--abbrev-ref", "@{upstream}"], cwd=REPO_ROOT
     )
-    upstream_head = _command_output(
-        ["git", "rev-parse", "@{upstream}"], cwd=REPO_ROOT
-    )
-    origin = _command_output(
-        ["git", "remote", "get-url", "origin"], cwd=REPO_ROOT
-    )
+    upstream_head = _command_output(["git", "rev-parse", "@{upstream}"], cwd=REPO_ROOT)
+    origin = _command_output(["git", "remote", "get-url", "origin"], cwd=REPO_ROOT)
     for label, result in (
         ("HEAD", git_head),
         ("branch", git_branch),
@@ -5106,9 +5733,7 @@ def _write_preflight(*, frozen_at: str) -> None:
         stderr=subprocess.PIPE,
         check=False,
     )
-    tar_commit = tar_commit_process.stdout.decode(
-        "utf-8", errors="replace"
-    ).strip()
+    tar_commit = tar_commit_process.stdout.decode("utf-8", errors="replace").strip()
     if tar_commit_process.returncode != 0 or tar_commit != DOCKET_COMMIT:
         raise CampaignError(
             f"frozen Docket source archive commit ID mismatch: {tar_commit!r}"
@@ -5124,11 +5749,69 @@ def _write_preflight(*, frozen_at: str) -> None:
         "synthetic_runtime_schema": "maude.synthetic-runtime.v1",
     }
     provider_probes = _provider_probe_summary()
-    installation_surface_probes = _installation_surface_probe_summary(
-        provider_probes
-    )
+    installation_surface_probes = _installation_surface_probe_summary(provider_probes)
     grader_surface_probes = _grader_surface_probe_summary()
     auth_gate_selftest = _auth_gate_selftest_summary()
+    assignment_selftest = _provider_assignment_selftest_summary()
+    finalization_errors = finalize_provider_assignments.validate_finalized_matrix()
+    if finalization_errors:
+        raise CampaignError(
+            "provider assignment finalization is not exact: "
+            + "; ".join(finalization_errors)
+        )
+    matrix = load_matrix()
+    capability_assignment = _validate_capability_assignment(
+        matrix=matrix,
+        auth_successes=set(provider_probes["successful_provider_configs"]),
+        installation_successes=set(
+            installation_surface_probes["successful_provider_configs"]
+        ),
+        ordinary_grader_successes=set(
+            grader_surface_probes["successful_provider_configs_by_probe"]["ordinary"]
+        ),
+        installation_grader_successes=set(
+            grader_surface_probes["successful_provider_configs_by_probe"][
+                "installation"
+            ]
+        ),
+    )
+    auth_identities = set(provider_probes["all_observed_session_identities"])
+    installation_identities = set(
+        installation_surface_probes["all_observed_session_identities"]
+    )
+    grader_identities = set(grader_surface_probes["all_observed_session_identities"])
+    if (
+        auth_identities & installation_identities
+        or auth_identities & grader_identities
+        or installation_identities & grader_identities
+    ):
+        raise CampaignError(
+            "capability probes reused an identity across auth, installation, "
+            "or grader surfaces"
+        )
+    provider_boundary_summaries = {
+        value["provider_config"]: {
+            "provider_boundary_kind": value["provider_boundary_kind"],
+            "operator_tools": PROVIDER_MODEL_CONFIGS[value["provider_config"]][
+                "operator_tools"
+            ],
+            "grader_tools": PROVIDER_MODEL_CONFIGS[value["provider_config"]][
+                "grader_tools"
+            ],
+            "built_in_tools": PROVIDER_MODEL_CONFIGS[value["provider_config"]][
+                "built_in_tools"
+            ],
+            "mcp_protocol_version": PROVIDER_MODEL_CONFIGS[value["provider_config"]][
+                "mcp_protocol_version"
+            ],
+            "provider_auth_retained_until_transport_exit": True,
+            "operator_command_broker_receives_credentials": False,
+            "operator_command_broker_receives_semantic_prompt": False,
+            "operator_command_task_level_network": False,
+            "grader_evidence_surface_read_only": True,
+        }
+        for value in provider_probes["providers"]
+    }
     preflight = {
         "schema": "maude.synthetic-operator.preflight.v1",
         "campaign_id": CAMPAIGN_ID,
@@ -5150,12 +5833,9 @@ def _write_preflight(*, frozen_at: str) -> None:
             "preparation_base_commit": PREPARATION_BASE_COMMIT,
             "upstream": git_upstream["stdout"].strip(),
             "upstream_head": upstream_head["stdout"].strip(),
-            "initial_observation": file_record(
-                INITIAL_REPOSITORY_OBSERVATION
-            ),
+            "initial_observation": file_record(INITIAL_REPOSITORY_OBSERVATION),
             "clean_at_campaign_start": (
-                initial_observation["observations"]["status_short"]["stdout"]
-                == ""
+                initial_observation["observations"]["status_short"]["stdout"] == ""
             ),
             "initial_git_status_short": initial_observation["observations"][
                 "status_short"
@@ -5173,84 +5853,53 @@ def _write_preflight(*, frozen_at: str) -> None:
         "required_baseline": SUT_COMMIT,
         "required_preparation_base": PREPARATION_BASE_COMMIT,
         "successor_lineage": file_record(SUCCESSOR_LINEAGE),
-        "rejected_grader_surface_probe_attempt": file_record(
-            REJECTED_GRADER_PROBE_STATUS
-        ),
         "versions": versions,
         "provider_session_capability_probes": provider_probes,
-        "installation_surface_capability_probes": (
-            installation_surface_probes
-        ),
+        "installation_surface_capability_probes": (installation_surface_probes),
         "grader_surface_capability_probes": grader_surface_probes,
         "provider_auth_gate_fake_process_selftest": auth_gate_selftest,
-        "model_family_policy": CODEX_ONLY_MODEL_POLICY,
+        "provider_assignment_provider_free_selftest": assignment_selftest,
+        "deterministic_provider_assignment_validation": {
+            "algorithm": "maude-synthetic-provider-assignment-v1",
+            "finalizer": file_record(FINALIZE_PROVIDER_ASSIGNMENTS),
+            "validation_errors": [],
+            "valid": True,
+            "authority_effect": "none",
+        },
+        "provider_capability_policy": (_provider_capability_policy_record()),
+        "model_family_policy": matrix["model_family_policy"],
+        "role_assignment_capability_validation": capability_assignment,
+        "all_capability_probe_session_identities_distinct": True,
         "isolation_capability_probe": {
             "mechanism": "bubblewrap",
-            "result": "passed by the requested Codex capability probes",
+            "result": (
+                "passed for every provider role assigned by the final matrix; "
+                "stable provider-capability-unavailable observations remain "
+                "recorded for any excluded candidate role"
+            ),
             "repository_source_absent": True,
-            "provider_cli_startup": "passed for Codex only",
-            "claude_capability": {
-                "available": False,
-                "session_permitted": False,
-                "observed_failure": (
-                    "MCP initialization was reached, then Claude authentication "
-                    "failed as expired and unrefreshable before any tool action."
-                ),
-                "local_binary_version_observation_is_not_session_proof": True,
-            },
-            "limitation": (
-                "Only Codex is usable. Provider authentication remains inside a "
-                "task-blind transport namespace until exit. The trusted direct "
-                "stdio shim shares that namespace, so namespace isolation alone "
-                "does not prevent auth access; the frozen shim has no auth-reading "
-                "path and runtime evidence records no auth read. The operator "
-                "broker receives neither credentials nor semantic prompts and "
-                "runs each command in a fresh source/auth-free no-network "
-                "Bubblewrap namespace. Graders receive one read-only evidence "
-                "tool. Same-family grading cannot support a cross-family claim."
+            "provider_cli_startup_passed_provider_configs": provider_probes[
+                "successful_provider_configs"
+            ],
+            "provider_capability_unavailable_configs": provider_probes[
+                "unavailable_provider_configs"
+            ],
+            "provider_role_assignments": capability_assignment["assignments"],
+            "provider_boundaries": provider_boundary_summaries,
+            "provider_network_permitted_only_for_provider_session_transport": (True),
+            "locally_configured_provider_credentials_permitted_only_for_provider_session_transport": (
+                True
             ),
+            "task_level_network_permitted": False,
+            "production_task_systems_or_credentials_permitted": False,
+            "external_operational_side_effects_permitted": False,
+            "limitation": (matrix["model_family_policy"]["limitation"]),
             "resolver_mount": (
-                "The task-blind Codex transport may retain resolver access needed "
-                "for provider transport. Per-command and persistent-PTY task "
-                "namespaces have no external network; only explicitly declared "
-                "synthetic Unix sockets may be bound."
+                "Each task-blind provider transport may retain resolver access "
+                "needed only for provider traffic. Per-command and persistent-"
+                "PTY task namespaces have no external network; only explicitly "
+                "declared synthetic Unix sockets may be bound."
             ),
-            "codex_boundary": {
-                "provider_transport_outside_task_sandbox": True,
-                "operator_tools": CLAUDE_OPERATOR_TOOLS,
-                "grader_tools": CLAUDE_GRADER_TOOLS,
-                "operator_mcp_enabled_tools": CODEX_OPERATOR_TOOLS,
-                "grader_mcp_enabled_tools": CODEX_GRADER_TOOLS,
-                "built_in_tools": [],
-                "intrinsic_action_features_disabled": (
-                    CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
-                ),
-                "optional_features_disabled": CODEX_DISABLED_OPTIONAL_FEATURES,
-                "protocol": CODEX_MCP_PROTOCOL_VERSION,
-                "approval_policy": CODEX_APPROVAL_POLICY,
-                "mcp_default_tools_approval_mode": (
-                    CODEX_MCP_DEFAULT_TOOLS_APPROVAL_MODE
-                ),
-                "exact_one_tool_roster_proved": True,
-                "unexpected_intrinsic_action_policy": "fail-closed",
-                "provider_auth_retained_until_transport_exit": True,
-                "trusted_stdio_shim_shares_transport_namespace": True,
-                "trusted_stdio_shim_auth_read_observed": False,
-                "command_broker_receives_credentials": False,
-                "command_broker_receives_semantic_prompt": False,
-                "per_command_mount_network_pid_namespaces": True,
-                "installation_persistent_pty_broker_separately_sandboxed": True,
-                "request_file_pty_shutdown_and_orphan_cleanup_proved": True,
-                "provider_auth_destroyed_after_transport_exit": True,
-                "normalized_provider_proxy_broker_correlations_proved": True,
-                "unix_socket_addressing": {
-                    "encoded_path_budget_bytes": 100,
-                    "owner_private_short_arenas": True,
-                    "pre_bind_and_connect_budget_checks": True,
-                    "cleanup_proved": True,
-                    "canonical_evidence_paths_preserved": True,
-                },
-            },
         },
         "related_runtime_repositories": {
             "agent_governor": {
@@ -5314,9 +5963,7 @@ def _write_hash_inventory() -> None:
         PACKET_DIR / "hash-inventory.json",
     }
     records = [
-        file_record(path)
-        for path in _artifact_candidates()
-        if path not in excluded
+        file_record(path) for path in _artifact_candidates() if path not in excluded
     ]
     write_json(
         PACKET_DIR / "hash-inventory.json",
@@ -5343,9 +5990,11 @@ def _manifest_markdown(manifest: dict[str, Any]) -> str:
         f"**System under test commit:** `{SUT_COMMIT}`",
         f"**Preparation base commit:** `{PREPARATION_BASE_COMMIT}`",
         (
-            "**Superseded generation:** "
-            "`maude-baseline-20260726T233054-0400` (aborted evaluator "
-            "infrastructure; none of its sessions count here)"
+            "**Superseded generations:** "
+            "`maude-baseline-20260726T233054-0400` and "
+            "`maude-baseline-20260728T032857-0400` (both aborted for "
+            "evaluator-infrastructure defects; none of their sessions, "
+            "grades, or artifacts count as evidence or completion here)"
         ),
         "**Authority effect:** None.",
         "",
@@ -5411,10 +6060,10 @@ def _validate_static_inputs() -> list[str]:
     errors = validate_matrix()
     required = [
         MATRIX_PATH,
+        PROVIDER_CAPABILITY_POLICY_PATH,
         INSTALL_TRACK_PATH,
         INITIAL_REPOSITORY_OBSERVATION,
         SUCCESSOR_LINEAGE,
-        REJECTED_GRADER_PROBE_STATUS,
         PACKET_DIR / "grading-rubric.md",
         PACKET_DIR / "installation-grading-rubric.md",
         PACKET_DIR / "failure-taxonomy.json",
@@ -5434,6 +6083,10 @@ def _validate_static_inputs() -> list[str]:
         HARNESS_DIR / "prepare_installation_media.py",
         HARNESS_DIR / "grader_surface_probe.py",
         HARNESS_DIR / "auth_gate_selftest.py",
+        FINALIZE_PROVIDER_ASSIGNMENTS,
+        PROVIDER_ASSIGNMENT_SELFTEST,
+        AUTH_GATE_PROBE_PATH,
+        INSTALL_SURFACE_PROBE_PATH,
         grader_surface_probe.OUTPUT_ROOT / "index.json",
         HARNESS_DIR / "test_authority_fixtures.py",
         HARNESS_DIR / "test_fixture_fidelity.py",
@@ -5450,8 +6103,12 @@ def _validate_static_inputs() -> list[str]:
     for path in required:
         if not path.is_file():
             errors.append(f"missing required campaign input: {path}")
+    try:
+        _provider_capability_policy()
+    except CampaignError as exc:
+        errors.append(str(exc))
+    errors.extend(finalize_provider_assignments.validate_finalized_matrix())
     errors.extend(_validate_successor_lineage())
-    errors.extend(_validate_rejected_grader_probe_history())
     for path in (
         HARNESS_DIR / "maude",
         HARNESS_DIR / "public_cli.py",
@@ -5498,6 +6155,7 @@ def _validate_static_inputs() -> list[str]:
                 "-B",
                 str(HARNESS_DIR / "grader_surface_probe.py"),
                 "validate",
+                "--allow-provider-capability-unavailable",
             ],
             "grader-surface capability probes",
         ),
@@ -5521,11 +6179,15 @@ def _validate_static_inputs() -> list[str]:
             [
                 "python3",
                 "-B",
-                str(
-                    PACKET_DIR
-                    / "direct-runtime"
-                    / "prepare_controls.py"
-                ),
+                str(PROVIDER_ASSIGNMENT_SELFTEST),
+            ],
+            "provider assignment provider-free regression",
+        ),
+        (
+            [
+                "python3",
+                "-B",
+                str(PACKET_DIR / "direct-runtime" / "prepare_controls.py"),
                 "--validate",
             ],
             "direct-runtime controls",
@@ -5566,59 +6228,131 @@ def _validate_static_inputs() -> list[str]:
 
 
 def _validate_successor_lineage() -> list[str]:
-    """Bind the discarded first generation without importing its evidence."""
+    """Bind both discarded generations without importing their evidence."""
 
     if not SUCCESSOR_LINEAGE.is_file() or SUCCESSOR_LINEAGE.is_symlink():
         return ["successor lineage record is absent or unsafe"]
-    old_root = (
-        EVAL_ROOT
-        / "runs"
-        / "maude-baseline-20260726T233054-0400"
-    )
-    old_manifest = old_root / "packet" / "campaign-manifest.json"
-    old_abort = old_root / "campaign-abort.json"
+    generation_1_root = EVAL_ROOT / "runs" / "maude-baseline-20260726T233054-0400"
+    generation_2_root = EVAL_ROOT / "runs" / "maude-baseline-20260728T032857-0400"
+    generation_1_manifest = generation_1_root / "packet" / "campaign-manifest.json"
+    generation_1_abort = generation_1_root / "campaign-abort.json"
+    generation_2_manifest = generation_2_root / "packet" / "campaign-manifest.json"
+    generation_2_abort = generation_2_root / "campaign-abort.json"
+    generation_2_verifier_gap = generation_2_root / "verifier-gap-reproduction.json"
     expected = {
-        "schema": "maude.synthetic-operator.successor-lineage.v1",
+        "schema": "maude.synthetic-operator.successor-lineage.v2",
         "campaign_id": CAMPAIGN_ID,
-        "generation": 2,
-        "generation_1": {
-            "campaign_id": "maude-baseline-20260726T233054-0400",
-            "campaign_manifest": {
-                "path": str(old_manifest.relative_to(REPO_ROOT)),
-                "bytes": 425984,
-                "sha256": (
-                    "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc96d9d"
-                    "5893729f3e17d"
+        "generation": 3,
+        "preparation_base_commit": PREPARATION_BASE_COMMIT,
+        "system_under_test_commit": SUT_COMMIT,
+        "prior_generations": [
+            {
+                "generation": 1,
+                "campaign_id": ("maude-baseline-20260726T233054-0400"),
+                "campaign_manifest": {
+                    "path": str(generation_1_manifest.relative_to(REPO_ROOT)),
+                    "bytes": 425984,
+                    "sha256": (
+                        "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc"
+                        "96d9d5893729f3e17d"
+                    ),
+                },
+                "packet_commit": ("f9e8caadf194c38384e981baa7cd0b6a5dcac9b1"),
+                "abort_record": {
+                    "path": str(generation_1_abort.relative_to(REPO_ROOT)),
+                    "bytes": 3735,
+                    "sha256": (
+                        "984e165b7472139e770c18cba04a855f8cb2d34c9af93"
+                        "ae600b92d49dfe2f129"
+                    ),
+                },
+                "preservation_commit": ("09af081fbd1326bf4a76d22b19de0aa03663c8f8"),
+                "campaign_disposition": ("aborted-evaluator-infrastructure"),
+                "operator_stage": {
+                    "declared_runs": 35,
+                    "completion_markers": 25,
+                    "unique_provider_session_identities": 25,
+                    "coached_sessions": 0,
+                    "installation_runs_failed_pre_provider": 10,
+                    "installation_provider_sessions_started": 0,
+                },
+                "grading_stage": {
+                    "provider_sessions_started": 24,
+                    "completed_grades": 0,
+                },
+                "failure_summary": (
+                    "Installation materialization and grader schema, "
+                    "argument-size, and evaluator-validation defects "
+                    "invalidated the generation."
                 ),
+                "counts_as_current_campaign_evidence": False,
+                "counts_toward_current_campaign_completion": False,
             },
-            "packet_commit": (
-                "f9e8caadf194c38384e981baa7cd0b6a5dcac9b1"
-            ),
-            "abort_record": {
-                "path": str(old_abort.relative_to(REPO_ROOT)),
-                "bytes": 3735,
-                "sha256": (
-                    "984e165b7472139e770c18cba04a855f8cb2d34c9af93ae600b9"
-                    "2d49dfe2f129"
+            {
+                "generation": 2,
+                "campaign_id": ("maude-baseline-20260728T032857-0400"),
+                "campaign_manifest": {
+                    "path": str(generation_2_manifest.relative_to(REPO_ROOT)),
+                    "bytes": 460487,
+                    "sha256": (
+                        "f9bb0a0c079adf85942a0c9fd1905abcf0833d747ee64"
+                        "f283f3f5322a1ce8ef4"
+                    ),
+                },
+                "packet_commit": ("47f21ca3cca08e93a8428ce8b8f91c4e74cfac3d"),
+                "abort_record": {
+                    "path": str(generation_2_abort.relative_to(REPO_ROOT)),
+                    "bytes": 3957,
+                    "sha256": (
+                        "5abf3a384dfa11d8c7d7e2b270f2957b41c48c5698bd"
+                        "66afae9705ead84b95e1"
+                    ),
+                },
+                "verifier_gap_record": {
+                    "path": str(generation_2_verifier_gap.relative_to(REPO_ROOT)),
+                    "bytes": 3917,
+                    "sha256": (
+                        "7865bad16fa8611b670143313ab8f3e77b2188f7283fd"
+                        "3fcd8c42f24a2d378f2"
+                    ),
+                },
+                "preservation_commit": ("d76b90a0c990016354bb44ff2ab97e4675f7199a"),
+                "campaign_disposition": ("aborted-evaluator-infrastructure"),
+                "operator_stage": {
+                    "declared_runs": 35,
+                    "materialized_runs": 35,
+                    "provider_sessions_started": 17,
+                    "completion_markers": 15,
+                    "completed_unique_provider_session_identities": 15,
+                    "interrupted_provider_session_identities": 2,
+                    "runs_not_started": 18,
+                    "coached_sessions": 0,
+                },
+                "grading_stage": {
+                    "provider_sessions_started": 0,
+                    "completed_grades": 0,
+                },
+                "failure_summary": (
+                    "The frozen verifier accepted missing or semantically "
+                    "invalid command-broker evidence, and a retrospective "
+                    "result-wrapper defect misclassified all 15 completed "
+                    "runs."
                 ),
+                "counts_as_current_campaign_evidence": False,
+                "counts_toward_current_campaign_completion": False,
             },
-            "preservation_commit": (
-                "09af081fbd1326bf4a76d22b19de0aa03663c8f8"
-            ),
-            "sessions_rejected": 25,
-            "completed_grades": 0,
-            "failed_grader_provider_sessions": 24,
-            "installation_runs_failed_pre_provider": 10,
-            "installation_provider_sessions_started": 0,
-        },
+        ],
         "evidence_boundary": {
-            "generation_1_counts_as_successor_evidence": False,
-            "generation_1_counts_toward_successor_completion": False,
-            "successor_full_matrix_rerun_required": True,
+            "prior_generations_count_as_campaign_evidence": False,
+            "prior_generations_count_toward_campaign_completion": False,
+            "current_generation_full_matrix_rerun_required": True,
+            "required_current_generation_run_count": 35,
             "statement": (
-                "Generation-1 sessions, failures, grades, artifacts, and "
-                "findings are preservation and preparation history only; "
-                "none counts as evidence for this successor campaign."
+                "Generations 1 and 2 are immutable preservation and "
+                "preparation history only. Their sessions, failures, grades, "
+                "artifacts, and findings do not count as evidence or "
+                "completion for generation 3; all 35 runs require new fresh "
+                "operator and independent-grader sessions."
             ),
         },
         "authority_effect": "none",
@@ -5630,133 +6364,116 @@ def _validate_successor_lineage() -> list[str]:
     errors: list[str] = []
     if actual != expected:
         errors.append("successor lineage record differs from the exact history")
-    for path, byte_count, digest, label in (
+    history = [
         (
-            old_manifest,
-            425984,
-            expected["generation_1"]["campaign_manifest"]["sha256"],
+            generation_1_manifest,
+            expected["prior_generations"][0]["campaign_manifest"],
             "generation-1 manifest",
+            expected["prior_generations"][0]["packet_commit"],
         ),
         (
-            old_abort,
-            3735,
-            expected["generation_1"]["abort_record"]["sha256"],
+            generation_1_abort,
+            expected["prior_generations"][0]["abort_record"],
             "generation-1 abort record",
+            None,
         ),
-    ):
+        (
+            generation_2_manifest,
+            expected["prior_generations"][1]["campaign_manifest"],
+            "generation-2 manifest",
+            expected["prior_generations"][1]["packet_commit"],
+        ),
+        (
+            generation_2_abort,
+            expected["prior_generations"][1]["abort_record"],
+            "generation-2 abort record",
+            None,
+        ),
+        (
+            generation_2_verifier_gap,
+            expected["prior_generations"][1]["verifier_gap_record"],
+            "generation-2 verifier-gap record",
+            None,
+        ),
+    ]
+    for path, record, label, packet_commit in history:
         if (
             not path.is_file()
             or path.is_symlink()
-            or path.stat().st_size != byte_count
-            or sha256_file(path) != digest
+            or path.stat().st_size != record["bytes"]
+            or sha256_file(path) != record["sha256"]
         ):
             errors.append(f"{label} bytes differ from successor lineage")
-    for commit, label in (
-        (
-            expected["generation_1"]["packet_commit"],
-            "generation-1 packet commit",
-        ),
-        (
-            expected["generation_1"]["preservation_commit"],
-            "generation-1 preservation commit",
-        ),
-    ):
-        observed = subprocess.run(
-            ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
-            cwd=REPO_ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
+            continue
+        preservation_commit = next(
+            generation["preservation_commit"]
+            for generation in expected["prior_generations"]
+            if path.is_relative_to(
+                REPO_ROOT
+                / "evals"
+                / "synthetic-operator"
+                / "runs"
+                / generation["campaign_id"]
+            )
         )
-        if observed.returncode != 0:
-            errors.append(f"{label} is absent from the repository")
-    return errors
-
-
-def _validate_rejected_grader_probe_history() -> list[str]:
-    """Keep the pre-freeze validator failure visible and non-counting."""
-
-    if (
-        not REJECTED_GRADER_PROBE_STATUS.is_file()
-        or REJECTED_GRADER_PROBE_STATUS.is_symlink()
-    ):
-        return ["rejected grader-probe preparation history is absent"]
-    status = load_json(REJECTED_GRADER_PROBE_STATUS)
-    failed_root = REJECTED_GRADER_PROBE_STATUS.parent
-    failed_index = failed_root / "index.json"
-    if not failed_index.is_file() or failed_index.is_symlink():
-        return ["rejected grader-probe index is absent"]
-    index = load_json(failed_index)
-    expected_threads = [
-        "019fa7b8-9489-7b50-8f9d-2dcde1179e23",
-        "019fa7b9-235f-7c33-9f4f-8bf9eba6b0ef",
-    ]
-    errors: list[str] = []
-    required_status = {
-        "schema": (
-            "maude.synthetic-operator."
-            "grader-surface-probe-attempt-status.v1"
-        ),
-        "campaign_id": CAMPAIGN_ID,
-        "campaign_run": False,
-        "status": "rejected-evaluator-index-validation",
-        "provider_sessions_started": 2,
-        "provider_sessions_completed": 2,
-        "provider_thread_ids": expected_threads,
-        "session_results_schema_valid": True,
-        "counts_as_campaign_evidence": False,
-        "counts_as_successor_completion": False,
-        "bound_campaign_runner_sha256": CLAUDE_RUNNER_SHA256,
-        "bound_probe_runner_sha256": (
-            "300c7b764ea84d07cf26d022509e9de4fc681bbb4f6371d2a0c5039542993925"
-        ),
-        "retry_requires_fresh_sessions": True,
-        "raw_evidence_preserved": True,
-        "product_or_documentation_changed": False,
-        "governance_or_oq7_state_changed": False,
-        "network_or_external_operational_effect": False,
-        "authority_effect": "none",
-    }
-    for key, value in required_status.items():
-        if status.get(key) != value:
-            errors.append(
-                f"rejected grader-probe status differs at {key}"
-            )
-    failure = status.get("failure")
-    if (
-        not isinstance(status.get("observed_at"), str)
-        or not status["observed_at"]
-        or not isinstance(failure, dict)
-        or failure.get("class") != "evaluator infrastructure"
-        or failure.get("stage") != "post-session probe self-validation"
-        or failure.get("provider_or_schema_failure") is not False
-    ):
-        errors.append("rejected grader-probe failure facts differ")
-    if (
-        index.get("campaign_id") != CAMPAIGN_ID
-        or index.get("campaign_run") is not False
-        or index.get("all_passed") is not True
-        or index.get("provider_thread_ids") != expected_threads
-        or index.get("distinct_fresh_thread_ids") is not True
-        or index.get("all_jsonschema_validations_passed") is not True
-        or index.get("all_prompts_delivered_by_closed_stdin") is not True
-        or index.get("semantic_prompt_bytes_in_any_argv") is not False
-    ):
-        errors.append("rejected grader-probe preserved index facts differ")
-    for probe_id in ("ordinary", "installation"):
-        result = load_json(failed_root / probe_id / "result.json")
-        if (
-            result.get("campaign_run") is not False
-            or result.get("all_passed") is not True
-            or result.get("authority_effect") != "none"
-            or result.get("probe_runner", {}).get("sha256")
-            != required_status["bound_probe_runner_sha256"]
-            or result.get("campaign_runner", {}).get("sha256")
-            != CLAUDE_RUNNER_SHA256
+        for commit, commit_label in (
+            (preservation_commit, "preservation commit"),
+            (packet_commit, "packet commit"),
         ):
-            errors.append(
-                f"rejected grader-probe {probe_id} result differs"
+            if commit is None:
+                continue
+            observed_bytes = subprocess.run(
+                ["git", "show", f"{commit}:{record['path']}"],
+                cwd=REPO_ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
             )
+            if (
+                observed_bytes.returncode != 0
+                or len(observed_bytes.stdout) != record["bytes"]
+                or hashlib.sha256(observed_bytes.stdout).hexdigest() != record["sha256"]
+            ):
+                errors.append(f"{label} is not exact at its {commit_label}")
+    for generation in expected["prior_generations"]:
+        packet_commit = generation["packet_commit"]
+        preservation_commit = generation["preservation_commit"]
+        for commit, label in (
+            (packet_commit, "packet commit"),
+            (preservation_commit, "preservation commit"),
+        ):
+            observed = subprocess.run(
+                ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
+                cwd=REPO_ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if observed.returncode != 0:
+                errors.append(
+                    f"generation-{generation['generation']} {label} is absent"
+                )
+        for ancestor, descendant, label in (
+            (
+                packet_commit,
+                preservation_commit,
+                "packet commit is not an ancestor of preservation commit",
+            ),
+            (
+                preservation_commit,
+                PREPARATION_BASE_COMMIT,
+                "preservation commit is not an ancestor of preparation base",
+            ),
+        ):
+            observed = subprocess.run(
+                ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+                cwd=REPO_ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if observed.returncode != 0:
+                errors.append(f"generation-{generation['generation']} {label}")
     return errors
 
 
@@ -5765,7 +6482,7 @@ def _validate_final_boundary_bytes() -> list[str]:
 
     expected = {
         HARNESS_DIR / "campaign_runner.py": (
-            568475,
+            624423,
             CLAUDE_RUNNER_SHA256,
         ),
         CLAUDE_MCP_BRIDGE: (56742, CLAUDE_BRIDGE_SHA256),
@@ -5773,16 +6490,24 @@ def _validate_final_boundary_bytes() -> list[str]:
         HARNESS_DIR / "public_cli.py": (6047, PUBLIC_CLI_SHA256),
         PUBLIC_CLI_BROKER: (16736, PUBLIC_CLI_BROKER_SHA256),
         HARNESS_DIR / "auth_gate_selftest.py": (
-            135165,
+            172944,
             AUTH_GATE_SELFTEST_SHA256,
         ),
         HARNESS_DIR / "grader_surface_probe.py": (
-            47388,
+            76821,
             GRADER_SURFACE_PROBE_SHA256,
         ),
         HARNESS_DIR / "campaign_common.py": (
-            31462,
+            39154,
             CAMPAIGN_COMMON_SHA256,
+        ),
+        FINALIZE_PROVIDER_ASSIGNMENTS: (
+            33348,
+            FINALIZE_PROVIDER_ASSIGNMENTS_SHA256,
+        ),
+        PROVIDER_ASSIGNMENT_SELFTEST: (
+            26215,
+            PROVIDER_ASSIGNMENT_SELFTEST_SHA256,
         ),
     }
     errors: list[str] = []
@@ -5807,16 +6532,22 @@ def _validate_provider_boundary_declarations() -> list[str]:
         matrix = load_matrix()
     except CampaignError as exc:
         return [str(exc)]
-    configs = matrix.get("operator_model_configs")
-    if configs != {"openai-sol": CODEX_ONLY_MODEL_CONFIG}:
+    try:
+        _model_execution_configs(matrix)
+        _provider_capability_policy()
+    except CampaignError as exc:
+        errors.append(str(exc))
+    policy = matrix.get("model_family_policy")
+    if (
+        not isinstance(policy, dict)
+        or policy.get("assignment_algorithm")
+        != "maude-synthetic-provider-assignment-v1"
+        or policy.get("separate_fresh_sessions_required") is not True
+        or not isinstance(policy.get("provider_role_eligibility"), dict)
+    ):
         errors.append(
-            "operator model configs differ from the exact Codex-only strict MCP "
-            "declaration"
-        )
-    if matrix.get("model_family_policy") != CODEX_ONLY_MODEL_POLICY:
-        errors.append(
-            "matrix model-family policy differs from the exact Codex-only "
-            "same-family/separate-fresh-session limitation"
+            "matrix model-family policy does not declare the finalized "
+            "provider-role assignment and separate-session boundary"
         )
     if CLAUDE_MCP_BRIDGE.is_file():
         for mode, expected in (
@@ -5913,9 +6644,7 @@ def _validate_bridge_help_neutrality() -> list[str]:
     lowered_help = help_text.casefold()
     lowered_source = source_text.casefold()
     if "maude_public_socket" not in lowered_source:
-        errors.append(
-            "terminal bridge must use only the declared public Unix socket"
-        )
+        errors.append("terminal bridge must use only the declared public Unix socket")
     for private_fragment in (
         "maude_lab_control_dir",
         "control/requests",
@@ -5976,8 +6705,7 @@ def _validate_public_cli_boundary_declarations() -> list[str]:
     )
     missing = [value for value in required_fragments if value not in source]
     errors = [
-        f"public-CLI broker declaration is absent: {value!r}"
-        for value in missing
+        f"public-CLI broker declaration is absent: {value!r}" for value in missing
     ]
     completed = subprocess.run(
         ["python3", "-I", "-B", str(PUBLIC_CLI_BROKER), "--help"],
@@ -6093,12 +6821,8 @@ def freeze(*, dry_run: bool) -> dict[str, Any]:
                 }
                 for source, relative in INSTALL_OPERATOR_DOC_SOURCES
             ],
-            "would_render_runs": [
-                item["run_id"] for item in matrix_runs(matrix)
-            ],
-            "would_freeze_installation_endpoint_plans": sorted(
-                INSTALL_ENDPOINT_SPECS
-            ),
+            "would_render_runs": [item["run_id"] for item in matrix_runs(matrix)],
+            "would_freeze_installation_endpoint_plans": sorted(INSTALL_ENDPOINT_SPECS),
             "would_write": [
                 str(MANIFEST_PATH.relative_to(REPO_ROOT)),
                 str((PACKET_DIR / "manifest.md").relative_to(REPO_ROOT)),
@@ -6151,9 +6875,7 @@ def validate_frozen() -> list[str]:
         if manifest.get("campaign_id") != CAMPAIGN_ID:
             errors.append("campaign manifest ID is wrong")
         errors.extend(validate_manifest_hashes(manifest))
-        expected_paths = {
-            record["path"] for record in _frozen_artifacts()
-        }
+        expected_paths = {record["path"] for record in _frozen_artifacts()}
         actual_paths = set(manifest_artifact_map(manifest))
         if expected_paths != actual_paths:
             errors.append(

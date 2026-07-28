@@ -1,0 +1,47 @@
+# Maude installation task
+
+**Task ID:** `install-task-01`
+**Component:** `Maude`
+
+## Situation
+
+A new disposable operator host has Python 3.12 and the baseline Maude documentation. A synthetic Governor service is already running at the socket named in the handoff. No product checkout or package cache is supplied.
+
+## Goal
+
+Discover the documented setup, install Maude into an isolated environment, configure the supplied endpoint, and complete one meaningful first interaction that proves the client can reach the synthetic service.
+
+## Handoff
+
+```json
+{
+  "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/run/governor.sock",
+  "project_directory": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/project",
+  "service_owner": "synthetic-platform-team"
+}
+```
+
+## Constraints
+
+```json
+{
+  "authority_effect": "none",
+  "external_side_effects": "denied",
+  "network": "denied",
+  "production": "denied",
+  "sibling_checkout_install_or_mutation": "denied",
+  "sudo": "denied"
+}
+```
+
+## Evidence requested
+
+- commands attempted and exact observable responses
+- package and executable state before and after
+- configuration source and resolved endpoint
+- first public Maude result or exact blocking error
+- ownership boundary and final disposition
+
+## Review condition
+
+Conclude only from command, package, executable, connection, and public interface evidence visible in the clean room.

@@ -1,0 +1,3 @@
+{"initialize_accepted":true,"message_ordinal":1,"protocol_event":"initialize-response-flushed","protocol_version_negotiated":"2025-11-25","protocol_version_requested":"2025-11-25","response_sha256":"2cd07d610f2bf149984e64fcb7f6670f356fe5a925540fb86ebf545e81f06363","schema":"maude.synthetic-operator.mcp-correlation-event.v1"}
+{"message_ordinal":2,"protocol_event":"notifications/initialized","protocol_version":"2025-11-25","schema":"maude.synthetic-operator.mcp-correlation-event.v1"}
+{"message_ordinal":3,"protocol_event":"tools-list-response-flushed","protocol_version":"2025-11-25","response_sha256":"8c898b016a72d9eb4a5fde383a76c484d7950740121dc407d6ebe176449dbac1","schema":"maude.synthetic-operator.mcp-correlation-event.v1","tools":["terminal"]}
