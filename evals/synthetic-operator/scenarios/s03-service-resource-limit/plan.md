@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Raise only the api container memory limit from 256Mi to 384Mi; leave requests and CPU limits unchanged."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s03/repo"
+workspace: "/tmp/maude-synth-7a6c6c6e422e/maude-s03/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

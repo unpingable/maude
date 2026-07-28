@@ -20,7 +20,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PERSONAS = ROOT / "personas"
 SCENARIOS = ROOT / "scenarios"
-CAMPAIGN = "maude-synth-maude-baseline-20260728T050937-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T070428-0400"
+CAMPAIGN = (
+    "maude-synth-"
+    + hashlib.sha256(CAMPAIGN_ID.encode("utf-8")).hexdigest()[:12]
+)
 CLOCK = "2026-07-27T03:30:00Z"
 
 # Authority-critical fixture serialization is pinned to this exact Agent

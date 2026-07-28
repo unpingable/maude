@@ -1,0 +1,181 @@
+{
+  "authority_effect": "none",
+  "campaign_run": false,
+  "diagnostic_sha256": "ef8b1706ffefab711a3f8bede6d3bb509cfa6f14291ec7505af143e71a66ac45",
+  "exception_type": "CampaignError",
+  "failure_classification": "provider-capability-unavailable",
+  "failure_stage": "provider-transport",
+  "model_configuration": {
+    "broker_boundary": "Operator commands execute in a fresh source-free, auth-free, no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "browser_enabled": false,
+    "built_in_tools": [],
+    "cli": "claude",
+    "expected_family": "Claude",
+    "freshness": [
+      "--no-session-persistence",
+      "new UUID session id",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_protocol_version": "2025-11-25",
+    "model_argument": "sonnet",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "permission_mode": "bypassPermissions",
+    "provider": "Anthropic",
+    "reasoning_effort": "low",
+    "session_persistence": false,
+    "slash_commands_enabled": false,
+    "strict_mcp_config": true,
+    "tool_boundary": "Strict per-session MCP configuration. The operator receives only mcp__operator__terminal; the grader receives only mcp__grader__evidence. Built-in tools are excluded from the exact provider roster.",
+    "transport_boundary": "Claude runs in a task-blind retained-auth transport with no task paths or task sockets. Its fixed MCP proxy and command broker receive neither provider credentials nor semantic evaluator prompts.",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "partial_evidence": [
+    {
+      "bytes": 2522,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "auth-gate.json",
+      "sha256": "cc4aba9bcf89c714e0c3cc45198fd9c833ebea2aab3d97b43a4c5ee1bc3f8e6f"
+    },
+    {
+      "bytes": 720,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "claude-mcp-boundary/cleanup.json",
+      "sha256": "f564e8e8275124686b4bb842fd752a181b72a6dbd27dab3a42df2afd7b8a7514"
+    },
+    {
+      "bytes": 315,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker-ready.json",
+      "sha256": "8311929645159a9ffd77583b6decbd0bc9acd7249687ecd787c82482e02112ce"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1722,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-policy.json",
+      "sha256": "77910eb62a542cc97068ff25fca126d5fd6438c1f65765b6b9f1daad0eff4fc4"
+    },
+    {
+      "bytes": 4519,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "claude-mcp-boundary/declared-boundary.json",
+      "sha256": "1647162bcdd913f8e450e0003fdfd44c7ad940fba6da085511a3641464e090ba"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/proxy-ready.json",
+      "sha256": "d3b6ec70b2c9c1084f6fc7a0d9fa658e0e2cb7bbc69bcc3bbb519b35d1750e27"
+    },
+    {
+      "bytes": 755,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "004aa77e03afbaaa50b8d51fe1c47c7cad2a6a803149f23330ec5d7b14df06c6"
+    },
+    {
+      "bytes": 11915,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "isolation.json",
+      "sha256": "2d79a715c2a080703509df3c1d6bb6a69661f7c79e69f8f8ade1d58fd2c2adf7"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "provider.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 332,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "system-prompt.md",
+      "sha256": "f9d043c37f174635703c3d3cad807a152e366d9daf44104bb63ea8cf4e5cc3d0"
+    },
+    {
+      "bytes": 3672,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "transcript.jsonl",
+      "sha256": "81bc0599009ebea7ec995e52ab55fe6470b65af3cdede598012ca7dcab3c910b"
+    },
+    {
+      "bytes": 695,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "user-prompt.md",
+      "sha256": "69bd96e8f1a1a174a6f8375d6f6c5335ba60c4870b64e504f19e396f8e485566"
+    }
+  ],
+  "partial_evidence_preserved": true,
+  "provider_config": "anthropic-sonnet",
+  "provider_network_attempted": true,
+  "provider_network_use_observed": "unknown",
+  "provider_process_launch_state": "completed",
+  "provider_process_observation": {
+    "returncode": 1,
+    "timed_out": false
+  },
+  "provider_session_identity_observed": true,
+  "raw_stderr": {
+    "bytes": 0,
+    "media_type": "text/plain",
+    "mode": "0664",
+    "path": "attempts/20260728T112105Z-7468f47e1e96/anthropic-sonnet/provider.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw_transcript": {
+    "bytes": 3672,
+    "media_type": "application/x-ndjson",
+    "mode": "0664",
+    "path": "attempts/20260728T112105Z-7468f47e1e96/anthropic-sonnet/transcript.jsonl",
+    "sha256": "81bc0599009ebea7ec995e52ab55fe6470b65af3cdede598012ca7dcab3c910b"
+  },
+  "retry_or_provider_selection_decision_made": false,
+  "schema": "maude.synthetic-operator.provider-capability-failure.v1",
+  "session_identity": {
+    "configured_model": "sonnet",
+    "provider_reported_model": "claude-sonnet-5",
+    "provider_reported_tools": [
+      "mcp__operator__terminal"
+    ],
+    "provider_session_id": "e884c1ca-63c1-488d-9ed4-3c62c22760b1"
+  },
+  "status": "provider-capability-unavailable",
+  "task_level_network_or_external_operational_effect": false
+}

@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:a4b825779f2ca4eb94640db8196fc7dfaabeff9b614c1ad8550e0bfad042d36d",
-    "source_plan_digest": "sha256:219050adb110071369ff1297a488654604bec7ae9a41f88e92ee5e631fb87b51"
+    "approval_witness_digest": "sha256:36389abe40f503fea3d22b6fcd8c791e1f0f5672f1ab9a286f45a7829d7b6195",
+    "source_plan_digest": "sha256:563afc44e4c7f2bb1a8ccdbe35996c6633e6260b370e35a20ce464a3fdd7ad8c"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -235,7 +235,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:a4b825779f2ca4eb94640db8196fc7dfaabeff9b614c1ad8550e0bfad042d36d",
+    "approval_witness_digest": "sha256:36389abe40f503fea3d22b6fcd8c791e1f0f5672f1ab9a286f45a7829d7b6195",
     "behavior": "normal",
     "commands": [
       {
@@ -249,12 +249,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:4873e763cd161bb5f0245cbca22124676515c4b5407d066216a4a4495893c69f",
-    "grant_id": "sgr_4873e763cd16",
+    "grant_digest": "sha256:d23c551aa799c362cff3059506027b8c2fc73da3d5bca8d5efd2c88ca80394dc",
+    "grant_id": "sgr_d23c551aa799",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:219050adb110071369ff1297a488654604bec7ae9a41f88e92ee5e631fb87b51",
+    "source_plan_digest": "sha256:563afc44e4c7f2bb1a8ccdbe35996c6633e6260b370e35a20ce464a3fdd7ad8c",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -318,7 +318,7 @@
     "base_files": {
       "alerts/menu-latency.yaml": "groups:\n  - name: menu\n    rules:\n      - alert: MenuApiHighLatency\n        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n        for: 10m\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s09/repo"
+    "path": "/tmp/maude-synth-7a6c6c6e422e/maude-s09/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

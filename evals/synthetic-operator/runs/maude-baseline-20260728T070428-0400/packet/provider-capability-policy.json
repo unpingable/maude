@@ -1,0 +1,55 @@
+{
+  "schema": "maude.synthetic-operator.provider-capability-policy.v1",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "candidate_provider_configs": [
+    "openai-sol",
+    "anthropic-sonnet"
+  ],
+  "decision_rule_frozen_before_provider_probes": true,
+  "capability_rules": {
+    "basic_operator_eligibility": "The provider's fresh auth/isolation probe must pass with a fresh session identity and the exact bounded terminal-tool contract.",
+    "installation_operator_eligibility": "The provider must satisfy basic operator eligibility and its fresh installation-surface probe must pass.",
+    "ordinary_grader_eligibility": "The provider must satisfy its fresh auth/isolation probe and a fresh ordinary-grader schema/surface probe.",
+    "installation_grader_eligibility": "The provider must satisfy its fresh auth/isolation probe and a fresh installation-grader schema/surface probe.",
+    "binary_or_credential_presence_is_not_capability": true,
+    "a_provider_failure_does_not_imply_another_provider_passed": true,
+    "a_probe_integrity_failure_invalidates_preparation": true,
+    "a_capability_failure_excludes_only_the_unsupported_provider_role": true,
+    "at_least_one_operator_and_grader_path_must_remain": true
+  },
+  "assignment_rules": {
+    "when_both_families_are_fully_eligible": {
+      "use_both_families_for_representative_ordinary_and_installation_runs": true,
+      "prefer_opposite_family_independent_grading": true,
+      "balance_assignments_deterministically": true
+    },
+    "when_capability_is_partial": {
+      "assign_only_roles_proved_by_the_corresponding_probe": true,
+      "record_same_family_grading_where_unavoidable": true,
+      "make_no_unsupported_cross_family_claim": true
+    },
+    "direct_runtime_comparators_mirror_paired_maude_operator_and_grader_configs": true
+  },
+  "freshness_and_retry": {
+    "every_probe_uses_a_fresh_provider_process": true,
+    "a_session_counts_as_fresh_only_with_a_provider_session_identity": true,
+    "no_resume_continuation_or_follow_up": true,
+    "maximum_attempts_per_provider_and_probe_kind_in_this_campaign_id": 1,
+    "failed_and_partial_attempts_must_be_preserved": true,
+    "retry_after_any_attempt_requires_a_new_campaign_generation": true
+  },
+  "network_and_effect_boundary": {
+    "provider_network_permitted_for_capability_probes_and_later_fresh_campaign_sessions": true,
+    "locally_configured_provider_credentials_permitted_only_for_provider_session_transport": true,
+    "task_level_network_permitted": false,
+    "production_task_systems_or_credentials_permitted": false,
+    "external_operational_side_effects_permitted": false,
+    "synthetic_local_fixture_effects_only": true
+  },
+  "campaign_evidence_boundary": {
+    "capability_probe_sessions_count_as_campaign_runs": false,
+    "capability_probe_sessions_count_toward_role_or_scenario_coverage": false,
+    "capability_probe_sessions_count_as_independent_grades": false
+  },
+  "authority_effect": "none"
+}

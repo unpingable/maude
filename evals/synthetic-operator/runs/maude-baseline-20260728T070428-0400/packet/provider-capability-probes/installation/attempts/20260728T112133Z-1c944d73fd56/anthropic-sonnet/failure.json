@@ -1,0 +1,223 @@
+{
+  "authority_effect": "none",
+  "campaign_run": false,
+  "diagnostic_sha256": "e79b3fd68187e25e3acd2a70c11609ef888ace88f652f4a3a14ab1cf7a6e2778",
+  "exception_type": "CampaignError",
+  "failure_classification": "provider-capability-unavailable",
+  "failure_stage": "provider-transport",
+  "model_configuration": {
+    "broker_boundary": "Operator commands execute in a fresh source-free, auth-free, no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "browser_enabled": false,
+    "built_in_tools": [],
+    "cli": "claude",
+    "expected_family": "Claude",
+    "freshness": [
+      "--no-session-persistence",
+      "new UUID session id",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_protocol_version": "2025-11-25",
+    "model_argument": "sonnet",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "permission_mode": "bypassPermissions",
+    "provider": "Anthropic",
+    "reasoning_effort": "low",
+    "session_persistence": false,
+    "slash_commands_enabled": false,
+    "strict_mcp_config": true,
+    "tool_boundary": "Strict per-session MCP configuration. The operator receives only mcp__operator__terminal; the grader receives only mcp__grader__evidence. Built-in tools are excluded from the exact provider roster.",
+    "transport_boundary": "Claude runs in a task-blind retained-auth transport with no task paths or task sockets. Its fixed MCP proxy and command broker receive neither provider credentials nor semantic evaluator prompts.",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "partial_evidence": [
+    {
+      "bytes": 4487,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "auth-gate.json",
+      "sha256": "5420a2ba78dcf7e550b783f23b8950502a800984b38f55999f8a870300509927"
+    },
+    {
+      "bytes": 2568,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "claude-mcp-boundary/cleanup.json",
+      "sha256": "b5ab4b4caacccb3b5abeae9e60ad20478513d28fe7846fe304b5fc73fa15153a"
+    },
+    {
+      "bytes": 315,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker-ready.json",
+      "sha256": "7c5477ab507a62e257440ba7787d7e51cc330c2fdc72036c67e7137bd3a6a46e"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-broker.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2767,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/command-policy.json",
+      "sha256": "efeb4de0c566a511d95a1e361f126e25a55a2d172c55e3a342a689742854cba0"
+    },
+    {
+      "bytes": 5529,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "claude-mcp-boundary/declared-boundary.json",
+      "sha256": "1b0be5a24dbaf6a30da828e42715d7d431f8c4aabba19add98de2973dfe88d88"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/proxy-ready.json",
+      "sha256": "d3b6ec70b2c9c1084f6fc7a0d9fa658e0e2cb7bbc69bcc3bbb519b35d1750e27"
+    },
+    {
+      "bytes": 755,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "004aa77e03afbaaa50b8d51fe1c47c7cad2a6a803149f23330ec5d7b14df06c6"
+    },
+    {
+      "bytes": 492,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/pty-broker-cleanup.json",
+      "sha256": "c05d2e30a8bae1247000577d76851578cb2466573e415c139d9852c20f30eb6e"
+    },
+    {
+      "bytes": 4783,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "claude-mcp-boundary/pty-broker-invocation.json",
+      "sha256": "b005180ef90562d953fa2ae6ee8ed30c5f17c58e8945511ea6db2ec33816373e"
+    },
+    {
+      "bytes": 222,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/pty-broker-ready.json",
+      "sha256": "229e622d5341c0d23c30e1592f70d21b224bcf320fc3075d066a904b16458605"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/pty-broker.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "claude-mcp-boundary/pty-broker.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 12231,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "isolation.json",
+      "sha256": "5756a69f55e023e7d8f5ae01bf64e156c19449ebd6bd07286e286d981d382df4"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "provider.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 355,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "system-prompt.md",
+      "sha256": "fc8fd07560ea953ee615a1d1592d303f5f1937a13c056a63fab66ead23c595ed"
+    },
+    {
+      "bytes": 5528,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "transcript.jsonl",
+      "sha256": "dba8ec4f92b302550bc777c7be98b101a82d11559edb05b212e45623b88ba9e7"
+    },
+    {
+      "bytes": 2543,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "user-prompt.md",
+      "sha256": "78fab80d92f98b402a1b0b06b6681a8ccfba21ddff8df4175ad2627d0b7b51e7"
+    }
+  ],
+  "partial_evidence_preserved": true,
+  "provider_config": "anthropic-sonnet",
+  "provider_network_attempted": true,
+  "provider_network_use_observed": "unknown",
+  "provider_process_launch_state": "completed",
+  "provider_process_observation": {
+    "returncode": 1,
+    "timed_out": false
+  },
+  "provider_session_identity_observed": true,
+  "raw_stderr": {
+    "bytes": 0,
+    "media_type": "text/plain",
+    "mode": "0664",
+    "path": "attempts/20260728T112133Z-1c944d73fd56/anthropic-sonnet/provider.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw_transcript": {
+    "bytes": 5528,
+    "media_type": "application/x-ndjson",
+    "mode": "0664",
+    "path": "attempts/20260728T112133Z-1c944d73fd56/anthropic-sonnet/transcript.jsonl",
+    "sha256": "dba8ec4f92b302550bc777c7be98b101a82d11559edb05b212e45623b88ba9e7"
+  },
+  "retry_or_provider_selection_decision_made": false,
+  "schema": "maude.synthetic-operator.provider-capability-failure.v1",
+  "session_identity": {
+    "configured_model": "sonnet",
+    "provider_reported_model": "claude-sonnet-5",
+    "provider_reported_tools": [
+      "mcp__operator__terminal"
+    ],
+    "provider_session_id": "33541444-5485-42aa-98af-503a92f0119a"
+  },
+  "status": "provider-capability-unavailable",
+  "task_level_network_or_external_operational_effect": false
+}

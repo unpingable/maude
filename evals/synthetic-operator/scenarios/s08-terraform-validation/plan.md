@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Cap replicas at 50 in the variable validation rule. Validate only; never plan or apply infrastructure."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s08/repo"
+workspace: "/tmp/maude-synth-7a6c6c6e422e/maude-s08/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

@@ -1,0 +1,95 @@
+{
+  "cleanup_errors": [],
+  "command_broker": {
+    "exit_code": 0,
+    "forced_after_graceful_timeout": false,
+    "graceful_exit_requested": false,
+    "label": "Codex command broker",
+    "observed_processes": [
+      570309
+    ],
+    "remaining_processes": []
+  },
+  "private_socket_arena": {
+    "all_removed": true,
+    "directories": [
+      {
+        "directory": "/tmp/maude-sock-7a6c6c6e422e/s-79228a100d018f66896d",
+        "remaining_entries": [],
+        "removed": true
+      },
+      {
+        "directory": "/tmp/maude-sock-7a6c6c6e422e/s-d38acbfcca783e9c1d0f",
+        "remaining_entries": [],
+        "removed": true
+      }
+    ],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-7a6c6c6e422e"
+  },
+  "provider_auth_destroyed": true,
+  "provider_processes_remaining": [],
+  "pty_broker": {
+    "cleanup_report": {
+      "bytes": 703,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "cleanup.json",
+      "sha256": "e48c735ff3443a86726a30ba5de9f862f901522784360af921e7644f9f911f8f"
+    },
+    "exit_code": 0,
+    "forced_after_graceful_timeout": false,
+    "graceful_exit_requested": true,
+    "graceful_shutdown_request": {
+      "request_id": "3ff86dbc76054facb7037d3037890adb",
+      "requested_at": "2026-07-28T11:22:24Z",
+      "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+    },
+    "label": "Codex persistent PTY broker",
+    "observed_processes": [
+      570306,
+      570307,
+      570308
+    ],
+    "remaining_processes": [],
+    "shutdown_control_boundary": {
+      "contains_authority_or_secret": false,
+      "created_after_provider_absent_or_exited": true,
+      "path_visibility": "shared-persistent-pty-namespace",
+      "request_fields": [
+        "request_id",
+        "requested_at",
+        "schema"
+      ],
+      "tamper_or_preexistence_policy": "fail-closed-then-force-stop"
+    },
+    "socket_removed": true
+  },
+  "pty_cleanup": {
+    "all_tracked_ptys_stopped": true,
+    "broker_pid": 2,
+    "completed_at": "2026-07-28T11:22:25Z",
+    "handled_requests": 8,
+    "schema": "maude.synthetic-operator.pty-broker-cleanup.v1",
+    "shutdown_mode": "request-file",
+    "shutdown_request": {
+      "request_id": "3ff86dbc76054facb7037d3037890adb",
+      "requested_at": "2026-07-28T11:22:24Z",
+      "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+    },
+    "shutdown_request_removed": true,
+    "shutdown_signal": null,
+    "socket_removed": true,
+    "tracked_ptys": [
+      {
+        "child_pid": 5,
+        "daemon_pid": 4,
+        "forced_signal": null,
+        "remaining": false,
+        "state_root": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state",
+        "stop_result": null
+      }
+    ]
+  },
+  "schema": "maude.synthetic-operator.codex-boundary-cleanup.v1"
+}

@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:cdd52349855f9ec593bf3f0c16580552c68f819ad15c8269ab62be15688761b4",
-    "source_plan_digest": "sha256:c469c0c07b9b46e005ff3bfdf799dcaf6c52d73b92f02c6089907b8d4ef0d399"
+    "approval_witness_digest": "sha256:ac7f196e44b299124b6a9dc7def0c4967f4fa81070221eec2960b04768323379",
+    "source_plan_digest": "sha256:53a45c482b37e50eea28f65e2140a9c50c5bf2f7347716169d8e001b7682501f"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -240,7 +240,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:cdd52349855f9ec593bf3f0c16580552c68f819ad15c8269ab62be15688761b4",
+    "approval_witness_digest": "sha256:ac7f196e44b299124b6a9dc7def0c4967f4fa81070221eec2960b04768323379",
     "behavior": "normal",
     "commands": [
       {
@@ -256,12 +256,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:85bdf1cf2da908651566e59bb9b003724deb840b5b2da6e2cfc3995b73fb869f",
-    "grant_id": "sgr_85bdf1cf2da9",
+    "grant_digest": "sha256:7196afd4f78f3e8b70e1666288290799080e62ee4a5fb1aa8ce3e9b5a379bdda",
+    "grant_id": "sgr_7196afd4f78f",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:c469c0c07b9b46e005ff3bfdf799dcaf6c52d73b92f02c6089907b8d4ef0d399",
+    "source_plan_digest": "sha256:53a45c482b37e50eea28f65e2140a9c50c5bf2f7347716169d8e001b7682501f",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -328,7 +328,7 @@
       "nginx/nginx.conf": "error_log stderr;\npid /tmp/maude-synthetic-nginx.pid;\n\nevents {}\n\nhttp {\n    upstream order-history-v1 {\n        server 127.0.0.1:18081;\n    }\n    upstream order-history-v2 {\n        server 127.0.0.1:18082;\n    }\n    server {\n        listen 127.0.0.1:18080;\n        include nginx/routes.conf;\n    }\n}\n",
       "nginx/routes.conf": "location /order-history/ {\n    proxy_set_header X-Request-ID $request_id;\n    proxy_pass http://order-history-v1:8080;\n}\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/repo"
+    "path": "/tmp/maude-synth-7a6c6c6e422e/maude-s07/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

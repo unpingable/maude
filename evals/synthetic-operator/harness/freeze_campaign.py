@@ -123,7 +123,7 @@ CLAUDE_BRIDGE_SHA256 = (
     "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
 )
 CLAUDE_RUNNER_SHA256 = (
-    "46f59deaf7a9a2785d05a4b5fab81ed74c158c0c6d80b2d5d8e64834027c52ef"
+    "aa625db34bb6caf75830bfbb15af5f0b69fa91c127bc8809e06c66f3bb9f994f"
 )
 OPERATOR_PTY_SHA256 = "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
 PUBLIC_CLI_SHA256 = "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
@@ -134,7 +134,7 @@ AUTH_GATE_SELFTEST_SHA256 = (
     "d09cdd0b06d59feabfe1216375cf8645bfa0ad585388c2faba38d319b0e53f7e"
 )
 CAMPAIGN_COMMON_SHA256 = (
-    "bb134e1457993830799e1ffa251ae5af21a5e00b303ff35779387bdcaa37b66c"
+    "234b32cb2d2a2f542184c0f1b247154033d184aa357cb1e825335e8108fca4a7"
 )
 GRADER_SURFACE_PROBE_SHA256 = (
     "7e28828f00a98333975ae5dfb9a42a0d8c8941ab332917185a617717b300e854"
@@ -1229,7 +1229,11 @@ def _frozen_session_config(
                     "../work",
                     "../run",
                     "../project",
-                    "../venv",
+                    *(
+                        ["../venv"]
+                        if run["source_visibility"] == "installed-distribution"
+                        else []
+                    ),
                     "../task",
                 ]
             )
@@ -2045,6 +2049,7 @@ def _build_manifest(matrix: dict[str, Any], *, frozen_at: str) -> dict[str, Any]
         "known_campaign_limitations": [
             "Generation 1 (`maude-baseline-20260726T233054-0400`) is preserved as aborted evaluator-infrastructure history. Its 25 operator sessions, 24 failed grader-provider sessions, and 10 pre-provider installation failures do not count as successor evidence or completion; this generation reruns the full 35-run matrix.",
             "Generation 2 (`maude-baseline-20260728T032857-0400`) is preserved as aborted evaluator-infrastructure history. Its 15 completed operator sessions, 2 interrupted provider sessions, 18 unstarted runs, and 0 grades do not count as successor evidence or completion because the frozen verifier accepted missing or semantically invalid command-broker evidence and the retrospective wrapper misclassified all 15 completed runs; this generation reruns the full 35-run matrix.",
+            "Generation 3 (`maude-baseline-20260728T050937-0400`) is preserved as aborted evaluator-infrastructure history. Its 30 completed operator sessions, five pre-session installation failures, and 0 grades do not count as successor evidence or completion because the evaluator declared nonexistent installation venv and unavailable-endpoint socket mounts, and its lab root exceeded the conservative Unix-socket budget; this generation reruns the full 35-run matrix.",
             "This campaign is Round A baseline only. Product and documentation repair is prohibited, so no Round B post-repair comparison or changed-command/display example can be produced in this campaign; those absences must remain explicit in findings.",
             "The Agent Governor service is deterministic synthetic protocol state, not a live daemon.",
             "The Maude terminal is driven headlessly at 120x40; terminal adapter actions are recorded.",
@@ -5992,7 +5997,8 @@ def _manifest_markdown(manifest: dict[str, Any]) -> str:
         (
             "**Superseded generations:** "
             "`maude-baseline-20260726T233054-0400` and "
-            "`maude-baseline-20260728T032857-0400` (both aborted for "
+            "`maude-baseline-20260728T032857-0400`, and "
+            "`maude-baseline-20260728T050937-0400` (all aborted for "
             "evaluator-infrastructure defects; none of their sessions, "
             "grades, or artifacts count as evidence or completion here)"
         ),
@@ -6228,7 +6234,7 @@ def _validate_static_inputs() -> list[str]:
 
 
 def _validate_successor_lineage() -> list[str]:
-    """Bind both discarded generations without importing their evidence."""
+    """Bind three discarded generations without importing their evidence."""
 
     if not SUCCESSOR_LINEAGE.is_file() or SUCCESSOR_LINEAGE.is_symlink():
         return ["successor lineage record is absent or unsafe"]
@@ -6239,10 +6245,16 @@ def _validate_successor_lineage() -> list[str]:
     generation_2_manifest = generation_2_root / "packet" / "campaign-manifest.json"
     generation_2_abort = generation_2_root / "campaign-abort.json"
     generation_2_verifier_gap = generation_2_root / "verifier-gap-reproduction.json"
+    generation_3_root = EVAL_ROOT / "runs" / "maude-baseline-20260728T050937-0400"
+    generation_3_manifest = generation_3_root / "packet" / "campaign-manifest.json"
+    generation_3_abort = generation_3_root / "campaign-abort.json"
+    generation_3_preservation_inventory = (
+        generation_3_root / "commit-artifact-inventory.json"
+    )
     expected = {
-        "schema": "maude.synthetic-operator.successor-lineage.v2",
+        "schema": "maude.synthetic-operator.successor-lineage.v3",
         "campaign_id": CAMPAIGN_ID,
-        "generation": 3,
+        "generation": 4,
         "preparation_base_commit": PREPARATION_BASE_COMMIT,
         "system_under_test_commit": SUT_COMMIT,
         "prior_generations": [
@@ -6341,6 +6353,61 @@ def _validate_successor_lineage() -> list[str]:
                 "counts_as_current_campaign_evidence": False,
                 "counts_toward_current_campaign_completion": False,
             },
+            {
+                "generation": 3,
+                "campaign_id": ("maude-baseline-20260728T050937-0400"),
+                "campaign_manifest": {
+                    "path": str(generation_3_manifest.relative_to(REPO_ROOT)),
+                    "bytes": 497806,
+                    "sha256": (
+                        "ac342a7005e252c979657c1105123cd4614d85e63dcd37"
+                        "d604f3bc55e79e9cac"
+                    ),
+                },
+                "packet_commit": ("bba7875b3448a21586fe7cf1cd4ab7dd223d3782"),
+                "abort_record": {
+                    "path": str(generation_3_abort.relative_to(REPO_ROOT)),
+                    "bytes": 5473,
+                    "sha256": (
+                        "9ec8d8ed1115e220c177231dbb00d13f0d56597a4eaf64"
+                        "ace6390ebcda994f7d"
+                    ),
+                },
+                "preservation_inventory": {
+                    "path": str(
+                        generation_3_preservation_inventory.relative_to(REPO_ROOT)
+                    ),
+                    "bytes": 651898,
+                    "sha256": (
+                        "22108c597b63937b4361ff49f5d4abae4cea9c17031bfd20"
+                        "af96fd204b3347a3"
+                    ),
+                },
+                "preservation_commit": ("631302ff5c690a47eba8c2808044451aecba0bea"),
+                "campaign_disposition": ("aborted-evaluator-infrastructure"),
+                "operator_stage": {
+                    "declared_runs": 35,
+                    "materialized_runs": 35,
+                    "provider_sessions_started": 30,
+                    "completion_markers": 30,
+                    "completed_unique_provider_session_identities": 30,
+                    "pre_session_failures": 5,
+                    "pre_session_failure_provider_identities": 0,
+                    "coached_sessions": 0,
+                },
+                "grading_stage": {
+                    "provider_sessions_started": 0,
+                    "completed_grades": 0,
+                },
+                "failure_summary": (
+                    "The evaluator declared nonexistent installation venv and "
+                    "unavailable-endpoint socket mounts, and its lab root "
+                    "exceeded the conservative Unix-socket budget; all "
+                    "generation-3 evidence is non-counting."
+                ),
+                "counts_as_current_campaign_evidence": False,
+                "counts_toward_current_campaign_completion": False,
+            },
         ],
         "evidence_boundary": {
             "prior_generations_count_as_campaign_evidence": False,
@@ -6348,10 +6415,10 @@ def _validate_successor_lineage() -> list[str]:
             "current_generation_full_matrix_rerun_required": True,
             "required_current_generation_run_count": 35,
             "statement": (
-                "Generations 1 and 2 are immutable preservation and "
+                "Generations 1, 2, and 3 are immutable preservation and "
                 "preparation history only. Their sessions, failures, grades, "
                 "artifacts, and findings do not count as evidence or "
-                "completion for generation 3; all 35 runs require new fresh "
+                "completion for generation 4; all 35 runs require new fresh "
                 "operator and independent-grader sessions."
             ),
         },
@@ -6393,6 +6460,24 @@ def _validate_successor_lineage() -> list[str]:
             generation_2_verifier_gap,
             expected["prior_generations"][1]["verifier_gap_record"],
             "generation-2 verifier-gap record",
+            None,
+        ),
+        (
+            generation_3_manifest,
+            expected["prior_generations"][2]["campaign_manifest"],
+            "generation-3 manifest",
+            expected["prior_generations"][2]["packet_commit"],
+        ),
+        (
+            generation_3_abort,
+            expected["prior_generations"][2]["abort_record"],
+            "generation-3 abort record",
+            None,
+        ),
+        (
+            generation_3_preservation_inventory,
+            expected["prior_generations"][2]["preservation_inventory"],
+            "generation-3 preservation inventory",
             None,
         ),
     ]
@@ -6482,7 +6567,7 @@ def _validate_final_boundary_bytes() -> list[str]:
 
     expected = {
         HARNESS_DIR / "campaign_runner.py": (
-            624423,
+            631228,
             CLAUDE_RUNNER_SHA256,
         ),
         CLAUDE_MCP_BRIDGE: (56742, CLAUDE_BRIDGE_SHA256),
@@ -6498,7 +6583,7 @@ def _validate_final_boundary_bytes() -> list[str]:
             GRADER_SURFACE_PROBE_SHA256,
         ),
         HARNESS_DIR / "campaign_common.py": (
-            39154,
+            39235,
             CAMPAIGN_COMMON_SHA256,
         ),
         FINALIZE_PROVIDER_ASSIGNMENTS: (

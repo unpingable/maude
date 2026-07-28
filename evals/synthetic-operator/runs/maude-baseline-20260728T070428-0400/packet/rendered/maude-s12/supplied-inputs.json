@@ -1,0 +1,139 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s12",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s12/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2358,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s12/operator-prompt.md",
+    "sha256": "b6ebdf0c76f293f3144a7ac6007c913e9020be2e4917d9be14e43892fdcfd69f"
+  },
+  "visible_files": [
+    {
+      "bytes": 60,
+      "destination": "../repo/governance/AUTHORITY.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/fixture/governance/AUTHORITY.md",
+      "sha256": "fe7791482c810575c46d03bc1cc500d8748373319ef23c8ec287a5c8d2157351"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 894,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s12/operator-task.md",
+      "sha256": "8d1edc9e2a893549b2d2d511bc260fc91580bf9fbf641c37e0e7a47cb393ddf7"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-12",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/lab_approval_ux-task-12",
+      "sha256": "fc3051cf11730ade870e4bbaac0c1e0fb4d8e73df0ea651538d627c25c2a1dd3"
+    },
+    {
+      "bytes": 637,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/packet.json",
+      "sha256": "d25dedc3966a28afcc77d25ff9524bea105c84a0757a2497afa29ee872d27fbc"
+    },
+    {
+      "bytes": 1749,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/plan.md",
+      "sha256": "5f5776868c36a1d985387d1a8397b057a5610871c076776c822f616752bccd1d"
+    },
+    {
+      "bytes": 213,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/playbook.json",
+      "sha256": "b95e772404075633b10ef5950cc8a300626e644173e9ba638c2e0fccf8307013"
+    },
+    {
+      "bytes": 201,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/ration-card.json",
+      "sha256": "d7aa38ed86dec4a9de0193bfd60bc9138ad8064c0602985704b1320da7488442"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s12-governance-file-mutation/runtime.json",
+    "evals/synthetic-operator/scenarios/s12-governance-file-mutation/patch.diff",
+    "evals/synthetic-operator/scenarios/s12-governance-file-mutation/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

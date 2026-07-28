@@ -1,7 +1,7 @@
 {
   "endpoint_owner": "synthetic-platform-team",
-  "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/run/governor.sock",
-  "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/venv",
-  "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/venv/bin/maude",
+  "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/run/governor.sock",
+  "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/venv",
+  "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/venv/bin/maude",
   "sudo_authorized": false
 }

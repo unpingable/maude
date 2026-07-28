@@ -159,12 +159,13 @@ separately sandboxed persistent PTY broker so an interactive child can survive
 across model tool calls; each tool call remains a disposable command-sandbox
 client operation.
 
-Canonical long campaign and evidence paths remain unchanged in manifests,
-transcripts, and reports. Short owner-private AF_UNIX socket arenas are an
-internal transport indirection only. The runner checks the encoded address
-length before every bind or connect, enforces a maximum of 100 bytes, and
-records owner permissions and cleanup of the short arena without substituting
-its path for the canonical evidence identity.
+Campaign and evidence paths remain exact in manifests, transcripts, and
+reports. The disposable lab root uses a campaign-ID-derived short name so
+operator-visible AF_UNIX endpoints also stay inside the 100-byte address
+budget. Additional owner-private socket arenas are internal transport
+indirections only. The runner checks the encoded address length before every
+bind or connect and records owner permissions and cleanup without substituting
+an internal transport path for the evidence identity.
 
 If a public request times out after it has been queued, the broker reports a
 retained unknown and preserves the queue correlation; it does not imply that

@@ -1,0 +1,798 @@
+{
+  "all_actions_read_only_evidence": true,
+  "all_jsonschema_validations_passed": true,
+  "all_large_user_assignments_excluded_from_argv": true,
+  "all_local_failure_class_uniqueness_checks_passed": true,
+  "all_passed": false,
+  "all_prompts_exceed_131072_bytes": true,
+  "all_provider_actions_represented_once": true,
+  "all_requested_provider_probe_attempts_recorded": true,
+  "all_schema_digests_exact": true,
+  "artifact_inventory_excluding_indexes": [
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 373,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/cleanup.json",
+      "sha256": "3de0ae8286638485927aa24ae492fc1b4aada90301e76c1497867c141d48bc55"
+    },
+    {
+      "bytes": 5314,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/failure.json",
+      "sha256": "5ad742d147523a2be76202763bd945fe8d5c6ee5a2333f9acf8aed4f89c7d778"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 12164,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/grade-bundle/installation-grader-output.schema.json",
+      "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+    },
+    {
+      "bytes": 1808,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/grade-bundle/probe-facts.json",
+      "sha256": "76551c1afd06ad5bc3a93aac2b7bbc1ab9692a35dd33315142697a3dce0bdcd2"
+    },
+    {
+      "bytes": 57097,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/invocation.json",
+      "sha256": "6437f6c0add01956af5b0e8385ef69258ab9e7552a1025a9d7a24cbb8d4ab533"
+    },
+    {
+      "bytes": 12538,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/isolation-result.json",
+      "sha256": "38c446b65c1aeb76910317c3af42ea5e245867e3cdb3b9a33be267dc5dc43058"
+    },
+    {
+      "bytes": 321,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/raw/claude-mcp-boundary/cleanup.json",
+      "sha256": "1be3d2906350b520c2b03cc33cd6479ee81f2087031ce1c57d567008cf2b4bcb"
+    },
+    {
+      "bytes": 4086,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/raw/claude-mcp-boundary/declared-boundary.json",
+      "sha256": "58ab9d29b209f78feeec192c56f7961e3b5b76fc3af0454315cca96b9ac8ea7b"
+    },
+    {
+      "bytes": 122,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/raw/grader.stderr",
+      "sha256": "d8a1e758a0885d376f7a2457d829c53f27040ef929246fb4e28105670fb743de"
+    },
+    {
+      "bytes": 0,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/raw/grader.stdout.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1244,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/raw/provider-auth-gate.json",
+      "sha256": "d9c0e6aac1970b5a1be44686bf87f0269da7610b74072f8fd41c6250a9ebd66f"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 149233,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/user-prompt.md",
+      "sha256": "fa928ea42f2010ea690dbfd5d6627316d78f295525dd9a41c23c3af3fec2e060"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 369,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/cleanup.json",
+      "sha256": "d4a7c9bba4e6d9b2ee2677b93ab5bdaa4d90e3ff715bfda0a84ff9bb6441fb44"
+    },
+    {
+      "bytes": 5296,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/failure.json",
+      "sha256": "134fc2b021e3a4dff54e986f1666476d05816c78ca36b828ee254869d64f677b"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 7414,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/grade-bundle/grader-output.schema.json",
+      "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+    },
+    {
+      "bytes": 1482,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/grade-bundle/probe-facts.json",
+      "sha256": "8acb0576b80467e2c0a1046cd4ba4966035a59743e751a9aaf2af232af712d37"
+    },
+    {
+      "bytes": 41160,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/invocation.json",
+      "sha256": "c880edfe4b0e17376ee635c19bb6697a81442c3e731be8478bce505f19c9171f"
+    },
+    {
+      "bytes": 12442,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/isolation-result.json",
+      "sha256": "254bc46dc1ae52f195ff2ab16f5d1344850885ee02bce1dcb17a2dcf78d17b7c"
+    },
+    {
+      "bytes": 321,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/raw/claude-mcp-boundary/cleanup.json",
+      "sha256": "1be3d2906350b520c2b03cc33cd6479ee81f2087031ce1c57d567008cf2b4bcb"
+    },
+    {
+      "bytes": 4042,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/raw/claude-mcp-boundary/declared-boundary.json",
+      "sha256": "f5765b835e7db61bdafdd41dc04e755907f0525f6c087e73a9472b7315ce0f73"
+    },
+    {
+      "bytes": 122,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/raw/grader.stderr",
+      "sha256": "d8a1e758a0885d376f7a2457d829c53f27040ef929246fb4e28105670fb743de"
+    },
+    {
+      "bytes": 0,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/raw/grader.stdout.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1244,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/raw/provider-auth-gate.json",
+      "sha256": "f2294a282f4ed50511a091cb386b72f24b18b3acf82ecc26be713a59ebba514f"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 149190,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/user-prompt.md",
+      "sha256": "b369146a96c63fbfb6e457b26787979734ce15a896a53f64d76d362195fe870b"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/action-accounting.json",
+      "sha256": "a593bf6b8ef956bb827666d0dd67998a19fd2f3fa92b1b98ae71fc363f2bafac"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/clean-home-after.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 332,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/cleanup.json",
+      "sha256": "3b833f08a0e130ec5d43ab6fc3df68351ed0e6fe1ea3660b91179993afd50c62"
+    },
+    {
+      "bytes": 4182,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/commands-and-actions.json",
+      "sha256": "a0e6bbb2a13ac6e38c04e5cd1205dfb21b990b8e9b1f9ac3f492d62e2b5d7a95"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 12164,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/grade-bundle/installation-grader-output.schema.json",
+      "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+    },
+    {
+      "bytes": 1808,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/grade-bundle/probe-facts.json",
+      "sha256": "76551c1afd06ad5bc3a93aac2b7bbc1ab9692a35dd33315142697a3dce0bdcd2"
+    },
+    {
+      "bytes": 7663,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/grade.json",
+      "sha256": "6ff5214121c8f373f310d280ad6033eb8d66f7cfaa513816eb7c80dce08f8b84"
+    },
+    {
+      "bytes": 21940,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/invocation.json",
+      "sha256": "e79e0b51a1079bf2ab925422d8714affd5bf14f71dc296ceb56d41d9d16b72ae"
+    },
+    {
+      "bytes": 14623,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/isolation-result.json",
+      "sha256": "8695c27bdc24bc604882d1323d528f7c028d5a43593be763bbb2e9dac9166c9b"
+    },
+    {
+      "bytes": 320,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3082,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "4984b55a814682e0a26ca15862899bd7dc72588420c03d255dbb861c1c0d0caa"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "2ceef41a319f4617c6dac028f7c7f4499966fed6d20de3b85634d17d221a02e8"
+    },
+    {
+      "bytes": 3732,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "1999f2029ab52947505fe6bfd137ab68191fa0276edabe48e9afa35d72854236"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 10202,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/grader.stdout.jsonl",
+      "sha256": "a08a0be645ff1747d09fc339a44a8d8d46ed3f6d957293601274f0879c40e098"
+    },
+    {
+      "bytes": 7190,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/raw/provider-auth-gate.json",
+      "sha256": "fe033bfd4c72e9a431efa0caff7c05a50dd8d9990a27f86d542adb14b9bf2440"
+    },
+    {
+      "bytes": 23038,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/result.json",
+      "sha256": "47436ed67435e3524e95c146cd78be198cfccddcc92f53682223c17146b55f98"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/session-safety-audit.json",
+      "sha256": "1bb7a97859d10d3ce33bdf4249d73adf96d9cb30e09d3ef0054da6986fb10c83"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 179201,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/transcript.txt",
+      "sha256": "5ed633685e2f7aa4015ff4ca83bad5640bdf4f52cd219db309f042b77238cc45"
+    },
+    {
+      "bytes": 149233,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/user-prompt.md",
+      "sha256": "fa928ea42f2010ea690dbfd5d6627316d78f295525dd9a41c23c3af3fec2e060"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/action-accounting.json",
+      "sha256": "a593bf6b8ef956bb827666d0dd67998a19fd2f3fa92b1b98ae71fc363f2bafac"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/clean-home-after.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 328,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/cleanup.json",
+      "sha256": "7d9398c07f7462c577d3e45fa4244cf04a55425eea94629883d0e3bf08cd3989"
+    },
+    {
+      "bytes": 3770,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/commands-and-actions.json",
+      "sha256": "a2bbc38f70d856922cf2dced1551e14a474067e1ea42241c149e40fc01bd3f7c"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 7414,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/grade-bundle/grader-output.schema.json",
+      "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+    },
+    {
+      "bytes": 1482,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/grade-bundle/probe-facts.json",
+      "sha256": "8acb0576b80467e2c0a1046cd4ba4966035a59743e751a9aaf2af232af712d37"
+    },
+    {
+      "bytes": 4972,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/grade.json",
+      "sha256": "f5be32c0efc435ab1fd869892d66c3590067872de89a0c0029fcacc63de1bf51"
+    },
+    {
+      "bytes": 21798,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/invocation.json",
+      "sha256": "4f5d29709aacff401eaa4da0890335e82c181777bbd04fed8e54f385c4bf1990"
+    },
+    {
+      "bytes": 14503,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/isolation-result.json",
+      "sha256": "f19f80e3b6f991791cbb678c9c779ddc488e8da14909d0947e5e1d93f43b9c88"
+    },
+    {
+      "bytes": 320,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3062,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "36aff853f4de9e1091337e4e3a9a98d7413a100d1e221161719839e61089b5f1"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "6425d13e226a7402a98b6ae310a6da2b98835bf50918f5e69f92372eeb8947a7"
+    },
+    {
+      "bytes": 3320,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "8afc0aa8c468787a2b149deabb300f805c31969d2cf0f0f8a1f8421d4a673b4e"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 7400,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/grader.stdout.jsonl",
+      "sha256": "2a9c5511bb7d3e13fa888a26baf7491a1b297de7e13e5dc4ba125bc652eb5d66"
+    },
+    {
+      "bytes": 6778,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/raw/provider-auth-gate.json",
+      "sha256": "9e573f325478d1de24369e9ebe5a77ad865773c094e46c188d9367a9a5b69c3a"
+    },
+    {
+      "bytes": 22565,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/result.json",
+      "sha256": "b187215902da9dd87204fe650ff465ee1ab1696b2002fd472cff2380d687fa2e"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/session-safety-audit.json",
+      "sha256": "1bb7a97859d10d3ce33bdf4249d73adf96d9cb30e09d3ef0054da6986fb10c83"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 177306,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/transcript.txt",
+      "sha256": "43840495bd5fed5d4a4192cc54d03cadf272b5472bdf929e0c22fbf922017c78"
+    },
+    {
+      "bytes": 149190,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/user-prompt.md",
+      "sha256": "b369146a96c63fbfb6e457b26787979734ce15a896a53f64d76d362195fe870b"
+    }
+  ],
+  "attempt_id": "20260728T112243Z-0b20f43f6dfa",
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "campaign_run": false,
+  "campaign_runner": {
+    "bytes": 631228,
+    "media_type": "text/x-python",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/harness/campaign_runner.py",
+    "sha256": "aa625db34bb6caf75830bfbb15af5f0b69fa91c127bc8809e06c66f3bb9f994f"
+  },
+  "capability_observation_valid": true,
+  "completed_at": "2026-07-28T11:23:52Z",
+  "distinct_fresh_session_identities": true,
+  "exact_successor_schema_digests": {
+    "installation": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4",
+    "ordinary": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+  },
+  "failed_provider_probe_pairs": [
+    "anthropic-sonnet/ordinary",
+    "anthropic-sonnet/installation"
+  ],
+  "grader_system_prompt": {
+    "bytes": 777,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "prompts/grader-system.md",
+    "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+  },
+  "invalid_probe_pairs": [],
+  "minimum_prompt_bytes_required": 131073,
+  "no_resume_continue_followup_or_coaching": true,
+  "not_requested_provider_configs": [],
+  "probe_runner": {
+    "bytes": 76821,
+    "media_type": "text/x-python",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/harness/grader_surface_probe.py",
+    "sha256": "7e28828f00a98333975ae5dfb9a42a0d8c8941ab332917185a617717b300e854"
+  },
+  "prompt_transport_methods": [
+    "closed-stdin"
+  ],
+  "provider_capability_policy": {
+    "bytes": 2970,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "provider-capability-policy.json",
+    "sha256": "516f9702b0cc2d0e05a6a7c11971e451d704db778dda27cef95a52fe8a5678a5"
+  },
+  "provider_model_configurations": {
+    "anthropic-sonnet": {
+      "broker_boundary": "Operator commands execute in a fresh source-free, auth-free, no-network mount/PID namespace. The grader evidence tool is read-only.",
+      "browser_enabled": false,
+      "built_in_tools": [],
+      "cli": "claude",
+      "expected_family": "Claude",
+      "freshness": [
+        "--no-session-persistence",
+        "new UUID session id",
+        "fresh provider process",
+        "no resume, continuation, or follow-up"
+      ],
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "live_web_search_enabled": false,
+      "mcp_protocol_version": "2025-11-25",
+      "model_argument": "sonnet",
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "permission_mode": "bypassPermissions",
+      "provider": "Anthropic",
+      "reasoning_effort": "low",
+      "session_persistence": false,
+      "slash_commands_enabled": false,
+      "strict_mcp_config": true,
+      "tool_boundary": "Strict per-session MCP configuration. The operator receives only mcp__operator__terminal; the grader receives only mcp__grader__evidence. Built-in tools are excluded from the exact provider roster.",
+      "transport_boundary": "Claude runs in a task-blind retained-auth transport with no task paths or task sockets. Its fixed MCP proxy and command broker receive neither provider credentials nor semantic evaluator prompts.",
+      "user_mcp_and_connector_config_loaded": false
+    },
+    "openai-sol": {
+      "approval_policy": "never",
+      "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+      "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+      "built_in_tools": [],
+      "cli": "codex",
+      "exact_provider_tool_allowlist_supported": true,
+      "expected_family": "GPT",
+      "freshness": [
+        "--ephemeral",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "fresh provider process",
+        "no resume, continuation, or follow-up"
+      ],
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "intrinsic_action_features_explicitly_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "live_web_search_enabled": false,
+      "mcp_auto_approval_safety": {
+        "exact_enabled_tool_count_per_role": 1,
+        "grader_evidence_tool_read_only": true,
+        "mcp_config_hash_pinned": true,
+        "operator_terminal_bounded_by_frozen_broker": true
+      },
+      "mcp_default_tools_approval_mode": "approve",
+      "mcp_protocol_version": "2025-06-18",
+      "model_argument": "gpt-5.6-sol",
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "optional_features_explicitly_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "provider": "OpenAI",
+      "reasoning_effort": "low",
+      "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+      "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+      "unexpected_intrinsic_action_policy": "fail-closed",
+      "user_mcp_and_connector_config_loaded": false
+    }
+  },
+  "provider_network_permitted_for_probe_sessions": true,
+  "provider_probe_outcomes": [
+    {
+      "authority_effect": "none",
+      "campaign_run": false,
+      "probe_id": "ordinary",
+      "provider_config": "openai-sol",
+      "result": {
+        "bytes": 22565,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/ordinary/result.json",
+        "sha256": "b187215902da9dd87204fe650ff465ee1ab1696b2002fd472cff2380d687fa2e"
+      },
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa876-778d-78d2-b421-6969c437022a"
+      },
+      "status": "available",
+      "surface": "maude"
+    },
+    {
+      "authority_effect": "none",
+      "campaign_run": false,
+      "probe_id": "installation",
+      "provider_config": "openai-sol",
+      "result": {
+        "bytes": 23038,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112243Z-0b20f43f6dfa/openai-sol/installation/result.json",
+        "sha256": "47436ed67435e3524e95c146cd78be198cfccddcc92f53682223c17146b55f98"
+      },
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa876-ee19-7122-95d9-005a211c508e"
+      },
+      "status": "available",
+      "surface": "maude-installation"
+    },
+    {
+      "authority_effect": "none",
+      "campaign_run": false,
+      "failure": {
+        "bytes": 5296,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/ordinary/failure.json",
+        "sha256": "134fc2b021e3a4dff54e986f1666476d05816c78ca36b828ee254869d64f677b"
+      },
+      "probe_id": "ordinary",
+      "provider_config": "anthropic-sonnet",
+      "session_identity": {},
+      "status": "provider-capability-unavailable",
+      "surface": "maude"
+    },
+    {
+      "authority_effect": "none",
+      "campaign_run": false,
+      "failure": {
+        "bytes": 5314,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112243Z-0b20f43f6dfa/anthropic-sonnet/installation/failure.json",
+        "sha256": "5ad742d147523a2be76202763bd945fe8d5c6ee5a2333f9acf8aed4f89c7d778"
+      },
+      "probe_id": "installation",
+      "provider_config": "anthropic-sonnet",
+      "session_identity": {},
+      "status": "provider-capability-unavailable",
+      "surface": "maude-installation"
+    }
+  ],
+  "provider_session_identities": [
+    {
+      "identity": "019fa876-778d-78d2-b421-6969c437022a",
+      "probe_id": "ordinary",
+      "provider_config": "openai-sol"
+    },
+    {
+      "identity": "019fa876-ee19-7122-95d9-005a211c508e",
+      "probe_id": "installation",
+      "provider_config": "openai-sol"
+    }
+  ],
+  "raw_evidence_committed": false,
+  "raw_evidence_location": "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/grader-surface-probes/attempts/20260728T112243Z-0b20f43f6dfa",
+  "requested_provider_configs": [
+    "openai-sol",
+    "anthropic-sonnet"
+  ],
+  "schema": "maude.synthetic-operator.grader-surface-probes.v2",
+  "successful_provider_probe_pairs": [
+    "openai-sol/ordinary",
+    "openai-sol/installation"
+  ],
+  "task_level_network_or_external_operational_effect": false,
+  "unavailable_provider_probe_pairs": [
+    "anthropic-sonnet/ordinary",
+    "anthropic-sonnet/installation"
+  ]
+}

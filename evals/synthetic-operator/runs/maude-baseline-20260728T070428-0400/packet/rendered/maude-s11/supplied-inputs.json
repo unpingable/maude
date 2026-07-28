@@ -1,0 +1,147 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s11",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s11/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2232,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s11/operator-prompt.md",
+    "sha256": "ae1161eaf2bf5c0f8e08d0fba16617503e4f50ae0de55146473f9df4dcad177b"
+  },
+  "visible_files": [
+    {
+      "bytes": 47,
+      "destination": "../repo/apps/menu/deployment.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/fixture/apps/menu/deployment.yaml",
+      "sha256": "54e6abcfb42a82d36e5bf74b28c061686f584f90d703851c8371d178d7817e47"
+    },
+    {
+      "bytes": 47,
+      "destination": "../repo/apps/payments/deployment.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/fixture/apps/payments/deployment.yaml",
+      "sha256": "3073602260b7806571ff5d23e825f16effaeeae2f04b6f0d8afc3f0244f9323b"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 829,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s11/operator-task.md",
+      "sha256": "65bf9d90b59f276a958af921551b6bba1f116855fa61f8cca80938943d34db4a"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-11",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/lab_approval_ux-task-11",
+      "sha256": "877805e6f1e2b400c74b32f24c11c615a909be677f773ccf0f8778e519621c25"
+    },
+    {
+      "bytes": 597,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/packet.json",
+      "sha256": "b90bb6f30d9f1d48e7f48e0798a8ad4ad614b4223771b3dc308609fe941f1d9a"
+    },
+    {
+      "bytes": 1666,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/plan.md",
+      "sha256": "11b1e9c0404c4f7653fa1b8f515c1bdfe510d62c3b6999b96f88e9ca12607091"
+    },
+    {
+      "bytes": 173,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/playbook.json",
+      "sha256": "63e284a0cee639596b7558c53292edd03e7c1aafb2a7c11cd66f436d86a65ea3"
+    },
+    {
+      "bytes": 199,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/ration-card.json",
+      "sha256": "3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/runtime.json",
+    "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/patch.diff",
+    "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

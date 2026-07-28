@@ -202,6 +202,21 @@ def _checked_unix_socket_path(path: Path, *, label: str) -> Path:
     return path
 
 
+def _require_real_unix_socket(path: Path, *, label: str) -> Path:
+    """Fail closed unless *path* is an existing, non-symlink AF_UNIX socket."""
+
+    _checked_unix_socket_path(path, label=label)
+    try:
+        path_stat = path.lstat()
+    except FileNotFoundError as exc:
+        raise CampaignError(f"{label}: Unix socket source is absent") from exc
+    if path.is_symlink() or not stat.S_ISSOCK(path_stat.st_mode):
+        raise CampaignError(
+            f"{label}: Unix socket source is not a real AF_UNIX socket"
+        )
+    return path
+
+
 def _private_socket_directory(*, label: str) -> Path:
     """Allocate one short, owner-private arena for a single socket."""
 
@@ -408,6 +423,70 @@ def validate_packet() -> list[str]:
             path = REPO_ROOT / str(run.get(field, ""))
             if not path.is_file():
                 errors.append(f"{run.get('run_id')}: missing {field}: {path}")
+    errors.extend(_validate_installation_endpoint_policies(manifest))
+    return errors
+
+
+def _validate_installation_endpoint_policies(
+    manifest: dict[str, Any],
+) -> list[str]:
+    """Provider-free preflight of every frozen installation boundary plan."""
+
+    errors: list[str] = []
+    installation_runs = [
+        run
+        for run in manifest.get("runs", [])
+        if run.get("surface") == "maude-installation"
+    ]
+    if len(installation_runs) != 10:
+        errors.append(
+            "installation boundary preflight requires exactly 10 frozen "
+            f"installation runs, found {len(installation_runs)}"
+        )
+    active_modes = {"compatible", "incompatible-schema", "wrong-service"}
+    for run in installation_runs:
+        run_id = str(run.get("run_id", "<unknown>"))
+        plan_path = PACKET_DIR / "installation-endpoints" / f"{run_id}.json"
+        if not plan_path.is_file():
+            errors.append(f"{run_id}: frozen installation endpoint plan missing")
+            continue
+        plan = load_json(plan_path)
+        mode = plan.get("mode")
+        strategy = plan.get("socket_strategy")
+        chmod = plan.get("chmod")
+        if mode == "none":
+            if strategy != "none" or chmod is not None:
+                errors.append(
+                    f"{run_id}: none endpoint must have strategy none and "
+                    "no socket permissions"
+                )
+        elif mode == "unavailable":
+            if strategy not in {"task_handoff", "default_governor_dir"}:
+                errors.append(
+                    f"{run_id}: unavailable endpoint must retain a "
+                    "configured socket strategy"
+                )
+            if chmod is not None:
+                errors.append(
+                    f"{run_id}: unavailable endpoint must not declare "
+                    "socket permissions"
+                )
+        elif mode in active_modes:
+            if strategy not in {"task_handoff", "default_governor_dir"}:
+                errors.append(
+                    f"{run_id}: active endpoint requires a real socket "
+                    "strategy"
+                )
+            if not isinstance(chmod, str) or not re.fullmatch(r"0[0-7]{3}", chmod):
+                errors.append(
+                    f"{run_id}: active endpoint requires an octal socket "
+                    "permission mode"
+                )
+        else:
+            errors.append(
+                f"{run_id}: unsupported frozen installation endpoint mode "
+                f"{mode!r}"
+            )
     return errors
 
 
@@ -2655,6 +2734,7 @@ def _surface_mount_policy(
     run: dict[str, Any],
     operator_home: Path,
     *,
+    endpoint_mode: str | None = None,
     endpoint_socket: Path | None = None,
     public_cli_socket: Path | None = None,
 ) -> tuple[Path, list[dict[str, str]], list[dict[str, str]], dict[str, str]]:
@@ -2693,7 +2773,9 @@ def _surface_mount_policy(
         mount(operator_home, "rw", OPERATOR_HOME_MOUNT)
         mount(operator_home, "rw")
         mount(repo, "ro")
-        mount(install_root / "venv", "rw")
+        installed_venv = install_root / "venv"
+        if installed_venv.exists():
+            mount(installed_venv, "rw")
         xdg_runtime = install_root / "run" / "xdg"
         mount(xdg_runtime, "rw")
         environment["XDG_RUNTIME_DIR"] = str(xdg_runtime)
@@ -2733,15 +2815,67 @@ def _surface_mount_policy(
         environment["GWR_BROKER_BIN"] = str(
             operator / "bin" / "gwr-git-broker"
         )
-    if endpoint_socket is not None:
-        _checked_unix_socket_path(
-            endpoint_socket,
-            label=f"{run['run_id']} installation endpoint",
+    if endpoint_mode is not None:
+        if not installation:
+            raise CampaignError(
+                f"{run['run_id']}: endpoint mode is valid only for the "
+                "installation surface"
+            )
+        if endpoint_mode == "none":
+            if endpoint_socket is not None:
+                raise CampaignError(
+                    f"{run['run_id']}: endpoint mode none must not have a "
+                    "socket path"
+                )
+        elif endpoint_mode == "unavailable":
+            if endpoint_socket is None:
+                raise CampaignError(
+                    f"{run['run_id']}: unavailable endpoint lacks its "
+                    "configured socket path"
+                )
+            _checked_unix_socket_path(
+                endpoint_socket,
+                label=f"{run['run_id']} unavailable installation endpoint",
+            )
+            if endpoint_socket.exists() or endpoint_socket.is_symlink():
+                raise CampaignError(
+                    f"{run['run_id']}: unavailable endpoint must be absent "
+                    "and must not be mounted"
+                )
+            # Preserve the operator's configured endpoint while deliberately
+            # withholding an absent source from the terminal namespace.
+            environment["GOVERNOR_SOCKET"] = str(endpoint_socket)
+        elif endpoint_mode in {
+            "compatible",
+            "incompatible-schema",
+            "wrong-service",
+        }:
+            if endpoint_socket is None:
+                raise CampaignError(
+                    f"{run['run_id']}: active endpoint mode lacks a socket "
+                    "path"
+                )
+            _require_real_unix_socket(
+                endpoint_socket,
+                label=f"{run['run_id']} installation endpoint",
+            )
+            sockets.append(
+                {
+                    "source": str(endpoint_socket),
+                    "target": str(endpoint_socket),
+                }
+            )
+            environment["GOVERNOR_SOCKET"] = str(endpoint_socket)
+        else:
+            raise CampaignError(
+                f"{run['run_id']}: unknown installation endpoint mode "
+                f"{endpoint_mode!r}"
+            )
+    elif endpoint_socket is not None:
+        raise CampaignError(
+            f"{run['run_id']}: endpoint socket requires explicit endpoint "
+            "mode semantics"
         )
-        sockets.append(
-            {"source": str(endpoint_socket), "target": str(endpoint_socket)}
-        )
-        environment["GOVERNOR_SOCKET"] = str(endpoint_socket)
     return operator, mounts, sockets, environment
 
 
@@ -3030,6 +3164,7 @@ def _claude_operator_boundary_for_run(
     run: dict[str, Any],
     provider_home: Path,
     *,
+    endpoint_mode: str | None = None,
     endpoint_socket: Path | None = None,
     public_cli_socket: Path | None = None,
 ) -> tuple[dict[str, Any], Path, Path]:
@@ -3045,6 +3180,7 @@ def _claude_operator_boundary_for_run(
     cwd, mounts, sockets, environment = _surface_mount_policy(
         run,
         operator_home,
+        endpoint_mode=endpoint_mode,
         endpoint_socket=endpoint_socket,
         public_cli_socket=public_cli_socket,
     )
@@ -3247,12 +3383,14 @@ def _codex_operator_boundary_for_run(
     run: dict[str, Any],
     provider_home: Path,
     *,
+    endpoint_mode: str | None = None,
     endpoint_socket: Path | None = None,
     public_cli_socket: Path | None = None,
 ) -> tuple[dict[str, Any], Path, Path]:
     boundary, cwd, operator_home = _claude_operator_boundary_for_run(
         run,
         provider_home,
+        endpoint_mode=endpoint_mode,
         endpoint_socket=endpoint_socket,
         public_cli_socket=public_cli_socket,
     )
@@ -12172,7 +12310,14 @@ def _endpoint_stat(path: Path | None) -> dict[str, Any]:
 def _start_installation_endpoint(
     run: dict[str, Any],
     evidence: Path,
-) -> tuple[ManagedProcess | None, Path | None]:
+) -> tuple[ManagedProcess | None, str, Path | None]:
+    """Start and validate the frozen endpoint, returning its exact binding.
+
+    ``unavailable`` deliberately retains a configured path without mounting a
+    source.  ``none`` has no configured path.  Every other supported mode
+    returns only after its source is a real AF_UNIX socket.
+    """
+
     lab = _lab_dir(run["run_id"])
     private = lab / "private-install"
     materialization = load_json(
@@ -12181,12 +12326,40 @@ def _start_installation_endpoint(
     mode = materialization["mode"]
     raw_socket = materialization.get("resolved_socket")
     socket_path = Path(raw_socket) if raw_socket else None
-    if mode in {"none", "unavailable"}:
+    if mode == "none":
+        if socket_path is not None:
+            raise CampaignError(
+                f"{run['run_id']}: endpoint mode none must not resolve a "
+                "socket path"
+            )
         write_json(
             evidence / "observable" / "endpoint-before.json",
             _endpoint_stat(socket_path),
         )
-        return None, socket_path
+        return None, mode, socket_path
+    if mode == "unavailable":
+        if socket_path is None:
+            raise CampaignError(
+                f"{run['run_id']}: unavailable endpoint lacks a configured "
+                "socket path"
+            )
+        _checked_unix_socket_path(
+            socket_path,
+            label=f"{run['run_id']} unavailable installation endpoint",
+        )
+        if socket_path.exists() or socket_path.is_symlink():
+            raise CampaignError(
+                f"{run['run_id']}: unavailable endpoint must be absent"
+            )
+        write_json(
+            evidence / "observable" / "endpoint-before.json",
+            _endpoint_stat(socket_path),
+        )
+        return None, mode, socket_path
+    if mode not in {"compatible", "incompatible-schema", "wrong-service"}:
+        raise CampaignError(
+            f"{run['run_id']}: unknown endpoint mode {mode!r}"
+        )
     if socket_path is None:
         raise CampaignError(
             f"{run['run_id']}: active endpoint mode lacks a socket path"
@@ -12211,7 +12384,7 @@ def _start_installation_endpoint(
             str(state / "rpc-transcript.jsonl"),
         ]
         ready = state / "runtime-ready.json"
-    elif mode in {"incompatible-schema", "wrong-service"}:
+    else:
         ready = state / "endpoint-ready.json"
         argv = [
             sys.executable,
@@ -12226,10 +12399,6 @@ def _start_installation_endpoint(
             "--trace",
             str(state / "endpoint-transcript.jsonl"),
         ]
-    else:
-        raise CampaignError(
-            f"{run['run_id']}: unknown endpoint mode {mode!r}"
-        )
     process = ManagedProcess(
         argv,
         cwd=lab,
@@ -12238,17 +12407,20 @@ def _start_installation_endpoint(
     )
     _wait_ready(ready, process)
     socket_path.chmod(int(str(materialization["chmod"]), 8))
-    public_stat = _endpoint_stat(socket_path)
-    if not public_stat.get("is_socket"):
-        process.stop()
-        raise CampaignError(
-            f"{run['run_id']}: endpoint fixture did not create a Unix socket"
+    try:
+        _require_real_unix_socket(
+            socket_path,
+            label=f"{run['run_id']} installation endpoint",
         )
+    except CampaignError:
+        process.stop()
+        raise
+    public_stat = _endpoint_stat(socket_path)
     write_json(
         evidence / "observable" / "endpoint-before.json",
         public_stat,
     )
-    return process, socket_path
+    return process, mode, socket_path
 
 
 def _archive_failed_operator_attempt(
@@ -12360,6 +12532,8 @@ def run_operator(
     driver_exit: int | None = None
     public_cli_broker_exit: int | None = None
     public_cli_socket: Path | None = None
+    installation_endpoint_mode: str | None = None
+    endpoint_socket: Path | None = None
     boundary: dict[str, Any] | None = None
     no_identity_failure = False
     try:
@@ -12444,24 +12618,28 @@ def run_operator(
                 public_cli_broker_process,
             )
         elif run["surface"] == "maude-installation":
-            runtime_process, _installation_socket = (
+            (
+                runtime_process,
+                installation_endpoint_mode,
+                endpoint_socket,
+            ) = (
                 _start_installation_endpoint(run, evidence)
             )
-
-        endpoint_socket = (
-            Path(materialized["endpoint_socket"])
             if (
-                run["surface"] == "maude-installation"
-                and materialized.get("endpoint_socket")
-                and materialized.get("endpoint_mode") != "none"
-            )
-            else None
-        )
+                installation_endpoint_mode != materialized.get("endpoint_mode")
+                or (str(endpoint_socket) if endpoint_socket else None)
+                != materialized.get("endpoint_socket")
+            ):
+                raise CampaignError(
+                    f"{run_id}: validated endpoint binding differs from "
+                    "materialized installation evidence"
+                )
         if run["operator_model_config"] == "anthropic-sonnet":
             boundary, cwd, operator_home = (
                 _claude_operator_boundary_for_run(
                     run,
                     provider_home,
+                    endpoint_mode=installation_endpoint_mode,
                     endpoint_socket=endpoint_socket,
                     public_cli_socket=public_cli_socket,
                 )
@@ -12472,6 +12650,7 @@ def run_operator(
                 _codex_operator_boundary_for_run(
                     run,
                     provider_home,
+                    endpoint_mode=installation_endpoint_mode,
                     endpoint_socket=endpoint_socket,
                     public_cli_socket=public_cli_socket,
                 )
@@ -12652,11 +12831,7 @@ def run_operator(
                 install_root,
                 evidence / "observable" / "installation-after",
                 label="after",
-                allowed_socket=(
-                    Path(materialized["endpoint_socket"])
-                    if materialized.get("endpoint_socket")
-                    else None
-                ),
+                allowed_socket=endpoint_socket,
             )
             _capture_install_operator_generated(
                 run,
@@ -12665,11 +12840,7 @@ def run_operator(
             )
             write_json(
                 evidence / "observable" / "endpoint-after.json",
-                _endpoint_stat(
-                    Path(materialized["endpoint_socket"])
-                    if materialized.get("endpoint_socket")
-                    else None
-                ),
+                _endpoint_stat(endpoint_socket),
             )
         else:
             _capture_repo(

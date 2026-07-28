@@ -15,14 +15,18 @@ from pathlib import Path
 from typing import Any
 
 
-CAMPAIGN_ID = "maude-baseline-20260728T050937-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T070428-0400"
 SUT_COMMIT = "9d5a54f476a52826379a9ae8d6710551253a6493"
 ROOT = Path(__file__).resolve().parents[3]
 SCENARIOS = Path(__file__).resolve().parent
 PERSONAS = SCENARIOS.parent / "personas"
 PACKET = SCENARIOS.parent / "runs" / CAMPAIGN_ID / "packet"
 TRACK_PATH = PACKET / "installation-track.json"
-LAB_ROOT = Path(f"/tmp/maude-synth-{CAMPAIGN_ID}")
+LAB_SLUG = (
+    "maude-synth-"
+    + hashlib.sha256(CAMPAIGN_ID.encode("utf-8")).hexdigest()[:12]
+)
+LAB_ROOT = Path("/tmp") / LAB_SLUG
 
 PERSONA_TEXT = {
     "installation-shortest-path-sre": """\

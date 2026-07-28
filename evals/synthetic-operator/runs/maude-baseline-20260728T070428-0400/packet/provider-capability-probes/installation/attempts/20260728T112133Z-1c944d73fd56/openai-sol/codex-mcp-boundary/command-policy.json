@@ -1,0 +1,70 @@
+{
+  "bwrap": "/usr/bin/bwrap",
+  "cleanroom": {
+    "empty": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/empty",
+    "etc": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/etc",
+    "masked": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/masked"
+  },
+  "cwd": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work",
+  "environment": {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GOVERNOR_SOCKET": "/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/broker.sock",
+    "HOME": "/home/operator",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "NO_COLOR": "1",
+    "OPERATOR_PTY_SOCKET": "/run/operator-pty/broker.sock",
+    "PATH": "/usr/bin:/bin",
+    "PIP_CACHE_DIR": "/home/operator/.cache/pip",
+    "PIP_CONFIG_FILE": "/dev/null",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "TERM": "xterm-256color",
+    "TMPDIR": "/home/operator/tmp",
+    "USER": "operator",
+    "XDG_CACHE_HOME": "/home/operator/.cache",
+    "XDG_CONFIG_HOME": "/home/operator/.config",
+    "XDG_DATA_HOME": "/home/operator/.local/share",
+    "XDG_STATE_HOME": "/home/operator/.local/state"
+  },
+  "forbidden_prefixes": [
+    "/home/jbeck/git/agent_gov_ui",
+    "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/private-provider-home",
+    "/run/provider-auth"
+  ],
+  "home": "/home/operator",
+  "mounts": [
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/project",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/project"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/home",
+      "target": "/home/operator"
+    }
+  ],
+  "schema": "maude.synthetic-operator.command-broker-policy.v1",
+  "sockets": [
+    {
+      "source": "/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/broker.sock",
+      "target": "/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/broker.sock"
+    },
+    {
+      "source": "/tmp/maude-sock-7a6c6c6e422e/s-d38acbfcca783e9c1d0f/broker.sock",
+      "target": "/run/operator-pty/broker.sock"
+    }
+  ]
+}

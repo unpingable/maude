@@ -1,0 +1,127 @@
+{
+  "schema": "maude.synthetic-operator.successor-lineage.v3",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "generation": 4,
+  "preparation_base_commit": "631302ff5c690a47eba8c2808044451aecba0bea",
+  "system_under_test_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+  "prior_generations": [
+    {
+      "generation": 1,
+      "campaign_id": "maude-baseline-20260726T233054-0400",
+      "campaign_manifest": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/campaign-manifest.json",
+        "bytes": 425984,
+        "sha256": "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc96d9d5893729f3e17d"
+      },
+      "packet_commit": "f9e8caadf194c38384e981baa7cd0b6a5dcac9b1",
+      "abort_record": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/campaign-abort.json",
+        "bytes": 3735,
+        "sha256": "984e165b7472139e770c18cba04a855f8cb2d34c9af93ae600b92d49dfe2f129"
+      },
+      "preservation_commit": "09af081fbd1326bf4a76d22b19de0aa03663c8f8",
+      "campaign_disposition": "aborted-evaluator-infrastructure",
+      "operator_stage": {
+        "declared_runs": 35,
+        "completion_markers": 25,
+        "unique_provider_session_identities": 25,
+        "coached_sessions": 0,
+        "installation_runs_failed_pre_provider": 10,
+        "installation_provider_sessions_started": 0
+      },
+      "grading_stage": {
+        "provider_sessions_started": 24,
+        "completed_grades": 0
+      },
+      "failure_summary": "Installation materialization and grader schema, argument-size, and evaluator-validation defects invalidated the generation.",
+      "counts_as_current_campaign_evidence": false,
+      "counts_toward_current_campaign_completion": false
+    },
+    {
+      "generation": 2,
+      "campaign_id": "maude-baseline-20260728T032857-0400",
+      "campaign_manifest": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/campaign-manifest.json",
+        "bytes": 460487,
+        "sha256": "f9bb0a0c079adf85942a0c9fd1905abcf0833d747ee64f283f3f5322a1ce8ef4"
+      },
+      "packet_commit": "47f21ca3cca08e93a8428ce8b8f91c4e74cfac3d",
+      "abort_record": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/campaign-abort.json",
+        "bytes": 3957,
+        "sha256": "5abf3a384dfa11d8c7d7e2b270f2957b41c48c5698bd66afae9705ead84b95e1"
+      },
+      "verifier_gap_record": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/verifier-gap-reproduction.json",
+        "bytes": 3917,
+        "sha256": "7865bad16fa8611b670143313ab8f3e77b2188f7283fd3fcd8c42f24a2d378f2"
+      },
+      "preservation_commit": "d76b90a0c990016354bb44ff2ab97e4675f7199a",
+      "campaign_disposition": "aborted-evaluator-infrastructure",
+      "operator_stage": {
+        "declared_runs": 35,
+        "materialized_runs": 35,
+        "provider_sessions_started": 17,
+        "completion_markers": 15,
+        "completed_unique_provider_session_identities": 15,
+        "interrupted_provider_session_identities": 2,
+        "runs_not_started": 18,
+        "coached_sessions": 0
+      },
+      "grading_stage": {
+        "provider_sessions_started": 0,
+        "completed_grades": 0
+      },
+      "failure_summary": "The frozen verifier accepted missing or semantically invalid command-broker evidence, and a retrospective result-wrapper defect misclassified all 15 completed runs.",
+      "counts_as_current_campaign_evidence": false,
+      "counts_toward_current_campaign_completion": false
+    },
+    {
+      "generation": 3,
+      "campaign_id": "maude-baseline-20260728T050937-0400",
+      "campaign_manifest": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/campaign-manifest.json",
+        "bytes": 497806,
+        "sha256": "ac342a7005e252c979657c1105123cd4614d85e63dcd37d604f3bc55e79e9cac"
+      },
+      "packet_commit": "bba7875b3448a21586fe7cf1cd4ab7dd223d3782",
+      "abort_record": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/campaign-abort.json",
+        "bytes": 5473,
+        "sha256": "9ec8d8ed1115e220c177231dbb00d13f0d56597a4eaf64ace6390ebcda994f7d"
+      },
+      "preservation_inventory": {
+        "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/commit-artifact-inventory.json",
+        "bytes": 651898,
+        "sha256": "22108c597b63937b4361ff49f5d4abae4cea9c17031bfd20af96fd204b3347a3"
+      },
+      "preservation_commit": "631302ff5c690a47eba8c2808044451aecba0bea",
+      "campaign_disposition": "aborted-evaluator-infrastructure",
+      "operator_stage": {
+        "declared_runs": 35,
+        "materialized_runs": 35,
+        "provider_sessions_started": 30,
+        "completion_markers": 30,
+        "completed_unique_provider_session_identities": 30,
+        "pre_session_failures": 5,
+        "pre_session_failure_provider_identities": 0,
+        "coached_sessions": 0
+      },
+      "grading_stage": {
+        "provider_sessions_started": 0,
+        "completed_grades": 0
+      },
+      "failure_summary": "The evaluator declared nonexistent installation venv and unavailable-endpoint socket mounts, and its lab root exceeded the conservative Unix-socket budget; all generation-3 evidence is non-counting.",
+      "counts_as_current_campaign_evidence": false,
+      "counts_toward_current_campaign_completion": false
+    }
+  ],
+  "evidence_boundary": {
+    "prior_generations_count_as_campaign_evidence": false,
+    "prior_generations_count_toward_campaign_completion": false,
+    "current_generation_full_matrix_rerun_required": true,
+    "required_current_generation_run_count": 35,
+    "statement": "Generations 1, 2, and 3 are immutable preservation and preparation history only. Their sessions, failures, grades, artifacts, and findings do not count as evidence or completion for generation 4; all 35 runs require new fresh operator and independent-grader sessions."
+  },
+  "authority_effect": "none"
+}

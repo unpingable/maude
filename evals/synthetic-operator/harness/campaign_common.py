@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-CAMPAIGN_ID = "maude-baseline-20260728T050937-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T070428-0400"
 SUT_COMMIT = "9d5a54f476a52826379a9ae8d6710551253a6493"
-PREPARATION_BASE_COMMIT = "9e366fae778602f1355e9467814c89b54832893f"
+PREPARATION_BASE_COMMIT = "631302ff5c690a47eba8c2808044451aecba0bea"
 DOCKET_COMMIT = "9050a53cd8a4741d71f5334f90eb22dac52eeb62"
 
 HARNESS_DIR = Path(__file__).resolve().parent
@@ -31,7 +31,11 @@ MANIFEST_PATH = PACKET_DIR / "campaign-manifest.json"
 PROVIDER_CAPABILITY_POLICY_PATH = (
     PACKET_DIR / "provider-capability-policy.json"
 )
-LAB_ROOT = Path("/tmp") / f"maude-synth-{CAMPAIGN_ID}"
+LAB_SLUG = (
+    "maude-synth-"
+    + hashlib.sha256(CAMPAIGN_ID.encode("utf-8")).hexdigest()[:12]
+)
+LAB_ROOT = Path("/tmp") / LAB_SLUG
 PROVIDER_CAPABILITY_PROBE_ROOT = (
     PACKET_DIR / "provider-capability-probes"
 )

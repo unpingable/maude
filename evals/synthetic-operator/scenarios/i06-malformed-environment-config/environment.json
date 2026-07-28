@@ -1,6 +1,6 @@
 {
   "authority_effect": "none",
-  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
   "capture": [
     "complete provider transcript",
     "all shell commands and outputs",
@@ -12,11 +12,11 @@
     "network and sibling-access denial evidence"
   ],
   "clean_room": {
-    "home": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/home",
+    "home": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/home",
     "host_config_inherited": false,
     "host_environment_inherited": false,
     "host_source_mounted": false,
-    "initial_cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/operator",
+    "initial_cwd": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/operator",
     "installed_distribution_module_bytes_mounted": true,
     "operator_task_network": "denied by the provider tool sandbox; attempts are recorded",
     "pip": "24.0",
@@ -26,18 +26,18 @@
     "provider_transport_network": "retained for the model session only",
     "python": "3.12.3",
     "read_only_paths": [
-      "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/media",
-      "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/docs"
+      "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/media",
+      "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/docs"
     ],
     "release_source_archive_mounted": false,
-    "root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation",
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation",
     "sibling_checkout_mounted": false,
     "writable_paths": [
-      "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/home",
-      "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/operator",
-      "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/work"
+      "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/home",
+      "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/operator",
+      "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/work"
     ],
-    "xdg_runtime_dir": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i06/installation/run"
+    "xdg_runtime_dir": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run"
   },
   "fault_profile": "shell_environment_file_has_parse_error",
   "governor_state": "available",

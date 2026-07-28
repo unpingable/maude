@@ -1,0 +1,33 @@
+{
+  "allowed_tools": [
+    "mcp__grader__evidence"
+  ],
+  "built_in_tools_allowed": [],
+  "error": "Claude MCP never reached flushed tools/list readiness; semantic prompt was withheld",
+  "exception_type": "CampaignError",
+  "host_source_mounted_in_mcp_or_command": false,
+  "identity": null,
+  "mcp_config_sha256": "acf05ea83affc03e82584404a90387e16f968d1185ca8a80298f17c34cab5d90",
+  "mcp_protocol_version": "2025-11-25",
+  "prompt_event_sha256": "08968936638b1c68139026924f786ca2352427e65d6f8d813bcb590d5178fb46",
+  "prompt_sent_after_tools_list_flush": false,
+  "provider_auth_destroyed": true,
+  "provider_auth_files": [
+    ".claude.json",
+    ".claude/.credentials.json",
+    ".claude/settings.json"
+  ],
+  "provider_auth_mounted_in_mcp_or_command": false,
+  "provider_auth_retained_until_transport_exit": true,
+  "provider_auth_values_recorded": false,
+  "provider_config": "anthropic-sonnet",
+  "provider_transport_outside_task_sandbox": true,
+  "provider_tree_remaining": [],
+  "proxy_runtime_proofs": [],
+  "recorded_at": "2026-07-28T11:23:52Z",
+  "schema": "maude.synthetic-operator.claude-provider-boundary.v1",
+  "status": "failed-closed",
+  "tool_actions": [],
+  "tool_results": [],
+  "transport_metadata_path_disclosures": []
+}

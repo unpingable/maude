@@ -1,0 +1,139 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s19",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s19/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2416,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s19/operator-prompt.md",
+    "sha256": "54f397b9e2dbd31c366c37ca82e05e4032e4c484b72d843292adee09f6f4cba9"
+  },
+  "visible_files": [
+    {
+      "bytes": 21,
+      "destination": "../repo/config/cache.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/fixture/config/cache.yaml",
+      "sha256": "a2311d93ab4f739f6b0c4ce57445caaa30989b469afde1de4c79e259dc18fabb"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 834,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s19/operator-task.md",
+      "sha256": "f5e78c44ea537ede4202437a51251ad2d484ea6ba8bc46cb3e96508d0435a0a9"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-19",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/lab_approval_ux-task-19",
+      "sha256": "1ea3e7b703718d525a5aa09466893c86bdbe014dfeb5bbf94412f00cf8899e72"
+    },
+    {
+      "bytes": 641,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/packet.json",
+      "sha256": "68e2712d6dbd8c94d98bdb85564a55f137c0ba77d0eb640e97c0c25585180e86"
+    },
+    {
+      "bytes": 1762,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/plan.md",
+      "sha256": "e5200add87cad53fadc5ef1212c7e44c59749da3d30298c6bd824df8b79ea213"
+    },
+    {
+      "bytes": 217,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/playbook.json",
+      "sha256": "e583b98f8ee0e8e0a98a1cf8299caf25352ea095cc234aabd460a0ce3129963d"
+    },
+    {
+      "bytes": 209,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/ration-card.json",
+      "sha256": "3aa4ad30af8b17a585b79a688f232e6b5cf0a8a26439aaf3b85a6a223a2ff6da"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s19-discard-restoration/runtime.json",
+    "evals/synthetic-operator/scenarios/s19-discard-restoration/patch.diff",
+    "evals/synthetic-operator/scenarios/s19-discard-restoration/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

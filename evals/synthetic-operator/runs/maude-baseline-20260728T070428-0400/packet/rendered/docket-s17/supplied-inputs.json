@@ -1,0 +1,148 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "evaluator_materialization_source": {
+    "bytes": 409600,
+    "media_type": "application/x-tar",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/fixtures/docket-s17.tar",
+    "sha256": "0b1dea1a3bf522de8e5be50bbc1fd3b3d1344e08998195d75acf6040af65420f"
+  },
+  "generated_visible_state": null,
+  "run_id": "docket-s17",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "docket-gwr-direct",
+  "system_prompt": {
+    "bytes": 1576,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/docket-s17/operator-system.md",
+    "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+  },
+  "terminal_bridge_disclosure": null,
+  "user_prompt": {
+    "bytes": 2534,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/docket-s17/operator-prompt.md",
+    "sha256": "ea07553213637100d5f45163aab26fb52853dc75131195c82bb9d04cfaa8fa87"
+  },
+  "visible_files": [
+    {
+      "bytes": 29,
+      "destination": "../repo/config/proxy.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/fixture/config/proxy.yaml",
+      "sha256": "99fa1c9157b95602cbe7b5f8f0e730c4816123f85352e52842241263f6ff5b9d"
+    },
+    {
+      "bytes": 3779376,
+      "destination": "bin/docket",
+      "media_type": "application/octet-stream",
+      "mode": "0775",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/bin/docket",
+      "sha256": "1fa41093c5a9b37c7607eeeaf2db73b8a703d7d8b0e4dcc93076f9a0b6aabbc6"
+    },
+    {
+      "bytes": 609584,
+      "destination": "bin/gwr-git-broker",
+      "media_type": "application/octet-stream",
+      "mode": "0775",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/bin/gwr-git-broker",
+      "sha256": "559d86cb79ae9a426b2873aa0d8ad28056cff59f967fa5ec4f3374379c65f41e"
+    },
+    {
+      "bytes": 120,
+      "destination": "candidate.patch",
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/patch.diff",
+      "sha256": "5071d13327bbc92107814dae8bd5509681a9cdd8d3b9a052d31828bced7ea147"
+    },
+    {
+      "bytes": 1559,
+      "destination": "control.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/docket-s17/direct-control.json",
+      "sha256": "57506f567d5fe3ff366c5f49cc01c63b37eb90453a8e94bfe719fe6535b31de9"
+    },
+    {
+      "bytes": 6268,
+      "destination": "docs/attempt-dossier.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/docs/attempt-dossier.md",
+      "sha256": "aff983fb66b73c3b568de9fe45a9ffdce216c723248465f193c53fb9a50e9422"
+    },
+    {
+      "bytes": 4007,
+      "destination": "docs/effect-classes.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/docs/effect-classes.md",
+      "sha256": "b74e46488820508e9307d138c31e642293d347375ab4b522b89bd88d0b512d11"
+    },
+    {
+      "bytes": 11055,
+      "destination": "docs/operator-runbook.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/docs/operator-runbook.md",
+      "sha256": "cd56313afb01aecb6beab088d0e897277207765f47a7933b49e8f2c27259bcf9"
+    },
+    {
+      "bytes": 8253,
+      "destination": "docs/repository-identity-and-ref-continuity.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/docs/repository-identity-and-ref-continuity.md",
+      "sha256": "a64f0f02a58b878575cad42ce597bba12824531af3c25556d9b7c9544319a3e4"
+    },
+    {
+      "bytes": 6221,
+      "destination": "docs/trust-model.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/direct-runtime/docs/trust-model.md",
+      "sha256": "b39a4585800e45911c784c6e626bbfa589e98c3f696f5d77e77f5b45298fc13b"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 1060,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/docket-s17/operator-task.md",
+      "sha256": "2c428fc39239a40db4dba73dd57075bef7e56412d8ff0edc102bbc67011217bc"
+    },
+    {
+      "bytes": 613,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/packet.json",
+      "sha256": "f32d3eeb9b38529a125305e589f1f5ebe9b9d319a882f4400eef3e2b68f6aa89"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s17-client-daemon-restart/expected-disposition.json",
+    "Docket/GWR implementation source",
+    "fixture setup transcript",
+    "historical internal pilot material linked from the dossier",
+    "other comparison runs",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

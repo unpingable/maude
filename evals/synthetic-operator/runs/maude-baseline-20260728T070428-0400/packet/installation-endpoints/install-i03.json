@@ -1,0 +1,12 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "chmod": null,
+  "generated_directories": [],
+  "governor_dir": null,
+  "mode": "none",
+  "run_id": "install-i03",
+  "schema": "maude.synthetic-installation-endpoint-plan.v1",
+  "socket_strategy": "none",
+  "task_id": "install-task-03"
+}

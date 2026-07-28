@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Add an HTTP readiness probe on /ready port 8080 with a five-second initial delay."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo"
+workspace: "/tmp/maude-synth-7a6c6c6e422e/maude-s04/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

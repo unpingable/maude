@@ -1,0 +1,1407 @@
+{
+  "all_passed": false,
+  "all_requested_provider_attempts_recorded": true,
+  "attempt_id": "20260728T112133Z-1c944d73fd56",
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "campaign_run": false,
+  "campaign_runner": {
+    "bytes": 631228,
+    "media_type": "text/x-python",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/harness/campaign_runner.py",
+    "sha256": "aa625db34bb6caf75830bfbb15af5f0b69fa91c127bc8809e06c66f3bb9f994f"
+  },
+  "capability_observation_valid": true,
+  "completed_at": "2026-07-28T11:22:33Z",
+  "distinct_session_identities": false,
+  "failed_provider_configs": [
+    "anthropic-sonnet"
+  ],
+  "installation_media_provenance": {
+    "bytes": 39860,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/installation-media/provenance.json",
+    "sha256": "677cf8922ea0433f92b9ca304d70999ab0a038caa305af16f1bc962b2222a8e9"
+  },
+  "invalid_probe_provider_configs": [],
+  "maude_wheel": {
+    "bytes": 89993,
+    "distribution": {
+      "filename_tags": [
+        "py3-none-any"
+      ],
+      "name": "maude",
+      "record_entries": 41,
+      "requires_dist": [
+        "ag-shell-client>=0.1.0",
+        "pydantic>=2.6.0",
+        "pyyaml>=6.0",
+        "textual>=1.0.0",
+        "pytest; extra == 'dev'",
+        "pytest-asyncio; extra == 'dev'",
+        "ruff; extra == 'dev'"
+      ],
+      "root_is_purelib": "true",
+      "tags": [
+        "py3-none-any"
+      ],
+      "version": "2.4.0"
+    },
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl",
+    "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+  },
+  "not_requested_provider_configs": [],
+  "provider_capability_policy": {
+    "bytes": 2970,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "provider-capability-policy.json",
+    "sha256": "516f9702b0cc2d0e05a6a7c11971e451d704db778dda27cef95a52fe8a5678a5"
+  },
+  "provider_model_configurations": {
+    "anthropic-sonnet": {
+      "broker_boundary": "Operator commands execute in a fresh source-free, auth-free, no-network mount/PID namespace. The grader evidence tool is read-only.",
+      "browser_enabled": false,
+      "built_in_tools": [],
+      "cli": "claude",
+      "expected_family": "Claude",
+      "freshness": [
+        "--no-session-persistence",
+        "new UUID session id",
+        "fresh provider process",
+        "no resume, continuation, or follow-up"
+      ],
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "live_web_search_enabled": false,
+      "mcp_protocol_version": "2025-11-25",
+      "model_argument": "sonnet",
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "permission_mode": "bypassPermissions",
+      "provider": "Anthropic",
+      "reasoning_effort": "low",
+      "session_persistence": false,
+      "slash_commands_enabled": false,
+      "strict_mcp_config": true,
+      "tool_boundary": "Strict per-session MCP configuration. The operator receives only mcp__operator__terminal; the grader receives only mcp__grader__evidence. Built-in tools are excluded from the exact provider roster.",
+      "transport_boundary": "Claude runs in a task-blind retained-auth transport with no task paths or task sockets. Its fixed MCP proxy and command broker receive neither provider credentials nor semantic evaluator prompts.",
+      "user_mcp_and_connector_config_loaded": false
+    },
+    "openai-sol": {
+      "approval_policy": "never",
+      "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+      "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+      "built_in_tools": [],
+      "cli": "codex",
+      "exact_provider_tool_allowlist_supported": true,
+      "expected_family": "GPT",
+      "freshness": [
+        "--ephemeral",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "fresh provider process",
+        "no resume, continuation, or follow-up"
+      ],
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "intrinsic_action_features_explicitly_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "live_web_search_enabled": false,
+      "mcp_auto_approval_safety": {
+        "exact_enabled_tool_count_per_role": 1,
+        "grader_evidence_tool_read_only": true,
+        "mcp_config_hash_pinned": true,
+        "operator_terminal_bounded_by_frozen_broker": true
+      },
+      "mcp_default_tools_approval_mode": "approve",
+      "mcp_protocol_version": "2025-06-18",
+      "model_argument": "gpt-5.6-sol",
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "optional_features_explicitly_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "provider": "OpenAI",
+      "reasoning_effort": "low",
+      "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+      "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+      "unexpected_intrinsic_action_policy": "fail-closed",
+      "user_mcp_and_connector_config_loaded": false
+    }
+  },
+  "provider_network_permitted_for_probe_sessions": true,
+  "provider_outcomes": [
+    {
+      "authority_effect": "none",
+      "provider_config": "openai-sol",
+      "result": {
+        "bytes": 155881,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/result.json",
+        "sha256": "565788c313dce1bfd548593a143e38860df91552dd887b884ab673d2959a16bb"
+      },
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa875-7f08-7cc3-ba3d-cbc284f79fbe"
+      },
+      "status": "available"
+    },
+    {
+      "authority_effect": "none",
+      "failure": {
+        "bytes": 7722,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/anthropic-sonnet/failure.json",
+        "sha256": "3cc064109f79857ad6da9c4ddccfc93c4b4a31a22d2e4a133ad8fa81d6944b2b"
+      },
+      "provider_config": "anthropic-sonnet",
+      "session_identity": {
+        "configured_model": "sonnet",
+        "provider_reported_model": "claude-sonnet-5",
+        "provider_reported_tools": [
+          "mcp__operator__terminal"
+        ],
+        "provider_session_id": "33541444-5485-42aa-98af-503a92f0119a"
+      },
+      "status": "provider-capability-unavailable"
+    }
+  ],
+  "providers": [
+    {
+      "all_read_results_nonempty": true,
+      "authority_effect": "none",
+      "campaign_run": false,
+      "clean_home_after": {
+        "bytes": 251,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/clean-home-after.json",
+        "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+      },
+      "clean_home_before": {
+        "bytes": 251,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/clean-home-before.json",
+        "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+      },
+      "command_linked_runtime_session_list_request_response": true,
+      "completed_action_events": [
+        {
+          "action_id": "item_1",
+          "completion_kind": "item.completed",
+          "event_number": 5,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_2",
+          "completion_kind": "item.completed",
+          "event_number": 7,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_3",
+          "completion_kind": "item.completed",
+          "event_number": 9,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_4",
+          "completion_kind": "item.completed",
+          "event_number": 11,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_5",
+          "completion_kind": "item.completed",
+          "event_number": 13,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_6",
+          "completion_kind": "item.completed",
+          "event_number": 15,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_7",
+          "completion_kind": "item.completed",
+          "event_number": 17,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_8",
+          "completion_kind": "item.completed",
+          "event_number": 19,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        }
+      ],
+      "delivery": {
+        "allowed_unix_sockets": [],
+        "codex_approval_argv": [
+          "--config",
+          "approval_policy=\"never\""
+        ],
+        "codex_approval_config_override": "approval_policy=\"never\"",
+        "codex_approval_policy": "never",
+        "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+        "codex_mcp_default_tools_approval_mode": "approve",
+        "delivered_prompt_bytes": 2829,
+        "delivered_prompt_sha256": "2ca08dae956239857e2a24863eb20bf371c6841d49cef6115fef28c3c8e6ce32",
+        "exact_provider_tool_allowlist_supported": true,
+        "intrinsic_action_features_explicitly_disabled": [
+          "shell_tool",
+          "unified_exec"
+        ],
+        "live_web_search_enabled": false,
+        "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+        "mcp_enabled_tools": [
+          "terminal"
+        ],
+        "mcp_protocol_version": "2025-06-18",
+        "mcp_server": "operator",
+        "mcp_tool_approval_safety_basis": {
+          "exact_enabled_tool_count": 1,
+          "grader_evidence_tool_read_only": false,
+          "mcp_config_hash_pinned": true,
+          "operator_terminal_bounded_by_frozen_broker": true,
+          "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+          "single_enabled_mcp_tool": "terminal"
+        },
+        "noninteractive_approval_safety_basis": {
+          "grader_evidence_tool_read_only": false,
+          "intrinsic_action_features_disabled": [
+            "shell_tool",
+            "unified_exec"
+          ],
+          "operator_terminal_bounded_by_frozen_broker": true,
+          "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+          "single_enabled_mcp_tool": "terminal"
+        },
+        "optional_features_explicitly_disabled": [
+          "apps",
+          "plugins",
+          "remote_plugin",
+          "browser_use",
+          "browser_use_external",
+          "browser_use_full_cdp_access",
+          "computer_use",
+          "image_generation",
+          "multi_agent",
+          "multi_agent_v2",
+          "hooks",
+          "skill_mcp_dependency_install",
+          "tool_call_mcp_elicitation"
+        ],
+        "provider": "OpenAI",
+        "provider_task_paths_added": [],
+        "provider_transport_cwd": "/home/operator",
+        "requested_model": "gpt-5.6-sol",
+        "semantic_prompt_bytes_in_argv": false,
+        "system_prompt_delivery": "concatenated first in single CLI prompt",
+        "unexpected_intrinsic_action_policy": "fail-closed",
+        "user_mcp_and_connector_config_loaded": false,
+        "user_prompt_delivery": "concatenated after exact delimiter and delivered through closed stdin; no semantic prompt bytes appear in argv"
+      },
+      "entrypoint": {
+        "module_inside_venv": true,
+        "path": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude",
+        "sha256": "2569a785418800b8aee9c3d0dea0a6e1e06009a0fedc14d33117a471bf2c27ca",
+        "version": "2.4.0"
+      },
+      "exact_pty_command_sha256": [
+        "bd07436426c7146826e928f673e3bf953dce4f80c6ba13e74811eb02fe0f497f",
+        "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+        "795f6967927209b0258d487c814296c9e46dc85c82b16dc420644ee1eb40383b",
+        "37c9d419ef396c4171723aec4be9eafdc67a74a87f0acf6d5d841edf575b5d6f",
+        "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+        "0e6fb6ed66617e45b5e76adc4884ba57fa254c43e13f8e65a5946986262adfc2",
+        "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+        "ad6937b98d5c59d9e00b7e44b750ce89407bccf1bd14041c09107efdb796dbdf"
+      ],
+      "exact_terminal_commands_match_positionally": true,
+      "expected_answer_or_task_supplied": false,
+      "final_marker_present": true,
+      "fresh_process": true,
+      "gate_record": {
+        "bytes": 128186,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/auth-gate.json",
+        "sha256": "ed3f813fdcb90676d5836381fab69db8c8e43e3e78abb94ce0e66b99485da158"
+      },
+      "governor_status_attribution": "Maude polls governor.now. In this isolated probe, the separately focused literal status input is the only trigger for governor.status followed by runtime.session.list; their ordered successful responses prove application handling beyond PTY byte acknowledgement.",
+      "host_repository_checkout_mounted": false,
+      "installation_media_mounted": false,
+      "installed_distribution_mounted": true,
+      "installed_python_module_source_readable": true,
+      "model_configuration": {
+        "approval_policy": "never",
+        "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+        "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+        "built_in_tools": [],
+        "cli": "codex",
+        "exact_provider_tool_allowlist_supported": true,
+        "expected_family": "GPT",
+        "freshness": [
+          "--ephemeral",
+          "--ignore-user-config",
+          "--ignore-rules",
+          "fresh provider process",
+          "no resume, continuation, or follow-up"
+        ],
+        "grader_mcp_enabled_tools": [
+          "evidence"
+        ],
+        "grader_tools": [
+          "mcp__grader__evidence"
+        ],
+        "intrinsic_action_features_explicitly_disabled": [
+          "shell_tool",
+          "unified_exec"
+        ],
+        "live_web_search_enabled": false,
+        "mcp_auto_approval_safety": {
+          "exact_enabled_tool_count_per_role": 1,
+          "grader_evidence_tool_read_only": true,
+          "mcp_config_hash_pinned": true,
+          "operator_terminal_bounded_by_frozen_broker": true
+        },
+        "mcp_default_tools_approval_mode": "approve",
+        "mcp_protocol_version": "2025-06-18",
+        "model_argument": "gpt-5.6-sol",
+        "operator_mcp_enabled_tools": [
+          "terminal"
+        ],
+        "operator_tools": [
+          "mcp__operator__terminal"
+        ],
+        "optional_features_explicitly_disabled": [
+          "apps",
+          "plugins",
+          "remote_plugin",
+          "browser_use",
+          "browser_use_external",
+          "browser_use_full_cdp_access",
+          "computer_use",
+          "image_generation",
+          "multi_agent",
+          "multi_agent_v2",
+          "hooks",
+          "skill_mcp_dependency_install",
+          "tool_call_mcp_elicitation"
+        ],
+        "provider": "OpenAI",
+        "reasoning_effort": "low",
+        "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+        "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+        "unexpected_intrinsic_action_policy": "fail-closed",
+        "user_mcp_and_connector_config_loaded": false
+      },
+      "process": {
+        "coaching": "none",
+        "completed_at": "2026-07-28T11:22:25Z",
+        "elapsed_seconds": 45.500438,
+        "follow_up_messages": 0,
+        "fresh_process": true,
+        "provider_auth_gate": {
+          "allowed_mcp_server": "operator",
+          "allowed_mcp_tools": [
+            "terminal"
+          ],
+          "boundary_evidence": {
+            "bytes": 2844,
+            "media_type": "application/json",
+            "mode": "0664",
+            "path": "codex-mcp-boundary/cleanup.json",
+            "sha256": "58d94a489fbae1f602ac753078a0a5bac62259be8e63dbf6201799511c9445d3"
+          },
+          "broker_cleanup": {
+            "command_broker": {
+              "exit_code": 0,
+              "forced_after_graceful_timeout": false,
+              "graceful_exit_requested": false,
+              "label": "Codex command broker",
+              "observed_processes": [
+                570309
+              ],
+              "remaining_processes": []
+            },
+            "private_socket_arena": {
+              "all_removed": true,
+              "directories": [
+                {
+                  "directory": "/tmp/maude-sock-7a6c6c6e422e/s-79228a100d018f66896d",
+                  "remaining_entries": [],
+                  "removed": true
+                },
+                {
+                  "directory": "/tmp/maude-sock-7a6c6c6e422e/s-d38acbfcca783e9c1d0f",
+                  "remaining_entries": [],
+                  "removed": true
+                }
+              ],
+              "path_budget_bytes": 100,
+              "root": "/tmp/maude-sock-7a6c6c6e422e"
+            },
+            "pty_broker": {
+              "cleanup_report": {
+                "bytes": 703,
+                "media_type": "application/json",
+                "mode": "0664",
+                "path": "cleanup.json",
+                "sha256": "e48c735ff3443a86726a30ba5de9f862f901522784360af921e7644f9f911f8f"
+              },
+              "exit_code": 0,
+              "forced_after_graceful_timeout": false,
+              "graceful_exit_requested": true,
+              "graceful_shutdown_request": {
+                "request_id": "3ff86dbc76054facb7037d3037890adb",
+                "requested_at": "2026-07-28T11:22:24Z",
+                "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+              },
+              "label": "Codex persistent PTY broker",
+              "observed_processes": [
+                570306,
+                570307,
+                570308
+              ],
+              "remaining_processes": [],
+              "shutdown_control_boundary": {
+                "contains_authority_or_secret": false,
+                "created_after_provider_absent_or_exited": true,
+                "path_visibility": "shared-persistent-pty-namespace",
+                "request_fields": [
+                  "request_id",
+                  "requested_at",
+                  "schema"
+                ],
+                "tamper_or_preexistence_policy": "fail-closed-then-force-stop"
+              },
+              "socket_removed": true
+            },
+            "pty_cleanup": {
+              "all_tracked_ptys_stopped": true,
+              "broker_pid": 2,
+              "completed_at": "2026-07-28T11:22:25Z",
+              "handled_requests": 8,
+              "schema": "maude.synthetic-operator.pty-broker-cleanup.v1",
+              "shutdown_mode": "request-file",
+              "shutdown_request": {
+                "request_id": "3ff86dbc76054facb7037d3037890adb",
+                "requested_at": "2026-07-28T11:22:24Z",
+                "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+              },
+              "shutdown_request_removed": true,
+              "shutdown_signal": null,
+              "socket_removed": true,
+              "tracked_ptys": [
+                {
+                  "child_pid": 5,
+                  "daemon_pid": 4,
+                  "forced_signal": null,
+                  "remaining": false,
+                  "state_root": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state",
+                  "stop_result": null
+                }
+              ]
+            }
+          },
+          "broker_command_count": 8,
+          "codex_approval_argv": [
+            "--config",
+            "approval_policy=\"never\""
+          ],
+          "codex_approval_config_override": "approval_policy=\"never\"",
+          "codex_approval_policy": "never",
+          "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+          "codex_mcp_default_tools_approval_mode": "approve",
+          "exact_correlation_proved": true,
+          "identity": {
+            "event_number": 1,
+            "provider_thread_id": "019fa875-7f08-7cc3-ba3d-cbc284f79fbe"
+          },
+          "intrinsic_action_features_disabled": [
+            "shell_tool",
+            "unified_exec"
+          ],
+          "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+          "mcp_protocol_version": "2025-06-18",
+          "mcp_tool_approval_safety_basis": {
+            "exact_enabled_tool_count": 1,
+            "grader_evidence_tool_read_only": false,
+            "mcp_config_hash_pinned": true,
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "noninteractive_approval_safety_basis": {
+            "grader_evidence_tool_read_only": false,
+            "intrinsic_action_features_disabled": [
+              "shell_tool",
+              "unified_exec"
+            ],
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "normalized_result_correlations": [
+            {
+              "action_id": "item_1",
+              "arguments_sha256": "23d764a82ba87e33ad6f6db74e953658f72fc0c789c5c457d647fe2b3700e2bd",
+              "provider_normalized_result_text_sha256": "1311525b1b0f2722420d217c7a5d87499c0e377ef3a5254f439bf7eb926dc88c",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "1311525b1b0f2722420d217c7a5d87499c0e377ef3a5254f439bf7eb926dc88c",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_2",
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "provider_normalized_result_text_sha256": "98afc4038272e90d24ed2f085c13c0ba41e816149091277efc1a3ecf621eb775",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "98afc4038272e90d24ed2f085c13c0ba41e816149091277efc1a3ecf621eb775",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_3",
+              "arguments_sha256": "bda49e7386c214595486857a403c212ff9f0916dbfdd4cdaacc8ff36a5fdbe66",
+              "provider_normalized_result_text_sha256": "ce8345683cc8201cd49bc8721de919e208f8209fe9039f80c04146aa5fae50e9",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "ce8345683cc8201cd49bc8721de919e208f8209fe9039f80c04146aa5fae50e9",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_4",
+              "arguments_sha256": "7e38689b3727423b478ca5126385960a912d61651622f71020c78a5dbae7a20b",
+              "provider_normalized_result_text_sha256": "48a014660d6f1cacb03a976f8f25b85363b71754897036e4a5530e4df52eddc8",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "48a014660d6f1cacb03a976f8f25b85363b71754897036e4a5530e4df52eddc8",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_5",
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "provider_normalized_result_text_sha256": "b78b12cd928480dddbfc9d8a2fadd0769ef4c2b44525cbf291670deef773fd21",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "b78b12cd928480dddbfc9d8a2fadd0769ef4c2b44525cbf291670deef773fd21",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_6",
+              "arguments_sha256": "d016aa0f1c36f59aecb70fae2987e4ab8b35c6eec2e6a76869e74ff230d1d696",
+              "provider_normalized_result_text_sha256": "34955bfdb5d24d02c2dde50eb01bc9a5c30f3dc99a85edeb09004a74452534d1",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "34955bfdb5d24d02c2dde50eb01bc9a5c30f3dc99a85edeb09004a74452534d1",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_7",
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "provider_normalized_result_text_sha256": "9b9bd4f7c1c56e0546ed9602f2a2b3ff6b427c3260a970467d9d5976f948ea21",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "9b9bd4f7c1c56e0546ed9602f2a2b3ff6b427c3260a970467d9d5976f948ea21",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_8",
+              "arguments_sha256": "d211636f552443741d2e285df4ea0dc67f81f3ef08c3632585c162ed2a5e0bc6",
+              "provider_normalized_result_text_sha256": "cc9886f77f840923f1cd5b816abb6ba9a0a4c8b72d32be51eaad9156c61ec7f8",
+              "proxy_is_error": false,
+              "proxy_result_text_sha256": "cc9886f77f840923f1cd5b816abb6ba9a0a4c8b72d32be51eaad9156c61ec7f8",
+              "tool": "terminal"
+            }
+          ],
+          "optional_features_disabled": [
+            "apps",
+            "plugins",
+            "remote_plugin",
+            "browser_use",
+            "browser_use_external",
+            "browser_use_full_cdp_access",
+            "computer_use",
+            "image_generation",
+            "multi_agent",
+            "multi_agent_v2",
+            "hooks",
+            "skill_mcp_dependency_install",
+            "tool_call_mcp_elicitation"
+          ],
+          "per_session_exact_tool_roster_supported": true,
+          "provider_auth_destroyed": true,
+          "provider_auth_output_scan_hits": [],
+          "provider_auth_retained_until_transport_exit": true,
+          "provider_auth_values_recorded": false,
+          "provider_config": "openai-sol",
+          "provider_private_state_before_destroy": {
+            "file_count": 67,
+            "inventory_sha256": "7b77cc5903030e234eca1b3caa93db4a9eb9e8ed4281fd2c9f458510a281a04a",
+            "total_bytes": 2507333
+          },
+          "provider_processes_remaining": [],
+          "provider_returncode": 0,
+          "provider_task_paths_mounted": [],
+          "provider_timed_out": false,
+          "provider_transport_cwd_is_neutral": true,
+          "proxy_tool_call_count": 8,
+          "recorded_at": "2026-07-28T11:22:25Z",
+          "schema": "maude.synthetic-operator.codex-retained-provider-boundary.v1",
+          "semantic_prompt_bytes": 2829,
+          "semantic_prompt_bytes_in_argv": false,
+          "semantic_prompt_delivery": "stdin",
+          "semantic_prompt_sha256": "2ca08dae956239857e2a24863eb20bf371c6841d49cef6115fef28c3c8e6ce32",
+          "status": "complete",
+          "tool_actions": [
+            {
+              "action_id": "item_1",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' start --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --output '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript' -- '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude'"
+              },
+              "arguments_sha256": "23d764a82ba87e33ad6f6db74e953658f72fc0c789c5c457d647fe2b3700e2bd",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                4,
+                5
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' start --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --output '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript' -- '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"{\\\"captured_bytes\\\": 0, \\\"child_pid\\\": 5, \\\"command\\\": [\\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude\\\"], \\\"daemon_pid\\\": 4, \\\"exit_code\\\": null, \\\"output\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty.v1\\\", \\\"status\\\": \\\"running\\\", \\\"updated_at\\\": \\\"2026-07-28T11:21:49Z\\\"}\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_2",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5"
+              },
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                6,
+                7
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"bytes_read\\\": 17507, \\\"from_offset\\\": 0, \\\"next_offset\\\": 17507, \\\"status\\\": \\\"running\\\"}\\n\",\"stderr_truncated\":false,\"stdout\":\"\\u001b[?1049h\\u001b[?1000h\\u001b[?1003h\\u001b[?1015h\\u001b[?1006h\\u001b[?25l\\u001b[?1004h\\u001b[>25u\\u001b[?2026$p\\u001b[?2048$p\\u001b[?2004h\\u001b[?7l\\u001b[?1000h\\u001b[?1003h\\u001b[?1015h\\u001b[?1006h\\u001b]22;default\\u0007\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[1;9H\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001\\u001b[0m\\u001b[48;5;240m                                              \\u001b[0m\\u001b[1;111H\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\r\\n\\u001b[2;1H\\u001b[48;5;235m \\u001b[0m\\u001b[1;38;5;253;48;5;235mMaude v2.\\u001b[0m\\u001b[1;38;5;249;48;5;235m4.0\\u001b[0m\\u001b[38;5;253;48;5;235m — governor TUI\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                         \\u001b[0m\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[3;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235mGovernor: \\u001b[0m\\u001b[38;5;237;48;5;235m/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/\\u001b[0m\\u001b[38;5;237;48;5;235mbroker.sock\\u001b[0m\\u001b[38;5;253;48;5;235m                                           \\u001b[0m\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[4;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[5;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;250;48;5;235mConnected\\u001b[0m\\u001b[38;5;253;48;5;235m — \\u001b[0m\\u001b[38;5;247;48;5;235mbackend\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235msynthetic\\u001b[0m\\u001b[38;5;253;48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mmode\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235mcode\\u001b[0m\\u001b[38;5;253;48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mcontext\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235msynthetic\\u001b[0m\\u001b[38;5;253;48;5;235m-installation-probe\\u001b[0m\\u001b[38;5;253;48;5;235m                                        \\u001b[0m\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[6;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mCreated session: chat-synthetic-\\u001b[0m\\u001b[1;38;5;244;48;5;235m001\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                 \\u001b[0m\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[7;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[8;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mType \\u001b[0m\\u001b[38;5;245;48;5;235m\\\"help\\\"\\u001b[0m\\u001b[38;5;247;48;5;235m for available commands.\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                 \\u001b[0m\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[9;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[10;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[11;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[12;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[13;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[14;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[15;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[16;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[17;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[18;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[19;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[20;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[21;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[22;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[23;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[24;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[25;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[26;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[27;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[2;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[2;4H\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001\\u001b[0m\\u001b[48;5;240m                                              \\u001b[0m\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\r\\n\\u001b[2;1H\\u001b[48;5;235m \\u001b[0m\\u001b[1;38;5;253;48;5;235mMaude v2.\\u001b[0m\\u001b[1;38;5;249;48;5;235m4.0\\u001b[0m\\u001b[38;5;253;48;5;235m — governor TUI\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                         \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[3;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235mGovernor: \\u001b[0m\\u001b[38;5;237;48;5;235m/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/\\u001b[0m\\u001b[38;5;237;48;5;235mbroker.sock\\u001b[0m\\u001b[38;5;253;48;5;235m                                           \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[4;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[5;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;250;48;5;235mConnected\\u001b[0m\\u001b[38;5;253;48;5;235m — \\u001b[0m\\u001b[38;5;247;48;5;235mbackend\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235msynthetic\\u001b[0m\\u001b[38;5;253;48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mmode\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235mcode\\u001b[0m\\u001b[38;5;253;48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mcontext\\u001b[0m\\u001b[38;5;253;48;5;235m=\\u001b[0m\\u001b[38;5;237;48;5;235msynthetic\\u001b[0m\\u001b[38;5;253;48;5;235m-installation-probe\\u001b[0m\\u001b[38;5;253;48;5;235m                                        \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[6;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mCreated session: chat-synthetic-\\u001b[0m\\u001b[1;38;5;244;48;5;235m001\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                 \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[7;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[8;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;247;48;5;235mType \\u001b[0m\\u001b[38;5;245;48;5;235m\\\"help\\\"\\u001b[0m\\u001b[38;5;247;48;5;235m for available commands.\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                 \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[9;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[10;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[11;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[12;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[13;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[14;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[15;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[16;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[17;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[18;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[19;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[20;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[21;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[22;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[23;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[24;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[25;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[26;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[27;1H\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\r\\n\\u001b[28;1H\\u001b[7;38;5;233;48;5;233m▊\\u001b[0m\\u001b[38;5;233;48;5;234m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;233;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;233;48;5;233m▊\\u001b[0m\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;242;48;5;234mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                        \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;233;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[2;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[2;4H\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_3",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' send --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:09"
+              },
+              "arguments_sha256": "bda49e7386c214595486857a403c212ff9f0916dbfdd4cdaacc8ff36a5fdbe66",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                8,
+                9
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' send --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:09\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"accepted\\\": true, \\\"acknowledged_at\\\": \\\"2026-07-28T11:21:58Z\\\", \\\"error\\\": null, \\\"inputs_sent\\\": 1, \\\"operation\\\": \\\"send\\\", \\\"request_id\\\": \\\"a069eef165b445bca19f69dab26f39b9\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty-ack.v1\\\", \\\"state\\\": {\\\"captured_bytes\\\": 18919, \\\"child_pid\\\": 5, \\\"command\\\": [\\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude\\\"], \\\"daemon_pid\\\": 4, \\\"exit_code\\\": null, \\\"output\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty.v1\\\", \\\"status\\\": \\\"running\\\", \\\"updated_at\\\": \\\"2026-07-28T11:21:58Z\\\"}}\\n\",\"stderr_truncated\":false,\"stdout\":\"\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_4",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' send --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:7374617475730d"
+              },
+              "arguments_sha256": "7e38689b3727423b478ca5126385960a912d61651622f71020c78a5dbae7a20b",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                10,
+                11
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' send --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:7374617475730d\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"accepted\\\": true, \\\"acknowledged_at\\\": \\\"2026-07-28T11:22:04Z\\\", \\\"error\\\": null, \\\"inputs_sent\\\": 1, \\\"operation\\\": \\\"send\\\", \\\"request_id\\\": \\\"6c944c71f2a54d51b4eeab40fdeebbe8\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty-ack.v1\\\", \\\"state\\\": {\\\"captured_bytes\\\": 48504, \\\"child_pid\\\": 5, \\\"command\\\": [\\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude\\\"], \\\"daemon_pid\\\": 4, \\\"exit_code\\\": null, \\\"output\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty.v1\\\", \\\"status\\\": \\\"running\\\", \\\"updated_at\\\": \\\"2026-07-28T11:22:04Z\\\"}}\\n\",\"stderr_truncated\":false,\"stdout\":\"\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_5",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5"
+              },
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                12,
+                13
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"bytes_read\\\": 48852, \\\"from_offset\\\": 17507, \\\"next_offset\\\": 66359, \\\"status\\\": \\\"running\\\"}\\n\",\"stderr_truncated\":false,\"stdout\":\"\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[1;9H\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\u001b[0m\\u001b[48;5;240m                                  \\u001b[0m\\u001b[1;111H\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\u001b[2;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[2;4H\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\u001b[0m\\u001b[48;5;240m                                  \\u001b[0m\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\r\\n\\u001b[2;1H\\u001b[48;5;234m \\u001b[0m\\u001b[1;38;5;253;48;5;234mMaude v2.\\u001b[0m\\u001b[1;38;5;249;48;5;234m4.0\\u001b[0m\\u001b[38;5;253;48;5;234m — governor TUI\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                         \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[3;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234mGovernor: \\u001b[0m\\u001b[38;5;237;48;5;234m/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/\\u001b[0m\\u001b[38;5;237;48;5;234mbroker.sock\\u001b[0m\\u001b[38;5;253;48;5;234m                                           \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[4;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[5;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;250;48;5;234mConnected\\u001b[0m\\u001b[38;5;253;48;5;234m — \\u001b[0m\\u001b[38;5;247;48;5;234mbackend\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234msynthetic\\u001b[0m\\u001b[38;5;253;48;5;234m \\u001b[0m\\u001b[38;5;247;48;5;234mmode\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234mcode\\u001b[0m\\u001b[38;5;253;48;5;234m \\u001b[0m\\u001b[38;5;247;48;5;234mcontext\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234msynthetic\\u001b[0m\\u001b[38;5;253;48;5;234m-installation-probe\\u001b[0m\\u001b[38;5;253;48;5;234m                                        \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[6;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;246;48;5;234mCreated session: chat-synthetic-\\u001b[0m\\u001b[1;38;5;244;48;5;234m001\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                 \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[7;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[8;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;246;48;5;234mType \\u001b[0m\\u001b[38;5;245;48;5;234m\\\"help\\\"\\u001b[0m\\u001b[38;5;246;48;5;234m for available commands.\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                 \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[9;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[10;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[11;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[12;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[13;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[14;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[15;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[16;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[17;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[18;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[19;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[20;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[21;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[22;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[23;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[24;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[25;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[26;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[27;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\r\\n\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[1;9H\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\u001b[0m\\u001b[48;5;240m                                  \\u001b[0m\\u001b[1;111H\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;253;48;5;235mstatus\\u001b[0m\\u001b[38;5;233;48;5;253m \\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                                             \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;10H\\u001b[2;1H\\u001b[48;5;234m \\u001b[0m\\u001b[1;38;5;253;48;5;234mMaude v2.\\u001b[0m\\u001b[1;38;5;249;48;5;234m4.0\\u001b[0m\\u001b[38;5;253;48;5;234m — governor TUI\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                         \\u001b[0m\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[3;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234mGovernor: \\u001b[0m\\u001b[38;5;237;48;5;234m/tmp/maude-sock-7a6c6c6e422e/s-dfbe9da3948d2c8f184c/\\u001b[0m\\u001b[38;5;237;48;5;234mbroker.sock\\u001b[0m\\u001b[38;5;253;48;5;234m                                           \\u001b[0m\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[4;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[5;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;250;48;5;234mConnected\\u001b[0m\\u001b[38;5;253;48;5;234m — \\u001b[0m\\u001b[38;5;247;48;5;234mbackend\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234msynthetic\\u001b[0m\\u001b[38;5;253;48;5;234m \\u001b[0m\\u001b[38;5;247;48;5;234mmode\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234mcode\\u001b[0m\\u001b[38;5;253;48;5;234m \\u001b[0m\\u001b[38;5;247;48;5;234mcontext\\u001b[0m\\u001b[38;5;253;48;5;234m=\\u001b[0m\\u001b[38;5;237;48;5;234msynthetic\\u001b[0m\\u001b[38;5;253;48;5;234m-installation-probe\\u001b[0m\\u001b[38;5;253;48;5;234m                                        \\u001b[0m\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[6;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;246;48;5;234mCreated session: chat-synthetic-\\u001b[0m\\u001b[1;38;5;244;48;5;234m001\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                 \\u001b[0m\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[7;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[8;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;246;48;5;234mType \\u001b[0m\\u001b[38;5;245;48;5;234m\\\"help\\\"\\u001b[0m\\u001b[38;5;246;48;5;234m for available commands.\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                 \\u001b[0m\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[9;1H\\u001b[48;5;234m \\u001b[0m\\u001b[1;38;5;253;48;5;234mStatus:\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                             \\u001b[0m\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[10;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m  context: synthetic-installation-probe\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                             \\u001b[0m\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[11;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m  mode: code\\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                        \\u001b[0m\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[12;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[13;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[14;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[15;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[16;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[17;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[18;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[19;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[20;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[21;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[22;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[23;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[24;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[25;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[26;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[27;1H\\u001b[48;5;234m \\u001b[0m\\u001b[38;5;253;48;5;234m                                                                                                                    \\u001b[0m\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[48;5;234m \\u001b[0m\\r\\n\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[29;4H\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[1;9H\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\u001b[0m\\u001b[48;5;240m                                  \\u001b[0m\\u001b[1;111H\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_6",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' stop --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:11 --wait 5"
+              },
+              "arguments_sha256": "d016aa0f1c36f59aecb70fae2987e4ab8b35c6eec2e6a76869e74ff230d1d696",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                14,
+                15
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' stop --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --input hex:11 --wait 5\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"accepted\\\": true, \\\"acknowledged_at\\\": \\\"2026-07-28T11:22:11Z\\\", \\\"error\\\": null, \\\"inputs_sent\\\": 1, \\\"operation\\\": \\\"stop\\\", \\\"request_id\\\": \\\"c73595f8521b4f72b822d1279ece7ee9\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty-ack.v1\\\", \\\"state\\\": {\\\"captured_bytes\\\": 76673, \\\"child_pid\\\": 5, \\\"command\\\": [\\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude\\\"], \\\"daemon_pid\\\": 4, \\\"exit_code\\\": 0, \\\"output\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty.v1\\\", \\\"status\\\": \\\"completed\\\", \\\"updated_at\\\": \\\"2026-07-28T11:22:11Z\\\"}}\\n\",\"stderr_truncated\":false,\"stdout\":\"\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_7",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5"
+              },
+              "arguments_sha256": "27a13cc20805fc342f8edf382a89db4f89ffc4010c885640b0f394c1e185dc8d",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                16,
+                17
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' read --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state' --wait 5\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"{\\\"bytes_read\\\": 10314, \\\"from_offset\\\": 66359, \\\"next_offset\\\": 76673, \\\"status\\\": \\\"completed\\\"}\\n\",\"stderr_truncated\":false,\"stdout\":\"\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[1;1H\\u001b[48;5;240m \\u001b[0m\\u001b[38;5;254;48;5;240msynthet\\u001b[0m\\u001b[1;9H\\u001b[38;5;254;48;5;240mic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\u001b[0m\\u001b[48;5;240m                                  \\u001b[0m\\u001b[1;111H\\u001b[48;5;240m         \\u001b[0m\\u001b[48;5;240m \\u001b[0m\\u001b[29;4H\\u001b[2;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[2;120H\\r\\n\\u001b[3;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[3;120H\\r\\n\\u001b[4;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[4;120H\\r\\n\\u001b[5;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[5;120H\\r\\n\\u001b[6;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[6;120H\\r\\n\\u001b[7;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[7;120H\\r\\n\\u001b[8;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[8;120H\\r\\n\\u001b[9;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[9;120H\\r\\n\\u001b[10;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[10;120H\\r\\n\\u001b[11;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[11;120H\\r\\n\\u001b[12;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[12;120H\\r\\n\\u001b[13;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[13;120H\\r\\n\\u001b[14;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[14;120H\\r\\n\\u001b[15;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[15;120H\\r\\n\\u001b[16;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[16;120H\\r\\n\\u001b[17;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[17;120H\\r\\n\\u001b[18;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[18;120H\\r\\n\\u001b[19;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[19;120H\\r\\n\\u001b[20;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[20;120H\\r\\n\\u001b[21;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[21;120H\\r\\n\\u001b[22;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[22;120H\\r\\n\\u001b[23;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[23;120H\\r\\n\\u001b[24;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[24;120H\\r\\n\\u001b[25;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[25;120H\\r\\n\\u001b[26;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[26;120H\\r\\n\\u001b[27;118H\\u001b[38;5;253;48;5;16m  \\u001b[0m\\u001b[27;120H\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;243;48;5;235mType a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[28;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[38;5;241;48;5;235m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[29;1H\\u001b[7;38;5;241;48;5;233m▊\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;233;48;5;253mT\\u001b[0m\\u001b[38;5;243;48;5;235mype a message or command...\\u001b[0m\\u001b[38;5;253;48;5;235m                                                                                        \\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[38;5;241;48;5;233m▎\\u001b[0m\\r\\n\\u001b[30;1H\\u001b[1;38;5;248;48;5;235m ^q \\u001b[0m\\u001b[38;5;253;48;5;235mQuit \\u001b[0m\\u001b[30;10H\\u001b[1;38;5;248;48;5;235m ^l \\u001b[0m\\u001b[38;5;253;48;5;235mLock Spec \\u001b[0m\\u001b[30;24H\\u001b[1;38;5;248;48;5;235m ^g \\u001b[0m\\u001b[38;5;253;48;5;235mQueue \\u001b[0m\\u001b[30;34H\\u001b[1;38;5;248;48;5;235m ^b \\u001b[0m\\u001b[38;5;253;48;5;235mSessions \\u001b[0m\\u001b[30;47H\\u001b[1;38;5;248;48;5;235m ^o \\u001b[0m\\u001b[38;5;253;48;5;235mAdapters \\u001b[0m\\u001b[30;60H\\u001b[48;5;235m                                                 \\u001b[0m\\u001b[30;109H\\u001b[38;5;239;48;5;235m▏\\u001b[0m\\u001b[1;38;5;248;48;5;235m^p\\u001b[0m\\u001b[38;5;253;48;5;235m palette\\u001b[0m\\u001b[48;5;235m \\u001b[0m\\u001b[29;4H\\u001b[?2004l\\u001b[?7h\\u001b[?1000l\\u001b[?1003l\\u001b[?1015l\\u001b[?1006l\\u001b[<u\\u001b[?1049l\\u001b[?25h\\u001b[?1004l\\u001b[?1000l\\u001b[?1003l\\u001b[?1015l\\u001b[?1006l\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            },
+            {
+              "action_id": "item_8",
+              "arguments": {
+                "command": "'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' status --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state'"
+              },
+              "arguments_sha256": "d211636f552443741d2e285df4ea0dc67f81f3ef08c3632585c162ed2a5e0bc6",
+              "completed": true,
+              "error": null,
+              "event_numbers": [
+                18,
+                19
+              ],
+              "result": {
+                "content": [
+                  {
+                    "text": "{\"command\":\"'/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/operator-pty' status --state '/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty-state'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"{\\\"captured_bytes\\\": 76673, \\\"child_pid\\\": 5, \\\"command\\\": [\\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude\\\"], \\\"daemon_pid\\\": 4, \\\"exit_code\\\": 0, \\\"output\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript\\\", \\\"schema\\\": \\\"maude.synthetic-operator.stateful-pty.v1\\\", \\\"status\\\": \\\"completed\\\", \\\"updated_at\\\": \\\"2026-07-28T11:22:11Z\\\"}\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                    "type": "text"
+                  }
+                ],
+                "structured_content": null
+              },
+              "server": "operator",
+              "status": "completed",
+              "tool": "terminal"
+            }
+          ],
+          "unexpected_intrinsic_action_policy": "fail-closed"
+        },
+        "returncode": 0,
+        "semantic_prompt_bytes": 2829,
+        "semantic_prompt_sha256": "2ca08dae956239857e2a24863eb20bf371c6841d49cef6115fef28c3c8e6ce32",
+        "started_at": "2026-07-28T11:21:39Z",
+        "timed_out": false
+      },
+      "process_identity_pairs": [
+        {
+          "child_pid": 5,
+          "daemon_pid": 4
+        }
+      ],
+      "provider_config": "openai-sol",
+      "provider_network_attempted": true,
+      "provider_network_permitted_for_probe_session": true,
+      "pty_adapter": {
+        "bytes": 32867,
+        "media_type": "text/plain",
+        "mode": "0755",
+        "path": "installation/work/operator-pty",
+        "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+      },
+      "pty_command_returncode": 0,
+      "pty_state": {
+        "captured_bytes": 76673,
+        "child_pid": 5,
+        "command": [
+          "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/venv/bin/maude"
+        ],
+        "daemon_pid": 4,
+        "exit_code": 0,
+        "output": "/tmp/maude-synth-7a6c6c6e422e/_install-surface-openai-sol-d5f074c4db/installation/work/pty.typescript",
+        "schema": "maude.synthetic-operator.stateful-pty.v1",
+        "status": "completed",
+        "updated_at": "2026-07-28T11:22:11Z"
+      },
+      "pty_state_artifacts": [
+        {
+          "bytes": 185,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "acks/6c944c71f2a54d51b4eeab40fdeebbe8.json",
+          "sha256": "4da9336274ff8ec983f3010d73d9cd70addc480d7349160ddc01ff1b000a4dd2"
+        },
+        {
+          "bytes": 185,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "acks/a069eef165b445bca19f69dab26f39b9.json",
+          "sha256": "febc7e13df1a65d991b0817612a3aef3214028e4506c17f5883953bcda3f1729"
+        },
+        {
+          "bytes": 185,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "acks/c73595f8521b4f72b822d1279ece7ee9.json",
+          "sha256": "a0cbee219d937c93da3e493a8e6fa6f779d1e12f8f822aa67b7879726b4121c4"
+        },
+        {
+          "bytes": 6,
+          "media_type": "text/plain",
+          "mode": "0664",
+          "path": "read-offset",
+          "sha256": "f7947cbc2714ff158db61edaa030a28f5b805e79a5fec373bc5c4e613300b28b"
+        },
+        {
+          "bytes": 130,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "ready.json",
+          "sha256": "b55c549f591d75349875e69530497ef9b1f6a22d866a6055f9f4b26db3cc5e2b"
+        },
+        {
+          "bytes": 419,
+          "media_type": "application/x-ndjson",
+          "mode": "0664",
+          "path": "requests.jsonl",
+          "sha256": "74bbb581fb3624163e68a45b42babcb7ee55b7642defec280f2eea9631893e0e"
+        },
+        {
+          "bytes": 418,
+          "media_type": "application/json",
+          "mode": "0664",
+          "path": "state.json",
+          "sha256": "5dd49ca7331161f96b22b1660e250850c3c9951463d68559cf7fc0cd1c3f89a7"
+        }
+      ],
+      "pty_typescript": {
+        "bytes": 76673,
+        "media_type": "text/plain",
+        "mode": "0644",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/pty.typescript",
+        "sha256": "c898c6f1ca20afa502ea9d23841229e9171e01cbecf8f566200d14a97dcf5681"
+      },
+      "raw_stderr": {
+        "bytes": 0,
+        "media_type": "text/plain",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/provider.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "raw_transcript": {
+        "bytes": 120287,
+        "media_type": "application/x-ndjson",
+        "mode": "0664",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/transcript.jsonl",
+        "sha256": "a159669a19a9d77b44308defc978a5d56b5a2aa14a578588e992166a11d8a05e"
+      },
+      "read_after_input_proved": true,
+      "read_after_status_input_proved": true,
+      "read_after_stop_proved": true,
+      "read_before_input_proved": true,
+      "read_focus_send_command_send_read_stop_read_order_proved": true,
+      "real_governor_hello_request_response": true,
+      "real_governor_now_request_response": true,
+      "real_governor_status_request_response": true,
+      "real_sessions_create_request_response": true,
+      "real_sessions_list_request_response": true,
+      "release_source_archive_mounted": false,
+      "rpc_transcript": {
+        "bytes": 8462,
+        "media_type": "application/x-ndjson",
+        "mode": "0644",
+        "path": "attempts/20260728T112133Z-1c944d73fd56/openai-sol/rpc-transcript.jsonl",
+        "sha256": "cc6aed2f9bf9485e253e98721655fd89a116499ac90991a9d18dbe512f607845"
+      },
+      "runtime_trace_contract_predicates": {
+        "all_runtime_trace_responses_are_results": true,
+        "empty_startup_chat_session_create_observed": true,
+        "runtime_trace_nonempty": true,
+        "scheduled_governor_now_poll_observed": true,
+        "startup_chat_sessions_list_observed": true,
+        "startup_governor_hello_observed": true,
+        "startup_rpc_sequence_exact_prefix": true,
+        "typed_status_governor_status_observed": true,
+        "typed_status_rpc_sequence_in_order": true,
+        "typed_status_runtime_session_list_observed": true
+      },
+      "runtime_trace_pairs": [
+        {
+          "method": "governor.hello",
+          "request_body_sha256": "8db4e32092d4e8bddb749c898eb1721c5a8d551face6b662c194fabc3b9e9380",
+          "request_id": 1,
+          "response_body_sha256": "40e9f22d14637eb165b39b80947e4549b8116a5691c9d488fa872b86e592e568",
+          "response_kind": "result",
+          "result_or_error_sha256": "121835b0fa5ccd07a40f8ccff171a14572d904c29ea505e2a05019632a84ae21"
+        },
+        {
+          "method": "sessions.list",
+          "request_body_sha256": "285bbace0b496950512ad7760a70d6a6332bdb05f51fa4810da8a9ed5fa23edc",
+          "request_id": 2,
+          "response_body_sha256": "fd7035eefa5a8ad5905b8c310e75803983f097846206f66017d3135a42aaf2ce",
+          "response_kind": "result",
+          "result_or_error_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "method": "sessions.create",
+          "request_body_sha256": "5ef973c546884c7cb50453a8c8c51b0539ef7274db8ad2dda0b5af6cb05518a9",
+          "request_id": 3,
+          "response_body_sha256": "0e6c3c43f53a8e2748dd39cd051606b77ace9c024d604c8d0499b22a6edd8143",
+          "response_kind": "result",
+          "result_or_error_sha256": "1d785c1a68daf283534ab8af326cefac65f893d95dc4b25e78462bb61e027f4f"
+        },
+        {
+          "method": "governor.now",
+          "request_body_sha256": "6d92b744f9b63cbb14ce7c133505e9ac5d2c7b05bdf398fc1fc7a173f6ca58e0",
+          "request_id": 4,
+          "response_body_sha256": "d089fcbdd58ccc0e338fa47f7406d06ef2259f1e43d0a5a37c885fca629c13f9",
+          "response_kind": "result",
+          "result_or_error_sha256": "2fd47bbd8a8bb4d6fe36cdac30fe5b6b3231c5ab9588b8fd445575f7e1d46e68"
+        },
+        {
+          "method": "governor.now",
+          "request_body_sha256": "14ef5c2c47cc6538991ed0667684694daa5e28cb5235bee229fb98566eb0b6de",
+          "request_id": 5,
+          "response_body_sha256": "4fae06d37b0697ed7de77a914e22bd9eecbe93557d1fcefc8dfed44c5bef9b5e",
+          "response_kind": "result",
+          "result_or_error_sha256": "2fd47bbd8a8bb4d6fe36cdac30fe5b6b3231c5ab9588b8fd445575f7e1d46e68"
+        },
+        {
+          "method": "governor.status",
+          "request_body_sha256": "9cd00d46ebbd2ed76614f6bdd3190feadf0024f64a7750651763354d579fccd1",
+          "request_id": 6,
+          "response_body_sha256": "cdc2f75835db847531e9d390d1770eb16b72fcd379267d7f03455c4ac1699ed8",
+          "response_kind": "result",
+          "result_or_error_sha256": "765bb00d717480145a8974a9e827b7ccbef5f2eb4559da43c81ef9011822c6b7"
+        },
+        {
+          "method": "runtime.session.list",
+          "request_body_sha256": "f06e055b7d6e3af6069992545cb8d14da7a8fb7c100957a710c198ddbe54c907",
+          "request_id": 7,
+          "response_body_sha256": "199e58cf1707d3ba3954299aa321c6f48d71eddf2f6fc539bcacde2915cf5451",
+          "response_kind": "result",
+          "result_or_error_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "method": "governor.now",
+          "request_body_sha256": "819db07579d245e5ffa81905fdfbc581fe79fcdea21b72f8b5f9e01ec4aca340",
+          "request_id": 8,
+          "response_body_sha256": "9bd0722ea99865445e91f6ca4fe2826c23ee8e50928c7e88ed4cd14be1638d83",
+          "response_kind": "result",
+          "result_or_error_sha256": "2fd47bbd8a8bb4d6fe36cdac30fe5b6b3231c5ab9588b8fd445575f7e1d46e68"
+        },
+        {
+          "method": "governor.now",
+          "request_body_sha256": "5d4abc4322ee484efcbc749d41e6111d8db77724cae9a6c37496389190b16162",
+          "request_id": 9,
+          "response_body_sha256": "55fe1dbb2116126f28a7d85ef7c5926b165071bfac3f26d7a9e798ca8453390f",
+          "response_kind": "result",
+          "result_or_error_sha256": "2fd47bbd8a8bb4d6fe36cdac30fe5b6b3231c5ab9588b8fd445575f7e1d46e68"
+        }
+      ],
+      "safety_audit": {
+        "auth_read_attempts": [],
+        "environment_read_attempts": [],
+        "host_source_read_attempts": [],
+        "network_attempt_detection": "Includes URL/curl/wget/ssh tools, remote-capable git operations, OS package-manager acquisition, Python networking modules, and pip install/download/wheel unless the command explicitly uses --no-index.",
+        "network_command_attempts": [],
+        "schema": "maude.synthetic-operator.session-safety-audit.v1",
+        "unexpected_provider_action_count": 0,
+        "unexpected_provider_actions": [],
+        "zero_auth_env_network_source_attempts": true
+      },
+      "same_pty_process_across_provider_tool_actions": true,
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa875-7f08-7cc3-ba3d-cbc284f79fbe"
+      },
+      "stateful_pty_actions": 8,
+      "status": "available",
+      "status_command_send_proved": true,
+      "successful_action_output_sha256": [
+        "1311525b1b0f2722420d217c7a5d87499c0e377ef3a5254f439bf7eb926dc88c",
+        "98afc4038272e90d24ed2f085c13c0ba41e816149091277efc1a3ecf621eb775",
+        "ce8345683cc8201cd49bc8721de919e208f8209fe9039f80c04146aa5fae50e9",
+        "48a014660d6f1cacb03a976f8f25b85363b71754897036e4a5530e4df52eddc8",
+        "b78b12cd928480dddbfc9d8a2fadd0769ef4c2b44525cbf291670deef773fd21",
+        "34955bfdb5d24d02c2dde50eb01bc9a5c30f3dc99a85edeb09004a74452534d1",
+        "9b9bd4f7c1c56e0546ed9602f2a2b3ff6b427c3260a970467d9d5976f948ea21",
+        "cc9886f77f840923f1cd5b816abb6ba9a0a4c8b72d32be51eaad9156c61ec7f8"
+      ],
+      "successful_completed_action_events": [
+        {
+          "action_id": "item_1",
+          "completion_kind": "item.completed",
+          "event_number": 5,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_2",
+          "completion_kind": "item.completed",
+          "event_number": 7,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_3",
+          "completion_kind": "item.completed",
+          "event_number": 9,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_4",
+          "completion_kind": "item.completed",
+          "event_number": 11,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_5",
+          "completion_kind": "item.completed",
+          "event_number": 13,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_6",
+          "completion_kind": "item.completed",
+          "event_number": 15,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_7",
+          "completion_kind": "item.completed",
+          "event_number": 17,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        },
+        {
+          "action_id": "item_8",
+          "completion_kind": "item.completed",
+          "event_number": 19,
+          "exit_code": null,
+          "provider": "codex",
+          "status": "completed",
+          "succeeded": true,
+          "tool": "mcp__operator__terminal"
+        }
+      ],
+      "tab_focus_send_proved": true,
+      "task_level_network_or_external_operational_effect": false,
+      "terminal_action_records": [
+        {
+          "action_reference": "codex:item_1",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "bd07436426c7146826e928f673e3bf953dce4f80c6ba13e74811eb02fe0f497f",
+          "event_numbers": [
+            4,
+            5
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 1,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_2",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+          "event_numbers": [
+            6,
+            7
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 2,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_3",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "795f6967927209b0258d487c814296c9e46dc85c82b16dc420644ee1eb40383b",
+          "event_numbers": [
+            8,
+            9
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 3,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_4",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "37c9d419ef396c4171723aec4be9eafdc67a74a87f0acf6d5d841edf575b5d6f",
+          "event_numbers": [
+            10,
+            11
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 4,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_5",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+          "event_numbers": [
+            12,
+            13
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 5,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_6",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "0e6fb6ed66617e45b5e76adc4884ba57fa254c43e13f8e65a5946986262adfc2",
+          "event_numbers": [
+            14,
+            15
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 6,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_7",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "7f6bb1b6e5906906e614d1eb1a6c6479acc9387767b4581470183ee168d49c2f",
+          "event_numbers": [
+            16,
+            17
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 7,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        },
+        {
+          "action_reference": "codex:item_8",
+          "argument_keys": [
+            "command"
+          ],
+          "command_sha256": "ad6937b98d5c59d9e00b7e44b750ce89407bccf1bd14041c09107efdb796dbdf",
+          "event_numbers": [
+            18,
+            19
+          ],
+          "explicit_timeout_seconds": null,
+          "position": 8,
+          "provider": "codex",
+          "same_command_in_started_and_completed": true
+        }
+      ],
+      "tool_actions_after_gate": 8,
+      "typed_status_rpc_sequence_in_order": true
+    }
+  ],
+  "raw_evidence_committed": false,
+  "raw_evidence_location": "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/provider-capability-probes/installation/attempts/20260728T112133Z-1c944d73fd56",
+  "requested_provider_configs": [
+    "openai-sol",
+    "anthropic-sonnet"
+  ],
+  "schema": "maude.synthetic-operator.installation-surface-probes.v3",
+  "stateful_pty_contract": {
+    "claim_scope": "Proves cross-call PTY persistence and application handling of the predeclared status command after explicit input focus; it does not claim the probe model chose an unplanned input.",
+    "exact_operation_sequence_proved": [
+      "start",
+      "read",
+      "send-tab-focus",
+      "send-status-command",
+      "read",
+      "stop",
+      "read",
+      "status"
+    ],
+    "exact_pty_bytes_preserved": true,
+    "one_child_across_separate_provider_tool_actions": true,
+    "predeclared_command_sequence": true,
+    "separate_read_focus_send_command_send_read_stop_read_order_proved": true,
+    "typed_status_rpc_sequence_proved": true
+  },
+  "successful_provider_configs": [
+    "openai-sol"
+  ],
+  "task_level_network_or_external_operational_effect": false,
+  "unavailable_provider_configs": [
+    "anthropic-sonnet"
+  ]
+}

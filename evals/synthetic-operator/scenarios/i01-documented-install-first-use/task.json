@@ -1,5 +1,5 @@
 {
-  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
   "component": "Maude",
   "constraints": {
     "authority_effect": "none",
@@ -18,8 +18,8 @@
   ],
   "goal": "Discover the documented setup, install Maude into an isolated environment, configure the supplied endpoint, and complete one meaningful first interaction that proves the client can reach the synthetic service.",
   "handoff": {
-    "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/run/governor.sock",
-    "project_directory": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/project",
+    "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/run/governor.sock",
+    "project_directory": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/project",
     "service_owner": "synthetic-platform-team"
   },
   "review_condition": "Conclude only from command, package, executable, connection, and public interface evidence visible in the clean room.",

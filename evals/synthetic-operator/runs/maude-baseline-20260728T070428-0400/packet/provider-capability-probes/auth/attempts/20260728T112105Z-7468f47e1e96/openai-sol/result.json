@@ -1,0 +1,473 @@
+{
+  "authority_effect": "none",
+  "authorized_auth_path_absence_checks_only": true,
+  "authorized_codex_auth_absence_check": {
+    "accepted_argument_key_sets": [
+      [
+        "command"
+      ],
+      [
+        "command",
+        "timeout_seconds"
+      ]
+    ],
+    "command_sha256": "61c7f78f2d625ee09749d77660538c6ff0f7a724a19a4921eb68b9e8247d2407",
+    "optional_explicit_timeout_seconds": 30
+  },
+  "campaign_run": false,
+  "completed_action_events": [
+    {
+      "action_id": "item_1",
+      "completion_kind": "item.completed",
+      "event_number": 5,
+      "exit_code": null,
+      "provider": "codex",
+      "status": "completed",
+      "succeeded": true,
+      "tool": "mcp__operator__terminal"
+    },
+    {
+      "action_id": "item_2",
+      "completion_kind": "item.completed",
+      "event_number": 7,
+      "exit_code": null,
+      "provider": "codex",
+      "status": "completed",
+      "succeeded": true,
+      "tool": "mcp__operator__terminal"
+    }
+  ],
+  "delivery": {
+    "allowed_unix_sockets": [],
+    "codex_approval_argv": [
+      "--config",
+      "approval_policy=\"never\""
+    ],
+    "codex_approval_config_override": "approval_policy=\"never\"",
+    "codex_approval_policy": "never",
+    "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+    "codex_mcp_default_tools_approval_mode": "approve",
+    "delivered_prompt_bytes": 1078,
+    "delivered_prompt_sha256": "a27ea832accdb5de1f40f8b63d8eff73a22c5608b331aed236ea33e6ae1930e5",
+    "exact_provider_tool_allowlist_supported": true,
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+    "mcp_enabled_tools": [
+      "terminal"
+    ],
+    "mcp_protocol_version": "2025-06-18",
+    "mcp_server": "operator",
+    "mcp_tool_approval_safety_basis": {
+      "exact_enabled_tool_count": 1,
+      "grader_evidence_tool_read_only": false,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true,
+      "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+      "single_enabled_mcp_tool": "terminal"
+    },
+    "noninteractive_approval_safety_basis": {
+      "grader_evidence_tool_read_only": false,
+      "intrinsic_action_features_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "operator_terminal_bounded_by_frozen_broker": true,
+      "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+      "single_enabled_mcp_tool": "terminal"
+    },
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider": "OpenAI",
+    "provider_task_paths_added": [],
+    "provider_transport_cwd": "/home/operator",
+    "requested_model": "gpt-5.6-sol",
+    "semantic_prompt_bytes_in_argv": false,
+    "system_prompt_delivery": "concatenated first in single CLI prompt",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false,
+    "user_prompt_delivery": "concatenated after exact delimiter and delivered through closed stdin; no semantic prompt bytes appear in argv"
+  },
+  "distinct_completed_action_event_numbers": [
+    5,
+    7
+  ],
+  "final_answer_events": [
+    {
+      "event_number": 3,
+      "sha256": "c806b49e835c2e94cf9c7e8c84d2bb55d6d7686ef2c1ab0f3f96ca8420ba7c3c"
+    },
+    {
+      "event_number": 8,
+      "sha256": "4f60eae83f587bb85900aca3d6b1806ff779b47c579711bed11f20b9a670722c"
+    }
+  ],
+  "final_marker_after_second_tool_result": true,
+  "final_marker_present": true,
+  "fresh_process": true,
+  "gate_record": {
+    "bytes": 7760,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "attempts/20260728T112105Z-7468f47e1e96/openai-sol/auth-gate.json",
+    "sha256": "60026e56e0e687e1c4656cc806b3c76f627ce6d0329d2ed997610d7f677b9cdc"
+  },
+  "missing_clean_home_markers": [],
+  "model_configuration": {
+    "approval_policy": "never",
+    "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+    "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "built_in_tools": [],
+    "cli": "codex",
+    "exact_provider_tool_allowlist_supported": true,
+    "expected_family": "GPT",
+    "freshness": [
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_auto_approval_safety": {
+      "exact_enabled_tool_count_per_role": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true
+    },
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "model_argument": "gpt-5.6-sol",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider": "OpenAI",
+    "reasoning_effort": "low",
+    "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+    "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "process": {
+    "coaching": "none",
+    "completed_at": "2026-07-28T11:21:19Z",
+    "elapsed_seconds": 13.947679,
+    "follow_up_messages": 0,
+    "fresh_process": true,
+    "provider_auth_gate": {
+      "allowed_mcp_server": "operator",
+      "allowed_mcp_tools": [
+        "terminal"
+      ],
+      "boundary_evidence": {
+        "bytes": 718,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "codex-mcp-boundary/cleanup.json",
+        "sha256": "4289fb9dd09aebd8450eb465b9cd8523023eb60204e5c340c2e87621ab7b6e76"
+      },
+      "broker_cleanup": {
+        "command_broker": {
+          "exit_code": 0,
+          "forced_after_graceful_timeout": false,
+          "graceful_exit_requested": false,
+          "label": "Codex command broker",
+          "observed_processes": [
+            569820
+          ],
+          "remaining_processes": []
+        },
+        "private_socket_arena": {
+          "all_removed": true,
+          "directories": [
+            {
+              "directory": "/tmp/maude-sock-7a6c6c6e422e/s-ab6128907509906b6874",
+              "remaining_entries": [],
+              "removed": true
+            }
+          ],
+          "path_budget_bytes": 100,
+          "root": "/tmp/maude-sock-7a6c6c6e422e"
+        }
+      },
+      "broker_command_count": 2,
+      "codex_approval_argv": [
+        "--config",
+        "approval_policy=\"never\""
+      ],
+      "codex_approval_config_override": "approval_policy=\"never\"",
+      "codex_approval_policy": "never",
+      "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+      "codex_mcp_default_tools_approval_mode": "approve",
+      "exact_correlation_proved": true,
+      "identity": {
+        "event_number": 1,
+        "provider_thread_id": "019fa874-fac0-72c1-bbe7-4d9d741fd817"
+      },
+      "intrinsic_action_features_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+      "mcp_protocol_version": "2025-06-18",
+      "mcp_tool_approval_safety_basis": {
+        "exact_enabled_tool_count": 1,
+        "grader_evidence_tool_read_only": false,
+        "mcp_config_hash_pinned": true,
+        "operator_terminal_bounded_by_frozen_broker": true,
+        "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+        "single_enabled_mcp_tool": "terminal"
+      },
+      "noninteractive_approval_safety_basis": {
+        "grader_evidence_tool_read_only": false,
+        "intrinsic_action_features_disabled": [
+          "shell_tool",
+          "unified_exec"
+        ],
+        "operator_terminal_bounded_by_frozen_broker": true,
+        "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+        "single_enabled_mcp_tool": "terminal"
+      },
+      "normalized_result_correlations": [
+        {
+          "action_id": "item_1",
+          "arguments_sha256": "ac122dbb342fcd4b7eaf9719848631e3e16f78a913026e74945db35a50b9b688",
+          "provider_normalized_result_text_sha256": "860257b2c9b24286562c209674d30ca89eb8e93097e5f276d4c00353bec3bf77",
+          "proxy_is_error": false,
+          "proxy_result_text_sha256": "860257b2c9b24286562c209674d30ca89eb8e93097e5f276d4c00353bec3bf77",
+          "tool": "terminal"
+        },
+        {
+          "action_id": "item_2",
+          "arguments_sha256": "487d39418da35d066410e5bd0bbe03d14214b685b2522042dc43c2e99641fad2",
+          "provider_normalized_result_text_sha256": "bb65d2fbd9e2f75e69764f22322fdeb6cbdc04fc17930bd8aab96503c02df79e",
+          "proxy_is_error": false,
+          "proxy_result_text_sha256": "bb65d2fbd9e2f75e69764f22322fdeb6cbdc04fc17930bd8aab96503c02df79e",
+          "tool": "terminal"
+        }
+      ],
+      "optional_features_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "per_session_exact_tool_roster_supported": true,
+      "provider_auth_destroyed": true,
+      "provider_auth_output_scan_hits": [],
+      "provider_auth_retained_until_transport_exit": true,
+      "provider_auth_values_recorded": false,
+      "provider_config": "openai-sol",
+      "provider_private_state_before_destroy": {
+        "file_count": 61,
+        "inventory_sha256": "ea42666fc209626ef8d108cc3ec24d5ddc1113a706b52378ea04004dfd2b6484",
+        "total_bytes": 1011053
+      },
+      "provider_processes_remaining": [],
+      "provider_returncode": 0,
+      "provider_task_paths_mounted": [],
+      "provider_timed_out": false,
+      "provider_transport_cwd_is_neutral": true,
+      "proxy_tool_call_count": 2,
+      "recorded_at": "2026-07-28T11:21:19Z",
+      "schema": "maude.synthetic-operator.codex-retained-provider-boundary.v1",
+      "semantic_prompt_bytes": 1078,
+      "semantic_prompt_bytes_in_argv": false,
+      "semantic_prompt_delivery": "stdin",
+      "semantic_prompt_sha256": "a27ea832accdb5de1f40f8b63d8eff73a22c5608b331aed236ea33e6ae1930e5",
+      "status": "complete",
+      "tool_actions": [
+        {
+          "action_id": "item_1",
+          "arguments": {
+            "command": "/usr/bin/test \"$HOME\" = /home/operator && /usr/bin/test \"$XDG_CONFIG_HOME\" = /home/operator/.config && /usr/bin/printf 'clean-home-sentinel\\n' > \"$HOME/probe-sentinel\" && /usr/bin/printf 'HOME=/home/operator\\nCLEAN_HOME_WRITE_OK\\n'",
+            "timeout_seconds": 30
+          },
+          "arguments_sha256": "ac122dbb342fcd4b7eaf9719848631e3e16f78a913026e74945db35a50b9b688",
+          "completed": true,
+          "error": null,
+          "event_numbers": [
+            4,
+            5
+          ],
+          "result": {
+            "content": [
+              {
+                "text": "{\"command\":\"/usr/bin/test \\\"$HOME\\\" = /home/operator && /usr/bin/test \\\"$XDG_CONFIG_HOME\\\" = /home/operator/.config && /usr/bin/printf 'clean-home-sentinel\\\\n' > \\\"$HOME/probe-sentinel\\\" && /usr/bin/printf 'HOME=/home/operator\\\\nCLEAN_HOME_WRITE_OK\\\\n'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_auth-gate-openai-sol-7ae57aa634bb/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"HOME=/home/operator\\nCLEAN_HOME_WRITE_OK\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                "type": "text"
+              }
+            ],
+            "structured_content": null
+          },
+          "server": "operator",
+          "status": "completed",
+          "tool": "terminal"
+        },
+        {
+          "action_id": "item_2",
+          "arguments": {
+            "command": "/usr/bin/test \"$(/usr/bin/cat \"$HOME/probe-sentinel\")\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \"$provider_auth_root/.codex/auth.json\" && /usr/bin/test ! -e \"$provider_auth_root/.codex/installation_id\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\n'",
+            "timeout_seconds": 30
+          },
+          "arguments_sha256": "487d39418da35d066410e5bd0bbe03d14214b685b2522042dc43c2e99641fad2",
+          "completed": true,
+          "error": null,
+          "event_numbers": [
+            6,
+            7
+          ],
+          "result": {
+            "content": [
+              {
+                "text": "{\"command\":\"/usr/bin/test \\\"$(/usr/bin/cat \\\"$HOME/probe-sentinel\\\")\\\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/auth.json\\\" && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/installation_id\\\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\\\n'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_auth-gate-openai-sol-7ae57aa634bb/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"PROVIDER_AUTH_ABSENT_OK\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                "type": "text"
+              }
+            ],
+            "structured_content": null
+          },
+          "server": "operator",
+          "status": "completed",
+          "tool": "terminal"
+        }
+      ],
+      "unexpected_intrinsic_action_policy": "fail-closed"
+    },
+    "returncode": 0,
+    "semantic_prompt_bytes": 1078,
+    "semantic_prompt_sha256": "a27ea832accdb5de1f40f8b63d8eff73a22c5608b331aed236ea33e6ae1930e5",
+    "started_at": "2026-07-28T11:21:05Z",
+    "timed_out": false
+  },
+  "provider_config": "openai-sol",
+  "provider_network_attempted": true,
+  "provider_network_permitted_for_probe_session": true,
+  "raw_stderr": {
+    "bytes": 0,
+    "media_type": "text/plain",
+    "mode": "0664",
+    "path": "attempts/20260728T112105Z-7468f47e1e96/openai-sol/provider.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw_transcript": {
+    "bytes": 3743,
+    "media_type": "application/x-ndjson",
+    "mode": "0664",
+    "path": "attempts/20260728T112105Z-7468f47e1e96/openai-sol/transcript.jsonl",
+    "sha256": "ef94c256fdc03285a34f5e3f66f134788df6089169967922cb2acf528f0fbc13"
+  },
+  "required_clean_home_markers": [
+    "CLEAN_HOME_WRITE_OK",
+    "HOME=/home/operator",
+    "PROVIDER_AUTH_ABSENT_OK"
+  ],
+  "safety_audit": {
+    "auth_read_attempts": [
+      "{\"observations\": [{\"event_number\": 6, \"event_type\": \"item.started\", \"item\": {\"arguments\": {\"command\": \"/usr/bin/test \\\"$(/usr/bin/cat \\\"$HOME/probe-sentinel\\\")\\\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/auth.json\\\" && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/installation_id\\\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\\\n'\", \"timeout_seconds\": 30}, \"error\": null, \"id\": \"item_2\", \"result\": null, \"server\": \"operator\", \"status\": \"in_progress\", \"tool\": \"terminal\", \"type\": \"mcp_tool_call\"}, \"item_sha256\": \"c7adaa9ced3717329f815b78e0f5b85bd4a1dc4cba1972b4d3aeaa4e8f046eaf\"}, {\"event_number\": 7, \"event_type\": \"item.completed\", \"item\": {\"arguments\": {\"command\": \"/usr/bin/test \\\"$(/usr/bin/cat \\\"$HOME/probe-sentinel\\\")\\\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/auth.json\\\" && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/installation_id\\\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\\\n'\", \"timeout_seconds\": 30}, \"error\": null, \"id\": \"item_2\", \"result\": {\"content\": [{\"text\": \"{\\\"command\\\":\\\"/usr/bin/test \\\\\\\"$(/usr/bin/cat \\\\\\\"$HOME/probe-sentinel\\\\\\\")\\\\\\\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \\\\\\\"$provider_auth_root/.codex/auth.json\\\\\\\" && /usr/bin/test ! -e \\\\\\\"$provider_auth_root/.codex/installation_id\\\\\\\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\\\\\\\n'\\\",\\\"cwd\\\":\\\"/tmp/maude-synth-7a6c6c6e422e/_auth-gate-openai-sol-7ae57aa634bb/operator\\\",\\\"returncode\\\":0,\\\"stderr\\\":\\\"\\\",\\\"stderr_truncated\\\":false,\\\"stdout\\\":\\\"PROVIDER_AUTH_ABSENT_OK\\\\n\\\",\\\"stdout_truncated\\\":false,\\\"timed_out\\\":false}\", \"type\": \"text\"}], \"structured_content\": null}, \"server\": \"operator\", \"status\": \"completed\", \"tool\": \"terminal\", \"type\": \"mcp_tool_call\"}, \"item_sha256\": \"461280948838a95ac7ad3ce930b87c1c612a3b2db99cf3ee4752326176c8f9bf\"}]}"
+    ],
+    "environment_read_attempts": [],
+    "host_source_read_attempts": [],
+    "network_attempt_detection": "Includes URL/curl/wget/ssh tools, remote-capable git operations, OS package-manager acquisition, Python networking modules, and pip install/download/wheel unless the command explicitly uses --no-index.",
+    "network_command_attempts": [],
+    "schema": "maude.synthetic-operator.session-safety-audit.v1",
+    "unexpected_provider_action_count": 0,
+    "unexpected_provider_actions": [],
+    "zero_auth_env_network_source_attempts": false
+  },
+  "session_identity": {
+    "configured_model": "gpt-5.6-sol",
+    "provider_thread_id": "019fa874-fac0-72c1-bbe7-4d9d741fd817"
+  },
+  "status": "available",
+  "successful_action_output_records": [
+    {
+      "action_id": "item_1",
+      "event_number": 5,
+      "output": "{\"command\":\"/usr/bin/test \\\"$HOME\\\" = /home/operator && /usr/bin/test \\\"$XDG_CONFIG_HOME\\\" = /home/operator/.config && /usr/bin/printf 'clean-home-sentinel\\\\n' > \\\"$HOME/probe-sentinel\\\" && /usr/bin/printf 'HOME=/home/operator\\\\nCLEAN_HOME_WRITE_OK\\\\n'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_auth-gate-openai-sol-7ae57aa634bb/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"HOME=/home/operator\\nCLEAN_HOME_WRITE_OK\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+      "provider": "codex"
+    },
+    {
+      "action_id": "item_2",
+      "event_number": 7,
+      "output": "{\"command\":\"/usr/bin/test \\\"$(/usr/bin/cat \\\"$HOME/probe-sentinel\\\")\\\" = clean-home-sentinel && provider_auth_root=/run/provider-''auth && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/auth.json\\\" && /usr/bin/test ! -e \\\"$provider_auth_root/.codex/installation_id\\\" && /usr/bin/printf 'PROVIDER_AUTH_ABSENT_OK\\\\n'\",\"cwd\":\"/tmp/maude-synth-7a6c6c6e422e/_auth-gate-openai-sol-7ae57aa634bb/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"PROVIDER_AUTH_ABSENT_OK\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+      "provider": "codex"
+    }
+  ],
+  "successful_completed_action_events": [
+    {
+      "action_id": "item_1",
+      "completion_kind": "item.completed",
+      "event_number": 5,
+      "exit_code": null,
+      "provider": "codex",
+      "status": "completed",
+      "succeeded": true,
+      "tool": "mcp__operator__terminal"
+    },
+    {
+      "action_id": "item_2",
+      "completion_kind": "item.completed",
+      "event_number": 7,
+      "exit_code": null,
+      "provider": "codex",
+      "status": "completed",
+      "succeeded": true,
+      "tool": "mcp__operator__terminal"
+    }
+  ],
+  "task_level_network_or_external_operational_effect": false,
+  "tool_actions_after_gate": 2,
+  "unauthorized_auth_probe_reads": []
+}

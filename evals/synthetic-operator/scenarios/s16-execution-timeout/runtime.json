@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:83935e4ad85464592e80cf89f2ccb72937bb8b74fcb7c7c872056593c2b26ef3",
-    "source_plan_digest": "sha256:3ac58848727a5fc8f88ae17e86889ab1c53333fe1dac302f0e83c84178024ba3"
+    "approval_witness_digest": "sha256:773df2d0f544da42933078a48c082dea745c59acbe47d4b81ad490d988f04a7e",
+    "source_plan_digest": "sha256:b8074d81ae039cc9b786fa462f1226de1e41f95dd8a6c0e24954274ac618a396"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -99,7 +99,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:83935e4ad85464592e80cf89f2ccb72937bb8b74fcb7c7c872056593c2b26ef3",
+    "approval_witness_digest": "sha256:773df2d0f544da42933078a48c082dea745c59acbe47d4b81ad490d988f04a7e",
     "behavior": "normal",
     "commands": [
       {
@@ -113,12 +113,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:d3f4db2b10dd6fd031b782399e74b6525330e7fab98237955cddffe2a517232f",
-    "grant_id": "sgr_d3f4db2b10dd",
+    "grant_digest": "sha256:7794d314dcdd3a24cbc89d91124b4667f8f8e5a91bbfe7cd9c35056fb95770ea",
+    "grant_id": "sgr_7794d314dcdd",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:3ac58848727a5fc8f88ae17e86889ab1c53333fe1dac302f0e83c84178024ba3",
+    "source_plan_digest": "sha256:b8074d81ae039cc9b786fa462f1226de1e41f95dd8a6c0e24954274ac618a396",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -173,7 +173,7 @@
       "config/queue.yaml": "max_inflight: 100\n",
       "tests/test_queue_config.py": "from pathlib import Path\n\n\ndef test_max_inflight() -> None:\n    assert (\n        Path(\"config/queue.yaml\").read_text(encoding=\"utf-8\")\n        == \"max_inflight: 80\\n\"\n    )\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s16/repo"
+    "path": "/tmp/maude-synth-7a6c6c6e422e/maude-s16/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

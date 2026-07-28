@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Change only the opaque configuration reference from config/payments/v18 to config/payments/v19. Do not retrieve or print configuration contents."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s05/repo"
+workspace: "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

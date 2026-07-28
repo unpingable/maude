@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Add --config /etc/menu-board/config.toml to ExecStart and make no other unit changes."
-workspace: "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s06/repo"
+workspace: "/tmp/maude-synth-7a6c6c6e422e/maude-s06/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

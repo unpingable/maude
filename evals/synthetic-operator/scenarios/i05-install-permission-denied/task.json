@@ -1,5 +1,5 @@
 {
-  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
   "component": "Maude",
   "constraints": {
     "authority_effect": "none",
@@ -19,9 +19,9 @@
   "goal": "First attempt the relevant published explicit-socket example exactly as written and preserve its result. Then configure and start Maude as far as safely possible using the handoff, and report whether the first useful interaction completed.",
   "handoff": {
     "endpoint_owner": "synthetic-platform-team",
-    "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/run/governor.sock",
-    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/venv",
-    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i05/installation/venv/bin/maude",
+    "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/run/governor.sock",
+    "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/venv",
+    "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/venv/bin/maude",
     "sudo_authorized": false
   },
   "review_condition": "Do not silently repair placeholders in the initial copy/paste attempt. Do not use sudo, change endpoint permissions, or claim service readiness without a public protocol response.",

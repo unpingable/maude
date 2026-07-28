@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:af5c828b52bd71ad5e0283218e4cc14075c6f896de275262b77bb83ad36631a2",
-    "source_plan_digest": "sha256:89ded8fef177088506642c8b987a9668334e471b71f755d187ce0779ca7f58ff"
+    "approval_witness_digest": "sha256:940fc7e21dd81d73f3136cfe1cb8fe7f002033e1bad7d0d8c913957d08e39de3",
+    "source_plan_digest": "sha256:74694373841fc6e12fb100726c2396c9ac81e03a5fe0e588b2e6eae0e100d255"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -233,7 +233,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:af5c828b52bd71ad5e0283218e4cc14075c6f896de275262b77bb83ad36631a2",
+    "approval_witness_digest": "sha256:940fc7e21dd81d73f3136cfe1cb8fe7f002033e1bad7d0d8c913957d08e39de3",
     "behavior": "normal",
     "commands": [
       {
@@ -246,12 +246,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:599bba8b463ac52cdcce75dcc2eda77a945dfece9d1bd22e553ca083a6603669",
-    "grant_id": "sgr_599bba8b463a",
+    "grant_digest": "sha256:7c3dd60bcceaee8800faefc8af2d6d5a91ffe20d6c8e948e989e1e5f01bcb6b6",
+    "grant_id": "sgr_7c3dd60bccea",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:89ded8fef177088506642c8b987a9668334e471b71f755d187ce0779ca7f58ff",
+    "source_plan_digest": "sha256:74694373841fc6e12fb100726c2396c9ac81e03a5fe0e588b2e6eae0e100d255",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -314,7 +314,7 @@
     "base_files": {
       "systemd/menu-board.service": "[Unit]\nDescription=Menu board renderer\n\n[Service]\nExecStart=/usr/bin/env menu-board --foreground\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s06/repo"
+    "path": "/tmp/maude-synth-7a6c6c6e422e/maude-s06/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",
