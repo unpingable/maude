@@ -1,0 +1,40 @@
+{
+  "schema": "maude.synthetic-operator.evidence-preservation-correction.v1",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "recorded_at": "2026-07-28T12:36:06Z",
+  "status": "force-add-indexed-ignored-evidence",
+  "parent_evidence_commit": "6d66a1b397a2385f853d51b076620c4e9b87b04d",
+  "cause": "The repository .gitignore entry at line 28 ignores every .governor directory. Normal staging therefore omitted two exact captured copies of install-i10's indexed project/.governor/ownership.json evidence even though both the observable-artifact index and frozen grader-bundle inventory pin the file.",
+  "discovery": {
+    "fresh_checkout_verifier_error": "install-i10 observable artifacts: indexed file missing observable/operator-supplied/files/project/.governor/ownership.json",
+    "all_5056_parent_commit_inventory_records_byte_exact_in_fresh_checkout": true,
+    "ignored_path_audit_found_other_indexed_evidence_omissions": false,
+    "ruff_cache_paths_were_check_generated_disposable_state_not_indexed_evidence": true
+  },
+  "restored_records": [
+    {
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/install-i10/observable/operator-supplied/files/project/.governor/ownership.json",
+      "bytes": 117,
+      "sha256": "983698a6586c790b1f722fc35f24ee99ee4da33b6ff453ec36c260102e5f3550",
+      "indexed_by": "install-i10/observable-artifacts.json",
+      "index_mode": "0664"
+    },
+    {
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/install-i10/grade/grade-bundle/observable/operator-supplied/files/project/.governor/ownership.json",
+      "bytes": 117,
+      "sha256": "983698a6586c790b1f722fc35f24ee99ee4da33b6ff453ec36c260102e5f3550",
+      "indexed_by": "install-i10/grade/grade-bundle/bundle-inventory.json",
+      "index_mode": "0644"
+    }
+  ],
+  "copies_byte_identical": true,
+  "scope": {
+    "raw_transcript_or_grade_bytes_modified": false,
+    "product_behavior_modified": false,
+    "operator_documentation_repaired": false,
+    "governance_or_oq7_state_changed": false,
+    "roadmap_status_changed": false,
+    "authority_effect": "none",
+    "pushed": false
+  }
+}
