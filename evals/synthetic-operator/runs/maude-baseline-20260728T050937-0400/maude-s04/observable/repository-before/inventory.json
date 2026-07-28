@@ -1,0 +1,94 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "82f13d2960b9bc1f7f81e3b2c589fa43b3ad7355\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 249,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/menu-board/deployment.yaml",
+      "sha256": "d825f98e8afdfcc8de784036b9dac922b8909a10f5ac1010fc0f2de74bbf8669"
+    },
+    {
+      "bytes": 95,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/menu-board/kustomization.yaml",
+      "sha256": "1779a8dce44822dbc4c9e29430d781dd4a2f6c48e774074a5af05297a7f3591f"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s04/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

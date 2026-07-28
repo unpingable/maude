@@ -1,0 +1,28 @@
+{
+  "cleanup_errors": [],
+  "command_broker": {
+    "exit_code": 0,
+    "forced_after_graceful_timeout": false,
+    "graceful_exit_requested": false,
+    "label": "Codex command broker",
+    "observed_processes": [
+      547646
+    ],
+    "remaining_processes": []
+  },
+  "private_socket_arena": {
+    "all_removed": true,
+    "directories": [
+      {
+        "directory": "/tmp/maude-sock-b8c9ccf150af/s-1806824c033bbe9012d3",
+        "remaining_entries": [],
+        "removed": true
+      }
+    ],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-b8c9ccf150af"
+  },
+  "provider_auth_destroyed": true,
+  "provider_processes_remaining": [],
+  "schema": "maude.synthetic-operator.codex-boundary-cleanup.v1"
+}

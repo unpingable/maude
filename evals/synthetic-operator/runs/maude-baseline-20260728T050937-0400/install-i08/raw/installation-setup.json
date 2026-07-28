@@ -1,0 +1,311 @@
+{
+  "authority_effect": "none",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "venv",
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python",
+        "-m",
+        "pip",
+        "--isolated",
+        "install",
+        "--disable-pip-version-check",
+        "--no-cache-dir",
+        "--no-index",
+        "--find-links",
+        "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse",
+        "--require-hashes",
+        "--requirement",
+        "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Looking in links: /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 3))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/ag_shell_client-0.1.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 4))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/textual-8.2.8-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 5))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pydantic-2.13.4-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 6))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pyyaml-6.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 7))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/markdown_it_py-4.2.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 8))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/mdit_py_plugins-0.6.1-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 9))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/platformdirs-4.10.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 10))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pygments-2.20.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 11))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/rich-15.0.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 12))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/linkify_it_py-2.1.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 13))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/uc_micro_py-2.0.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 14))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/mdurl-0.1.2-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 15))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/typing_extensions-4.16.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 16))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/typing_inspection-0.4.2-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 17))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/annotated_types-0.7.0-py3-none-any.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 18))\nProcessing ./evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/wheelhouse/pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (from -r /home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt (line 19))\nInstalling collected packages: uc-micro-py, typing_extensions, PyYAML, Pygments, platformdirs, mdurl, annotated-types, ag-shell-client, typing-inspection, pydantic_core, markdown-it-py, linkify-it-py, rich, pydantic, mdit-py-plugins, textual, maude\nSuccessfully installed PyYAML-6.0.3 Pygments-2.20.0 ag-shell-client-0.1.0 annotated-types-0.7.0 linkify-it-py-2.1.0 markdown-it-py-4.2.0 maude-2.4.0 mdit-py-plugins-0.6.1 mdurl-0.1.2 platformdirs-4.10.0 pydantic-2.13.4 pydantic_core-2.46.4 rich-15.0.0 textual-8.2.8 typing-inspection-0.4.2 typing_extensions-4.16.0 uc-micro-py-2.0.0\n"
+    }
+  ],
+  "copied_site_packages": false,
+  "editable_install": false,
+  "installation_media_provenance": {
+    "bytes": 39860,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/provenance.json",
+    "sha256": "94f96abb72f5dcc98e79b2fcb887dd8d10e5b2a841d89438c96b03e1d8cedcac"
+  },
+  "mirror_rewrite": false,
+  "network_controls": "pip --isolated --no-index --no-cache-dir with an exact frozen local wheelhouse and --require-hashes; no intentional network operation; no OS network namespace claimed for materialization",
+  "package_command_wrapper": false,
+  "probe": {
+    "expected_installed": true,
+    "maude_entrypoint_executable": true,
+    "maude_entrypoint_exists": true,
+    "maude_help": {
+      "argv": [
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/maude",
+        "--help"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "usage: maude [-h] [--governor-dir GOVERNOR_DIR] [--socket SOCKET]\n             [--context-id CONTEXT_ID] [--label LABEL]\n\nMaude - Governor TUI\n\noptions:\n  -h, --help            show this help message and exit\n  --governor-dir GOVERNOR_DIR\n                        Governor directory (default: from GOVERNOR_DIR env or\n                        cwd)\n  --socket SOCKET       Governor daemon socket path (default: from\n                        GOVERNOR_SOCKET env or auto-derived)\n  --context-id CONTEXT_ID\n                        Governor context ID (default: from GOVERNOR_CONTEXT_ID\n                        env or 'default')\n  --label LABEL         Session label shown in terminal title (default: from\n                        MAUDE_LABEL env)\n"
+    },
+    "observed": {
+      "console_script": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/maude",
+      "console_script_executable": true,
+      "console_script_exists": true,
+      "console_script_first_line": "#!/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python",
+      "console_script_sha256": "c965856c5e9cc73c317c0cce9fff00a42ae5c5ae76228165e6e8dd8312a87420",
+      "direct_url_files": [],
+      "egg_link_files": [],
+      "maude_distribution_version": "2.4.0",
+      "maude_module": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/lib/python3.12/site-packages/maude/__init__.py",
+      "maude_module_inside_prefix": true,
+      "packages": {
+        "PyYAML": "6.0.3",
+        "Pygments": "2.20.0",
+        "ag-shell-client": "0.1.0",
+        "annotated-types": "0.7.0",
+        "linkify-it-py": "2.1.0",
+        "markdown-it-py": "4.2.0",
+        "maude": "2.4.0",
+        "mdit-py-plugins": "0.6.1",
+        "mdurl": "0.1.2",
+        "pip": "24.0",
+        "platformdirs": "4.10.0",
+        "pydantic": "2.13.4",
+        "pydantic_core": "2.46.4",
+        "rich": "15.0.0",
+        "textual": "8.2.8",
+        "typing-inspection": "0.4.2",
+        "typing_extensions": "4.16.0",
+        "uc-micro-py": "2.0.0"
+      },
+      "prefix": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv",
+      "pth_files": [],
+      "sys_path": [
+        "",
+        "/usr/lib/python312.zip",
+        "/usr/lib/python3.12",
+        "/usr/lib/python3.12/lib-dynload",
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/lib/python3.12/site-packages"
+      ]
+    },
+    "pip_check": {
+      "argv": [
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "No broken requirements found.\n"
+    },
+    "pip_freeze": {
+      "argv": [
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python",
+        "-m",
+        "pip",
+        "freeze",
+        "--all"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "ag-shell-client==0.1.0\nannotated-types==0.7.0\nlinkify-it-py==2.1.0\nmarkdown-it-py==4.2.0\nmaude==2.4.0\nmdit-py-plugins==0.6.1\nmdurl==0.1.2\npip==24.0\nplatformdirs==4.10.0\npydantic==2.13.4\npydantic_core==2.46.4\nPygments==2.20.0\nPyYAML==6.0.3\nrich==15.0.0\ntextual==8.2.8\ntyping-inspection==0.4.2\ntyping_extensions==4.16.0\nuc-micro-py==2.0.0\n"
+    },
+    "probe_command": {
+      "argv": [
+        "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python",
+        "-c",
+        "import hashlib\nimport importlib.metadata as metadata\nimport importlib.util\nimport json\nimport os\nimport pathlib\nimport sys\n\nprefix = pathlib.Path(sys.prefix).resolve()\nspec = importlib.util.find_spec(\"maude\")\nmodule = pathlib.Path(spec.origin).resolve() if spec and spec.origin else None\nscript = prefix / \"bin\" / \"maude\"\nscript_bytes = script.read_bytes() if script.is_file() else b\"\"\npackages = {\n    dist.metadata[\"Name\"]: dist.version\n    for dist in metadata.distributions()\n    if dist.metadata.get(\"Name\")\n}\ndirect_urls = sorted(\n    str(path.relative_to(prefix))\n    for path in prefix.rglob(\"direct_url.json\")\n)\negg_links = sorted(\n    str(path.relative_to(prefix))\n    for path in prefix.rglob(\"*.egg-link\")\n)\npth_files = sorted(\n    str(path.relative_to(prefix))\n    for path in prefix.rglob(\"*.pth\")\n)\nprint(json.dumps({\n    \"prefix\": str(prefix),\n    \"packages\": packages,\n    \"maude_module\": str(module) if module else None,\n    \"maude_module_inside_prefix\": bool(module and prefix in module.parents),\n    \"maude_distribution_version\": (\n        metadata.version(\"maude\")\n        if \"maude\" in {name.lower() for name in packages}\n        else None\n    ),\n    \"console_script\": str(script),\n    \"console_script_exists\": script.is_file(),\n    \"console_script_executable\": os.access(script, os.X_OK),\n    \"console_script_sha256\": (\n        hashlib.sha256(script_bytes).hexdigest() if script_bytes else None\n    ),\n    \"console_script_first_line\": (\n        script_bytes.splitlines()[0].decode(\"utf-8\", errors=\"replace\")\n        if script_bytes else None\n    ),\n    \"direct_url_files\": direct_urls,\n    \"egg_link_files\": egg_links,\n    \"pth_files\": pth_files,\n    \"sys_path\": sys.path,\n}, sort_keys=True))\n"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"console_script\": \"/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/maude\", \"console_script_executable\": true, \"console_script_exists\": true, \"console_script_first_line\": \"#!/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/bin/python\", \"console_script_sha256\": \"c965856c5e9cc73c317c0cce9fff00a42ae5c5ae76228165e6e8dd8312a87420\", \"direct_url_files\": [], \"egg_link_files\": [], \"maude_distribution_version\": \"2.4.0\", \"maude_module\": \"/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/lib/python3.12/site-packages/maude/__init__.py\", \"maude_module_inside_prefix\": true, \"packages\": {\"PyYAML\": \"6.0.3\", \"Pygments\": \"2.20.0\", \"ag-shell-client\": \"0.1.0\", \"annotated-types\": \"0.7.0\", \"linkify-it-py\": \"2.1.0\", \"markdown-it-py\": \"4.2.0\", \"maude\": \"2.4.0\", \"mdit-py-plugins\": \"0.6.1\", \"mdurl\": \"0.1.2\", \"pip\": \"24.0\", \"platformdirs\": \"4.10.0\", \"pydantic\": \"2.13.4\", \"pydantic_core\": \"2.46.4\", \"rich\": \"15.0.0\", \"textual\": \"8.2.8\", \"typing-inspection\": \"0.4.2\", \"typing_extensions\": \"4.16.0\", \"uc-micro-py\": \"2.0.0\"}, \"prefix\": \"/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv\", \"pth_files\": [], \"sys_path\": [\"\", \"/usr/lib/python312.zip\", \"/usr/lib/python3.12\", \"/usr/lib/python3.12/lib-dynload\", \"/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv/lib/python3.12/site-packages\"]}\n"
+    },
+    "python_exists": true,
+    "schema": "maude.synthetic-installation.package-probe.v1",
+    "venv": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/venv",
+    "venv_exists": true
+  },
+  "run_id": "install-i08",
+  "runtime_requirements": {
+    "bytes": 1804,
+    "media_type": "text/plain",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/installation-media/runtime-requirements.txt",
+    "sha256": "aadaf8a8bd73a199ef1cbf90fd87ed8474182c7550d8bb9c8b2838cd27bf6403"
+  },
+  "schema": "maude.synthetic-installation.materialization.v1",
+  "wheelhouse_inventory": [
+    {
+      "bytes": 9984,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "ag_shell_client-0.1.0-py3-none-any.whl",
+      "sha256": "2a7b85444f71463368f2154c77f78a3f751e336dcb77bc468e21d14bbb105866"
+    },
+    {
+      "bytes": 13643,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "annotated_types-0.7.0-py3-none-any.whl",
+      "sha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"
+    },
+    {
+      "bytes": 76356,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "hatchling-1.29.0-py3-none-any.whl",
+      "sha256": "50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0"
+    },
+    {
+      "bytes": 19878,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "linkify_it_py-2.1.0-py3-none-any.whl",
+      "sha256": "0d252c1594ecba2ecedc444053db5d3a9b7ec1b0dd929c8f1d74dce89f86c05e"
+    },
+    {
+      "bytes": 91687,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "markdown_it_py-4.2.0-py3-none-any.whl",
+      "sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
+    },
+    {
+      "bytes": 89993,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "maude-2.4.0-py3-none-any.whl",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+    },
+    {
+      "bytes": 66663,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "mdit_py_plugins-0.6.1-py3-none-any.whl",
+      "sha256": "214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d"
+    },
+    {
+      "bytes": 9979,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "mdurl-0.1.2-py3-none-any.whl",
+      "sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "bytes": 100195,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "packaging-26.2-py3-none-any.whl",
+      "sha256": "5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"
+    },
+    {
+      "bytes": 55206,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pathspec-1.0.4-py3-none-any.whl",
+      "sha256": "fb6ae2fd4e7c921a165808a552060e722767cfa526f99ca5156ed2ce45a5c723"
+    },
+    {
+      "bytes": 22743,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "platformdirs-4.10.0-py3-none-any.whl",
+      "sha256": "fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"
+    },
+    {
+      "bytes": 20538,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pluggy-1.6.0-py3-none-any.whl",
+      "sha256": "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
+    },
+    {
+      "bytes": 472262,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pydantic-2.13.4-py3-none-any.whl",
+      "sha256": "45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba"
+    },
+    {
+      "bytes": 2094516,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "926c9541b14b12b1681dca8a0b75feb510b06c6341b70a8e500c2fdcff837cce"
+    },
+    {
+      "bytes": 1231151,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pygments-2.20.0-py3-none-any.whl",
+      "sha256": "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
+    },
+    {
+      "bytes": 807870,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "pyyaml-6.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+    },
+    {
+      "bytes": 310654,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "rich-15.0.0-py3-none-any.whl",
+      "sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
+    },
+    {
+      "bytes": 731418,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "textual-8.2.8-py3-none-any.whl",
+      "sha256": "267375fd402dc8d981457212efa71f0e3365fd17bba144ba9bb3ed7563cb374a"
+    },
+    {
+      "bytes": 14216,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "trove_classifiers-2026.4.28.13-py3-none-any.whl",
+      "sha256": "8f4b1eb4e16296b57d612965444f87a83861cc989a0451ac97fe4265ddef03b8"
+    },
+    {
+      "bytes": 45571,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "bytes": 14611,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "typing_inspection-0.4.2-py3-none-any.whl",
+      "sha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7"
+    },
+    {
+      "bytes": 6383,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "uc_micro_py-2.0.0-py3-none-any.whl",
+      "sha256": "3603a3859af53e5a39bc7677713c78ea6589ff188d70f4fee165db88e22b242c"
+    }
+  ]
+}

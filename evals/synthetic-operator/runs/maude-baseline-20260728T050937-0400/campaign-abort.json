@@ -1,0 +1,149 @@
+{
+  "schema": "maude.synthetic-operator.campaign-abort.v1",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "recorded_at": "2026-07-28T10:59:53Z",
+  "status": "aborted-evaluator-infrastructure",
+  "frozen_packet": {
+    "commit": "bba7875b3448a21586fe7cf1cd4ab7dd223d3782",
+    "manifest_bytes": 497806,
+    "manifest_sha256": "ac342a7005e252c979657c1105123cd4614d85e63dcd37d604f3bc55e79e9cac"
+  },
+  "operator_stage": {
+    "declared_runs": 35,
+    "materialized_runs": 35,
+    "completion_markers": 30,
+    "completed_run_ids": [
+      "maude-s01",
+      "maude-s02",
+      "maude-s03",
+      "maude-s04",
+      "maude-s05",
+      "maude-s06",
+      "maude-s07",
+      "maude-s08",
+      "maude-s09",
+      "maude-s10",
+      "maude-s11",
+      "maude-s12",
+      "maude-s13",
+      "maude-s14",
+      "maude-s15",
+      "maude-s16",
+      "maude-s17",
+      "maude-s18",
+      "maude-s19",
+      "maude-s20",
+      "docket-s01",
+      "docket-s11",
+      "docket-s15",
+      "docket-s17",
+      "docket-s20",
+      "install-i05",
+      "install-i06",
+      "install-i07",
+      "install-i08",
+      "install-i10"
+    ],
+    "provider_sessions_started": 30,
+    "unique_provider_session_identities": 30,
+    "completed_unique_provider_session_identities": 30,
+    "pre_session_failures": 5,
+    "pre_session_failure_run_ids": [
+      "install-i01",
+      "install-i02",
+      "install-i03",
+      "install-i04",
+      "install-i09"
+    ],
+    "pre_session_failure_provider_identities": 0,
+    "coached_sessions": 0,
+    "operator_model_configurations": [
+      "openai-sol"
+    ],
+    "retrospective_evaluator_contamination_observed": 10,
+    "source_evaluator_contamination_observed": 5
+  },
+  "installation_pre_session_failures": [
+    {
+      "run_id": "install-i01",
+      "failure_stage": "command-broker-policy-preflight",
+      "cause": "the evaluator declared an installation/venv mount even though this scenario intentionally had no installed distribution and the mount source did not exist",
+      "provider_session_started": false,
+      "partial_evidence_preserved": true
+    },
+    {
+      "run_id": "install-i02",
+      "failure_stage": "installation-endpoint-path-validation",
+      "cause": "the frozen lab root produced a 112-byte Unix-socket path, exceeding the campaign's conservative 100-byte budget",
+      "provider_session_started": false,
+      "partial_evidence_preserved": true
+    },
+    {
+      "run_id": "install-i03",
+      "failure_stage": "command-broker-policy-preflight",
+      "cause": "the evaluator declared an installation/venv mount even though this scenario intentionally had no installed distribution and the mount source did not exist",
+      "provider_session_started": false,
+      "partial_evidence_preserved": true
+    },
+    {
+      "run_id": "install-i04",
+      "failure_stage": "persistent-pty-broker-startup",
+      "cause": "the evaluator declared the intentionally unavailable Governor endpoint as a socket mount; bubblewrap correctly rejected the absent socket and the PTY broker exited before a regular cleanup report",
+      "provider_session_started": false,
+      "partial_evidence_preserved": true
+    },
+    {
+      "run_id": "install-i09",
+      "failure_stage": "command-broker-policy-preflight",
+      "cause": "the evaluator declared an installation/venv mount even though this scenario intentionally had no installed distribution and the mount source did not exist",
+      "provider_session_started": false,
+      "partial_evidence_preserved": true
+    }
+  ],
+  "grading_stage": {
+    "provider_sessions_started": 0,
+    "completed_grades": 0,
+    "grading_started": false
+  },
+  "mechanical_verification": {
+    "allow_incomplete_verifier_ok": true,
+    "allow_incomplete_verifier_errors": [],
+    "allow_incomplete_verifier_record": {
+      "path": "evidence-verification.json",
+      "bytes": 13573,
+      "sha256": "ff4abbbf0e439aa7a3610f7b9cb1053b30d392e911d9be9498497a13c2be2227"
+    },
+    "operator_session_identities_observed_by_frozen_verifier": 30,
+    "completed_grade_session_identities_observed": 0,
+    "required_installation_scenarios_completed": 5,
+    "required_installation_scenarios_missing": 5,
+    "failed_provider_homes_destroyed": true,
+    "failed_pre_session_evidence_contains_provider_credentials": false
+  },
+  "packet_reproducibility_limitation": {
+    "all_780_committed_frozen_artifact_blobs_match_manifest_byte_counts_and_sha256": true,
+    "git_preserves_only_executable_bits_not_the_manifest_full_unix_mode_vector": true,
+    "unmodified_clean_checkout_full_validation_under_arbitrary_umask_claimed": false,
+    "original_preparation_workspace_full_validation_passed": true
+  },
+  "disposition": {
+    "counts_toward_campaign_completion": false,
+    "operator_or_ux_verdict_permitted": false,
+    "successor_generation_required": true,
+    "successor_must_rerun_full_matrix": true,
+    "raw_completed_operator_evidence_preserved": true,
+    "partial_pre_session_evidence_preserved": true,
+    "grading_prohibited_for_this_generation": true,
+    "evidence_splicing_into_successor_prohibited": true
+  },
+  "scope": {
+    "product_behavior_modified": false,
+    "operator_documentation_repaired": false,
+    "governance_or_oq7_state_changed": false,
+    "external_operational_side_effects": false,
+    "task_level_network_access": false,
+    "provider_network_used_only_for_fresh_synthetic_sessions": true,
+    "pushed": false,
+    "authority_effect": "none"
+  }
+}

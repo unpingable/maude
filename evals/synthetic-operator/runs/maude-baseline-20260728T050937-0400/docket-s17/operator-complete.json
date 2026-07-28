@@ -1,0 +1,9 @@
+{
+  "completed_at": "2026-07-28T10:49:23Z",
+  "observable_artifacts_sha256": "669e3bdd9a6e199561b2cbb1d92b7b84c5e876a7305a073ffa18e7f9d7f0d360",
+  "process_returncode": 0,
+  "run_id": "docket-s17",
+  "schema": "maude.synthetic-operator.operator-complete.v1",
+  "timed_out": false,
+  "transcript_sha256": "760f82caf49dee18de49de6042df3e59f24c56fa5109f0a58ce07e30e3505dc3"
+}

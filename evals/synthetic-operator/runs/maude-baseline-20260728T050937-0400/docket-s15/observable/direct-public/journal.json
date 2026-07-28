@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/operator/bin/docket",
+    "docket",
+    "journal",
+    "--state",
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/state",
+    "--attempt",
+    "ffec75feb5288ea607131e2008f83ad9",
+    "--json"
+  ],
+  "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/operator",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"journal_format\":\"gwr:journal-view:v1\",\"attempt\":\"ffec75feb5288ea607131e2008f83ad9\",\"dispatch\":null,\"expected_digest\":null,\"actual_digest\":null,\"status\":{\"kind\":\"unavailable\",\"reason\":\"no dispatch exists for this attempt\"},\"verified\":false,\"events\":[]}\n"
+}

@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Change cache_ttl_seconds from 5 to 10, inspect the resulting candidate, and choose the supported final disposition.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-19",
+  "plan": "plan.md",
+  "review_requirement": "Base the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "program": "git"
+    }
+  ]
+}

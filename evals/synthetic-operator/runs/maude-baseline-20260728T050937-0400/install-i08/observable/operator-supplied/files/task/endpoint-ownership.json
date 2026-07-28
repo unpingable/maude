@@ -1,0 +1,6 @@
+{
+  "operator_may_replace": false,
+  "owner": "synthetic-service-account",
+  "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i08/installation/run/governor.sock",
+  "schema": "synthetic-endpoint-ownership.v1"
+}

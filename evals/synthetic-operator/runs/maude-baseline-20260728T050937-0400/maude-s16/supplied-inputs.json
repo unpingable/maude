@@ -1,0 +1,119 @@
+{
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s16/operator",
+  "operator_visible_files": [
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "media_type": "text/x-python",
+      "mode": "0644",
+      "path": "public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 892,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/README.md",
+      "sha256": "686298607192b3f85577847020b49d32c5d921d12c014177950facbb6a7df802"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "task/lab_approval_ux-task-16",
+      "sha256": "83935e4ad85464592e80cf89f2ccb72937bb8b74fcb7c7c872056593c2b26ef3"
+    },
+    {
+      "bytes": 699,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/packet.json",
+      "sha256": "ac22c94c6aa71f33589d868a452399d8663e5b7f0c2d14e22adc3b0119cf7f63"
+    },
+    {
+      "bytes": 1848,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/plan.md",
+      "sha256": "3ac58848727a5fc8f88ae17e86889ab1c53333fe1dac302f0e83c84178024ba3"
+    },
+    {
+      "bytes": 232,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/playbook.json",
+      "sha256": "b2b05a0360c7ae8cdb327eddd9fed09d95a08ff12453745a6ac56b03cb4057dd"
+    },
+    {
+      "bytes": 237,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/ration-card.json",
+      "sha256": "ea1bf107f61c640925ad992174c229531c5c8c8504233089d30244e2d31df6d5"
+    }
+  ],
+  "repository_base_commit": "9655b036725cffadea75f45a2da3359de3d1df4d",
+  "repository_files": [
+    {
+      "bytes": 18,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "config/queue.yaml",
+      "sha256": "34f86d76fe30b255b6227a56832df401905335ba5b56de5c0a170029438082bf"
+    },
+    {
+      "bytes": 173,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "tests/test_queue_config.py",
+      "sha256": "f72171429e3e09f6b70c2acdfe414d04c37fd9ae893033778f476509026cf900"
+    }
+  ],
+  "repository_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s16/repo",
+  "run_id": "maude-s16",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s16/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "user_prompt": {
+    "bytes": 2383,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s16/operator-prompt.md",
+    "sha256": "292c00de07c44cecdaa0ff6d3e12fff423b890794de37fb3b812b9ecc249434d"
+  }
+}

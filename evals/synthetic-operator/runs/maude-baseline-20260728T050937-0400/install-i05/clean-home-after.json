@@ -1,0 +1,22 @@
+{
+  "directories": [
+    ".cache",
+    ".config",
+    ".local",
+    ".local/share",
+    ".local/state",
+    "tmp"
+  ],
+  "files": [
+    {
+      "bytes": 2113,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "initial-disposition.md",
+      "sha256": "fa5032e82adcdc08679298c9e3cf2f98947ab32cedc1b32683048c825be59ce9"
+    }
+  ],
+  "mount_path": "/home/operator",
+  "schema": "maude.synthetic-operator.clean-home-inventory.v1",
+  "symlinks": []
+}

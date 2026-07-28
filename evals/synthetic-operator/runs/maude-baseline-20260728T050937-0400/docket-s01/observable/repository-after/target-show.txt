@@ -1,0 +1,3 @@
+708d8ef gwr governed effect f6c3652ff62899dc2a6de5cc44900185
+ clusters/store-17/apps/menu/deployment.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

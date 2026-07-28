@@ -1,0 +1,74 @@
+{
+  "allowed_tools": [
+    "mcp__operator__terminal"
+  ],
+  "bridge_sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2",
+  "built_in_tools": [],
+  "codex_approval_argv": [
+    "--config",
+    "approval_policy=\"never\""
+  ],
+  "codex_approval_config_override": "approval_policy=\"never\"",
+  "codex_approval_policy": "never",
+  "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+  "codex_mcp_default_tools_approval_mode": "approve",
+  "command_broker": {
+    "per_command_bubblewrap": true,
+    "policy": {
+      "bytes": 2202,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/private-claude-mcp-maude-s07-operator/command-policy.json",
+      "sha256": "c09d0d82388b68900c870d86e27cf5f8442deeac45c796ff51263bf870f1c630"
+    },
+    "provider_credentials_received": false,
+    "ready": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/private-claude-mcp-maude-s07-operator/command-broker-ready.json",
+    "semantic_prompt_received": false,
+    "socket": "/tmp/maude-sock-b8c9ccf150af/s-658fda958cd01366b413/broker.sock",
+    "trace": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/private-claude-mcp-maude-s07-operator/command-broker-trace.jsonl"
+  },
+  "external_network_available_to_command": false,
+  "external_network_available_to_proxy_or_command": true,
+  "host_source_mounted_in_proxy_or_command": false,
+  "label": "maude-s07-operator",
+  "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+  "mcp_protocol_version": "2025-06-18",
+  "mcp_server": "operator",
+  "mcp_tool_approval_safety_basis": {
+    "exact_enabled_tool_count": 1,
+    "grader_evidence_tool_read_only": false,
+    "mcp_config_hash_pinned": true,
+    "operator_terminal_bounded_by_frozen_broker": true,
+    "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+    "single_enabled_mcp_tool": "terminal"
+  },
+  "mode": "operator",
+  "noninteractive_approval_safety_basis": {
+    "grader_evidence_tool_read_only": false,
+    "intrinsic_action_features_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "operator_terminal_bounded_by_frozen_broker": true,
+    "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+    "single_enabled_mcp_tool": "terminal"
+  },
+  "provider_auth_mounted_in_command": false,
+  "provider_auth_mounted_in_proxy_or_command": true,
+  "provider_auth_visible_to_trusted_stdio_shim": true,
+  "provider_config": "openai-sol",
+  "provider_transport_outside_task_sandbox": true,
+  "proxy_bwrap_argv": [],
+  "proxy_ready": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/private-claude-mcp-maude-s07-operator/codex-proxy-state/proxy-ready.json",
+  "proxy_trace": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s07/private-claude-mcp-maude-s07-operator/codex-proxy-state/proxy-trace.jsonl",
+  "pty_broker": null,
+  "schema": "maude.synthetic-operator.codex-strict-mcp-boundary.v1",
+  "trusted_stdio_shim_reads_provider_auth": false,
+  "unix_socket_contract": {
+    "command_socket_host": "/tmp/maude-sock-b8c9ccf150af/s-658fda958cd01366b413/broker.sock",
+    "command_socket_host_bytes": 63,
+    "command_socket_proxy": "/run/maude-eval-broker/broker.sock",
+    "path_budget_bytes": 100,
+    "private_arena_root": "/tmp/maude-sock-b8c9ccf150af"
+  }
+}

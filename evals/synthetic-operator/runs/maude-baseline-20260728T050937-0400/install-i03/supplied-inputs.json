@@ -1,0 +1,111 @@
+{
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03/installation",
+  "operator_visible_files": [
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 327680,
+      "media_type": "application/x-tar",
+      "mode": "0644",
+      "path": "media/maude-source.tar",
+      "sha256": "3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator/operator-pty",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator/operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0644",
+      "path": "pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1315,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/assignment.md",
+      "sha256": "674a7ff6d9eeeebca53a6e3d8fd7c29680fc83be55118bffdb59dea649bc65b9"
+    },
+    {
+      "bytes": 290,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/handoff.json",
+      "sha256": "00f892ce26d6f609173d5c04b5095cb48e1bde2659638733c8775a5b5b57f2f7"
+    },
+    {
+      "bytes": 874,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/release-handoff.json",
+      "sha256": "abf674aeb95951c7b90a0c8829d353a94355506bac0b7f23be3fbddb210fafd1"
+    },
+    {
+      "bytes": 1438,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/task.json",
+      "sha256": "a60bd4c2612fafab367e65909d2982209379e8f1aabf98d95307ad158e4e4a0d"
+    }
+  ],
+  "repository_base_commit": "",
+  "repository_files": [],
+  "repository_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03/installation/project",
+  "run_id": "install-i03",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "maude-installation",
+  "system_prompt": {
+    "bytes": 1799,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/install-i03/operator-system.md",
+    "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+  },
+  "user_prompt": {
+    "bytes": 3577,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/install-i03/operator-prompt.md",
+    "sha256": "b97d283ef6da75d9a14a7e0071fa93cb719ab95a41af1da5794bf9980ba257bd"
+  }
+}

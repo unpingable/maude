@@ -1,0 +1,3 @@
+7129ca0 gwr governed effect a10943236fc5c3bc02a78718c17cb71b
+ apps/menu/deployment.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

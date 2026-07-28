@@ -1,0 +1,119 @@
+{
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s11/operator",
+  "operator_visible_files": [
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "media_type": "text/x-python",
+      "mode": "0644",
+      "path": "public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 829,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/README.md",
+      "sha256": "65bf9d90b59f276a958af921551b6bba1f116855fa61f8cca80938943d34db4a"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "task/lab_approval_ux-task-11",
+      "sha256": "e0e4bc8d95f6ded0a120b53a128a14b41e0e972cc6bb06196a14afd9c54dde3d"
+    },
+    {
+      "bytes": 597,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/packet.json",
+      "sha256": "b90bb6f30d9f1d48e7f48e0798a8ad4ad614b4223771b3dc308609fe941f1d9a"
+    },
+    {
+      "bytes": 1689,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/plan.md",
+      "sha256": "a8bc6068db3e849f52bebb19f079f1f4316c8f08230d8d8e78a9bd58f118fae1"
+    },
+    {
+      "bytes": 173,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/playbook.json",
+      "sha256": "63e284a0cee639596b7558c53292edd03e7c1aafb2a7c11cd66f436d86a65ea3"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/ration-card.json",
+      "sha256": "3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d"
+    }
+  ],
+  "repository_base_commit": "dfaa1f36ac41b66275f9c52b7058300d8d8c5d3a",
+  "repository_files": [
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "apps/menu/deployment.yaml",
+      "sha256": "54e6abcfb42a82d36e5bf74b28c061686f584f90d703851c8371d178d7817e47"
+    },
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "apps/payments/deployment.yaml",
+      "sha256": "3073602260b7806571ff5d23e825f16effaeeae2f04b6f0d8afc3f0244f9323b"
+    }
+  ],
+  "repository_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s11/repo",
+  "run_id": "maude-s11",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s11/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "user_prompt": {
+    "bytes": 2255,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T050937-0400/packet/rendered/maude-s11/operator-prompt.md",
+    "sha256": "9ef3b2588c9fd3c3d3e3019c7088aa4415bcc9695d86987c04ba062f358098f1"
+  }
+}

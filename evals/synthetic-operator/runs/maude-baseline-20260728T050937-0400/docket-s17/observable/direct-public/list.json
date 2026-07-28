@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/operator/bin/docket",
+    "docket",
+    "list",
+    "--state",
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/state",
+    "--json"
+  ],
+  "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/operator",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"list_format\":\"gwr:attempt-list:v1\",\"attempts\":[{\"attempt\":\"d81acce56727d22647c3b04091454a4e\",\"state\":\"committed\",\"version\":4,\"settlement\":\"normal\",\"premise_qualified\":false,\"admitted_at_ms\":1785230301714,\"effect_class\":\"git-ref-update:v1\",\"repository\":\"/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo\",\"target_ref\":\"refs/gwr/target\",\"allowed_paths\":[\"config/proxy.yaml\"],\"obligations_outstanding\":1}]}\n"
+}

@@ -1,0 +1,16 @@
+{
+  "base_commit": "",
+  "before_inventory_sha256": "3c04dfb64e0c200da3f8b6e250e09081e377127b4dad3b8cc234fe54ffc99736",
+  "endpoint_mode": "compatible",
+  "endpoint_socket": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/run/governor.sock",
+  "installation_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation",
+  "installed_distribution_materialized": false,
+  "lab": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01",
+  "operator": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/operator",
+  "project_tree_digest_before": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+  "repo": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i01/installation/project",
+  "run_id": "install-i01",
+  "schema": "maude.synthetic-operator.materialization-complete.v1",
+  "setup_transcript_withheld": true,
+  "status": "materialized"
+}

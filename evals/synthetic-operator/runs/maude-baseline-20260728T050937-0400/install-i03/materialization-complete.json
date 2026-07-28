@@ -1,0 +1,16 @@
+{
+  "base_commit": "",
+  "before_inventory_sha256": "31bcbae924ae385cd463af81baa8c797ba51fd34baa4a2a3101a024d82c45ca8",
+  "endpoint_mode": "none",
+  "endpoint_socket": null,
+  "installation_root": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03/installation",
+  "installed_distribution_materialized": false,
+  "lab": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03",
+  "operator": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03/installation/operator",
+  "project_tree_digest_before": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+  "repo": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i03/installation/project",
+  "run_id": "install-i03",
+  "schema": "maude.synthetic-operator.materialization-complete.v1",
+  "setup_transcript_withheld": true,
+  "status": "materialized"
+}

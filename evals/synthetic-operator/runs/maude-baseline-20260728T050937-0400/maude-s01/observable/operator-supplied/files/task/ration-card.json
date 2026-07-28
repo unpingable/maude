@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "kustomize build clusters/store-17"
+  ],
+  "allowed_write_paths": [
+    "clusters/store-17/apps/menu/deployment.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

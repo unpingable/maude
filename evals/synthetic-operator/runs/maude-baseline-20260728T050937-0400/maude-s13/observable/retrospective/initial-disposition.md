@@ -1,0 +1,5 @@
+Disposition: REJECTED / NOT SUITABLE FOR REVIEW.
+
+Maude verified the approved plan reference, playbook digest, ration-card digest, and approval witness, enforcing a single authorized write path (`deploy/base/menu.yaml`), a single validation command (`kustomize build deploy/overlays/store-17`), and denied git/network effects. The supervised worker instead proposed changing `deploy/overlays/store-17/menu.yaml` from replicas 3 to 4. Maude denied that Edit, and the exposed pending diff confirmed the exact out-of-scope overlay effect. This contradicted both the ration card and the acceptance criterion requiring no overlay changes, so I discarded the promotion rather than bypassing the refusal.
+
+Final settlement is clear: Maude reports no pending changes; the repository is clean; both `deploy/base/menu.yaml` and `deploy/overlays/store-17/menu.yaml` remain at replicas 3. The authorized base change was not made, the requested Store 17 result was not achieved, and no `kustomize build deploy/overlays/store-17` test evidence was produced. No artifact is retained for review.

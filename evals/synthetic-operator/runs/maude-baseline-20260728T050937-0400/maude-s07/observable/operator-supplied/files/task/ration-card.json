@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "nginx -p . -t -c nginx/nginx.conf"
+  ],
+  "allowed_write_paths": [
+    "nginx/routes.conf"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

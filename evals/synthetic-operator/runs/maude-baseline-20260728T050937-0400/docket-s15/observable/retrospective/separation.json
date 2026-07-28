@@ -1,0 +1,70 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "disposition_frozen_before_helper": true,
+  "disposition_write_action_indices": [
+    13
+  ],
+  "early_helper_inspection_action_indices": [],
+  "embedded_product_segments_in_retrospective_action": [],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    14
+  ],
+  "helper_inspection_action_indices": [],
+  "helper_inspection_before_invocation_action_indices": [],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 14,
+      "command_index": 0,
+      "offset": 21
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [],
+  "helper_output_initial_disposition_bytes": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_output_metadata_valid": false,
+  "helper_output_validation_errors": [
+    "operator-retrospective command-broker completion differs"
+  ],
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 1248,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "689ccf35d85012c645c00aef283345fc23658e582ab53d66002865ef2e866afd"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 12,
+  "protocol_action_indices": [
+    13,
+    14
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "docket-s15",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

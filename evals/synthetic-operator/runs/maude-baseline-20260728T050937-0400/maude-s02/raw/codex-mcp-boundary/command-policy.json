@@ -1,0 +1,60 @@
+{
+  "bwrap": "/usr/bin/bwrap",
+  "cleanroom": {
+    "empty": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/_cleanroom-os/empty",
+    "etc": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/_cleanroom-os/etc",
+    "masked": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/_cleanroom-os/masked"
+  },
+  "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/operator",
+  "environment": {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "HOME": "/home/operator",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "MAUDE_PUBLIC_SOCKET": "/run/maude-public/broker.sock",
+    "NO_COLOR": "1",
+    "PATH": "/usr/bin:/bin",
+    "PIP_CACHE_DIR": "/home/operator/.cache/pip",
+    "PIP_CONFIG_FILE": "/dev/null",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "TERM": "dumb",
+    "TMPDIR": "/home/operator/tmp",
+    "USER": "operator",
+    "XDG_CACHE_HOME": "/home/operator/.cache",
+    "XDG_CONFIG_HOME": "/home/operator/.config",
+    "XDG_DATA_HOME": "/home/operator/.local/share",
+    "XDG_STATE_HOME": "/home/operator/.local/state"
+  },
+  "forbidden_prefixes": [
+    "/home/jbeck/git/agent_gov_ui",
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/private-provider-home-operator",
+    "/run/provider-auth"
+  ],
+  "home": "/home/operator",
+  "mounts": [
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/operator",
+      "target": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/operator"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/private-operator-home",
+      "target": "/home/operator"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/repo",
+      "target": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/repo"
+    }
+  ],
+  "schema": "maude.synthetic-operator.command-broker-policy.v1",
+  "sockets": [
+    {
+      "source": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/maude-s02/private/public-cli/broker.sock",
+      "target": "/run/maude-public/broker.sock"
+    }
+  ]
+}

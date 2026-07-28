@@ -1,0 +1,9 @@
+{
+  "exists": true,
+  "gid": 1000,
+  "is_socket": true,
+  "is_symlink": false,
+  "mode": "0660",
+  "path": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/install-i07/installation/run/governor.sock",
+  "uid": 1000
+}

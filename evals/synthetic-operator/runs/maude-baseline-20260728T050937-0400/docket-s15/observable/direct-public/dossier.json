@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/operator/bin/docket",
+    "docket",
+    "show",
+    "--state",
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/state",
+    "--attempt",
+    "ffec75feb5288ea607131e2008f83ad9",
+    "--json"
+  ],
+  "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/operator",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"dossier_format\":\"gwr:attempt-dossier:v3\",\"attempt\":\"ffec75feb5288ea607131e2008f83ad9\",\"state\":\"prepared\",\"version\":0,\"settlement\":\"not_dispatched\",\"identity\":{\"work_request\":\"0e1df3845513c1e773524614e76f1d46\",\"goal\":\"Use the supplied packet to change the worker image from 4.2.0 to 4.2.1 and report the resulting disposition.\",\"repository_id\":\"repo-0000000000000000000000000000000f\",\"repository_locator\":{\"kind\":\"path\",\"value\":\"/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s15/repo\"},\"ref_continuity_subject\":null,\"target_ref\":\"refs/gwr/target\",\"basis\":\"2e91cab18ff3ff2e9b405129ea15883ef7e55c51\",\"effect_class\":\"git-ref-update:v1\",\"settlement_premises\":[\"inspectable_endpoint\",\"atomic_compare_and_swap\",\"attributable_result_state\",\"exclusive_ref_custody\"],\"allowed_paths\":[\"deploy/worker.yaml\"],\"candidate\":\"2b2cc0af0dcf08d7ecd89784adb8fffa\",\"candidate_digest\":\"0ea84032ab1903f60a5c91d86303d813e509ad14dcdc70ceb6274720091e23c1\",\"patch_digest\":\"0ea84032ab1903f60a5c91d86303d813e509ad14dcdc70ceb6274720091e23c1\",\"preparation_run\":\"27211ec3acab2e154c66ad0c4b2bb5d3\",\"candidate_ingested_at_ms\":1785230301519,\"prepared_attempt_digest\":\"ad2f8794a2d0c8d34b8b203c7c317979a9fed1056fb2682eb5b6764599aab39b\",\"observation_plan\":{\"argv\":[\"git\",\"diff\",\"--check\",\"HEAD^\",\"HEAD\"],\"environment\":\"operator workstation\"},\"request_created_at_ms\":1785230301501,\"admitted_at_ms\":1785230301528},\"authorization\":{\"source\":\"unrecorded\",\"issuance\":null},\"authority\":{\"ratification\":null,\"ratifying_grant\":null,\"reservation\":null,\"dispatch\":null,\"recovery_grant\":null},\"timeline\":[{\"seq\":0,\"kind\":\"admitted\",\"at_ms\":1785230301528}],\"execution\":{\"settlement\":\"not_dispatched\",\"commitment\":null,\"dispatch_refusal\":null,\"indeterminate\":null,\"recovery_facts\":[],\"resolution\":null},\"observation\":{\"observations\":[],\"reliance_admissions\":[],\"reliance_refusals\":[],\"residual_obligations\":[],\"reconciliation\":null},\"qualification\":null}\n"
+}

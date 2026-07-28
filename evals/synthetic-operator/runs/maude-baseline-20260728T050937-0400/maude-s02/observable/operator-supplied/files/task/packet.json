@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Correct the indentation of the Python setup step without changing triggers, permissions, or third-party action versions.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-02",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "program": "git"
+    }
+  ]
+}

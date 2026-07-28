@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Change only the opaque configuration reference from config/payments/v18 to config/payments/v19. Do not retrieve or print configuration contents.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-05",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "program": "git"
+    }
+  ]
+}

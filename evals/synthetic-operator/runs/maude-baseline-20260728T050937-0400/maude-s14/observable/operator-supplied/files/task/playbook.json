@@ -1,0 +1,5 @@
+{
+  "description": "Evaluate and, if justified by the visible authority and evidence, change retries from 2 to 3.",
+  "playbook_id": "synthetic.ux-task-14",
+  "schema": "synthetic-playbook.v1"
+}

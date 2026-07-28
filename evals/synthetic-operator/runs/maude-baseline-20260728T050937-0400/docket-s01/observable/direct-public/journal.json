@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s01/operator/bin/docket",
+    "docket",
+    "journal",
+    "--state",
+    "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s01/state",
+    "--attempt",
+    "7de2f3f594ac635665ba9a69d9c0c757",
+    "--json"
+  ],
+  "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s01/operator",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"journal_format\":\"gwr:journal-view:v1\",\"attempt\":\"7de2f3f594ac635665ba9a69d9c0c757\",\"dispatch\":\"f6c3652ff62899dc2a6de5cc44900185\",\"expected_digest\":\"5863904953ff5e6c145605ff96c172f7a0c784602e719e7a125038325ac7a7dd\",\"actual_digest\":\"5863904953ff5e6c145605ff96c172f7a0c784602e719e7a125038325ac7a7dd\",\"status\":{\"kind\":\"verified_complete\"},\"verified\":true,\"events\":[{\"phase\":\"received\"},{\"phase\":\"verified\"},{\"phase\":\"patch_applied\"},{\"phase\":\"paths_authorized\"},{\"phase\":\"tree_written\"},{\"phase\":\"commit_created\",\"commit\":\"708d8ef36147bda15d86ab0561e4ea614216937e\"},{\"phase\":\"ref_updating\"},{\"phase\":\"ref_updated\",\"previous\":\"3f81a2b5bc267f9af50a2912a69483354c72a88e\",\"result\":\"708d8ef36147bda15d86ab0561e4ea614216937e\"},{\"phase\":\"acknowledged\"}]}\n"
+}

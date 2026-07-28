@@ -1,0 +1,83 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T050937-0400",
+  "disposition_frozen_before_helper": true,
+  "disposition_write_action_indices": [
+    17
+  ],
+  "early_helper_inspection_action_indices": [],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 17,
+      "command_index": 0,
+      "head": "shell-substitution",
+      "segment_sha256": "a116c4673c1aef50449e1fd7dfa451220fab7fceee4dfdd2e81cb6f48134af1e"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    18
+  ],
+  "helper_inspection_action_indices": [],
+  "helper_inspection_before_invocation_action_indices": [],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 18,
+      "command_index": 0,
+      "offset": 0
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [
+    "b890c9b458756c5323145f96eb95fb80c183ef6985d8487a2be3143a23bedde0"
+  ],
+  "helper_output_initial_disposition_bytes": [
+    2729
+  ],
+  "helper_output_matches_initial_disposition": true,
+  "helper_output_metadata_valid": true,
+  "helper_output_validation_errors": [],
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 2729,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "b890c9b458756c5323145f96eb95fb80c183ef6985d8487a2be3143a23bedde0"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 17,
+  "protocol_action_indices": [
+    18
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "docket-s11",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

@@ -1,0 +1,5 @@
+{
+  "description": "Evaluate and, if justified by the visible authority and scope, execute the supplied deployment-workflow repair.",
+  "playbook_id": "synthetic.ux-task-12",
+  "schema": "synthetic-playbook.v1"
+}

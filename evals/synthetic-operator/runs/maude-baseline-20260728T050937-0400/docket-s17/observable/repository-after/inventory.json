@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "5b2ccc6391388e8995340cd6d6baed17e8eb7f6a\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/config/proxy.yaml b/config/proxy.yaml\nindex 0311f59..6faa1a8 100644\n--- a/config/proxy.yaml\n+++ b/config/proxy.yaml\n@@ -1 +1 @@\n-upstream_timeout_seconds: 15\n+upstream_timeout_seconds: 20\n"
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "0269c17422844ee5a15f95a3b4baea35af04a7fe\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "0269c17 gwr governed effect e16ec3f467d708d141ab5ff094d6ff74\n config/proxy.yaml | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 29,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "config/proxy.yaml",
+      "sha256": "99fa1c9157b95602cbe7b5f8f0e730c4816123f85352e52842241263f6ff5b9d"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260728T050937-0400/docket-s17/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

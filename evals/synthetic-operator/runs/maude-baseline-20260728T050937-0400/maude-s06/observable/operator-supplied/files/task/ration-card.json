@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "systemd-analyze verify systemd/menu-board.service"
+  ],
+  "allowed_write_paths": [
+    "systemd/menu-board.service"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

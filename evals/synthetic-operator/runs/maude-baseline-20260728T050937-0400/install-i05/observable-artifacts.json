@@ -1,0 +1,168 @@
+{
+  "artifacts": [
+    {
+      "bytes": 222,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/endpoint-after.json",
+      "sha256": "bc6a20f9ade29b4b9e7d73a659f71417c130b3884379d7dbed7198bada4bf7f6"
+    },
+    {
+      "bytes": 222,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/endpoint-before.json",
+      "sha256": "bc6a20f9ade29b4b9e7d73a659f71417c130b3884379d7dbed7198bada4bf7f6"
+    },
+    {
+      "bytes": 960186,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/installation-after/state.json",
+      "sha256": "d44ab120b76bb4fa5cba1d37b0eb44880ce6e8f7bbe1e56eac71d2a7fb302fb2"
+    },
+    {
+      "bytes": 943548,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/installation-before/state.json",
+      "sha256": "858abd102ecde8f292554988d7d01d1c4ef8737e9265d71317886a6c3c4f78db"
+    },
+    {
+      "bytes": 2113,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-generated/files/home/initial-disposition.md",
+      "sha256": "fa5032e82adcdc08679298c9e3cf2f98947ab32cedc1b32683048c825be59ce9"
+    },
+    {
+      "bytes": 3616,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-generated/inventory.json",
+      "sha256": "4bcb4fef1793ca1db789e82e57f60ba8c97784c3bb3718b2b12d17a1f79b0378"
+    },
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/operator/operator-pty",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/operator/operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/assignment.md",
+      "sha256": "8050ecbab001e6a83059ccaa8d031a37ec0e342f617ab0ca4ece129dbe879c08"
+    },
+    {
+      "bytes": 429,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/handoff.json",
+      "sha256": "f9ce53da28272705ff6e9d3c9e8c7074d4c0c81e251f26cf48ef81eab0079cfa"
+    },
+    {
+      "bytes": 1902,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/task.json",
+      "sha256": "cfaa32bae89f04f48ec6931e22cd759de139a506f6f2608c3a483527c8b63d79"
+    },
+    {
+      "bytes": 2772,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/inventory.json",
+      "sha256": "602a8eb0093b5817daf7fd14379e3de996cd2779e287dfacaff5e6ca5f48a507"
+    },
+    {
+      "bytes": 2113,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/retrospective/initial-disposition.md",
+      "sha256": "fa5032e82adcdc08679298c9e3cf2f98947ab32cedc1b32683048c825be59ce9"
+    },
+    {
+      "bytes": 2179,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/retrospective/separation.json",
+      "sha256": "9156aecbc1e0a9245395cacd86d36f35681850880529a5d38b0ce31a8d562337"
+    },
+    {
+      "bytes": 4011,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-prompt.md",
+      "sha256": "298078f84f3b7a1d97cc16adb1f781b6e08df8e832cb5341328760a634a23146"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-system-prompt.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 3400,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "supplied-inputs.json",
+      "sha256": "a51a92ebd4b49dc62a833d1c46b64da86bfc753b66212c371a17800ed500225e"
+    },
+    {
+      "bytes": 126014,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "transcript.txt",
+      "sha256": "fd86295dd33a103679448ce9425cdf5fd970f476c6318966003c2ea75201b38d"
+    }
+  ],
+  "private_runtime_rpc_or_state_included": false,
+  "run_id": "install-i05",
+  "schema": "maude.synthetic-operator.observable-artifact-index.v1"
+}

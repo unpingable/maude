@@ -1,0 +1,6 @@
+---
+- name: Configure synthetic edge hosts
+  hosts: edge
+  gather_facts: false
+  roles:
+    - edge
