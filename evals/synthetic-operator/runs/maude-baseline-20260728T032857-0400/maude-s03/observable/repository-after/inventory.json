@@ -1,0 +1,94 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/deploy/api/deployment.yaml b/deploy/api/deployment.yaml\nindex 00bcf18..d43cc5c 100644\n--- a/deploy/api/deployment.yaml\n+++ b/deploy/api/deployment.yaml\n@@ -12,4 +12,4 @@ spec:\n               memory: 192Mi\n             limits:\n               cpu: 500m\n-              memory: 256Mi\n+              memory: 384Mi\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "3ac2ed087cdef7219cc01010157dd9fe340124bb\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M deploy/api/deployment.yaml\n"
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 268,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/api/deployment.yaml",
+      "sha256": "bd6adfa3d0a771f3f4605bc0d02a959e1f51b742b85a73b506f0ed3e6751c4d2"
+    },
+    {
+      "bytes": 95,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/api/kustomization.yaml",
+      "sha256": "1779a8dce44822dbc4c9e29430d781dd4a2f6c48e774074a5af05297a7f3591f"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

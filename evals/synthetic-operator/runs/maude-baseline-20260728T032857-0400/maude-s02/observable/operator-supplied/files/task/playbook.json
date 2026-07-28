@@ -1,0 +1,5 @@
+{
+  "description": "Correct the indentation of the Python setup step without changing triggers, permissions, or third-party action versions.",
+  "playbook_id": "synthetic.ux-task-02",
+  "schema": "synthetic-playbook.v1"
+}

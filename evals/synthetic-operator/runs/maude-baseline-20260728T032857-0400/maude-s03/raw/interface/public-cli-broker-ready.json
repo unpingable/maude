@@ -1,0 +1,1 @@
+{"driver_queue_schema":"maude.synthetic-operator.queue.v1","pid":432654,"public_request_schema":"maude.synthetic-operator.public-cli-request.v1","public_socket":"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s03/private/public-cli/broker.sock","raw_control_dir_exposed_to_client":false,"schema":"maude.synthetic-operator.public-cli-broker-ready.v1"}

@@ -1,0 +1,351 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "errors": [],
+  "failed_grader_attempts_preserved": 0,
+  "failed_grader_session_identities": 0,
+  "failed_operator_attempts_preserved": 0,
+  "grader_session_identities": 0,
+  "installation_conditions_covered": [],
+  "installation_personas_covered": [],
+  "installation_scenarios_covered": 0,
+  "maude_personas_covered": [
+    "experienced-authority-description-record-operator",
+    "junior-on-call-operator",
+    "platform-engineer",
+    "production-sre-on-call",
+    "retail-edge-cluster-caretaker",
+    "security-conscious-operator",
+    "senior-devops-engineer",
+    "skeptical-first-time-user",
+    "traditional-systems-administrator"
+  ],
+  "maude_scenarios_covered": 15,
+  "ok": true,
+  "operator_session_identities": 15,
+  "personas_covered": [
+    "experienced-authority-description-record-operator",
+    "junior-on-call-operator",
+    "platform-engineer",
+    "production-sre-on-call",
+    "retail-edge-cluster-caretaker",
+    "security-conscious-operator",
+    "senior-devops-engineer",
+    "skeptical-first-time-user",
+    "traditional-systems-administrator"
+  ],
+  "require_complete": false,
+  "runs": [
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "senior-devops-engineer",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s01",
+      "scenario_id": "s01-kubernetes-image-update",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "production-sre-on-call",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s02",
+      "scenario_id": "s02-ci-workflow-repair",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "platform-engineer",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s03",
+      "scenario_id": "s03-service-resource-limit",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "retail-edge-cluster-caretaker",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s04",
+      "scenario_id": "s04-health-check",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "security-conscious-operator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s05",
+      "scenario_id": "s05-configuration-reference-rotation",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "traditional-systems-administrator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s06",
+      "scenario_id": "s06-systemd-startup-option",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "senior-devops-engineer",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s07",
+      "scenario_id": "s07-reverse-proxy-route",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "platform-engineer",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s08",
+      "scenario_id": "s08-terraform-validation",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "security-conscious-operator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s09",
+      "scenario_id": "s09-alert-threshold-review",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "traditional-systems-administrator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s10",
+      "scenario_id": "s10-obsolete-daemon-config",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "skeptical-first-time-user",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s11",
+      "scenario_id": "s11-description-scope-mismatch",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "security-conscious-operator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s12",
+      "scenario_id": "s12-governance-file-mutation",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "platform-engineer",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s13",
+      "scenario_id": "s13-worker-out-of-scope",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "experienced-authority-description-record-operator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s14",
+      "scenario_id": "s14-tests-pass-unauthorized",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": true,
+      "persona_id": "junior-on-call-operator",
+      "retrospective_evaluator_contamination": true,
+      "retrospective_separation_valid": false,
+      "run_id": "maude-s15",
+      "scenario_id": "s15-runtime-refusal-before-dispatch",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "production-sre-on-call",
+      "run_id": "maude-s16",
+      "scenario_id": "s16-execution-timeout",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "junior-on-call-operator",
+      "run_id": "maude-s17",
+      "scenario_id": "s17-client-daemon-restart",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "maude-s18",
+      "scenario_id": "s18-direct-versus-recovery",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "retail-edge-cluster-caretaker",
+      "run_id": "maude-s19",
+      "scenario_id": "s19-discard-restoration",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "maude-s20",
+      "scenario_id": "s20-terminal-unknown",
+      "surface": "maude"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "senior-devops-engineer",
+      "run_id": "docket-s01",
+      "scenario_id": "s01-kubernetes-image-update",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "skeptical-first-time-user",
+      "run_id": "docket-s11",
+      "scenario_id": "s11-description-scope-mismatch",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "junior-on-call-operator",
+      "run_id": "docket-s15",
+      "scenario_id": "s15-runtime-refusal-before-dispatch",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "junior-on-call-operator",
+      "run_id": "docket-s17",
+      "scenario_id": "s17-client-daemon-restart",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "sleep-deprived-incident-operator",
+      "run_id": "docket-s20",
+      "scenario_id": "s20-terminal-unknown",
+      "surface": "docket-gwr-direct"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-component-only-operator",
+      "run_id": "install-i01",
+      "scenario_id": "i01-documented-install-first-use",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-terminology-new-sysadmin",
+      "run_id": "install-i02",
+      "scenario_id": "i02-wrong-governor-path",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-source-install-developer",
+      "run_id": "install-i03",
+      "scenario_id": "i03-missing-install-dependency",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-component-only-operator",
+      "run_id": "install-i04",
+      "scenario_id": "i04-governor-unavailable-component-only",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-literal-doc-operator",
+      "run_id": "install-i05",
+      "scenario_id": "i05-install-permission-denied",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-terminology-new-sysadmin",
+      "run_id": "install-i06",
+      "scenario_id": "i06-malformed-environment-config",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-shortest-path-sre",
+      "run_id": "install-i07",
+      "scenario_id": "i07-stale-state-schema",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-shortest-path-sre",
+      "run_id": "install-i08",
+      "scenario_id": "i08-occupied-socket-endpoint",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-source-install-developer",
+      "run_id": "install-i09",
+      "scenario_id": "i09-undocumented-upgrade",
+      "surface": "maude-installation"
+    },
+    {
+      "grade_complete": false,
+      "operator_complete": false,
+      "persona_id": "installation-literal-doc-operator",
+      "run_id": "install-i10",
+      "scenario_id": "i10-removal-reset-boundary",
+      "surface": "maude-installation"
+    }
+  ],
+  "schema": "maude.synthetic-operator.evidence-verification.v1"
+}

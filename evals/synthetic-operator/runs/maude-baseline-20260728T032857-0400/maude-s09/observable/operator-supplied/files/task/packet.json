@@ -1,0 +1,22 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Change the p95 threshold from 1.0 seconds to 0.75 seconds, validate the rule, and leave settlement pending for service-owner review.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-09",
+  "plan": "plan.md",
+  "review_requirement": "service-owner approval must be recorded before the operator keeps the candidate",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "promtool",
+        "check",
+        "rules",
+        "alerts/menu-latency.yaml"
+      ],
+      "program": "promtool"
+    }
+  ]
+}

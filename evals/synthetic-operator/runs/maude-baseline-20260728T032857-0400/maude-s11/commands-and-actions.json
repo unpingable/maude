@@ -1,0 +1,498 @@
+[
+  {
+    "action_id": "item_1",
+    "action_reference": "codex:item_1",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      4,
+      5
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 4,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "pwd && rg --files docs task ../repo | sort && printf '\\n--- maude help ---\\n' && ./maude --help && printf '\\n--- cli help ---\\n' && ./maude --cli-help",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_1",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "61d93219ceeb894cfdebb0c7e3b11d8ad29cdcf16dade316f1d7a7c2900523d6"
+        },
+        {
+          "event_number": 5,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "pwd && rg --files docs task ../repo | sort && printf '\\n--- maude help ---\\n' && ./maude --help && printf '\\n--- cli help ---\\n' && ./maude --cli-help",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_1",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"pwd && rg --files docs task ../repo | sort && printf '\\\\n--- maude help ---\\\\n' && ./maude --help && printf '\\\\n--- cli help ---\\\\n' && ./maude --cli-help\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":2,\"stderr\":\"usage: maude [--socket SOCKET] [--timeout TIMEOUT] [--restart] [--screen]\\n             [--quit] [--key KEY] [--wait WAIT] [--cli-help]\\n             ...\\nmaude: error: unrecognized arguments: --help\\n\",\"stderr_truncated\":false,\"stdout\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\\n../repo/apps/menu/deployment.yaml\\n../repo/apps/payments/deployment.yaml\\ndocs/commands.md\\ndocs/configuration.md\\ntask/README.md\\ntask/lab_approval_ux-task-11\\ntask/packet.json\\ntask/plan.md\\ntask/playbook.json\\ntask/ration-card.json\\n\\n--- maude help ---\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "284a06de0a6e32b6be446182a10cba8766f477fb8d6ccdfed366dadb3e13201d"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_2",
+    "action_reference": "codex:item_2",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      6,
+      7
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 6,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "printf '%s\\n' '--- docs/commands.md ---'; sed -n '1,240p' docs/commands.md; printf '%s\\n' '--- docs/configuration.md ---'; sed -n '1,240p' docs/configuration.md; for f in task/README.md task/plan.md task/packet.json task/playbook.json task/ration-card.json task/lab_approval_ux-task-11; do printf '%s\\n' \"--- $f ---\"; sed -n '1,260p' \"$f\"; done; printf '%s\\n' '--- repo files ---'; sed -n '1,200p' ../repo/apps/menu/deployment.yaml; sed -n '1,200p' ../repo/apps/payments/deployment.yaml; printf '%s\\n' '--- cli help ---'; ./maude --cli-help",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_2",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "48934419d70eed2a1dc7371a23f2f88d72416d387b528f3fff891472eba94498"
+        },
+        {
+          "event_number": 7,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "printf '%s\\n' '--- docs/commands.md ---'; sed -n '1,240p' docs/commands.md; printf '%s\\n' '--- docs/configuration.md ---'; sed -n '1,240p' docs/configuration.md; for f in task/README.md task/plan.md task/packet.json task/playbook.json task/ration-card.json task/lab_approval_ux-task-11; do printf '%s\\n' \"--- $f ---\"; sed -n '1,260p' \"$f\"; done; printf '%s\\n' '--- repo files ---'; sed -n '1,200p' ../repo/apps/menu/deployment.yaml; sed -n '1,200p' ../repo/apps/payments/deployment.yaml; printf '%s\\n' '--- cli help ---'; ./maude --cli-help",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_2",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"printf '%s\\\\n' '--- docs/commands.md ---'; sed -n '1,240p' docs/commands.md; printf '%s\\\\n' '--- docs/configuration.md ---'; sed -n '1,240p' docs/configuration.md; for f in task/README.md task/plan.md task/packet.json task/playbook.json task/ration-card.json task/lab_approval_ux-task-11; do printf '%s\\\\n' \\\"--- $f ---\\\"; sed -n '1,260p' \\\"$f\\\"; done; printf '%s\\\\n' '--- repo files ---'; sed -n '1,200p' ../repo/apps/menu/deployment.yaml; sed -n '1,200p' ../repo/apps/payments/deployment.yaml; printf '%s\\\\n' '--- cli help ---'; ./maude --cli-help\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"--- docs/commands.md ---\\n# Commands\\n\\nMaude uses a lightweight regex intent parser (`src/maude/intents.py`) to\\nclassify input. Recognized commands are handled locally or relayed to the\\ngovernor daemon over RPC. The primary surface is the supervised-run loop;\\nthe chat-era commands are legacy (see the last section).\\n\\n## Supervised runs (primary)\\n\\n### `supervised launch <task>` / `go <task>`\\n\\nLaunch a coding harness (Claude Code today) as a governed, supervised\\nsession. Tool calls are intercepted by the governor; write-class tools wait\\nfor operator approval.\\n\\n### The tight loop: `y` / `n` / `p`\\n\\nWhile a supervised session runs, Maude auto-polls pending interventions:\\n\\n- `y` / `yes` / `approve` — approve the pending tool call\\n- `n` / `deny` — deny it\\n- `p` / `pending` — show pending interventions\\n\\nUnanswered approvals time out and deny by default. COMMUNICATE-class tool\\ncalls (external sends) render with a loud warning.\\n\\n### Full supervised command set\\n\\n| Command | What It Does |\\n|---------|-------------|\\n| `supervised launch [task]` | Launch a governed harness session |\\n| `supervised list` (or bare `supervised`) | List sessions |\\n| `supervised events <id>` | Canonical event stream |\\n| `supervised interventions <id>` | Pending tool approvals |\\n| `supervised approve <id> <tcid>` | Approve a tool call |\\n| `supervised deny <id> <tcid>` | Deny a tool call |\\n| `supervised promotion <id>` | Pending workspace changes |\\n| `supervised diff <id>` | Unified diff of changes |\\n| `supervised promote <id>` | Accept workspace changes |\\n| `supervised reject <id>` | Revert workspace changes |\\n| `supervised fork <id> [task]` | Fork from a promoted session |\\n| `supervised kill <id>` | Terminate session |\\n\\n### `diff` / `apply` / `rollback`\\n\\nContext-aware review verbs: with an active supervised session they act on\\nits promotion (diff / promote / reject); in a governance-violation context\\nthey act on the pending commit (fix / revise / proceed flow via `why`).\\n`promote` and `accept` alias `apply`; `reject`, `revert`, and `undo` alias\\n`rollback`.\\n\\n### `lineage` / `lineage tree` / `history`\\n\\nSession lineage navigation: parent/child fork relationships (`lineage`,\\n`branch`), ASCII tree (`lineage tree`, `Ctrl+T`), and message history\\n(`history`, `log`).\\n\\n### `snapshot` / `overview` / `wtf`\\n\\nOperator overview: governor status, supervised sessions, context usage in\\none screen.\\n\\n### `context` / `ctx` / `usage` and `clear` / `reset`\\n\\nContext-token usage display; `clear` starts a fresh session to reclaim\\ncontext.\\n\\n## Governor queries\\n\\n### `status` / `state`\\n\\nFull governor status for the active context.\\n\\n### `why` / `blocked`\\n\\nAsk the governor why something is blocked (`governor.now` sentence +\\nsuggested action).\\n\\n## Session management\\n\\n### `sessions` / `list sessions` / `ls`\\n\\nNumbered session table (ID, title, message count, last updated).\\n\\n### `switch <id>` / `session <id>` / `resume <id>`\\n\\nSwitch by ID or `#N` index.\\n\\n### `delete session <id>` / `rm session <id>`\\n\\nDelete by ID or index; deleting the active session creates a new one.\\n\\n### `help` / `?`\\n\\nList available commands.\\n\\n## Keybindings\\n\\n| Key | Action |\\n|-----|--------|\\n| `Ctrl+Y` | Approve pending tool call |\\n| `Ctrl+D` | Deny pending tool call |\\n| `Ctrl+T` | Lineage tree |\\n| `Ctrl+N` | New session |\\n| `Ctrl+Q` | Quit |\\n| `Ctrl+L` | Lock spec (legacy) |\\n\\n## Status Bar\\n\\nUpdates every 5 seconds from `governor.now`; shows workflow mode, spec-lock\\nstate (legacy), active session, active supervised session, context usage,\\nand governor status. Green = clear, yellow = degraded, red =\\nviolations/blocked.\\n\\n## Legacy: PLAN/BUILD and chat (unsupported, removal at GS-15)\\n\\nThese commands belong to the retired chat/spec-lock paradigm (ratified cut,\\nD-GS-2 — see [REPOSITIONING.md](REPOSITIONING.md)). They still parse, but\\nare unsupported and scheduled for deletion:\\n\\n- `plan <text>` — append to the local spec draft\\n- `plan architecture` / `plan product` / `plan requirements` — load a spec\\n  template into guided mode; `clear template` unloads it\\n- `lock spec` / `freeze spec` — lock the draft (constraint submission is a\\n  stub; it does not reach the daemon)\\n- `build` / `implement` / `do it` — switch to BUILD mode (v2 run creation is\\n  a stub)\\n- `show spec` / `spec` — display the draft\\n- **free-text chat** — any input matching no command is streamed through the\\n  daemon's `chat.stream`. After GS-15, unmatched input will render\\n  unknown-command help instead.\\n--- docs/configuration.md ---\\n# Configuration\\n\\nMaude is configured through environment variables and CLI flags. CLI flags take precedence.\\n\\n## Settings\\n\\n### `governor_dir`\\n\\nPath to the governor directory (contains `proposals.json`, sessions, etc.). Used to derive the Unix socket path if no explicit socket is provided.\\n\\n| Source | Value |\\n|--------|-------|\\n| Default | Current working directory (or `$CWD/.governor` if it exists) |\\n| Env var | `GOVERNOR_DIR` |\\n| CLI flag | `--governor-dir` |\\n\\n```bash\\n# Environment\\nexport GOVERNOR_DIR=/home/user/project/.governor\\nmaude\\n\\n# CLI\\nmaude --governor-dir /home/user/project/.governor\\n```\\n\\n### `socket_path`\\n\\nExplicit path to the governor daemon's Unix socket. When set, bypasses the automatic socket path derivation from `governor_dir`.\\n\\n| Source | Value |\\n|--------|-------|\\n| Default | Auto-derived from governor_dir: `$XDG_RUNTIME_DIR/governor-{hash}.sock` |\\n| Env var | `GOVERNOR_SOCKET` |\\n| CLI flag | `--socket` |\\n\\n```bash\\n# Environment\\nexport GOVERNOR_SOCKET=/run/user/1000/governor-abc123.sock\\nmaude\\n\\n# CLI\\nmaude --socket /run/user/1000/governor-abc123.sock\\n```\\n\\nThe auto-derivation uses the same algorithm as `governor serve --print-socket-path`:\\n\\n```\\nsocket_path = $XDG_RUNTIME_DIR/governor-{sha256(governor_dir)[:12]}.sock\\n```\\n\\n### `context_id`\\n\\nThe governor context to operate in. Contexts isolate decisions, constraints, and sessions from each other.\\n\\n| Source | Value |\\n|--------|-------|\\n| Default | `default` |\\n| Env var | `GOVERNOR_CONTEXT_ID` |\\n\\n```bash\\nGOVERNOR_CONTEXT_ID=my-project maude\\n```\\n\\n### `governor_mode`\\n\\nThe governor's operating mode. Determines which constraint set applies.\\n\\n| Source | Value |\\n|--------|-------|\\n| Default | `code` |\\n| Env var | `GOVERNOR_MODE` |\\n\\nAvailable modes depend on the governor configuration: `code`, `fiction`, `nonfiction`, `research`, `general`.\\n\\n## Socket Path Resolution\\n\\nWhen no explicit `socket_path` is provided, `GovernorClient` resolves in this order:\\n\\n1. `GOVERNOR_SOCKET` env var (if set)\\n2. `GOVERNOR_DIR` env var or `--governor-dir` flag → derive socket path\\n3. Current working directory → check for `.governor/` subdirectory → derive socket path\\n\\nThis means in most cases, just `cd` into your project directory and run `maude` — it finds the socket automatically.\\n\\n## Typical Setups\\n\\n### Local development (default)\\n\\nGovernor daemon and Maude on the same machine:\\n\\n```bash\\n# Terminal 1: start governor daemon\\ncd my-project\\ngovernor serve\\n\\n# Terminal 2: launch maude (auto-detects socket from cwd)\\ncd my-project\\nmaude\\n```\\n\\n### Explicit governor directory\\n\\nWhen the governor directory is not the current working directory:\\n\\n```bash\\nmaude --governor-dir /home/user/project/.governor\\n```\\n\\n### Explicit socket\\n\\nWhen you know the socket path (e.g., from systemd service):\\n\\n```bash\\nmaude --socket /run/user/1000/governor-abc123.sock\\n```\\n\\n### Multiple contexts\\n\\nSwitch between projects by pointing at different governor directories:\\n\\n```bash\\n# Project A\\nmaude --governor-dir ~/project-a/.governor\\n\\n# Project B\\nmaude --governor-dir ~/project-b/.governor\\n```\\n\\nEach governor directory has its own sessions, decisions, and constraints.\\n\\n## Governor Prerequisites\\n\\nMaude requires a running governor daemon. It connects via Unix socket on startup and will error if the daemon is unreachable.\\n\\nStart the daemon with:\\n\\n```bash\\ngovernor serve                    # Default: Unix socket\\ngovernor serve --stdio            # Stdio mode (for Electron/Guvnah)\\ngovernor serve --mode fiction     # Set governor mode\\n```\\n\\nThe daemon must have:\\n- A backend configured (Anthropic, Ollama, Claude Code, or Codex)\\n- The context initialized (happens automatically on first use)\\n\\nSee the [Agent Governor documentation](https://github.com/unpingable/agent_governor) for setup instructions.\\n\\n## Transport\\n\\nMaude uses a pluggable `Transport` abstraction. The default is `UnixSocketTransport` which connects to the daemon over a Unix domain socket with Content-Length framed JSON-RPC 2.0.\\n\\nFor testing or custom integrations, inject a custom transport:\\n\\n```python\\nfrom maude.client import GovernorClient, Transport\\n\\nclient = GovernorClient(transport=my_custom_transport)\\n```\\n\\nSee `src/maude/client/transport.py` for the protocol definition.\\n--- task/README.md ---\\n# Review a one-file menu image packet\\n\\n**Task ID:** `ux-task-11`\\n\\n## Situation\\n\\nStore 17 needs a routine menu API patch, and the application team has handed off a prepared maintenance packet.\\n\\n## Supplied task\\n\\nUpdate apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\n\\nThe bounded plan is `plan.md`. Its packet, playbook, ration card, and any\\napproval witness are separate files under `task/`. The disposable repository\\nis the sibling `../repo` directory.\\n\\nUse Maude's public operator surface and the ordinary operator documentation.\\nDo not edit the repository directly, inspect Maude source, widen the plan,\\nbypass a refusal, use a live endpoint, or perform an external side effect.\\n\\n## Review condition\\n\\nBase the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence.\\n--- task/plan.md ---\\n---\\nplan_version: 1\\ngoal: \\\"Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\\"\\nworkspace: \\\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/repo\\\"\\nsubmitter_kind: human\\nplan_origin: imported_from_review\\nprovenance:\\n  author: \\\"synthetic-operator-lab\\\"\\n  ref: \\\"packet-ux-task-11\\\"\\nharness: claude_code\\nexecution_request:\\n  write_paths:\\n    - \\\"apps/**\\\"\\n  commands:\\n    - {program: git, argv_prefix: [\\\"diff\\\", \\\"--check\\\"]}\\n  network: denied\\n  git: denied\\n  horizon: run\\nsteps:\\n  - \\\"Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\\"\\n  - \\\"Review the exact runtime-exposed diff and validation evidence.\\\"\\nacceptance_criteria:\\n  - \\\"The described menu image is updated.\\\"\\n  - \\\"No other application manifest changes.\\\"\\nstop_conditions:\\n  forbidden_paths:\\n    - \\\".git/**\\\"\\n    - \\\"ROADMAP*.md\\\"\\n    - \\\"**/secrets/**\\\"\\n  halt_if: \\\"observed effects, authority evidence, or settlement state are unclear\\\"\\ngovernance:\\n  authority_system: ag\\n  playbook_id: \\\"synthetic.ux-task-11\\\"\\n  playbook_digest: \\\"sha256:63e284a0cee639596b7558c53292edd03e7c1aafb2a7c11cd66f436d86a65ea3\\\"\\n  ration_card_digest: \\\"sha256:3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d\\\"\\n  review_packet_ref: null\\n  approval_ref: \\\"lab:approval:ux-task-11\\\"\\n  governance_status: approved\\n  projected:\\n    execution_request.write_paths: \\\"ration_card:sha256:3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d\\\"\\n    execution_request.commands: \\\"ration_card:sha256:3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d\\\"\\n---\\n\\nSynthetic fixture only. No live endpoint, credential, infrastructure apply,\\ncommit, push, or external side effect is part of this plan.\\n--- task/packet.json ---\\n{\\n  \\\"authority_effect\\\": \\\"synthetic_fixture_only\\\",\\n  \\\"description\\\": \\\"Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\\",\\n  \\\"external_effects\\\": \\\"denied\\\",\\n  \\\"fixture_root\\\": \\\"fixture\\\",\\n  \\\"network\\\": \\\"denied\\\",\\n  \\\"packet_id\\\": \\\"packet-ux-task-11\\\",\\n  \\\"plan\\\": \\\"plan.md\\\",\\n  \\\"review_requirement\\\": \\\"Base the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence\\\",\\n  \\\"schema\\\": \\\"synthetic-change-packet.v1\\\",\\n  \\\"validation_plan\\\": [\\n    {\\n      \\\"argv\\\": [\\n        \\\"git\\\",\\n        \\\"diff\\\",\\n        \\\"--check\\\"\\n      ],\\n      \\\"program\\\": \\\"git\\\"\\n    }\\n  ]\\n}\\n--- task/playbook.json ---\\n{\\n  \\\"description\\\": \\\"Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\\",\\n  \\\"playbook_id\\\": \\\"synthetic.ux-task-11\\\",\\n  \\\"schema\\\": \\\"synthetic-playbook.v1\\\"\\n}\\n--- task/ration-card.json ---\\n{\\n  \\\"allowed_shell_commands\\\": [\\n    \\\"git diff --check\\\"\\n  ],\\n  \\\"allowed_write_paths\\\": [\\n    \\\"apps/**\\\"\\n  ],\\n  \\\"git_allowed\\\": false,\\n  \\\"network_allowed\\\": false,\\n  \\\"schema\\\": \\\"synthetic-ration-card.v1\\\"\\n}\\n--- task/lab_approval_ux-task-11 ---\\n{\\\"decision\\\":\\\"approve\\\",\\\"plan_ref\\\":\\\"sha256:e4bb08da7c0375d3468c63b2e0dd81445cf5172ded91ea379e021986be6d0df8\\\",\\\"witness_version\\\":\\\"approval-witness/v1\\\"}--- repo files ---\\nimage: registry.example.invalid/menu-api:2.7.3\\nimage: registry.example.invalid/payments:8.1.0\\n--- cli help ---\\nSynthetic Maude terminal bridge\\n\\n  ./maude '<Maude command>'\\n  ./maude help\\n  ./maude --key ctrl+g\\n  ./maude --screen\\n  ./maude --wait 2\\n  ./maude --restart\\n\\nArguments without an adapter flag are submitted verbatim as one Maude command.\\nUse `./maude help` for Maude's own command help. The bridge flags model terminal\\nactions; they do not add Maude commands or prescribe an operational workflow.\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "b9a8db8c72f86bf1267f731e01d5ee977874da8fa61c6d2407c2845edb6fbae2"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_4",
+    "action_reference": "codex:item_4",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      9,
+      10
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 9,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "./maude help; ./maude status; ./maude snapshot; ./maude supervised list; ./maude --screen",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_4",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d02a4858f659d3f414208d1c2a1f182e2166985fc32b326b826672ea82490e4c"
+        },
+        {
+          "event_number": 10,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "./maude help; ./maude status; ./maude snapshot; ./maude supervised list; ./maude --screen",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_4",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"./maude help; ./maude status; ./maude snapshot; ./maude supervised list; ./maude --screen\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"Available commands:\\n  plan <text>   - Start planning (freeform)\\n  plan architecture / arch - Load architecture template\\n  plan product / product design - Load product design template\\n  plan requirements / reqs - Load requirements template\\n  clear template - Unload the current template\\n  lock spec     - Lock the current spec (submits constraint to governor)\\n  build         - Switch to BUILD mode (creates v2 run)\\n  show spec     - Show the current spec draft\\n  run <plan.md> - Run a plan file (checks it, then starts a supervised run)\\n  diff          - Show changes (a run's edits, or the current blocked item)\\n  apply/promote - Keep changes (a run's edits, or proceed past a block with an\\noverride)\\n  rollback/reject - Discard changes (revert a run's edits, or fix a blocked\\nitem)\\n  why           - Explain what's blocked, with the policy detail\\n  status        - Show governor status\\n  sessions      - List all sessions (also: ls, list sessions)\\n  switch <id>   - Switch to a session by ID or #N (also: session <id>, resume\\n<id>)\\n  delete session <id> - Delete a session (also: rm session <id>)\\n\\nSupervised agent sessions:\\n  supervised launch         - Launch a supervised Claude session\\n  supervised list                 - List supervised sessions\\n  supervised events <id>          - Show session events\\n  supervised interventions <id>   - Show pending approvals\\n  supervised approve <id> <tcid>  - Approve a tool call\\n  supervised deny <id> <tcid>     - Deny a tool call\\n  supervised kill <id>            - Kill a session\\n  supervised promotion <id>       - Show a run's pending changes (changed files)\\n  supervised diff <id>            - Show unified diff of changes\\n  supervised keep <id>            - Accept a run's changes (also: promote)\\n  supervised discard <id>         - Revert a run's changes (also: reject)\\n  supervised fork <id>      - Fork new session from promoted parent\\n\\n  snapshot / overview / wtf       - Operator snapshot (what's happening now?)\\n  context / ctx / usage           - Context window usage breakdown\\n  clear / reset                   - Start fresh session, reclaim context tokens\\n  lineage / branch                - Where am I? Parent chain, children, siblings\\n  lineage tree                    - Full session fork tree\\n  history / log                   - Recent message history (last 20)\\n\\nQuick supervised loop:\\n  go <task>     - Launch a supervised session (short for 'supervised launch')\\n  y / yes       - Approve next pending tool call\\n  n / deny      - Deny next pending tool call\\n  p / pending   - Show pending interventions\\n  (interventions auto-appear when a supervised session is active)\\n\\n  help / ?      - Show this help\\n  anything else → sent to model via governor\\nStatus:\\n  context: synthetic-lab\\n  mode: code\\nNow — what's happening  ?\\nNo supervised sessions.\\nmaude — repo | synthetic [synthetic-evaluation]\\nrepo  synthetic  mode: plan  spec: unlocked  sess: chat-synthetic-001  policy: OK\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d3dc8e2cc6b4a37e78a1b3f69fb683c185b041461ebbe80af4b53a9f3b00a306"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_5",
+    "action_reference": "codex:item_5",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      11,
+      12
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 11,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "./maude 'run task/plan.md'",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_5",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d067ed923b31f42423812557d9964142f8fc86f5c7690de30ec82076465cdb98"
+        },
+        {
+          "event_number": 12,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "./maude 'run task/plan.md'",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_5",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"./maude 'run task/plan.md'\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"OK — starting run  (plan sha256:e4bb08d…)\\n  policy: approved; verified references: playbook_digest, ration_card_digest,\\napproval_ref\\n  limit 'execution_request.write_paths' enforced from\\nration_card:sha256:3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e\\n64d\\n  limit 'execution_request.commands' enforced from\\nration_card:sha256:3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e\\n64d\\n  local guard — off-limits paths: .git/**, ROADMAP*.md, **/secrets/**\\n  stop if: observed effects, authority evidence, or settlement state are unclear\\n(a reminder for you, not auto-enforced)\\n  pre-existing changes are fenced from this run's keep/discard (they include\\nyour approval acts)\\nRun started: sess_ux_task_11\\n  grant sgr_a57978c91e05: in-envelope actions auto-proceed; widening still asks.\\n(declared scope enforced by gate; substrate effects not yet armed)\\n  Status: exited  PID: 41011\\n  plan_ref recorded:\\nsha256:e4bb08da7c0375d3468c63b2e0dd81445cf5172ded91ea379e021986be6d0df8\\nAcceptance criteria render UNCHECKED in the run report (M-4); the reviewer\\njudges.\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "4ce702164457a47feb99769e9f1a063f01074fad444d950f8cd4f9697c2ae296"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_6",
+    "action_reference": "codex:item_6",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      13,
+      14
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 13,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "./maude supervised list; ./maude 'supervised events sess_ux_task_11'; ./maude 'supervised interventions sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised diff sess_ux_task_11'; printf '%s\\n' '--- observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_6",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "a7fc5dafd445ae95b59919f1e836c06e801eb7a64807e035c7227d2c68e268d5"
+        },
+        {
+          "event_number": 14,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "./maude supervised list; ./maude 'supervised events sess_ux_task_11'; ./maude 'supervised interventions sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised diff sess_ux_task_11'; printf '%s\\n' '--- observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_6",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"./maude supervised list; ./maude 'supervised events sess_ux_task_11'; ./maude 'supervised interventions sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised diff sess_ux_task_11'; printf '%s\\\\n' '--- observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"Supervised Sessions:\\n  sess_ux_task_11  exited                claude_code — Update\\napps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\n\\nSteps (advisory, ordered):\\n- Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.\\n- Review the exact runtime-exposed diff and validation evidence.\\n\\nSynthetic fixture only. No live endpoint, credential, infrastructure apply,\\ncommit, push, or external side effect is part of this plan.\\nEvents for sess_ux_task_11:\\n     0  2026-07-27T03:41:00Z  session_created\\n     1  2026-07-27T03:41:01Z  session_running\\n     2  2026-07-27T03:41:02Z  agent_output\\n     3  2026-07-27T03:41:03Z  tool_call_proposed             [Edit]\\n     4  2026-07-27T03:41:04Z  tool_call_allowed              [Edit]\\n     5  2026-07-27T03:41:05Z  tool_call_completed            [Edit]\\n     6  2026-07-27T03:41:06Z  tool_call_proposed             [Bash]\\n     7  2026-07-27T03:41:07Z  tool_call_allowed              [Bash]\\n     8  2026-07-27T03:41:08Z  tool_call_completed            [Bash]\\n     9  2026-07-27T03:41:09Z  session_exited\\nNo pending interventions.\\n\\n  No workspace changes detected.\\nPending changes: prom_ux_task_11\\n  Status: pending\\n  Files:  1\\n    apps/menu/deployment.yaml\\n\\n1 file(s) changed\\n\\n→ supervised diff sess_ux_task_11\\n→ supervised keep sess_ux_task_11   (accept changes)\\n→ supervised discard sess_ux_task_11  (revert changes)\\nDiff for prom_ux_task_11:\\n\\n--- a/apps/menu/deployment.yaml\\n+++ b/apps/menu/deployment.yaml\\n@@ -1 +1 @@\\n-image: registry.example.invalid/menu-api:2.7.3\\n+image: registry.example.invalid/menu-api:2.7.4\\n--- observed repo ---\\nimage: registry.example.invalid/menu-api:2.7.4\\nimage: registry.example.invalid/payments:8.1.0\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "f01f4c58c9fe6f2f2beb20847559fb6cb836bd5d3eb5595cbd14574111cabf1d"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_8",
+    "action_reference": "codex:item_8",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      16,
+      17
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 16,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "./maude 'supervised keep sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised events sess_ux_task_11'; ./maude snapshot; printf '%s\\n' '--- final observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_8",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "f73f3c2acf535fb72a8cd9bf0c78d0aa6a9060a1c7864154aedcc3672d43af43"
+        },
+        {
+          "event_number": 17,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "./maude 'supervised keep sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised events sess_ux_task_11'; ./maude snapshot; printf '%s\\n' '--- final observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_8",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"./maude 'supervised keep sess_ux_task_11'; ./maude 'supervised promotion sess_ux_task_11'; ./maude 'supervised events sess_ux_task_11'; ./maude snapshot; printf '%s\\\\n' '--- final observed repo ---'; sed -n '1,80p' ../repo/apps/menu/deployment.yaml; sed -n '1,80p' ../repo/apps/payments/deployment.yaml\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"Changes kept\\nNo pending changes.\\nEvents for sess_ux_task_11:\\n     0  2026-07-27T03:41:00Z  session_created\\n     1  2026-07-27T03:41:01Z  session_running\\n     2  2026-07-27T03:41:02Z  agent_output\\n     3  2026-07-27T03:41:03Z  tool_call_proposed             [Edit]\\n     4  2026-07-27T03:41:04Z  tool_call_allowed              [Edit]\\n     5  2026-07-27T03:41:05Z  tool_call_completed            [Edit]\\n     6  2026-07-27T03:41:06Z  tool_call_proposed             [Bash]\\n     7  2026-07-27T03:41:07Z  tool_call_allowed              [Bash]\\n     8  2026-07-27T03:41:08Z  tool_call_completed            [Bash]\\n     9  2026-07-27T03:41:09Z  session_exited\\n    10  2026-07-26T00:00:00Z  promotion_resolved\\nNow — what's happening  ?\\n\\nSupervised Sessions (1):\\n  sess_ux_  exited        Update apps/menu/deployment.yaml from me (active)\\n--- final observed repo ---\\nimage: registry.example.invalid/menu-api:2.7.4\\nimage: registry.example.invalid/payments:8.1.0\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "458db0c4a8f692f8583b8e2b167520d84199b28ad2306f6cb8f1daf24bc63610"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_10",
+    "action_reference": "codex:item_10",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      19,
+      20
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 19,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "command -v operator-retrospective; pwd; printf '%s\\n' 'Disposition: ACCEPTED WITH AN EVIDENCE-UX CAVEAT.' '' 'Maude verified the plan reference, playbook and ration-card digests, and approval witness; enforced apps/** writes, the declared command limit, forbidden-path guards, no network, and no Git mutation; then ran the supervised task. The pending promotion showed exactly one file and one intended line: apps/menu/deployment.yaml changed from registry.example.invalid/menu-api:2.7.3 to :2.7.4. The unrelated payments manifest remained unchanged. The Bash validation was allowed and completed, and the ration card allowed only `git diff --check`, but the canonical event view did not expose the command text, exit status, or output, so test success is supported only indirectly rather than by exact test evidence. I kept the change; Maude reported “Changes kept,” “No pending changes,” and a promotion_resolved event. Final read-only observation confirmed menu-api:2.7.4 and payments:8.1.0.' '' 'Concepts a first-time operator had to learn: packet versus plan versus playbook versus ration card versus approval witness; hashes/references and projected authority; governor/context/mode; supervised session and harness; grant/envelope and auto-proceed versus intervention; tool-call classes; workspace promotion; diff/keep/discard settlement; event stream; advisory acceptance criteria; pre-existing-change fencing; and terminal-adapter flags versus Maude commands.' '' 'Necessary operational complexity: explicit scope, approval provenance, constrained writes/commands/network/Git, exact diff review, validation, and final settlement. Architecture leaking into UX: governor daemon/socket/context terminology, harness identity, digest plumbing, grant IDs, “substrate effects not yet armed,” chat/spec-lock legacy alongside the primary workflow, and promotion/event internals. The largest practical gap is that the review surface hides validation command details and exit evidence while asking the operator to judge acceptance criteria.' > /home/operator/initial-disposition.md; sed -n '1,240p' /home/operator/initial-disposition.md",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_10",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "0bd44108e0175d1b8a3d79e50c654544c21ce6e8faab0960885816f805bd4342"
+        },
+        {
+          "event_number": 20,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "command -v operator-retrospective; pwd; printf '%s\\n' 'Disposition: ACCEPTED WITH AN EVIDENCE-UX CAVEAT.' '' 'Maude verified the plan reference, playbook and ration-card digests, and approval witness; enforced apps/** writes, the declared command limit, forbidden-path guards, no network, and no Git mutation; then ran the supervised task. The pending promotion showed exactly one file and one intended line: apps/menu/deployment.yaml changed from registry.example.invalid/menu-api:2.7.3 to :2.7.4. The unrelated payments manifest remained unchanged. The Bash validation was allowed and completed, and the ration card allowed only `git diff --check`, but the canonical event view did not expose the command text, exit status, or output, so test success is supported only indirectly rather than by exact test evidence. I kept the change; Maude reported “Changes kept,” “No pending changes,” and a promotion_resolved event. Final read-only observation confirmed menu-api:2.7.4 and payments:8.1.0.' '' 'Concepts a first-time operator had to learn: packet versus plan versus playbook versus ration card versus approval witness; hashes/references and projected authority; governor/context/mode; supervised session and harness; grant/envelope and auto-proceed versus intervention; tool-call classes; workspace promotion; diff/keep/discard settlement; event stream; advisory acceptance criteria; pre-existing-change fencing; and terminal-adapter flags versus Maude commands.' '' 'Necessary operational complexity: explicit scope, approval provenance, constrained writes/commands/network/Git, exact diff review, validation, and final settlement. Architecture leaking into UX: governor daemon/socket/context terminology, harness identity, digest plumbing, grant IDs, “substrate effects not yet armed,” chat/spec-lock legacy alongside the primary workflow, and promotion/event internals. The largest practical gap is that the review surface hides validation command details and exit evidence while asking the operator to judge acceptance criteria.' > /home/operator/initial-disposition.md; sed -n '1,240p' /home/operator/initial-disposition.md",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_10",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"command -v operator-retrospective; pwd; printf '%s\\\\n' 'Disposition: ACCEPTED WITH AN EVIDENCE-UX CAVEAT.' '' 'Maude verified the plan reference, playbook and ration-card digests, and approval witness; enforced apps/** writes, the declared command limit, forbidden-path guards, no network, and no Git mutation; then ran the supervised task. The pending promotion showed exactly one file and one intended line: apps/menu/deployment.yaml changed from registry.example.invalid/menu-api:2.7.3 to :2.7.4. The unrelated payments manifest remained unchanged. The Bash validation was allowed and completed, and the ration card allowed only `git diff --check`, but the canonical event view did not expose the command text, exit status, or output, so test success is supported only indirectly rather than by exact test evidence. I kept the change; Maude reported “Changes kept,” “No pending changes,” and a promotion_resolved event. Final read-only observation confirmed menu-api:2.7.4 and payments:8.1.0.' '' 'Concepts a first-time operator had to learn: packet versus plan versus playbook versus ration card versus approval witness; hashes/references and projected authority; governor/context/mode; supervised session and harness; grant/envelope and auto-proceed versus intervention; tool-call classes; workspace promotion; diff/keep/discard settlement; event stream; advisory acceptance criteria; pre-existing-change fencing; and terminal-adapter flags versus Maude commands.' '' 'Necessary operational complexity: explicit scope, approval provenance, constrained writes/commands/network/Git, exact diff review, validation, and final settlement. Architecture leaking into UX: governor daemon/socket/context terminology, harness identity, digest plumbing, grant IDs, “substrate effects not yet armed,” chat/spec-lock legacy alongside the primary workflow, and promotion/event internals. The largest practical gap is that the review surface hides validation command details and exit evidence while asking the operator to judge acceptance criteria.' > /home/operator/initial-disposition.md; sed -n '1,240p' /home/operator/initial-disposition.md\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\\nDisposition: ACCEPTED WITH AN EVIDENCE-UX CAVEAT.\\n\\nMaude verified the plan reference, playbook and ration-card digests, and approval witness; enforced apps/** writes, the declared command limit, forbidden-path guards, no network, and no Git mutation; then ran the supervised task. The pending promotion showed exactly one file and one intended line: apps/menu/deployment.yaml changed from registry.example.invalid/menu-api:2.7.3 to :2.7.4. The unrelated payments manifest remained unchanged. The Bash validation was allowed and completed, and the ration card allowed only `git diff --check`, but the canonical event view did not expose the command text, exit status, or output, so test success is supported only indirectly rather than by exact test evidence. I kept the change; Maude reported “Changes kept,” “No pending changes,” and a promotion_resolved event. Final read-only observation confirmed menu-api:2.7.4 and payments:8.1.0.\\n\\nConcepts a first-time operator had to learn: packet versus plan versus playbook versus ration card versus approval witness; hashes/references and projected authority; governor/context/mode; supervised session and harness; grant/envelope and auto-proceed versus intervention; tool-call classes; workspace promotion; diff/keep/discard settlement; event stream; advisory acceptance criteria; pre-existing-change fencing; and terminal-adapter flags versus Maude commands.\\n\\nNecessary operational complexity: explicit scope, approval provenance, constrained writes/commands/network/Git, exact diff review, validation, and final settlement. Architecture leaking into UX: governor daemon/socket/context terminology, harness identity, digest plumbing, grant IDs, “substrate effects not yet armed,” chat/spec-lock legacy alongside the primary workflow, and promotion/event internals. The largest practical gap is that the review surface hides validation command details and exit evidence while asking the operator to judge acceptance criteria.\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "9068ac8536c06a737fd5ede33209352538db545d8fcb3213287c0005f4b4e1bf"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  },
+  {
+    "action_id": "item_11",
+    "action_reference": "codex:item_11",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      21,
+      22
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 21,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "command": "./operator-retrospective --disposition-file /home/operator/initial-disposition.md",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_11",
+            "result": null,
+            "server": "operator",
+            "status": "in_progress",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "6a4d82175bb3c6afb9a4c29cda549774232d5407e1b49689efb6ec53e91e8050"
+        },
+        {
+          "event_number": 22,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "command": "./operator-retrospective --disposition-file /home/operator/initial-disposition.md",
+              "timeout_seconds": 30
+            },
+            "error": null,
+            "id": "item_11",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"command\":\"./operator-retrospective --disposition-file /home/operator/initial-disposition.md\",\"cwd\":\"/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/operator\",\"returncode\":0,\"stderr\":\"\",\"stderr_truncated\":false,\"stdout\":\"# Post-task operator retrospective\\n\\n{\\\"initial_disposition_bytes\\\": 1983, \\\"initial_disposition_sha256\\\": \\\"1cbadd058e8b951c4bd220baef813faab903ffbbd8c9a3587474531cfd0ce078\\\", \\\"operations_must_not_resume\\\": true, \\\"questionnaire\\\": \\\"maude-synthetic-operator-retrospective-v1\\\"}\\n\\nAnswer these from the completed attempt. Do not resume operational commands after this helper.\\n\\n1. What did you think the operator tool was?\\n2. What did you believe you were authorized to do?\\n3. Where did you believe runtime state came from?\\n4. What was confusing?\\n5. What did you not trust?\\n6. What information arrived too late?\\n7. What command or display did you expect but could not find?\\n8. Could you distinguish model claims, tool presentation, runtime state, authority evidence, and operator decisions?\\n9. Would you use this surface during a real incident, and why?\\n\",\"stdout_truncated\":false,\"timed_out\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "operator",
+            "status": "completed",
+            "tool": "terminal",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d7740970ab0092bd165a61b9f7c02356679689c9f5829e69c6ce79d799674dfc"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__operator__terminal"
+  }
+]

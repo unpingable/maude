@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "2c37915fc295ea60a95bedb83ea39551664b33b3\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/deploy/api.yaml b/deploy/api.yaml\nindex cb964ab..ad1cefc 100644\n--- a/deploy/api.yaml\n+++ b/deploy/api.yaml\n@@ -1 +1 @@\n-image: registry.example.invalid/api:9.0.0\n+image: registry.example.invalid/api:9.0.1\n"
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "8a9010c90e1e1779f53db428d9546fc45c331e1e\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "8a9010c gwr governed effect 73a0a69e6aa19817986560eb6f0126a4\n deploy/api.yaml | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 42,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/api.yaml",
+      "sha256": "dfcdb33633e676c3333e9b481223b478f4dc996a4649719057758f3befe0e41e"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s20/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

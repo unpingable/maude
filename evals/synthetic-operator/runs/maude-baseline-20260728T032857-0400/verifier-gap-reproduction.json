@@ -1,0 +1,95 @@
+{
+  "schema": "maude.synthetic-operator.verifier-gap-reproduction.v1",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "recorded_at": "2026-07-28T08:24:52Z",
+  "status": "confirmed-evaluator-infrastructure-defect",
+  "frozen_verifier": {
+    "path": "evals/synthetic-operator/harness/campaign_runner.py",
+    "bytes": 568475,
+    "sha256": "eaf8112aee1d836e263b3ec4c89ac2c391e100ecbfeac8f58487b64970678f31"
+  },
+  "contradicted_manifest_claims": {
+    "required_after_raw_evidence_commit": true,
+    "verify_codex_tool_proxy_broker_correlations": true,
+    "verify_codex_per_command_namespace_and_descriptor_proofs": true
+  },
+  "primary_reproduction": {
+    "run_id": "maude-s01",
+    "repository_evidence_modified": false,
+    "copy_location_disposition": "disposable /tmp copy only; not campaign evidence",
+    "trace_path": "raw/codex-mcp-boundary/command-broker-trace.jsonl",
+    "original": {
+      "bytes": 82184,
+      "sha256": "7d5274d64596c338127892e08bb765f92873266345a8425831da8668472418ba",
+      "session_boundary_errors": []
+    },
+    "mutation": {
+      "record": 1,
+      "json_pointer": "/namespace_and_mount_proof/external_network_namespace",
+      "before": "unshared",
+      "after": "shared"
+    },
+    "tampered": {
+      "bytes": 82182,
+      "sha256": "8d70e0e6dec11c38fb6b841af167e0ea2beff0a9990c7abfc6ffa27a45ce95e5",
+      "session_boundary_errors": []
+    },
+    "unexpected_result": "tampered broker evidence was accepted"
+  },
+  "independent_reproduction": {
+    "run_id": "maude-s03",
+    "repository_evidence_modified": false,
+    "copy_location_disposition": "disposable /tmp copy only; not campaign evidence",
+    "trace_path": "raw/codex-mcp-boundary/command-broker-trace.jsonl",
+    "original": {
+      "bytes": 99369,
+      "records": 10,
+      "sha256": "5e5fcb4e7c3b78e075a00174610e260dc448f8c402b23dc42ce03471faab3af6",
+      "allow_incomplete_verifier_ok": true,
+      "allow_incomplete_verifier_errors": []
+    },
+    "mutations": [
+      "changed ordinal and request identity",
+      "changed request and result digests",
+      "changed broker-only result output",
+      "removed --unshare-net",
+      "changed external network namespace to host-shared",
+      "changed network namespace distinct proof to false",
+      "changed provider-auth mount visibility to true",
+      "added a forbidden provider-auth descriptor target",
+      "added an inside pre-exec file descriptor greater than 2"
+    ],
+    "tampered": {
+      "bytes": 99095,
+      "records": 10,
+      "sha256": "2430884acd9f4a0b40c1848ef3d7b1601bcd6b1ff0e5c8975d303e68859619dd",
+      "allow_incomplete_verifier_ok": true,
+      "allow_incomplete_verifier_errors": []
+    },
+    "deleted_trace": {
+      "allow_incomplete_verifier_ok": true,
+      "allow_incomplete_verifier_errors": []
+    },
+    "existing_helper_direct_result": [
+      "command-result digest mismatch",
+      "PID/mount/network separation proof invalid",
+      "forbidden path/auth/FD proof invalid",
+      "inside pre-exec FD proof is not limited to 0/1/2",
+      "per-command Bubblewrap argv is invalid"
+    ],
+    "unexpected_result": "the semantic helper detects the mutations, but the Codex verifier path never calls it"
+  },
+  "static_cause": {
+    "summary": "The Codex retained-auth branch validates proxy correlations and cleanup, then returns without requiring or reading command-broker evidence. Equivalent broker loading, correlation, and per-command semantic checks are wired only into the Claude operator branch.",
+    "defect_kind": "wiring omission",
+    "gate_attestation_is_not_a_substitute": true
+  },
+  "disposition": {
+    "generation_counts_toward_campaign_completion": false,
+    "operator_or_ux_verdict_permitted": false,
+    "supplemental_audit_cures_frozen_contract": false,
+    "successor_generation_required": true,
+    "successor_must_rerun_full_matrix": true
+  },
+  "authority_effect": "none"
+}

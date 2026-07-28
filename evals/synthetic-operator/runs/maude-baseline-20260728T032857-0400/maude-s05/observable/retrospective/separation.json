@@ -1,0 +1,90 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "disposition_write_action_indices": [
+    10
+  ],
+  "early_helper_inspection_action_indices": [],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "scope",
+      "segment_sha256": "2b5ef0110ca66c624cf5cb8ab77c453f269dfaad53f819432532db4c96785984"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "no",
+      "segment_sha256": "b3400a4b1133ce37aaf6c815b6784cfa29d7fcbbb6c1020d82e32a3af70dcc82"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "the",
+      "segment_sha256": "e19681fe3c54ebaf0aa5c32b3a003cb5f24df1b9bd07ef75039435651e6261e5"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "repository",
+      "segment_sha256": "c714518ff731e438d41d2096b94375af52d9cf2857d7c2d189179f4eb03565e3"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "no",
+      "segment_sha256": "02f35cc15a0c352b8ceeea22c954e37a7f5d0d97e156fa5db73140f2f08fa802"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    10
+  ],
+  "helper_inspection_action_indices": [],
+  "helper_inspection_before_invocation_action_indices": [],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "offset": 1231
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 1164,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "a544671beeea9b527f8d9f2356aa0f200694d5867cda37958837207efd8ade43"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 10,
+  "protocol_action_indices": [],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s05",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

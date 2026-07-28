@@ -1,0 +1,119 @@
+{
+  "schema": "maude.synthetic-operator.campaign-abort.v1",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "recorded_at": "2026-07-28T08:24:52Z",
+  "status": "aborted-evaluator-infrastructure",
+  "frozen_packet": {
+    "commit": "47f21ca3cca08e93a8428ce8b8f91c4e74cfac3d",
+    "manifest_bytes": 460487,
+    "manifest_sha256": "f9bb0a0c079adf85942a0c9fd1905abcf0833d747ee64f283f3f5322a1ce8ef4"
+  },
+  "operator_stage": {
+    "declared_runs": 35,
+    "materialized_runs": 35,
+    "completion_markers": 15,
+    "completed_run_ids": [
+      "maude-s01",
+      "maude-s02",
+      "maude-s03",
+      "maude-s04",
+      "maude-s05",
+      "maude-s06",
+      "maude-s07",
+      "maude-s08",
+      "maude-s09",
+      "maude-s10",
+      "maude-s11",
+      "maude-s12",
+      "maude-s13",
+      "maude-s14",
+      "maude-s15"
+    ],
+    "provider_sessions_started": 17,
+    "unique_provider_session_identities": 17,
+    "completed_unique_provider_session_identities": 15,
+    "interrupted_provider_session_identities": 2,
+    "interrupted_runs": [
+      {
+        "run_id": "maude-s16",
+        "provider_thread_id": "019fa7ce-394c-7ac1-9471-95bda6720ccf"
+      },
+      {
+        "run_id": "maude-s17",
+        "provider_thread_id": "019fa7ce-409d-7d00-814b-df142068a339"
+      }
+    ],
+    "runs_not_started": 18,
+    "coached_sessions": 0
+  },
+  "grading_stage": {
+    "provider_sessions_started": 0,
+    "completed_grades": 0,
+    "grading_started": false
+  },
+  "mechanical_verification": {
+    "allow_incomplete_verifier_ok": true,
+    "allow_incomplete_verifier_errors": [],
+    "allow_incomplete_verifier_record": {
+      "path": "evidence-verification.json",
+      "bytes": 11243,
+      "sha256": "33695c3ef612d8b6db0bc8d3435611d657c35e00af65fb2e0de171dc460be8fd"
+    },
+    "operator_session_identities_observed_by_frozen_verifier": 15,
+    "completed_grade_session_identities_observed": 0,
+    "frozen_verifier_defect": {
+      "record": {
+        "path": "verifier-gap-reproduction.json"
+      },
+      "cause": "Codex retained-auth verification returned without loading, correlating, or semantically validating command-broker evidence",
+      "false_manifest_assertions": [
+        "verify_codex_tool_proxy_broker_correlations",
+        "verify_codex_per_command_namespace_and_descriptor_proofs"
+      ],
+      "tampered_broker_trace_accepted": true,
+      "missing_broker_trace_accepted": true,
+      "independently_reproduced": true
+    },
+    "retrospective_separation_anomaly": {
+      "affected_completion_markers": 15,
+      "observed_result": "all completed runs were marked evaluator_contamination because the helper output disposition digest was not recovered from the Codex MCP result wrapper",
+      "requires_evaluator_fix_before_successor_freeze": true
+    }
+  },
+  "interruption_cleanup": {
+    "runner_interrupted_to_stop_new_sessions": true,
+    "orphaned_provider_processes_observed": 0,
+    "orphaned_synthetic_helper_processes_observed": 8,
+    "affected_runs": [
+      "maude-s16",
+      "maude-s17"
+    ],
+    "helper_types_per_run": [
+      "synthetic runtime",
+      "Maude driver",
+      "public CLI broker",
+      "command broker"
+    ],
+    "signal": "SIGTERM",
+    "remaining_targeted_processes_after_cleanup": 0
+  },
+  "disposition": {
+    "counts_toward_campaign_completion": false,
+    "operator_or_ux_verdict_permitted": false,
+    "successor_generation_required": true,
+    "successor_must_rerun_full_matrix": true,
+    "raw_evidence_preserved": true,
+    "interrupted_attempts_preserved": true,
+    "grading_prohibited_for_this_generation": true
+  },
+  "scope": {
+    "product_behavior_modified": false,
+    "operator_documentation_repaired": false,
+    "governance_or_oq7_state_changed": false,
+    "external_operational_side_effects": false,
+    "task_level_network_access": false,
+    "provider_network_used_only_for_fresh_synthetic_sessions": true,
+    "pushed": false,
+    "authority_effect": "none"
+  }
+}

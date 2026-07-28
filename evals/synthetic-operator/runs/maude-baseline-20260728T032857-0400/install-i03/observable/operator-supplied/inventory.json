@@ -1,0 +1,102 @@
+{
+  "copied_destinations": [
+    "README.md",
+    "docs/README.md",
+    "docs/commands.md",
+    "docs/configuration.md",
+    "operator/operator-pty",
+    "operator/operator-retrospective",
+    "pyproject.toml",
+    "task/assignment.md",
+    "task/handoff.json",
+    "task/release-handoff.json",
+    "task/task.json"
+  ],
+  "excluded_destinations": [
+    "media/maude-source.tar"
+  ],
+  "files": [
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "operator/operator-pty",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "operator/operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1315,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "task/assignment.md",
+      "sha256": "b519edc11cf2e98c0fec5621f1df7b9932ef1528af2f3b570cdca0dfccc475da"
+    },
+    {
+      "bytes": 290,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/handoff.json",
+      "sha256": "a8ab34236aa47f58ec10b2a99bb7c3e6ce5a5e3988c2ba0c25872d7be4da4e17"
+    },
+    {
+      "bytes": 874,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/release-handoff.json",
+      "sha256": "cb37da2060c27ef673bc34e6f8a5ec22eabe4d9bace40ea6f7a1ae40a87c4b49"
+    },
+    {
+      "bytes": 1438,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/task.json",
+      "sha256": "08fff8d0325f93369ae45a2734fc0437452c1e56073feed957e714ecd505110f"
+    }
+  ],
+  "installation_root": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i03/installation",
+  "installed_distribution_copied_to_grade_evidence": false,
+  "run_id": "install-i03",
+  "schema": "maude.synthetic-installation.operator-supplied-snapshot.v1",
+  "source_archive_copied_to_grade_evidence": false
+}

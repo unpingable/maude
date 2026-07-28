@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-board
+spec:
+  template:
+    spec:
+      containers:
+        - name: menu-board
+          image: registry.example.invalid/menu-board:5.4.1
+          ports:
+            - containerPort: 8080

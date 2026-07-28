@@ -1,0 +1,6 @@
+groups:
+  - name: menu
+    rules:
+      - alert: MenuApiHighLatency
+        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75
+        for: 10m

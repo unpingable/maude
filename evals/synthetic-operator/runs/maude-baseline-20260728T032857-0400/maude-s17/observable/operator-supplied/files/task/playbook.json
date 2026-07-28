@@ -1,0 +1,5 @@
+{
+  "description": "Continue handling the supplied proxy timeout change and report its current disposition.",
+  "playbook_id": "synthetic.ux-task-17",
+  "schema": "synthetic-playbook.v1"
+}

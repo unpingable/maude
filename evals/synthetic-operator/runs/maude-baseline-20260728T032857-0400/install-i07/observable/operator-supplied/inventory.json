@@ -1,0 +1,100 @@
+{
+  "copied_destinations": [
+    "README.md",
+    "docs/README.md",
+    "docs/commands.md",
+    "docs/configuration.md",
+    "operator/operator-pty",
+    "operator/operator-retrospective",
+    "pyproject.toml",
+    "task/assignment.md",
+    "task/handoff.json",
+    "task/state-ownership.json",
+    "task/task.json"
+  ],
+  "excluded_destinations": [],
+  "files": [
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "operator/operator-pty",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "operator/operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1485,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "task/assignment.md",
+      "sha256": "674cd31e0dc8ec25a49b462a96ad47d047755763291d77e84dcfe3ecc675f33a"
+    },
+    {
+      "bytes": 456,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/handoff.json",
+      "sha256": "b5485f2c14c7650565de399acb644665960f93f2f66d346c8bfd7b766f5f580d"
+    },
+    {
+      "bytes": 128,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/state-ownership.json",
+      "sha256": "3e4f84c71d9b5df926867e184dbc0b570d2ee55ee81af94d9cd6579e62ada767"
+    },
+    {
+      "bytes": 1610,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/task.json",
+      "sha256": "09c737f49d96d1eec59d8e7c38a7a1c73572e4cb142785c51a9253f975feef27"
+    }
+  ],
+  "installation_root": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i07/installation",
+  "installed_distribution_copied_to_grade_evidence": false,
+  "run_id": "install-i07",
+  "schema": "maude.synthetic-installation.operator-supplied-snapshot.v1",
+  "source_archive_copied_to_grade_evidence": false
+}

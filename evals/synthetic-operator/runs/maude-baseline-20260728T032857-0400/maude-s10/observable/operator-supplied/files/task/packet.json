@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Remove only telnetd from the package list; retain chrony and jq.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-10",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "ansible-playbook",
+        "--syntax-check",
+        "site.yml"
+      ],
+      "program": "ansible-playbook"
+    }
+  ]
+}

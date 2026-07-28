@@ -1,0 +1,167 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "disposition_write_action_indices": [
+    7
+  ],
+  "early_helper_inspection_action_indices": [
+    7
+  ],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "shell-substitution",
+      "segment_sha256": "f56c7ccded45ece93413e33afd9eb2cfe8144269057d01b2b0e3ac0ec43ee90d"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "command",
+      "segment_sha256": "496148abac7fa19748ee4b57ac1055e97ffd9f6f16765bf02c5fb75ff3d9f0dc"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "pwd",
+      "segment_sha256": "a1159e9df3670d549d04524532629f5477ceb7deec9b45e47e8c009506ecb2c8"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "enforced",
+      "segment_sha256": "be4230945993732493654c41ce54e920c39bb7b88e590f89e602ccb10a80a8c5"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "then",
+      "segment_sha256": "ac66da447ae46b8bf2ff2a6f000c30ad0c1613f3653b9cc8c2eb188950ee7636"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "Maude",
+      "segment_sha256": "670c930c1d0ba6f36576c46b2a573cc743a3f34b576d4ad8afad58233be13a64"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "references",
+      "segment_sha256": "008bb62a58d7325d2650d3ad5e95b18d699d755c8b0d7d32db1b16464b180162"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "mode",
+      "segment_sha256": "55bc6c138c540b9ebde9f0b5b6c98db33a929eaabfbe63cc6387a6dc00557c51"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "supervised",
+      "segment_sha256": "d8dfa468733362ae0c977d2209d02a67c186d2ec1e9a9ef6743dd8b686ec86ae"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "envelope",
+      "segment_sha256": "8a6be57beebc1c627113fa6a2f1062281d38de71db61cd4abf54a60a3d588c7d"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "tool-call",
+      "segment_sha256": "380d0d954ac5ecd59bfd0d903dd59fce922a862a64ce900c961699347a0922c8"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "workspace",
+      "segment_sha256": "925798f613cc1154899368ab5fbb0e66b149b78ade7dbc74939bef33cf0ca5e2"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "discard",
+      "segment_sha256": "0425e986ec571c6a4d9451d01096f36ca00d5dd64eb677d8bed4d37589183faa"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "event",
+      "segment_sha256": "d4469074ee1432226706b62fef5f29eb8185a52060f2828578590eb8f3fabcb4"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "advisory",
+      "segment_sha256": "da32016164b78107271c769bc89760235cdb6dcfc928fc432d55777be8a9a404"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "pre-existing-change",
+      "segment_sha256": "8588c85dcf2638410460ec3aaf9b87076951c18f5206c64fc2886b8570c17e76"
+    },
+    {
+      "action_index": 7,
+      "command_index": 0,
+      "head": "and",
+      "segment_sha256": "d65b4bdd08b3e39ca901d2c7bb91783d876d2d8f66fdfd248024931b1b393090"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    8
+  ],
+  "helper_inspection_action_indices": [
+    7
+  ],
+  "helper_inspection_before_invocation_action_indices": [
+    7
+  ],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "offset": 0
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 1983,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "1cbadd058e8b951c4bd220baef813faab903ffbbd8c9a3587474531cfd0ce078"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 7,
+  "protocol_action_indices": [
+    8
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s11",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

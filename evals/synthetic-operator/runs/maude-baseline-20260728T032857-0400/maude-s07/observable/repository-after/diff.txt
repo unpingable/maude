@@ -1,0 +1,10 @@
+diff --git a/nginx/routes.conf b/nginx/routes.conf
+index 0074240..2aa3601 100644
+--- a/nginx/routes.conf
++++ b/nginx/routes.conf
+@@ -1,4 +1,4 @@
+ location /order-history/ {
+     proxy_set_header X-Request-ID $request_id;
+-    proxy_pass http://order-history-v1:8080;
++    proxy_pass http://order-history-v2:8080;
+ }

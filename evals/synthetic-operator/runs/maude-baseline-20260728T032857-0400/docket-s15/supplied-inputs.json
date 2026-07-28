@@ -1,0 +1,119 @@
+{
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s15/operator",
+  "operator_visible_files": [
+    {
+      "bytes": 3779376,
+      "media_type": "application/octet-stream",
+      "mode": "0755",
+      "path": "bin/docket",
+      "sha256": "1fa41093c5a9b37c7607eeeaf2db73b8a703d7d8b0e4dcc93076f9a0b6aabbc6"
+    },
+    {
+      "bytes": 609584,
+      "media_type": "application/octet-stream",
+      "mode": "0755",
+      "path": "bin/gwr-git-broker",
+      "sha256": "559d86cb79ae9a426b2873aa0d8ad28056cff59f967fa5ec4f3374379c65f41e"
+    },
+    {
+      "bytes": 154,
+      "media_type": "text/x-diff",
+      "mode": "0644",
+      "path": "candidate.patch",
+      "sha256": "0ea84032ab1903f60a5c91d86303d813e509ad14dcdc70ceb6274720091e23c1"
+    },
+    {
+      "bytes": 1623,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "control.json",
+      "sha256": "4d1ab6cf9111001e9977ebb20bf8c2691762480897c0b5d1ffb837a442a3c8c6"
+    },
+    {
+      "bytes": 6268,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/attempt-dossier.md",
+      "sha256": "aff983fb66b73c3b568de9fe45a9ffdce216c723248465f193c53fb9a50e9422"
+    },
+    {
+      "bytes": 4007,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/effect-classes.md",
+      "sha256": "b74e46488820508e9307d138c31e642293d347375ab4b522b89bd88d0b512d11"
+    },
+    {
+      "bytes": 11055,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/operator-runbook.md",
+      "sha256": "cd56313afb01aecb6beab088d0e897277207765f47a7933b49e8f2c27259bcf9"
+    },
+    {
+      "bytes": 8253,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/repository-identity-and-ref-continuity.md",
+      "sha256": "a64f0f02a58b878575cad42ce597bba12824531af3c25556d9b7c9544319a3e4"
+    },
+    {
+      "bytes": 6221,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/trust-model.md",
+      "sha256": "b39a4585800e45911c784c6e626bbfa589e98c3f696f5d77e77f5b45298fc13b"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 961,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/README.md",
+      "sha256": "448a20e416c766eb4b53811f5bdf551d142c0f4fb5d854c669a67e1b9a314eff"
+    },
+    {
+      "bytes": 634,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/packet.json",
+      "sha256": "e0247c5457020e2d41383affcdb5031a94d6cc30b56313b79b1555e62aa7895e"
+    }
+  ],
+  "repository_base_commit": "ac74c967e0f011d8dcfabcf1aae3b439eaa80459",
+  "repository_files": [
+    {
+      "bytes": 45,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/worker.yaml",
+      "sha256": "fb49847e7f7f28e4c515b80676b7e171f02f1f7564719891e0c84c46bb98b35e"
+    }
+  ],
+  "repository_root": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/docket-s15/repo",
+  "run_id": "docket-s15",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "docket-gwr-direct",
+  "system_prompt": {
+    "bytes": 1576,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/docket-s15/operator-system.md",
+    "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+  },
+  "user_prompt": {
+    "bytes": 2458,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/docket-s15/operator-prompt.md",
+    "sha256": "ec54d401bcbca42629dbff2ab67cc8c8bb66e9e4a09a17a3dd3582022d02ada1"
+  }
+}

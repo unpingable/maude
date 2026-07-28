@@ -1,0 +1,14 @@
+diff --git a/terraform/variables.tf b/terraform/variables.tf
+index 8861259..ccbb7e0 100644
+--- a/terraform/variables.tf
++++ b/terraform/variables.tf
+@@ -3,7 +3,7 @@ variable "replicas" {
+   description = "Desired worker replicas"
+ 
+   validation {
+-    condition     = var.replicas >= 1 && var.replicas <= 500
+-    error_message = "replicas must be between 1 and 500"
++    condition     = var.replicas >= 1 && var.replicas <= 50
++    error_message = "replicas must be between 1 and 50"
+   }
+ }

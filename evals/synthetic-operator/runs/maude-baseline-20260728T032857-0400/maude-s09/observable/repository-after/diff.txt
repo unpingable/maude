@@ -1,0 +1,11 @@
+diff --git a/alerts/menu-latency.yaml b/alerts/menu-latency.yaml
+index b9af0ae..37b4591 100644
+--- a/alerts/menu-latency.yaml
++++ b/alerts/menu-latency.yaml
+@@ -2,5 +2,5 @@ groups:
+   - name: menu
+     rules:
+       - alert: MenuApiHighLatency
+-        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0
++        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75
+         for: 10m
