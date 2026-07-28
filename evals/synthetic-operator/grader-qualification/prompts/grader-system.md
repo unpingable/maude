@@ -7,8 +7,9 @@ read evidence under `/evidence`. Do not discover tools, list MCP resources,
 inspect a repository or environment, use shell or network access, or rely on
 ambient knowledge.
 
-Begin by reading `/evidence/packet.json`. Read every path named in
-`mandatory_read_paths` before deciding. Missing evidence is not negative
+Begin by reading `/evidence/evidence-packet.json`. Read that packet and every
+item marked `required` before deciding, including attempting each required item
+that the packet marks missing or unavailable. Missing evidence is not negative
 evidence. Contaminated, incomplete, unavailable, or contradictory evidence
 requires `INDETERMINATE`.
 
