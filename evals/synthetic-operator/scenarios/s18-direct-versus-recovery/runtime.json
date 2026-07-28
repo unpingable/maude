@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:56c2b6f2c16641e62cac3b941880c7a673f5d470e26edcfb1790410bab249192",
-    "source_plan_digest": "sha256:9bc4c57e07284aff50c847029b9fb1afa90eb11c4b79b7aff768da7b1006a806"
+    "approval_witness_digest": "sha256:d0fcb80dd96d574dc970c2954855090f49d7af442a7ca9f2e14f509dc476528b",
+    "source_plan_digest": "sha256:83e50e0bf008e1e5d79ae467af053049bd5223ab0a2f145742f8476cf569dab6"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -249,7 +249,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:56c2b6f2c16641e62cac3b941880c7a673f5d470e26edcfb1790410bab249192",
+    "approval_witness_digest": "sha256:d0fcb80dd96d574dc970c2954855090f49d7af442a7ca9f2e14f509dc476528b",
     "behavior": "normal",
     "commands": [
       {
@@ -262,12 +262,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:abfcab802a802d7223023bec793d6dad54dacd380682e9902b435b2ac3834691",
-    "grant_id": "sgr_abfcab802a80",
+    "grant_digest": "sha256:e76ee9cd91c9241d34a42e7265ea1eb07001e991a8e3ada7e69e75df4826181c",
+    "grant_id": "sgr_e76ee9cd91c9",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:9bc4c57e07284aff50c847029b9fb1afa90eb11c4b79b7aff768da7b1006a806",
+    "source_plan_digest": "sha256:83e50e0bf008e1e5d79ae467af053049bd5223ab0a2f145742f8476cf569dab6",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -277,7 +277,7 @@
   "initial_sessions": [
     {
       "backend_kind": "synthetic_fixture",
-      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s18/repo",
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s18/repo",
       "exit_code": 0,
       "session_id": "sess_ux_task_18",
       "status": "exited",
@@ -340,7 +340,7 @@
     "base_files": {
       "config/scheduler.yaml": "batch_size: 20\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s18/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s18/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

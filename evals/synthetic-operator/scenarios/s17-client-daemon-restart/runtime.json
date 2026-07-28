@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:0eb08a5578a492147c8f8bc7a234181560a362bec834d93cfeada262f6881b7a",
-    "source_plan_digest": "sha256:834f93518c0a85002353e1c34b045ac90106361f033ae11c3125039c5c0a1da6"
+    "approval_witness_digest": "sha256:c981c772d6a9f53d405f9c857dab3dff6088df3892a062edfded7f79b23c45bf",
+    "source_plan_digest": "sha256:b2f6ae5037db7a3fcb9b6c2168709149c90ae94a4c632649ce7f450dcc815371"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -144,7 +144,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:0eb08a5578a492147c8f8bc7a234181560a362bec834d93cfeada262f6881b7a",
+    "approval_witness_digest": "sha256:c981c772d6a9f53d405f9c857dab3dff6088df3892a062edfded7f79b23c45bf",
     "behavior": "normal",
     "commands": [
       {
@@ -157,12 +157,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:a8e84b6034aee2a5538847ab26c468a34456c36917f3bdc19de896f901277269",
-    "grant_id": "sgr_a8e84b6034ae",
+    "grant_digest": "sha256:2e260897db3d4cb3de42073f16e90fdfb76a3dbe829c6cd30bc99efec234e801",
+    "grant_id": "sgr_2e260897db3d",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:834f93518c0a85002353e1c34b045ac90106361f033ae11c3125039c5c0a1da6",
+    "source_plan_digest": "sha256:b2f6ae5037db7a3fcb9b6c2168709149c90ae94a4c632649ce7f450dcc815371",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -172,7 +172,7 @@
   "initial_sessions": [
     {
       "backend_kind": "synthetic_fixture",
-      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "cwd": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s17/repo",
       "exit_code": null,
       "session_id": "sess_ux_task_17",
       "status": "running",
@@ -235,7 +235,7 @@
     "base_files": {
       "config/proxy.yaml": "upstream_timeout_seconds: 15\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s17/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

@@ -1,5 +1,5 @@
 {
-  "archive_path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i03/installation/media/maude-source.tar",
+  "archive_path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i03/installation/media/maude-source.tar",
   "artifact_id": "release-install-task-03",
   "authority_effect": "none",
   "delivery": "filtered installable Git archive from the exact baseline commit",

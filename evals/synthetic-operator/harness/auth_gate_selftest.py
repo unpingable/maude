@@ -27,6 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+import campaign_common as common
 import campaign_runner as runner
 import operator_pty as pty_adapter
 
@@ -1618,10 +1619,11 @@ def _run_local_codex_mcp_case(
     assert bwrap[0] == str(runner.BWRAP)
     assert str(runner.HOST_SOURCE_ROOT) not in bwrap
     assert "--chdir" in bwrap
-    codex_argv, delivery = runner._provider_argv(
+    large_user_prompt = "synthetic task\n" + ("x" * 200_000)
+    codex_argv, delivery, stdin_payload = runner._provider_argv(
         "openai-sol",
         system_prompt="synthetic system",
-        user_prompt="synthetic task",
+        user_prompt=large_user_prompt,
         cwd=bundle,
         grade_schema=bundle / "schema.json",
         claude_boundary=boundary,
@@ -1660,6 +1662,15 @@ def _run_local_codex_mcp_case(
     mcp_approval_index = mcp_approval_indexes[0]
     assert "use_legacy_landlock" not in codex_argv
     assert str(bundle) not in codex_argv
+    assert codex_argv[-1] == "-"
+    assert stdin_payload is not None
+    assert len(stdin_payload) > 131_072
+    assert all(large_user_prompt not in value for value in codex_argv)
+    assert delivery["semantic_prompt_bytes_in_argv"] is False
+    assert delivery["delivered_prompt_bytes"] == len(stdin_payload)
+    assert delivery["delivered_prompt_sha256"] == runner.sha256_bytes(
+        stdin_payload
+    )
     assert delivery["mcp_enabled_tools"] == ["evidence"]
     assert delivery["mcp_protocol_version"] == (
         runner.CODEX_MCP_PROTOCOL_VERSION
@@ -1955,8 +1966,14 @@ def _run_local_codex_mcp_case(
             f"''.join(json.dumps(value)+'\\n' for value in "
             f"{[*protocol_trace, proxy_call]!r}),encoding='utf-8');"
         )
+    stdin_probe = case_root / "stdin-probe.json"
     source = (
-        "import json,pathlib;"
+        "import hashlib,json,pathlib,sys;"
+        "prompt=sys.stdin.buffer.read();"
+        f"pathlib.Path({str(stdin_probe)!r}).write_text("
+        "json.dumps({'bytes':len(prompt),"
+        "'sha256':hashlib.sha256(prompt).hexdigest()})+'\\n',"
+        "encoding='utf-8');"
         + trace_setup
         + "".join(f"print({line!r},flush=True);" for line in provider_events)
     )
@@ -1981,6 +1998,7 @@ def _run_local_codex_mcp_case(
                 credential_values=[secret],
                 gate_record_path=gate_path,
                 boundary=boundary,
+                stdin_payload=stdin_payload,
             )
         except BaseException as exc:
             observed = {"type": type(exc).__name__, "message": str(exc)}
@@ -1994,6 +2012,11 @@ def _run_local_codex_mcp_case(
     assert secret not in stdout_path.read_bytes()
     assert secret not in stderr_path.read_bytes()
     assert gate["provider_auth_destroyed"] is True
+    stdin_observation = json.loads(stdin_probe.read_text(encoding="utf-8"))
+    assert stdin_observation == {
+        "bytes": len(stdin_payload),
+        "sha256": runner.sha256_bytes(stdin_payload),
+    }
     assert gate["codex_approval_argv"] == [
         "--config",
         'approval_policy="never"',
@@ -2298,6 +2321,250 @@ def public_cli_broker_case(diagnostics_root: Path) -> dict[str, Any]:
         "timeout_preserved_as_retained_unknown": True,
         "raw_control_path_absent_from_public_trace": True,
         "cleanup": cleanup,
+        "all_passed": True,
+    }
+
+
+def installation_static_visible_paths_case(
+    diagnostics_root: Path,
+) -> dict[str, Any]:
+    """Keep supplied operator helpers static while ignoring generated trees."""
+
+    install_root = diagnostics_root / "installation-static-visible-paths"
+    static_files = {
+        "operator/operator-pty": "#!/usr/bin/env python3\n",
+        "operator/operator-retrospective": "#!/usr/bin/env python3\n",
+        "docs/commands.md": "# Commands\n",
+        "task/task.json": "{}\n",
+    }
+    generated_files = {
+        "work/generated.txt": "work\n",
+        "home/.config/maude/state": "home\n",
+        "run/xdg/runtime-state": "run\n",
+        "venv/lib/python/site-packages/generated.py": "venv\n",
+    }
+    for relative, content in {**static_files, **generated_files}.items():
+        path = install_root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+
+    observed = runner._installation_static_visible_paths(install_root)
+    assert observed == set(static_files)
+    assert "operator/operator-pty" in observed
+    assert "operator/operator-retrospective" in observed
+    assert not observed.intersection(generated_files)
+    return {
+        "static_visible_paths": sorted(observed),
+        "generated_paths_excluded": sorted(generated_files),
+        "operator_helpers_retained": [
+            "operator/operator-pty",
+            "operator/operator-retrospective",
+        ],
+        "all_passed": True,
+    }
+
+
+def retrospective_action_deduplication_case() -> dict[str, Any]:
+    """Count one helper command, never a helper name printed in output."""
+
+    helper_command = (
+        "./operator-retrospective --disposition-file "
+        "/home/operator/initial-disposition.md"
+    )
+    paired_events = [
+        {
+            "type": "item.started",
+            "item": {
+                "id": "retrospective-action",
+                "type": "command_execution",
+                "command": helper_command,
+                "status": "in_progress",
+            },
+        },
+        {
+            "type": "item.completed",
+            "item": {
+                "id": "retrospective-action",
+                "type": "command_execution",
+                "command": helper_command,
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": (
+                    "operator-retrospective completed successfully\n"
+                ),
+            },
+        },
+    ]
+    paired_actions = runner._event_actions(paired_events)
+    assert len(paired_actions) == 1
+    assert paired_actions[0]["event_numbers"] == [1, 2]
+    paired_analysis = runner._retrospective_action_analysis(
+        paired_actions[0]
+    )
+    assert len(paired_analysis["invocations"]) == 1
+    assert paired_analysis["mentions_helper"] is True
+
+    result_only_events = [
+        {
+            "type": "item.completed",
+            "item": {
+                "id": "ordinary-action",
+                "type": "command_execution",
+                "command": "/usr/bin/printf done",
+                "status": "completed",
+                "exit_code": 0,
+                "aggregated_output": (
+                    "operator-retrospective --disposition-file "
+                    "/home/operator/initial-disposition.md\n"
+                ),
+            },
+        }
+    ]
+    result_only_actions = runner._event_actions(result_only_events)
+    assert len(result_only_actions) == 1
+    result_only_analysis = runner._retrospective_action_analysis(
+        result_only_actions[0]
+    )
+    assert result_only_analysis["invocations"] == []
+    assert result_only_analysis["mentions_helper"] is False
+    assert result_only_analysis["retrospective_related"] is False
+    return {
+        "paired_event_count": len(paired_events),
+        "deduplicated_action_count": len(paired_actions),
+        "helper_invocation_count": len(paired_analysis["invocations"]),
+        "helper_name_in_result_only_counted": False,
+        "all_passed": True,
+    }
+
+
+def public_socket_policy_case() -> dict[str, Any]:
+    """Accept only one declared public socket and reject raw queue exposure."""
+
+    target = str(runner.PUBLIC_CLI_SOCKET_MOUNT)
+    exact_policy = {
+        "environment": {"MAUDE_PUBLIC_SOCKET": target},
+        "sockets": [
+            {
+                "source": "/tmp/synthetic-public-cli.sock",
+                "target": target,
+            }
+        ],
+        "mounts": [],
+    }
+    observed = runner._public_cli_boundary_from_policy(
+        exact_policy,
+        label="exact-policy",
+    )
+    assert observed == {
+        "raw_driver_queue_exposed": False,
+        "environment_variable": "MAUDE_PUBLIC_SOCKET",
+        "socket_target": target,
+        "exact_socket_count": 1,
+    }
+
+    invalid_policies = {
+        "raw-control-environment": {
+            **exact_policy,
+            "environment": {
+                **exact_policy["environment"],
+                "MAUDE_LAB_CONTROL_DIR": "/private/control",
+            },
+        },
+        "raw-control-mount": {
+            **exact_policy,
+            "mounts": [
+                {
+                    "source": "/tmp/private-control",
+                    "target": "/private/control",
+                    "mode": "rw",
+                }
+            ],
+        },
+        "duplicate-public-socket": {
+            **exact_policy,
+            "sockets": [
+                *exact_policy["sockets"],
+                {
+                    "source": "/tmp/duplicate-public-cli.sock",
+                    "target": target,
+                },
+            ],
+        },
+    }
+    rejected: list[str] = []
+    for name, policy in invalid_policies.items():
+        try:
+            runner._public_cli_boundary_from_policy(
+                policy,
+                label=name,
+            )
+        except runner.CampaignError:
+            rejected.append(name)
+        else:
+            raise AssertionError(f"invalid public socket policy accepted: {name}")
+    assert sorted(rejected) == sorted(invalid_policies)
+    return {
+        "exact_policy": observed,
+        "invalid_policies_rejected": sorted(rejected),
+        "all_passed": True,
+    }
+
+
+def suffixless_operator_helper_media_type_case() -> dict[str, Any]:
+    """Derive media type from each operator-visible destination."""
+
+    helper_bytes = b"#!/usr/bin/env python3\nprint('synthetic helper')\n"
+    observed = {
+        destination: common.media_type_for_path(
+            Path(destination),
+            helper_bytes,
+        )
+        for destination in (
+            "operator/operator-pty",
+            "operator/operator-retrospective",
+        )
+    }
+    assert set(observed.values()) == {"text/plain"}
+    assert (
+        common.media_type_for_path(
+            Path("operator/suffixless-binary"),
+            b"\x00\xff",
+        )
+        == "application/octet-stream"
+    )
+    return {
+        "destination_media_types": observed,
+        "suffixless_binary_media_type": "application/octet-stream",
+        "all_passed": True,
+    }
+
+
+def grade_failure_class_uniqueness_case() -> dict[str, Any]:
+    """Accept unique failure classes and reject duplicate classifications."""
+
+    unique = {
+        "failure_classes": [
+            "command discoverability failure",
+            "documentation defect",
+        ]
+    }
+    runner._validate_grade_local_invariants(unique)
+
+    duplicate = {
+        "failure_classes": [
+            "documentation defect",
+            "documentation defect",
+        ]
+    }
+    duplicate_rejected = False
+    try:
+        runner._validate_grade_local_invariants(duplicate)
+    except runner.CampaignError:
+        duplicate_rejected = True
+    assert duplicate_rejected
+    return {
+        "unique_failure_classes_accepted": unique["failure_classes"],
+        "duplicate_failure_classes_rejected": duplicate_rejected,
         "all_passed": True,
     }
 
@@ -3469,6 +3736,28 @@ def main() -> int:
         (
             "public-cli-broker-case",
             lambda: public_cli_broker_case(diagnostics_root),
+        ),
+        (
+            "installation-static-visible-paths",
+            lambda: installation_static_visible_paths_case(
+                diagnostics_root
+            ),
+        ),
+        (
+            "retrospective-action-deduplication",
+            retrospective_action_deduplication_case,
+        ),
+        (
+            "public-socket-policy",
+            public_socket_policy_case,
+        ),
+        (
+            "suffixless-operator-helper-media-type",
+            suffixless_operator_helper_media_type_case,
+        ),
+        (
+            "grade-failure-class-uniqueness",
+            grade_failure_class_uniqueness_case,
         ),
         (
             "installation-terminal-action-sequence",

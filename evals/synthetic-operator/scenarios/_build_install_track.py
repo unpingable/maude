@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 
-CAMPAIGN_ID = "maude-baseline-20260726T233054-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T032857-0400"
 SUT_COMMIT = "9d5a54f476a52826379a9ae8d6710551253a6493"
 ROOT = Path(__file__).resolve().parents[3]
 SCENARIOS = Path(__file__).resolve().parent

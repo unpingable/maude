@@ -1830,6 +1830,26 @@ def materialize_run(run: dict[str, Any], manifest: dict[str, Any]) -> dict[str, 
     return result
 
 
+def _installation_static_visible_paths(install_root: Path) -> set[str]:
+    generated_roots = {"work", "home", "run", "venv"}
+    actual_static: set[str] = set()
+    for path in sorted(install_root.rglob("*")):
+        relative = path.relative_to(install_root)
+        if not relative.parts or relative.parts[0] in generated_roots:
+            continue
+        if path.is_symlink():
+            raise CampaignError(
+                f"undeclared static symlink is visible: {relative}"
+            )
+        if path.is_file():
+            actual_static.add(relative.as_posix())
+        elif not path.is_dir():
+            raise CampaignError(
+                f"undeclared static special path is visible: {relative}"
+            )
+    return actual_static
+
+
 def _materialized_supplied_inputs(
     run: dict[str, Any], operator: Path, repo: Path, base_commit: str
 ) -> dict[str, Any]:
@@ -1855,24 +1875,7 @@ def _materialized_supplied_inputs(
                     f"missing or changed: {destination}"
                 )
             visible.append(file_record(path, relative_to=install_root))
-        generated_roots = {"operator", "work", "home", "run", "venv"}
-        actual_static: set[str] = set()
-        for path in sorted(install_root.rglob("*")):
-            relative = path.relative_to(install_root)
-            if not relative.parts or relative.parts[0] in generated_roots:
-                continue
-            if path.is_symlink():
-                raise CampaignError(
-                    f"{run['run_id']}: undeclared static symlink is visible: "
-                    f"{relative}"
-                )
-            if path.is_file():
-                actual_static.add(relative.as_posix())
-            elif not path.is_dir():
-                raise CampaignError(
-                    f"{run['run_id']}: undeclared static special path is "
-                    f"visible: {relative}"
-                )
+        actual_static = _installation_static_visible_paths(install_root)
         if actual_static != expected_destinations:
             raise CampaignError(
                 f"{run['run_id']}: installation static visible-file set "
@@ -3576,7 +3579,7 @@ def _provider_argv(
     additional_dirs: list[Path] | None = None,
     allowed_unix_sockets: list[Path] | None = None,
     claude_boundary: dict[str, Any] | None = None,
-) -> tuple[list[str], dict[str, Any]]:
+) -> tuple[list[str], dict[str, Any], bytes | None]:
     additional_dirs = additional_dirs or []
     allowed_unix_sockets = allowed_unix_sockets or []
     if config_id == "anthropic-sonnet":
@@ -3645,6 +3648,7 @@ def _provider_argv(
             "provider_task_paths_added": [],
             "provider_unix_sockets_added": [],
         }
+        stdin_payload = None
     else:
         if (
             claude_boundary is None
@@ -3720,13 +3724,19 @@ def _provider_argv(
                     str(Path("/evidence") / grade_schema.name),
                 ]
             )
-        argv.append(delivered)
+        argv.append("-")
+        stdin_payload = delivered.encode("utf-8")
         delivery = {
             "provider": "OpenAI",
             "requested_model": "gpt-5.6-sol",
             "system_prompt_delivery": "concatenated first in single CLI prompt",
-            "user_prompt_delivery": "concatenated after exact delimiter",
+            "user_prompt_delivery": (
+                "concatenated after exact delimiter and delivered through "
+                "closed stdin; no semantic prompt bytes appear in argv"
+            ),
             "delivered_prompt_sha256": sha256_bytes(delivered.encode("utf-8")),
+            "delivered_prompt_bytes": len(stdin_payload),
+            "semantic_prompt_bytes_in_argv": False,
             "allowed_unix_sockets": [],
             "intrinsic_action_features_explicitly_disabled": list(
                 CODEX_DISABLED_INTRINSIC_ACTION_FEATURES
@@ -3762,7 +3772,7 @@ def _provider_argv(
             "exact_provider_tool_allowlist_supported": True,
             "unexpected_intrinsic_action_policy": "fail-closed",
         }
-    return argv, delivery
+    return argv, delivery, stdin_payload
 
 
 def _validate_codex_strict_argv(
@@ -3883,6 +3893,7 @@ def _validate_codex_strict_argv(
         or "--enable" in provider_argv
         or "--add-dir" in provider_argv
         or "use_legacy_landlock" in provider_argv
+        or provider_argv[-1:] != ["-"]
     ):
         raise CampaignError("Codex argv is not the frozen strict MCP shape")
 
@@ -4133,6 +4144,47 @@ def _isolation_preflight(
     }
 
 
+def _public_cli_boundary_from_policy(
+    policy: dict[str, Any],
+    *,
+    label: str,
+) -> dict[str, Any] | None:
+    serialized_policy = json.dumps(
+        policy,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    if (
+        "MAUDE_LAB_CONTROL_DIR" in policy.get("environment", {})
+        or "/private/control" in serialized_policy
+    ):
+        raise CampaignError(
+            f"{label} command policy exposes the raw Maude driver queue"
+        )
+    public_socket_environment = policy.get("environment", {}).get(
+        "MAUDE_PUBLIC_SOCKET"
+    )
+    if public_socket_environment is None:
+        return None
+    matching_public_sockets = [
+        value
+        for value in policy.get("sockets", [])
+        if value.get("target") == public_socket_environment
+        and value.get("target") == str(PUBLIC_CLI_SOCKET_MOUNT)
+    ]
+    if len(matching_public_sockets) != 1:
+        raise CampaignError(
+            f"{label} Maude command policy lacks one exact public socket"
+        )
+    return {
+        "raw_driver_queue_exposed": False,
+        "environment_variable": "MAUDE_PUBLIC_SOCKET",
+        "socket_target": public_socket_environment,
+        "exact_socket_count": 1,
+    }
+
+
 def _claude_mcp_isolation_preflight(
     boundary: dict[str, Any],
 ) -> dict[str, Any]:
@@ -4234,36 +4286,10 @@ def _claude_mcp_isolation_preflight(
     broker = boundary.get("command_broker")
     if isinstance(broker, dict):
         policy = load_json(broker["policy"])
-        serialized_policy = json.dumps(
-            policy, ensure_ascii=False, separators=(",", ":"), sort_keys=True
+        public_cli_boundary = _public_cli_boundary_from_policy(
+            policy,
+            label="Claude",
         )
-        if (
-            "MAUDE_LAB_CONTROL_DIR" in policy.get("environment", {})
-            or "/private/control" in serialized_policy
-        ):
-            raise CampaignError(
-                "Claude command policy exposes the raw Maude driver queue"
-            )
-        public_socket_environment = policy.get("environment", {}).get(
-            "MAUDE_PUBLIC_SOCKET"
-        )
-        if public_socket_environment is not None:
-            matching_public_sockets = [
-                value
-                for value in policy.get("sockets", [])
-                if value.get("target") == public_socket_environment
-                and value.get("target") == str(PUBLIC_CLI_SOCKET_MOUNT)
-            ]
-            if len(matching_public_sockets) != 1:
-                raise CampaignError(
-                    "Claude Maude command policy lacks one exact public socket"
-                )
-            public_cli_boundary = {
-                "raw_driver_queue_exposed": False,
-                "environment_variable": "MAUDE_PUBLIC_SOCKET",
-                "socket_target": public_socket_environment,
-                "exact_socket_count": 1,
-            }
         policy_probe = _command(
             [
                 sys.executable,
@@ -4384,8 +4410,14 @@ def _codex_mcp_isolation_preflight(
     ):
         raise CampaignError("Codex MCP transport isolation preflight failed")
     policy_validation: dict[str, Any] | None = None
+    public_cli_boundary: dict[str, Any] | None = None
     broker = boundary.get("command_broker")
     if isinstance(broker, dict):
+        policy = load_json(broker["policy"])
+        public_cli_boundary = _public_cli_boundary_from_policy(
+            policy,
+            label="Codex",
+        )
         probe = _command(
             [
                 sys.executable,
@@ -4429,6 +4461,7 @@ def _codex_mcp_isolation_preflight(
         "mcp_enabled_tools": expected_tools,
         "mcp_config_sha256": boundary["mcp_config_sha256"],
         "command_broker_policy_validation": policy_validation,
+        "public_cli_boundary": public_cli_boundary,
         "source_probe": source_check,
         "auth_probe": auth_check,
         "shim_self_test": self_test,
@@ -5725,6 +5758,7 @@ def _run_codex_retained_process(
     credential_values: list[bytes],
     gate_record_path: Path,
     boundary: dict[str, Any],
+    stdin_payload: bytes,
 ) -> dict[str, Any]:
     """Run Codex transport with copied auth and one strict MCP boundary."""
 
@@ -5739,6 +5773,8 @@ def _run_codex_retained_process(
         or cwd != boundary["transport_cwd"]
     ):
         raise CampaignError("Codex strict MCP transport boundary is invalid")
+    if not stdin_payload:
+        raise CampaignError("Codex stdin prompt payload is empty")
     _validate_codex_strict_argv(argv, boundary)
     started = _utc_now()
     started_monotonic = time.monotonic()
@@ -5881,6 +5917,10 @@ def _run_codex_retained_process(
                 "allowed_mcp_tools": boundary["codex_enabled_tools"],
                 "mcp_protocol_version": CODEX_MCP_PROTOCOL_VERSION,
                 "mcp_config_sha256": boundary["mcp_config_sha256"],
+                "semantic_prompt_delivery": "stdin",
+                "semantic_prompt_bytes": len(stdin_payload),
+                "semantic_prompt_sha256": sha256_bytes(stdin_payload),
+                "semantic_prompt_bytes_in_argv": False,
                 "identity": identity,
                 "tool_actions": actions,
                 "recorded_at": _utc_now(),
@@ -6016,7 +6056,7 @@ def _run_codex_retained_process(
             provider_process = subprocess.Popen(
                 argv,
                 cwd=cwd,
-                stdin=subprocess.DEVNULL,
+                stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=stderr,
                 start_new_session=True,
@@ -6024,6 +6064,10 @@ def _run_codex_retained_process(
             )
             if provider_process.stdout is None:
                 raise CampaignError("Codex stdout pipe was not created")
+            if provider_process.stdin is None:
+                raise CampaignError("Codex stdin pipe was not created")
+            provider_process.stdin.write(stdin_payload)
+            provider_process.stdin.close()
             remember_tree()
             selector = selectors.DefaultSelector()
             selector.register(provider_process.stdout, selectors.EVENT_READ)
@@ -6414,6 +6458,8 @@ def _run_codex_retained_process(
         "fresh_process": True,
         "follow_up_messages": 0,
         "coaching": "none",
+        "semantic_prompt_bytes": len(stdin_payload),
+        "semantic_prompt_sha256": sha256_bytes(stdin_payload),
         "provider_auth_gate": load_json(gate_record_path),
     }
 
@@ -6434,6 +6480,7 @@ def _run_model_process(
     user_prompt: str | None = None,
     process_env: dict[str, str] | None = None,
     codex_auth_mode: str = "early-scrub",
+    stdin_payload: bytes | None = None,
 ) -> dict[str, Any]:
     """Run one provider process behind its provider-specific auth/tool gate.
 
@@ -6449,6 +6496,7 @@ def _run_model_process(
             claude_boundary is None
             or user_prompt is None
             or process_env is None
+            or stdin_payload is not None
         ):
             raise CampaignError(
                 "Claude process requires MCP boundary, exact prompt, and "
@@ -6473,6 +6521,7 @@ def _run_model_process(
             claude_boundary is None
             or user_prompt is None
             or process_env is not None
+            or stdin_payload is None
         ):
             raise CampaignError(
                 "Codex retained transport requires its strict MCP boundary "
@@ -6489,8 +6538,14 @@ def _run_model_process(
             credential_values=credential_values,
             gate_record_path=gate_record_path,
             boundary=claude_boundary,
+            stdin_payload=stdin_payload,
         )
-    if claude_boundary is not None or user_prompt is not None or process_env is not None:
+    if (
+        claude_boundary is not None
+        or user_prompt is not None
+        or process_env is not None
+        or stdin_payload is not None
+    ):
         raise CampaignError(
             "Codex early-scrub gate received retained-boundary inputs"
         )
@@ -7788,7 +7843,7 @@ def run_auth_gate_probes(
             user_prompt = prompts[provider]
             write_text(provider_evidence / "system-prompt.md", system_prompt)
             write_text(provider_evidence / "user-prompt.md", user_prompt)
-            provider_argv, delivery = _provider_argv(
+            provider_argv, delivery, stdin_payload = _provider_argv(
                 provider,
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
@@ -7823,6 +7878,7 @@ def run_auth_gate_probes(
                     else None
                 ),
                 codex_auth_mode="retained-private-home",
+                stdin_payload=stdin_payload,
             )
             _quarantine_if_secret(
                 [stdout_path, stderr_path],
@@ -8670,7 +8726,7 @@ def run_installation_surface_probes(
             )
             write_text(provider_evidence / "system-prompt.md", system_prompt)
             write_text(provider_evidence / "user-prompt.md", user_prompt)
-            provider_argv, delivery = _provider_argv(
+            provider_argv, delivery, stdin_payload = _provider_argv(
                 provider,
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
@@ -8710,6 +8766,7 @@ def run_installation_surface_probes(
                     else None
                 ),
                 codex_auth_mode="retained-private-home",
+                stdin_payload=stdin_payload,
             )
             _quarantine_if_secret(
                 [stdout_path, stderr_path, typescript],
@@ -10191,7 +10248,7 @@ def _implementation_source_grade_boundary(
     action_violations: list[dict[str, Any]] = []
     for index, action in enumerate(actions, 1):
         serialized = json.dumps(
-            action.get("input"),
+            _action_command_texts(action),
             ensure_ascii=False,
             sort_keys=True,
         )
@@ -10441,7 +10498,7 @@ def _action_command_texts(action: dict[str, Any]) -> list[str]:
                 walk(child)
 
     walk(value)
-    return commands
+    return list(dict.fromkeys(commands))
 
 
 def _strip_shell_heredoc_bodies(command: str) -> str:
@@ -10511,16 +10568,16 @@ def _retrospective_action_analysis(
         for command_index, command in enumerate(command_texts)
         for match in helper_pattern.finditer(command)
     ]
-    serialized = json.dumps(
-        action.get("input"),
+    serialized_commands = json.dumps(
+        command_texts,
         ensure_ascii=False,
         sort_keys=True,
     )
-    mentions_helper = "operator-retrospective" in serialized
+    mentions_helper = "operator-retrospective" in serialized_commands
     mentions_disposition = (
-        "/home/operator/initial-disposition.md" in serialized
+        "/home/operator/initial-disposition.md" in serialized_commands
     )
-    mentions_pty = "operator-pty" in serialized
+    mentions_pty = "operator-pty" in serialized_commands
     tool = str(action.get("tool") or "").casefold()
     disposition_write = False
     if mentions_disposition and tool in {
@@ -11299,7 +11356,7 @@ def run_operator(
         user_path = PACKET_DIR / "rendered" / run_id / "operator-prompt.md"
         system_prompt = _read(system_path)
         user_prompt = _read(user_path)
-        provider_argv, delivery = _provider_argv(
+        provider_argv, delivery, stdin_payload = _provider_argv(
             run["operator_model_config"],
             system_prompt=system_prompt,
             user_prompt=user_prompt,
@@ -11397,6 +11454,7 @@ def run_operator(
                 else None
             ),
             codex_auth_mode="retained-private-home",
+            stdin_payload=stdin_payload,
         )
         _quarantine_if_secret(
             [evidence / "transcript.jsonl", raw / "provider.stderr"],
@@ -12100,6 +12158,18 @@ def _parse_grade(events: list[dict[str, Any]]) -> dict[str, Any]:
     raise CampaignError("independent grader did not return a parseable grade object")
 
 
+def _validate_grade_local_invariants(grade: dict[str, Any]) -> None:
+    failure_classes = grade.get("failure_classes")
+    if (
+        not isinstance(failure_classes, list)
+        or not all(isinstance(value, str) for value in failure_classes)
+        or len(failure_classes) != len(set(failure_classes))
+    ):
+        raise CampaignError(
+            "independent grade failure_classes must contain unique strings"
+        )
+
+
 def run_grader(
     run: dict[str, Any],
     *,
@@ -12190,7 +12260,7 @@ def run_grader(
             bundle / "bundle-inventory.json",
             grade_dir / "grade-bundle-inventory.json",
         )
-        provider_argv, delivery = _provider_argv(
+        provider_argv, delivery, stdin_payload = _provider_argv(
             run["grader_model_config"],
             system_prompt=system_prompt,
             user_prompt=prompt,
@@ -12266,6 +12336,7 @@ def run_grader(
                 else None
             ),
             codex_auth_mode="retained-private-home",
+            stdin_payload=stdin_payload,
         )
         _quarantine_if_secret(
             [raw / "grader.stdout.jsonl", raw / "grader.stderr"],
@@ -12316,6 +12387,7 @@ def run_grader(
         grade = _parse_grade(events)
         schema = load_json(bundle / "grader-output.schema.json")
         jsonschema.validate(grade, schema)
+        _validate_grade_local_invariants(grade)
         bundle_inventory = load_json(bundle / "bundle-inventory.json")
         if (
             bundle_inventory.get("evaluator_contamination")
@@ -13604,9 +13676,10 @@ def _verify_public_cli_broker(
     isolation_path = evidence / "isolation-result.json"
     if isolation_path.is_file():
         isolation = load_json(isolation_path)
-        if isolation.get("schema") == (
-            "maude.synthetic-operator.claude-mcp-isolation-result.v1"
-        ):
+        if isolation.get("schema") in {
+            "maude.synthetic-operator.claude-mcp-isolation-result.v1",
+            "maude.synthetic-operator.codex-mcp-isolation-result.v1",
+        }:
             public_boundary = isolation.get("public_cli_boundary")
             if (
                 not isinstance(public_boundary, dict)
@@ -13616,7 +13689,7 @@ def _verify_public_cli_broker(
                 or public_boundary.get("exact_socket_count") != 1
             ):
                 errors.append(
-                    f"{run_id}: Claude public socket/raw-control "
+                    f"{run_id}: provider public socket/raw-control "
                     "isolation proof invalid"
                 )
         else:
@@ -14324,6 +14397,17 @@ def verify_evidence(
                             f"{run_id}: grade-bundle retrospective "
                             "contamination linkage mismatch"
                         )
+                failure_classes = grade_value.get("failure_classes")
+                if (
+                    not isinstance(failure_classes, list)
+                    or not all(
+                        isinstance(value, str) for value in failure_classes
+                    )
+                    or len(failure_classes) != len(set(failure_classes))
+                ):
+                    errors.append(
+                        f"{run_id}: grade failure_classes are not unique strings"
+                    )
                 jsonschema.validate(
                     grade_value,
                     load_json(

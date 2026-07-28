@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:df8a7ce2cad26490eff7f8ef21e9ae0377f6a83643547e9f8ad114a32025e074",
-    "source_plan_digest": "sha256:a8c22522093ce574d5c86f2d0f59231d91e6c80e8310f480d6013f4f993c0aee"
+    "approval_witness_digest": "sha256:e6c463e4e9971160c6f60696bef4ff02215c132138c71a09f41d886e86003e4d",
+    "source_plan_digest": "sha256:27f98a776f71adfb0f2cd91d0c06525782b48a97b3a35ebc0221948149bba225"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -237,7 +237,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:df8a7ce2cad26490eff7f8ef21e9ae0377f6a83643547e9f8ad114a32025e074",
+    "approval_witness_digest": "sha256:e6c463e4e9971160c6f60696bef4ff02215c132138c71a09f41d886e86003e4d",
     "behavior": "normal",
     "commands": [
       {
@@ -250,12 +250,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:847443532e2c709c7870952de4b7bfbd92b03b9433ac152f301133dc9e9d825b",
-    "grant_id": "sgr_847443532e2c",
+    "grant_digest": "sha256:4f52c9b25d31468eb7d14a05c72bd500a60085b1ce3b7c7cde6093042fce53d5",
+    "grant_id": "sgr_4f52c9b25d31",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:a8c22522093ce574d5c86f2d0f59231d91e6c80e8310f480d6013f4f993c0aee",
+    "source_plan_digest": "sha256:27f98a776f71adfb0f2cd91d0c06525782b48a97b3a35ebc0221948149bba225",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -322,7 +322,7 @@
       "inventory.ini": "[edge]\nedge-synthetic ansible_connection=local\n",
       "site.yml": "---\n- name: Configure synthetic edge hosts\n  hosts: edge\n  gather_facts: false\n  roles:\n    - edge\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s10/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

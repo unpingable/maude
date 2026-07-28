@@ -1,0 +1,139 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s14",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s14/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2484,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s14/operator-prompt.md",
+    "sha256": "92c6ca5f2b5597d6fc5255e177f095d170372531c4789b64ab15d31638a4b003"
+  },
+  "visible_files": [
+    {
+      "bytes": 11,
+      "destination": "../repo/config/api.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/fixture/config/api.yaml",
+      "sha256": "2b65d494d83fdb4595485bbd6c1e601ac5ac15b306999a8f761cb6746a1608ba"
+    },
+    {
+      "bytes": 140,
+      "destination": "../repo/tests/test_config.py",
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/fixture/tests/test_config.py",
+      "sha256": "1056eb6ac69658386c9e4be76c786ba5210d6806a82b0058a9de66c4fdd46d63"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 847,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s14/operator-task.md",
+      "sha256": "3d61d4af1510c835d2f4e77a6637d0e2e44d96bae4a41d654d9b393ae40462ff"
+    },
+    {
+      "bytes": 656,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/packet.json",
+      "sha256": "255e06052fc90233af87d9bcb2a27ee2ad0c93ed4cbca9d0e80971cef2baad84"
+    },
+    {
+      "bytes": 1726,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/plan.md",
+      "sha256": "76ac07049191b2d27455ce65430a9256d5b490697a5b8e42e7fcd0dcd83757f6"
+    },
+    {
+      "bytes": 195,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/playbook.json",
+      "sha256": "3720ea2a4f2d1646705b9ff6266c38605c0aed8941550021f17840fc773558e6"
+    },
+    {
+      "bytes": 229,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/ration-card.json",
+      "sha256": "f4bd888392b489a897b4654e1685e6c9e221751662e15439c9637f9fdcda58ec"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/runtime.json",
+    "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/patch.diff",
+    "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

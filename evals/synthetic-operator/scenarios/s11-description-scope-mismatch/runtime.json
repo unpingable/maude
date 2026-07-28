@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:b17c1561372dfaa2b25aa0fb5e916635573844deb591c5ebab2d3e7211b11c9b",
-    "source_plan_digest": "sha256:16097a15506e615416cedb5add936b3c1600c9daf298ba439190ceaee21755eb"
+    "approval_witness_digest": "sha256:351b021d1c57ea3b5f4ed217134524bc4dd44db1392edb747f3e8090d561459b",
+    "source_plan_digest": "sha256:e4bb08da7c0375d3468c63b2e0dd81445cf5172ded91ea379e021986be6d0df8"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -250,7 +250,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:b17c1561372dfaa2b25aa0fb5e916635573844deb591c5ebab2d3e7211b11c9b",
+    "approval_witness_digest": "sha256:351b021d1c57ea3b5f4ed217134524bc4dd44db1392edb747f3e8090d561459b",
     "behavior": "normal",
     "commands": [
       {
@@ -263,12 +263,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:498ec8877258ee5290dd02de1bcbad8680240611cd826cab1ef3fca2040284e6",
-    "grant_id": "sgr_498ec8877258",
+    "grant_digest": "sha256:a57978c91e055a86b3891c8ca6bf813b184d9556ec6c2d7a3b9ce87b9b825073",
+    "grant_id": "sgr_a57978c91e05",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:16097a15506e615416cedb5add936b3c1600c9daf298ba439190ceaee21755eb",
+    "source_plan_digest": "sha256:e4bb08da7c0375d3468c63b2e0dd81445cf5172ded91ea379e021986be6d0df8",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -332,7 +332,7 @@
       "apps/menu/deployment.yaml": "image: registry.example.invalid/menu-api:2.7.3\n",
       "apps/payments/deployment.yaml": "image: registry.example.invalid/payments:8.1.0\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s11/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s11/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

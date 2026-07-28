@@ -1,0 +1,139 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s18",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s18/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2282,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s18/operator-prompt.md",
+    "sha256": "03d590fd190676d5200020df54419384938a213a49a9e820e0f6dbf47da79970"
+  },
+  "visible_files": [
+    {
+      "bytes": 15,
+      "destination": "../repo/config/scheduler.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/fixture/config/scheduler.yaml",
+      "sha256": "ba69a96cab0523172d2477856ecd37644427e5674f6668278763c79512f40119"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 881,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s18/operator-task.md",
+      "sha256": "68d63e4a0beab33c0d70abfc7678aa36b62e1e90cf00f562c1488d77351fde80"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-18",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/lab_approval_ux-task-18",
+      "sha256": "d0fcb80dd96d574dc970c2954855090f49d7af442a7ca9f2e14f509dc476528b"
+    },
+    {
+      "bytes": 623,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/packet.json",
+      "sha256": "1acf026b0126237b96808bca74b443a477f29f7d2ad97fcda451f0107bdf6012"
+    },
+    {
+      "bytes": 1793,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/plan.md",
+      "sha256": "83e50e0bf008e1e5d79ae467af053049bd5223ab0a2f145742f8476cf569dab6"
+    },
+    {
+      "bytes": 199,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/playbook.json",
+      "sha256": "42990734046ac008d3e3ca5837284baaf1dce62bd1cf586c550c3153f58cf08d"
+    },
+    {
+      "bytes": 213,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/ration-card.json",
+      "sha256": "ca0ad88d0b9589001ae9b5e73f45db35e53f6f637ec2f6916001b0e2f6a570cf"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/runtime.json",
+    "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/patch.diff",
+    "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

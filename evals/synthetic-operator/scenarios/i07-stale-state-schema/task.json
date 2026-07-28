@@ -1,5 +1,5 @@
 {
-  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
   "component": "Maude",
   "constraints": {
     "authority_effect": "none",
@@ -18,9 +18,9 @@
   ],
   "goal": "Determine whether first use succeeded and choose a safe next action without taking ownership of retained Governor state.",
   "handoff": {
-    "governor_socket": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i07/installation/run/governor.sock",
-    "installed_environment": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i07/installation/venv",
-    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i07/installation/venv/bin/maude",
+    "governor_socket": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i07/installation/run/governor.sock",
+    "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i07/installation/venv",
+    "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i07/installation/venv/bin/maude",
     "operator_may_migrate_or_delete_state": false,
     "retained_state_owner": "synthetic-platform-team"
   },

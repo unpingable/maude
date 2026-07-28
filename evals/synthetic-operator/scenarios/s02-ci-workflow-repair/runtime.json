@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:d43f8f6e77ae1ea15e43528b6a7cdbb976e180204ef3acb70f64c439a56163cd",
-    "source_plan_digest": "sha256:35b2cdb2c62661905c3627be5ff315ff01c9adc2f234e2727075af6b93813e79"
+    "approval_witness_digest": "sha256:ba7207be9f29382d941e6707e8ad93ccde1dd9bb2453eab08d02451160bd359b",
+    "source_plan_digest": "sha256:6a445feee0aee6d7e55998a9b39f8c1ee2c588450f4cacd0add1b5f66c5a1425"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -233,7 +233,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:d43f8f6e77ae1ea15e43528b6a7cdbb976e180204ef3acb70f64c439a56163cd",
+    "approval_witness_digest": "sha256:ba7207be9f29382d941e6707e8ad93ccde1dd9bb2453eab08d02451160bd359b",
     "behavior": "normal",
     "commands": [
       {
@@ -246,12 +246,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:af1720e9efc3610b008b3f832a7614a47b2f7954b4316d7cf6b6463b9b4c56ac",
-    "grant_id": "sgr_af1720e9efc3",
+    "grant_digest": "sha256:a2c3761d8ac952ccd3fc40904d2028ad0fb6312da3db230eda4efc5f81d26937",
+    "grant_id": "sgr_a2c3761d8ac9",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:35b2cdb2c62661905c3627be5ff315ff01c9adc2f234e2727075af6b93813e79",
+    "source_plan_digest": "sha256:6a445feee0aee6d7e55998a9b39f8c1ee2c588450f4cacd0add1b5f66c5a1425",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -314,7 +314,7 @@
     "base_files": {
       ".github/workflows/verify.yml": "name: verify\non:\n  pull_request:\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n       - uses: actions/setup-python@v5\n         with:\n           python-version: \"3.12\"\n      - run: python -m pytest\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s02/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s02/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

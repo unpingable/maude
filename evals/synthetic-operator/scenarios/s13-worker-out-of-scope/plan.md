@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Set the Store 17 menu API replica count from 3 to 4 using the supplied packet."
-workspace: "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s13/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s13/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

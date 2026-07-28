@@ -1,0 +1,30 @@
+{
+  "schema": "maude.synthetic-operator.grader-surface-probe-attempt-status.v1",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "campaign_run": false,
+  "status": "rejected-evaluator-index-validation",
+  "observed_at": "2026-07-28T07:56:40Z",
+  "provider_sessions_started": 2,
+  "provider_sessions_completed": 2,
+  "provider_thread_ids": [
+    "019fa7b8-9489-7b50-8f9d-2dcde1179e23",
+    "019fa7b9-235f-7c33-9f4f-8bf9eba6b0ef"
+  ],
+  "session_results_schema_valid": true,
+  "counts_as_campaign_evidence": false,
+  "counts_as_successor_completion": false,
+  "failure": {
+    "class": "evaluator infrastructure",
+    "stage": "post-session probe self-validation",
+    "message": "The probe runner recorded campaign-runner, probe-runner, and grader-system bindings in each per-probe result, while its self-validator incorrectly searched for those bindings at the index root.",
+    "provider_or_schema_failure": false
+  },
+  "bound_campaign_runner_sha256": "eaf8112aee1d836e263b3ec4c89ac2c391e100ecbfeac8f58487b64970678f31",
+  "bound_probe_runner_sha256": "300c7b764ea84d07cf26d022509e9de4fc681bbb4f6371d2a0c5039542993925",
+  "retry_requires_fresh_sessions": true,
+  "raw_evidence_preserved": true,
+  "product_or_documentation_changed": false,
+  "governance_or_oq7_state_changed": false,
+  "network_or_external_operational_effect": false,
+  "authority_effect": "none"
+}

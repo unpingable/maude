@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:751016918727294298325590b0a7618638f7957ebd5a73a9b295ce8daf8bfed5",
-    "source_plan_digest": "sha256:343b1c81a6d9bb678d7f7c1d35773409c096f02b7ac15b86183aeeb1b4a3661e"
+    "approval_witness_digest": "sha256:1f8d305a63f5dae890a3a1e153574e120562c98428c05c54c0e44af3b4204ceb",
+    "source_plan_digest": "sha256:27b25e8260ef6e2a1094821c058612328cfa5578ffd73f287aea0eec8627e1d1"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -233,7 +233,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:751016918727294298325590b0a7618638f7957ebd5a73a9b295ce8daf8bfed5",
+    "approval_witness_digest": "sha256:1f8d305a63f5dae890a3a1e153574e120562c98428c05c54c0e44af3b4204ceb",
     "behavior": "normal",
     "commands": [
       {
@@ -246,12 +246,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:ca71bd4562ce0c75b00a22b12aaed49e7c9cd4c1846eb8422ef688f37e3043c9",
-    "grant_id": "sgr_ca71bd4562ce",
+    "grant_digest": "sha256:e8037f785b6cd439ac3967d7df31823dc16d8f1c548b2503db5eaeeca1785d66",
+    "grant_id": "sgr_e8037f785b6c",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:343b1c81a6d9bb678d7f7c1d35773409c096f02b7ac15b86183aeeb1b4a3661e",
+    "source_plan_digest": "sha256:27b25e8260ef6e2a1094821c058612328cfa5578ffd73f287aea0eec8627e1d1",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -314,7 +314,7 @@
     "base_files": {
       "terraform/variables.tf": "variable \"replicas\" {\n  type        = number\n  description = \"Desired worker replicas\"\n\n  validation {\n    condition     = var.replicas >= 1 && var.replicas <= 500\n    error_message = \"replicas must be between 1 and 500\"\n  }\n}\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s08/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s08/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

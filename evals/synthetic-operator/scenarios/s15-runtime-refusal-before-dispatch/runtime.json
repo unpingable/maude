@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:6c9117a16ef7f5a7a2328e878afc40fb2d44e03339771167aeffd7d960ad23ae",
-    "source_plan_digest": "sha256:787c5a12d3de570c0ee9c68359acff27ca4d6aa17d151c274fa7e04d963d3386"
+    "approval_witness_digest": "sha256:5a242d43cfff31ef573f1e6d5153b61361857dc0b6ff37b7939e987fa237ba66",
+    "source_plan_digest": "sha256:2cf544b839a2f52c4d9400432884d8dd6969f60ac52e48e831c906c35ffe4238"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -51,7 +51,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:6c9117a16ef7f5a7a2328e878afc40fb2d44e03339771167aeffd7d960ad23ae",
+    "approval_witness_digest": "sha256:5a242d43cfff31ef573f1e6d5153b61361857dc0b6ff37b7939e987fa237ba66",
     "behavior": "normal",
     "commands": [
       {
@@ -64,12 +64,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:2755d3d8c7065afabbd4f0b47398e6eda3819344bcdb10fbd2a4b6853f93a700",
-    "grant_id": "sgr_2755d3d8c706",
+    "grant_digest": "sha256:bebd0ea0f1e5aec7221ebfffd2a7fc8b855fdc58b48160ba54d2ede6d1276176",
+    "grant_id": "sgr_bebd0ea0f1e5",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:787c5a12d3de570c0ee9c68359acff27ca4d6aa17d151c274fa7e04d963d3386",
+    "source_plan_digest": "sha256:2cf544b839a2f52c4d9400432884d8dd6969f60ac52e48e831c906c35ffe4238",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -128,7 +128,7 @@
     "base_files": {
       "deploy/worker.yaml": "image: registry.example.invalid/worker:4.2.0\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s15/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s15/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

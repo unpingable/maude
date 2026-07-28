@@ -1,0 +1,32 @@
+{
+  "schema": "maude.synthetic-operator.successor-lineage.v1",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "generation": 2,
+  "generation_1": {
+    "campaign_id": "maude-baseline-20260726T233054-0400",
+    "campaign_manifest": {
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/campaign-manifest.json",
+      "bytes": 425984,
+      "sha256": "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc96d9d5893729f3e17d"
+    },
+    "packet_commit": "f9e8caadf194c38384e981baa7cd0b6a5dcac9b1",
+    "abort_record": {
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/campaign-abort.json",
+      "bytes": 3735,
+      "sha256": "984e165b7472139e770c18cba04a855f8cb2d34c9af93ae600b92d49dfe2f129"
+    },
+    "preservation_commit": "09af081fbd1326bf4a76d22b19de0aa03663c8f8",
+    "sessions_rejected": 25,
+    "completed_grades": 0,
+    "failed_grader_provider_sessions": 24,
+    "installation_runs_failed_pre_provider": 10,
+    "installation_provider_sessions_started": 0
+  },
+  "evidence_boundary": {
+    "generation_1_counts_as_successor_evidence": false,
+    "generation_1_counts_toward_successor_completion": false,
+    "successor_full_matrix_rerun_required": true,
+    "statement": "Generation-1 sessions, failures, grades, artifacts, and findings are preservation and preparation history only; none counts as evidence for this successor campaign."
+  },
+  "authority_effect": "none"
+}

@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Change cache_ttl_seconds from 5 to 10, inspect the resulting candidate, and choose the supported final disposition."
-workspace: "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s19/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s19/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

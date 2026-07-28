@@ -1,0 +1,488 @@
+{
+  "all_actions_read_only_evidence": true,
+  "all_jsonschema_validations_passed": true,
+  "all_local_failure_class_uniqueness_checks_passed": true,
+  "all_passed": true,
+  "all_prompts_delivered_by_closed_stdin": true,
+  "all_prompts_exceed_131072_bytes": true,
+  "all_provider_actions_represented_once": true,
+  "all_schema_digests_exact": true,
+  "artifact_inventory_excluding_index": [
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/action-accounting.json",
+      "sha256": "a593bf6b8ef956bb827666d0dd67998a19fd2f3fa92b1b98ae71fc363f2bafac"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/clean-home-after.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 332,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/cleanup.json",
+      "sha256": "8c599519789cebf03af20d90df1deda9e93714882401c7c30cc3306bb1ebc3b9"
+    },
+    {
+      "bytes": 4182,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/commands-and-actions.json",
+      "sha256": "a0e6bbb2a13ac6e38c04e5cd1205dfb21b990b8e9b1f9ac3f492d62e2b5d7a95"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "installation/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 12164,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "installation/grade-bundle/installation-grader-output.schema.json",
+      "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+    },
+    {
+      "bytes": 1808,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/grade-bundle/probe-facts.json",
+      "sha256": "76551c1afd06ad5bc3a93aac2b7bbc1ab9692a35dd33315142697a3dce0bdcd2"
+    },
+    {
+      "bytes": 7927,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/grade.json",
+      "sha256": "8806d8adcc79baf24f4dd37760d71cd8057dcc781406760d705bc5d4dd3990ee"
+    },
+    {
+      "bytes": 21733,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/invocation.json",
+      "sha256": "a38bf03b729dec5da903aef187e0cb620f0ebffcc4a9040680c080a5c473431f"
+    },
+    {
+      "bytes": 14791,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/isolation-result.json",
+      "sha256": "ee8bc56c02e86b52b465b60764e1089287a2fde16b4c975a92d5a853732faa89"
+    },
+    {
+      "bytes": 320,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "34ee341f464902f7cdea28557a5c3fc532ea7cdb8eda84e97934f38c49ef2547"
+    },
+    {
+      "bytes": 3018,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "7d5de12b1fc0a5f783bd9468d3616ff59c5e6e8210ab25fd037b7b5a6bd0f4ab"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "installation/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "2ceef41a319f4617c6dac028f7c7f4499966fed6d20de3b85634d17d221a02e8"
+    },
+    {
+      "bytes": 3732,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "installation/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "51aae044b2e6ee7b69fa12a1b1dd4c505715df73964fd130f5df765f7ada01b3"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "installation/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 10466,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "installation/raw/grader.stdout.jsonl",
+      "sha256": "55897ab7b46c30e912e4db21d597db85af61733188a192ed6d8dfcc8488695b9"
+    },
+    {
+      "bytes": 7190,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/raw/provider-auth-gate.json",
+      "sha256": "67651ba94f60f35a88805f8942d4093a186639d1197b82662c564ed76c5b7b83"
+    },
+    {
+      "bytes": 22673,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/result.json",
+      "sha256": "b794f198cdbc096ecd39e47cf6e4ab6aedc59da59d0ef384ef10ce4027c1df09"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "installation/session-safety-audit.json",
+      "sha256": "1bb7a97859d10d3ce33bdf4249d73adf96d9cb30e09d3ef0054da6986fb10c83"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "installation/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 179465,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "installation/transcript.txt",
+      "sha256": "d278be82f3fc136f80f2dfcbc45784cd9a4768ca8fdea6797ff52ff1f6f00005"
+    },
+    {
+      "bytes": 149233,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "installation/user-prompt.md",
+      "sha256": "fa928ea42f2010ea690dbfd5d6627316d78f295525dd9a41c23c3af3fec2e060"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/action-accounting.json",
+      "sha256": "a593bf6b8ef956bb827666d0dd67998a19fd2f3fa92b1b98ae71fc363f2bafac"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/clean-home-after.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    {
+      "bytes": 328,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/cleanup.json",
+      "sha256": "574f73c8172c537dfe1411ee0311080b57ceebb9d023c315e4507ad1e173d006"
+    },
+    {
+      "bytes": 3770,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/commands-and-actions.json",
+      "sha256": "a2bbc38f70d856922cf2dced1551e14a474067e1ea42241c149e40fc01bd3f7c"
+    },
+    {
+      "bytes": 250,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "ordinary/grade-bundle/README.md",
+      "sha256": "803f72cefaac6e3566dd4c67c743b90a6c43191e5b14f2e9dd3b8ba0d498a212"
+    },
+    {
+      "bytes": 7414,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "ordinary/grade-bundle/grader-output.schema.json",
+      "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+    },
+    {
+      "bytes": 1482,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/grade-bundle/probe-facts.json",
+      "sha256": "8acb0576b80467e2c0a1046cd4ba4966035a59743e751a9aaf2af232af712d37"
+    },
+    {
+      "bytes": 4559,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/grade.json",
+      "sha256": "64c401bf9bdf355fb050a5f8aefb99e2c63b7a0416c2aaa779f8be0ef2c685a4"
+    },
+    {
+      "bytes": 21591,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/invocation.json",
+      "sha256": "8876203f1388eb9e3ddfd51197a947d8dac5fee9103a17e9c55abc69cb9bb9a5"
+    },
+    {
+      "bytes": 14671,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/isolation-result.json",
+      "sha256": "3f785763c7c2d3e565b8feeffe2d63e48c07739daf3f8ead9899bcf60913e8b5"
+    },
+    {
+      "bytes": 320,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "34ee341f464902f7cdea28557a5c3fc532ea7cdb8eda84e97934f38c49ef2547"
+    },
+    {
+      "bytes": 2998,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "d4cc3d8853789c135a583503212731eb8d3a38ae94b18ab8c83db6206a84020b"
+    },
+    {
+      "bytes": 348,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "ordinary/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "5888facd89ff834b2ad37042cb68e0418695f04a39da71a4c94495b5d88a1374"
+    },
+    {
+      "bytes": 3320,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "ordinary/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "9dfb2da1d7e3044e8f9247532a3ee95ae1009528703114b24164159f9bc77b2f"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "ordinary/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 7037,
+      "media_type": "application/x-ndjson",
+      "mode": "0664",
+      "path": "ordinary/raw/grader.stdout.jsonl",
+      "sha256": "c3b621425e20a49301b7a44cc6319b9bcbcc1a6e61735a587632f3315e0c8705"
+    },
+    {
+      "bytes": 6778,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/raw/provider-auth-gate.json",
+      "sha256": "8dca63898b0485c26c6af1acb965009311ced8ba6c856acbf50976242d028fc9"
+    },
+    {
+      "bytes": 22201,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/result.json",
+      "sha256": "880b4e517c49a913d9dff14d225b5f218c1f0140ce08b2ceb02364c5b5149f1a"
+    },
+    {
+      "bytes": 562,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "ordinary/session-safety-audit.json",
+      "sha256": "1bb7a97859d10d3ce33bdf4249d73adf96d9cb30e09d3ef0054da6986fb10c83"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "ordinary/system-prompt.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 176943,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "ordinary/transcript.txt",
+      "sha256": "9813addb04b6e2bd9cff007cf83c2ac8c48ce3ece39d654098456d269ed68d64"
+    },
+    {
+      "bytes": 149190,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "ordinary/user-prompt.md",
+      "sha256": "b369146a96c63fbfb6e457b26787979734ce15a896a53f64d76d362195fe870b"
+    }
+  ],
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "campaign_run": false,
+  "campaign_runner": {
+    "bytes": 568475,
+    "media_type": "text/x-python",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/harness/campaign_runner.py",
+    "sha256": "eaf8112aee1d836e263b3ec4c89ac2c391e100ecbfeac8f58487b64970678f31"
+  },
+  "completed_at": "2026-07-28T07:59:45Z",
+  "distinct_fresh_thread_ids": true,
+  "exact_successor_schema_digests": {
+    "installation": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4",
+    "ordinary": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+  },
+  "grader_system_prompt": {
+    "bytes": 777,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "prompts/grader-system.md",
+    "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+  },
+  "minimum_prompt_bytes_required": 131073,
+  "model_configuration": {
+    "approval_policy": "never",
+    "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Claude is unavailable, so cross-family isolation comparison is unsupported.",
+    "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "built_in_tools": [],
+    "cli": "codex",
+    "exact_provider_tool_allowlist_supported": true,
+    "expected_family": "GPT",
+    "freshness": [
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_auto_approval_safety": {
+      "exact_enabled_tool_count_per_role": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true
+    },
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "model_argument": "gpt-5.6-sol",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider": "OpenAI",
+    "reasoning_effort": "low",
+    "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+    "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "network_or_external_operational_effect": false,
+  "no_resume_continue_followup_or_coaching": true,
+  "probe_runner": {
+    "bytes": 47388,
+    "media_type": "text/x-python",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/harness/grader_surface_probe.py",
+    "sha256": "721e22b87c823c4edd0f224714cf2ef74c7b0d5fe0575032d5a6ae06930cbde4"
+  },
+  "probes": [
+    {
+      "all_passed": true,
+      "campaign_run": false,
+      "probe_id": "ordinary",
+      "result": {
+        "bytes": 22201,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "ordinary/result.json",
+        "sha256": "880b4e517c49a913d9dff14d225b5f218c1f0140ce08b2ceb02364c5b5149f1a"
+      },
+      "schema": {
+        "bytes": 7414,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "grader-output.schema.json",
+        "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+      },
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa7bb-7d0d-7691-b749-beb4074f5147"
+      },
+      "surface": "maude"
+    },
+    {
+      "all_passed": true,
+      "campaign_run": false,
+      "probe_id": "installation",
+      "result": {
+        "bytes": 22673,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "installation/result.json",
+        "sha256": "b794f198cdbc096ecd39e47cf6e4ab6aedc59da59d0ef384ef10ce4027c1df09"
+      },
+      "schema": {
+        "bytes": 12164,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "installation-grader-output.schema.json",
+        "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+      },
+      "session_identity": {
+        "configured_model": "gpt-5.6-sol",
+        "provider_thread_id": "019fa7bc-1045-75d1-bdf1-31ee70487b69"
+      },
+      "surface": "maude-installation"
+    }
+  ],
+  "provider": "OpenAI",
+  "provider_config": "openai-sol",
+  "provider_thread_ids": [
+    "019fa7bb-7d0d-7691-b749-beb4074f5147",
+    "019fa7bc-1045-75d1-bdf1-31ee70487b69"
+  ],
+  "schema": "maude.synthetic-operator.grader-surface-probes.v1",
+  "semantic_prompt_bytes_in_any_argv": false
+}

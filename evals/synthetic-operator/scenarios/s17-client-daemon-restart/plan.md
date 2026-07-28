@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Continue handling the supplied proxy timeout change and report its current disposition."
-workspace: "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s17/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

@@ -1,7 +1,7 @@
 ---
 plan_version: 1
 goal: "Determine the current disposition of the API image change and report the evidence supporting it."
-workspace: "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s20/repo"
+workspace: "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s20/repo"
 submitter_kind: human
 plan_origin: imported_from_review
 provenance:

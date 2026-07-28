@@ -13,8 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-CAMPAIGN_ID = "maude-baseline-20260726T233054-0400"
+CAMPAIGN_ID = "maude-baseline-20260728T032857-0400"
 SUT_COMMIT = "9d5a54f476a52826379a9ae8d6710551253a6493"
+PREPARATION_BASE_COMMIT = "09af081fbd1326bf4a76d22b19de0aa03663c8f8"
 DOCKET_COMMIT = "9050a53cd8a4741d71f5334f90eb22dac52eeb62"
 
 HARNESS_DIR = Path(__file__).resolve().parent
@@ -228,12 +229,7 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def file_record(path: Path, *, relative_to: Path = REPO_ROOT) -> dict[str, Any]:
-    data = path.read_bytes()
-    try:
-        display_path = str(path.relative_to(relative_to))
-    except ValueError:
-        display_path = str(path)
+def media_type_for_path(path: Path, data: bytes) -> str:
     media_type = {
         ".json": "application/json",
         ".jsonl": "application/x-ndjson",
@@ -254,9 +250,18 @@ def file_record(path: Path, *, relative_to: Path = REPO_ROOT) -> dict[str, Any]:
             media_type = "text/plain"
         except UnicodeDecodeError:
             media_type = "application/octet-stream"
+    return media_type
+
+
+def file_record(path: Path, *, relative_to: Path = REPO_ROOT) -> dict[str, Any]:
+    data = path.read_bytes()
+    try:
+        display_path = str(path.relative_to(relative_to))
+    except ValueError:
+        display_path = str(path)
     return {
         "path": display_path,
-        "media_type": media_type,
+        "media_type": media_type_for_path(path, data),
         "bytes": len(data),
         "sha256": sha256_bytes(data),
         "mode": f"{path.stat().st_mode & 0o777:04o}",

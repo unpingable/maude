@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+import grader_surface_probe
 from campaign_common import (
     AUTH_GATE_PROBE_PATH,
     CAMPAIGN_ID,
@@ -35,6 +36,7 @@ from campaign_common import (
     MATRIX_PATH,
     PACKET_DIR,
     PERSONAS_DIR,
+    PREPARATION_BASE_COMMIT,
     REPO_ROOT,
     SCENARIOS_DIR,
     SUT_COMMIT,
@@ -44,6 +46,7 @@ from campaign_common import (
     load_json,
     load_matrix,
     manifest_artifact_map,
+    media_type_for_path,
     matrix_runs,
     sha256_file,
     validate_manifest_hashes,
@@ -72,6 +75,12 @@ INSTALL_DOC_PACKET_DIR = PACKET_DIR / "installation-docs"
 INSTALL_MEDIA_DIR = PACKET_DIR / "installation-media"
 INITIAL_REPOSITORY_OBSERVATION = (
     PACKET_DIR / "initial-repository-observation.json"
+)
+SUCCESSOR_LINEAGE = PACKET_DIR / "successor-lineage.json"
+REJECTED_GRADER_PROBE_STATUS = (
+    PACKET_DIR
+    / "grader-surface-probes-failed-20260728T0755Z"
+    / "probe-attempt-status.json"
 )
 INSTALL_MEDIA_PROVENANCE = INSTALL_MEDIA_DIR / "provenance.json"
 INSTALL_SOURCE_ARCHIVE = (
@@ -119,7 +128,7 @@ CLAUDE_BRIDGE_SHA256 = (
     "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
 )
 CLAUDE_RUNNER_SHA256 = (
-    "2000e78c1bfdc5f821cb843b02ca787a28d123a92ab0bc4fabe099e2c2c90b36"
+    "eaf8112aee1d836e263b3ec4c89ac2c391e100ecbfeac8f58487b64970678f31"
 )
 OPERATOR_PTY_SHA256 = (
     "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
@@ -131,10 +140,13 @@ PUBLIC_CLI_BROKER_SHA256 = (
     "fafe3e530fa91ca0ec0e7164c1607ad76d53527d109375934139e36998eac575"
 )
 AUTH_GATE_SELFTEST_SHA256 = (
-    "48c65eb077291f78a34495e3aa15eaf9b6c1d30317bf00436d73332468641dde"
+    "90ffca4c9c0251a5df89ecd43de18d897eec9b9a4eb033655841fd465cb04235"
 )
 CAMPAIGN_COMMON_SHA256 = (
-    "2b0e53dbacb22e6d88247d82a1aa65dd3821c49f7324c0d30da833f0d0e1e3a3"
+    "bd601eac71e924754bf8cd628dd6c7bff0d33cd2ea3177399fb3f8cf1340418d"
+)
+GRADER_SURFACE_PROBE_SHA256 = (
+    "721e22b87c823c4edd0f224714cf2ef74c7b0d5fe0575032d5a6ae06930cbde4"
 )
 HOST_SOURCE_ROOT = Path("/home/jbeck/git/agent_gov_ui")
 INSTALL_ENDPOINT_DIR = PACKET_DIR / "installation-endpoints"
@@ -1026,6 +1038,10 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
         if run["surface"] == "maude-installation"
         else "operator-retrospective"
     )
+    retrospective_record["media_type"] = media_type_for_path(
+        Path(retrospective_record["destination"]),
+        OPERATOR_RETROSPECTIVE.read_bytes(),
+    )
     files.append(retrospective_record)
 
     generated_visible_state: dict[str, Any] | None = None
@@ -1071,6 +1087,10 @@ def _frozen_supplied_inputs(run: dict[str, Any]) -> dict[str, Any]:
     else:
         pty_record = file_record(OPERATOR_PTY)
         pty_record["destination"] = "operator/operator-pty"
+        pty_record["media_type"] = media_type_for_path(
+            Path(pty_record["destination"]),
+            OPERATOR_PTY.read_bytes(),
+        )
         files.append(pty_record)
         for _source, relative in INSTALL_OPERATOR_DOC_SOURCES:
             path = INSTALL_DOC_PACKET_DIR / relative
@@ -1808,16 +1828,27 @@ def _build_manifest(
         "frozen_at": frozen_at,
         "authority_effect": "none",
         "observation_custody": (
-            "initial clean-state and provider/isolation probe facts are exact "
-            "past observations recorded by the campaign root before artifact "
-            "creation; live Git identity fields are rechecked by this freezer"
+            "initial clean-state facts are exact observations recorded at the "
+            "separate preparation-base commit before successor input or "
+            "evaluator changes; provider/isolation probes are exact later "
+            "pre-freeze observations and live Git identity fields are "
+            "rechecked by this freezer"
         ),
         "repository": {
             "identity": "github-unpingable:unpingable/maude.git",
             "system_under_test_commit": SUT_COMMIT,
             "scaffold_baseline_commit": SUT_COMMIT,
+            "preparation_base_commit": PREPARATION_BASE_COMMIT,
+            "successor_lineage": file_record(SUCCESSOR_LINEAGE),
             "existing_working_line": "main",
             "packet_commit": "to be recorded by commit; not a SUT behavior change",
+        },
+        "preparation_history": {
+            "successor_lineage": file_record(SUCCESSOR_LINEAGE),
+            "rejected_grader_surface_probe_attempt": file_record(
+                REJECTED_GRADER_PROBE_STATUS
+            ),
+            "rejected_attempt_counts_as_campaign_evidence": False,
         },
         "system_under_test": {
             "name": "Maude",
@@ -2027,6 +2058,8 @@ def _build_manifest(
             ),
         },
         "known_campaign_limitations": [
+            "Generation 1 (`maude-baseline-20260726T233054-0400`) is preserved as aborted evaluator-infrastructure history. Its 25 operator sessions, 24 failed grader-provider sessions, and 10 pre-provider installation failures do not count as successor evidence or completion; this generation reruns the full 35-run matrix.",
+            "One successor pre-freeze grader-surface probe attempt completed two fresh schema-valid provider sessions but was rejected because its wrapper looked for byte bindings at the wrong JSON level. The raw attempt and both thread identities are preserved as preparation history, count as neither campaign evidence nor completion, and were replaced by two new fresh passing probes after the evaluator-only fix.",
             "This campaign is Round A baseline only. Product and documentation repair is prohibited, so no Round B post-repair comparison or changed-command/display example can be produced in this campaign; those absences must remain explicit in findings.",
             "The Agent Governor service is deterministic synthetic protocol state, not a live daemon.",
             "The Maude terminal is driven headlessly at 120x40; terminal adapter actions are recorded.",
@@ -2104,7 +2137,7 @@ def _initial_repository_observation() -> dict[str, Any]:
         ),
         "head": (
             ["git", "rev-parse", "HEAD"],
-            f"{SUT_COMMIT}\n",
+            f"{PREPARATION_BASE_COMMIT}\n",
         ),
         "upstream": (
             ["git", "rev-parse", "--abbrev-ref", "@{upstream}"],
@@ -2137,8 +2170,12 @@ def _initial_repository_observation() -> dict[str, Any]:
     custody = observation.get("custody")
     if (
         not isinstance(custody, dict)
-        or custody.get("artifact_serialized_after_initial_inspection") is not True
-        or custody.get("wall_clock_captured") is not False
+        or custody.get(
+            "artifact_serialized_immediately_after_initial_inspection"
+        )
+        is not True
+        or not isinstance(custody.get("wall_clock_captured"), str)
+        or not custody["wall_clock_captured"]
     ):
         raise CampaignError("initial repository observation custody is incomplete")
     return observation
@@ -2467,6 +2504,137 @@ def _provider_probe_summary() -> dict[str, Any]:
         "mcp_stdio_shim": file_record(CLAUDE_MCP_BRIDGE),
         "providers": sanitized,
         "raw_probe_evidence_committed": False,
+        "all_passed": True,
+        "authority_effect": "none",
+    }
+
+
+def _grader_surface_probe_summary() -> dict[str, Any]:
+    """Validate and summarize both exact-schema pre-freeze grader probes."""
+
+    errors = grader_surface_probe.validate_probes()
+    if errors:
+        raise CampaignError(
+            "grader-surface capability probes are incomplete: "
+            + "; ".join(errors)
+        )
+    index_path = grader_surface_probe.OUTPUT_ROOT / "index.json"
+    index = load_json(index_path)
+    expected_runner = file_record(HARNESS_DIR / "campaign_runner.py")
+    expected_probe_runner = file_record(
+        HARNESS_DIR / "grader_surface_probe.py"
+    )
+    if (
+        expected_runner["sha256"] != CLAUDE_RUNNER_SHA256
+        or index.get("campaign_runner") != expected_runner
+    ):
+        raise CampaignError(
+            "grader-surface probes do not bind the final audited "
+            "campaign_runner.py bytes"
+        )
+    if (
+        expected_probe_runner["sha256"] != GRADER_SURFACE_PROBE_SHA256
+        or index.get("probe_runner") != expected_probe_runner
+    ):
+        raise CampaignError(
+            "grader-surface probes do not bind the final audited probe-runner "
+            "bytes"
+        )
+    probes = index.get("probes")
+    if not isinstance(probes, list) or len(probes) != 2:
+        raise CampaignError("grader-surface probe set is not exact")
+    summarized: list[dict[str, Any]] = []
+    for record in probes:
+        probe_id = record.get("probe_id")
+        if probe_id not in {"ordinary", "installation"}:
+            raise CampaignError("grader-surface probe identity differs")
+        result_path = (
+            grader_surface_probe.OUTPUT_ROOT
+            / str(probe_id)
+            / "result.json"
+        )
+        result = load_json(result_path)
+        delivery = result.get("prompt_delivery")
+        boundary = result.get("action_boundary")
+        identity = result.get("session_identity")
+        validation = result.get("schema_validation")
+        if not all(
+            isinstance(value, dict)
+            for value in (delivery, boundary, identity, validation)
+        ):
+            raise CampaignError(
+                f"{probe_id}: grader-surface result is malformed"
+            )
+        if (
+            delivery.get("stdin_used") is not True
+            or delivery.get("stdin_closed_after_single_write") is not True
+            or delivery.get("semantic_prompt_bytes_in_argv") is not False
+            or delivery.get("exceeds_131072_bytes") is not True
+            or delivery.get("provider_argv_final_argument") != "-"
+            or not _is_sha256(delivery.get("semantic_prompt_sha256"))
+            or boundary.get("all_actions_read_only_evidence") is not True
+            or boundary.get("all_provider_actions_represented_once") is not True
+            or boundary.get("zero_auth_env_network_source_attempts") is not True
+            or validation.get("jsonschema_passed") is not True
+            or validation.get(
+                "local_failure_classes_uniqueness_passed"
+            )
+            is not True
+            or validation.get("successor_schema_has_no_uniqueItems") is not True
+            or record.get("all_passed") is not True
+            or result.get("campaign_run") is not False
+            or result.get("authority_effect") != "none"
+        ):
+            raise CampaignError(
+                f"{probe_id}: grader-surface capability predicates differ"
+            )
+        thread_id = identity.get("provider_thread_id")
+        if not isinstance(thread_id, str) or not thread_id:
+            raise CampaignError(
+                f"{probe_id}: grader-surface fresh thread identity is absent"
+            )
+        summarized.append(
+            {
+                "probe_id": probe_id,
+                "surface": record["surface"],
+                "session_identity": identity,
+                "schema": validation["source"],
+                "semantic_prompt_bytes": delivery[
+                    "semantic_prompt_bytes"
+                ],
+                "semantic_prompt_sha256": delivery[
+                    "semantic_prompt_sha256"
+                ],
+                "read_only_evidence_actions": boundary["action_count"],
+                "result": file_record(result_path),
+                "all_passed": True,
+            }
+        )
+    thread_ids = [
+        item["session_identity"]["provider_thread_id"] for item in summarized
+    ]
+    if len(set(thread_ids)) != 2:
+        raise CampaignError(
+            "grader-surface capability probes reused a provider thread"
+        )
+    return {
+        "schema": (
+            "maude.synthetic-operator.grader-surface-probe-summary.v1"
+        ),
+        "probe_index": file_record(index_path),
+        "campaign_runner": expected_runner,
+        "probe_runner": expected_probe_runner,
+        "probes": sorted(
+            summarized,
+            key=lambda value: value["probe_id"],
+        ),
+        "distinct_fresh_thread_ids": True,
+        "exact_successor_schemas_accepted": True,
+        "large_prompts_delivered_by_closed_stdin": True,
+        "semantic_prompt_bytes_in_argv": False,
+        "read_only_evidence_boundary": True,
+        "campaign_run": False,
+        "raw_probe_evidence_frozen_in_packet": True,
         "all_passed": True,
         "authority_effect": "none",
     }
@@ -4959,6 +5127,7 @@ def _write_preflight(*, frozen_at: str) -> None:
     installation_surface_probes = _installation_surface_probe_summary(
         provider_probes
     )
+    grader_surface_probes = _grader_surface_probe_summary()
     auth_gate_selftest = _auth_gate_selftest_summary()
     preflight = {
         "schema": "maude.synthetic-operator.preflight.v1",
@@ -4966,9 +5135,10 @@ def _write_preflight(*, frozen_at: str) -> None:
         "observed_at": frozen_at,
         "authority_effect": "none",
         "observation_custody": (
-            "Initial Git facts are preserved in a separately pinned, candidly "
-            "later-serialized command record with no claimed wall timestamp. "
-            "Provider/isolation and installed-surface probes are exact past "
+            "Initial Git facts are preserved in a separately pinned command "
+            "record captured at the clean preparation-base commit before "
+            "successor inputs or evaluator code changed. Provider/isolation "
+            "and installed-surface probes are exact later pre-freeze "
             "observations, and live Git identity fields are rechecked by this "
             "freezer."
         ),
@@ -4977,6 +5147,7 @@ def _write_preflight(*, frozen_at: str) -> None:
             "origin": origin["stdout"].strip(),
             "branch": git_branch["stdout"].strip(),
             "head": git_head["stdout"].strip(),
+            "preparation_base_commit": PREPARATION_BASE_COMMIT,
             "upstream": git_upstream["stdout"].strip(),
             "upstream_head": upstream_head["stdout"].strip(),
             "initial_observation": file_record(
@@ -4990,7 +5161,7 @@ def _write_preflight(*, frozen_at: str) -> None:
                 "status_short"
             ]["stdout"],
             "initial_state_observed_before_campaign_artifact_creation": True,
-            "initial_observation_wall_clock_captured": False,
+            "initial_observation_wall_clock_captured": True,
             "live_recheck_commands": {
                 "head": git_head,
                 "branch": git_branch,
@@ -5000,11 +5171,17 @@ def _write_preflight(*, frozen_at: str) -> None:
             },
         },
         "required_baseline": SUT_COMMIT,
+        "required_preparation_base": PREPARATION_BASE_COMMIT,
+        "successor_lineage": file_record(SUCCESSOR_LINEAGE),
+        "rejected_grader_surface_probe_attempt": file_record(
+            REJECTED_GRADER_PROBE_STATUS
+        ),
         "versions": versions,
         "provider_session_capability_probes": provider_probes,
         "installation_surface_capability_probes": (
             installation_surface_probes
         ),
+        "grader_surface_capability_probes": grader_surface_probes,
         "provider_auth_gate_fake_process_selftest": auth_gate_selftest,
         "model_family_policy": CODEX_ONLY_MODEL_POLICY,
         "isolation_capability_probe": {
@@ -5119,9 +5296,11 @@ def _write_preflight(*, frozen_at: str) -> None:
             "remote_writes": False,
         },
     }
-    if preflight["repository"]["head"] != SUT_COMMIT:
+    if preflight["repository"]["head"] != PREPARATION_BASE_COMMIT:
         raise CampaignError(
-            f"preflight HEAD {preflight['repository']['head']} != {SUT_COMMIT}"
+            "preflight HEAD "
+            f"{preflight['repository']['head']} != "
+            f"{PREPARATION_BASE_COMMIT}"
         )
     if preflight["repository"]["branch"] != "main":
         raise CampaignError("campaign is no longer on existing main working line")
@@ -5162,11 +5341,17 @@ def _manifest_markdown(manifest: dict[str, Any]) -> str:
         f"**Campaign ID:** `{CAMPAIGN_ID}`",
         f"**Frozen at:** `{manifest['frozen_at']}`",
         f"**System under test commit:** `{SUT_COMMIT}`",
+        f"**Preparation base commit:** `{PREPARATION_BASE_COMMIT}`",
+        (
+            "**Superseded generation:** "
+            "`maude-baseline-20260726T233054-0400` (aborted evaluator "
+            "infrastructure; none of its sessions count here)"
+        ),
         "**Authority effect:** None.",
         "",
         "The scaffold does not require a role-by-scenario cross product. The",
         "twenty Maude specimens cover each required scenario once; the ten",
-        "personas are coverage constraints. Four Docket/GWR runs are",
+        "personas are coverage constraints. Five Docket/GWR runs are",
         "task-equivalent direct-runtime controls; the client-restart control is",
         "capability-limited because that surface cannot reproduce Maude daemon",
         "recovery. Ten installation and first-use",
@@ -5228,6 +5413,8 @@ def _validate_static_inputs() -> list[str]:
         MATRIX_PATH,
         INSTALL_TRACK_PATH,
         INITIAL_REPOSITORY_OBSERVATION,
+        SUCCESSOR_LINEAGE,
+        REJECTED_GRADER_PROBE_STATUS,
         PACKET_DIR / "grading-rubric.md",
         PACKET_DIR / "installation-grading-rubric.md",
         PACKET_DIR / "failure-taxonomy.json",
@@ -5245,7 +5432,9 @@ def _validate_static_inputs() -> list[str]:
         HARNESS_DIR / "maude_driver.py",
         HARNESS_DIR / "synthetic_runtime.py",
         HARNESS_DIR / "prepare_installation_media.py",
+        HARNESS_DIR / "grader_surface_probe.py",
         HARNESS_DIR / "auth_gate_selftest.py",
+        grader_surface_probe.OUTPUT_ROOT / "index.json",
         HARNESS_DIR / "test_authority_fixtures.py",
         HARNESS_DIR / "test_fixture_fidelity.py",
         SCENARIOS_DIR / "_build_corpus.py",
@@ -5261,6 +5450,8 @@ def _validate_static_inputs() -> list[str]:
     for path in required:
         if not path.is_file():
             errors.append(f"missing required campaign input: {path}")
+    errors.extend(_validate_successor_lineage())
+    errors.extend(_validate_rejected_grader_probe_history())
     for path in (
         HARNESS_DIR / "maude",
         HARNESS_DIR / "public_cli.py",
@@ -5300,6 +5491,15 @@ def _validate_static_inputs() -> list[str]:
                 "--validate",
             ],
             "installation media",
+        ),
+        (
+            [
+                "python3",
+                "-B",
+                str(HARNESS_DIR / "grader_surface_probe.py"),
+                "validate",
+            ],
+            "grader-surface capability probes",
         ),
         (
             [
@@ -5365,12 +5565,207 @@ def _validate_static_inputs() -> list[str]:
     return errors
 
 
+def _validate_successor_lineage() -> list[str]:
+    """Bind the discarded first generation without importing its evidence."""
+
+    if not SUCCESSOR_LINEAGE.is_file() or SUCCESSOR_LINEAGE.is_symlink():
+        return ["successor lineage record is absent or unsafe"]
+    old_root = (
+        EVAL_ROOT
+        / "runs"
+        / "maude-baseline-20260726T233054-0400"
+    )
+    old_manifest = old_root / "packet" / "campaign-manifest.json"
+    old_abort = old_root / "campaign-abort.json"
+    expected = {
+        "schema": "maude.synthetic-operator.successor-lineage.v1",
+        "campaign_id": CAMPAIGN_ID,
+        "generation": 2,
+        "generation_1": {
+            "campaign_id": "maude-baseline-20260726T233054-0400",
+            "campaign_manifest": {
+                "path": str(old_manifest.relative_to(REPO_ROOT)),
+                "bytes": 425984,
+                "sha256": (
+                    "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc96d9d"
+                    "5893729f3e17d"
+                ),
+            },
+            "packet_commit": (
+                "f9e8caadf194c38384e981baa7cd0b6a5dcac9b1"
+            ),
+            "abort_record": {
+                "path": str(old_abort.relative_to(REPO_ROOT)),
+                "bytes": 3735,
+                "sha256": (
+                    "984e165b7472139e770c18cba04a855f8cb2d34c9af93ae600b9"
+                    "2d49dfe2f129"
+                ),
+            },
+            "preservation_commit": (
+                "09af081fbd1326bf4a76d22b19de0aa03663c8f8"
+            ),
+            "sessions_rejected": 25,
+            "completed_grades": 0,
+            "failed_grader_provider_sessions": 24,
+            "installation_runs_failed_pre_provider": 10,
+            "installation_provider_sessions_started": 0,
+        },
+        "evidence_boundary": {
+            "generation_1_counts_as_successor_evidence": False,
+            "generation_1_counts_toward_successor_completion": False,
+            "successor_full_matrix_rerun_required": True,
+            "statement": (
+                "Generation-1 sessions, failures, grades, artifacts, and "
+                "findings are preservation and preparation history only; "
+                "none counts as evidence for this successor campaign."
+            ),
+        },
+        "authority_effect": "none",
+    }
+    try:
+        actual = load_json(SUCCESSOR_LINEAGE)
+    except CampaignError as exc:
+        return [str(exc)]
+    errors: list[str] = []
+    if actual != expected:
+        errors.append("successor lineage record differs from the exact history")
+    for path, byte_count, digest, label in (
+        (
+            old_manifest,
+            425984,
+            expected["generation_1"]["campaign_manifest"]["sha256"],
+            "generation-1 manifest",
+        ),
+        (
+            old_abort,
+            3735,
+            expected["generation_1"]["abort_record"]["sha256"],
+            "generation-1 abort record",
+        ),
+    ):
+        if (
+            not path.is_file()
+            or path.is_symlink()
+            or path.stat().st_size != byte_count
+            or sha256_file(path) != digest
+        ):
+            errors.append(f"{label} bytes differ from successor lineage")
+    for commit, label in (
+        (
+            expected["generation_1"]["packet_commit"],
+            "generation-1 packet commit",
+        ),
+        (
+            expected["generation_1"]["preservation_commit"],
+            "generation-1 preservation commit",
+        ),
+    ):
+        observed = subprocess.run(
+            ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
+            cwd=REPO_ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if observed.returncode != 0:
+            errors.append(f"{label} is absent from the repository")
+    return errors
+
+
+def _validate_rejected_grader_probe_history() -> list[str]:
+    """Keep the pre-freeze validator failure visible and non-counting."""
+
+    if (
+        not REJECTED_GRADER_PROBE_STATUS.is_file()
+        or REJECTED_GRADER_PROBE_STATUS.is_symlink()
+    ):
+        return ["rejected grader-probe preparation history is absent"]
+    status = load_json(REJECTED_GRADER_PROBE_STATUS)
+    failed_root = REJECTED_GRADER_PROBE_STATUS.parent
+    failed_index = failed_root / "index.json"
+    if not failed_index.is_file() or failed_index.is_symlink():
+        return ["rejected grader-probe index is absent"]
+    index = load_json(failed_index)
+    expected_threads = [
+        "019fa7b8-9489-7b50-8f9d-2dcde1179e23",
+        "019fa7b9-235f-7c33-9f4f-8bf9eba6b0ef",
+    ]
+    errors: list[str] = []
+    required_status = {
+        "schema": (
+            "maude.synthetic-operator."
+            "grader-surface-probe-attempt-status.v1"
+        ),
+        "campaign_id": CAMPAIGN_ID,
+        "campaign_run": False,
+        "status": "rejected-evaluator-index-validation",
+        "provider_sessions_started": 2,
+        "provider_sessions_completed": 2,
+        "provider_thread_ids": expected_threads,
+        "session_results_schema_valid": True,
+        "counts_as_campaign_evidence": False,
+        "counts_as_successor_completion": False,
+        "bound_campaign_runner_sha256": CLAUDE_RUNNER_SHA256,
+        "bound_probe_runner_sha256": (
+            "300c7b764ea84d07cf26d022509e9de4fc681bbb4f6371d2a0c5039542993925"
+        ),
+        "retry_requires_fresh_sessions": True,
+        "raw_evidence_preserved": True,
+        "product_or_documentation_changed": False,
+        "governance_or_oq7_state_changed": False,
+        "network_or_external_operational_effect": False,
+        "authority_effect": "none",
+    }
+    for key, value in required_status.items():
+        if status.get(key) != value:
+            errors.append(
+                f"rejected grader-probe status differs at {key}"
+            )
+    failure = status.get("failure")
+    if (
+        not isinstance(status.get("observed_at"), str)
+        or not status["observed_at"]
+        or not isinstance(failure, dict)
+        or failure.get("class") != "evaluator infrastructure"
+        or failure.get("stage") != "post-session probe self-validation"
+        or failure.get("provider_or_schema_failure") is not False
+    ):
+        errors.append("rejected grader-probe failure facts differ")
+    if (
+        index.get("campaign_id") != CAMPAIGN_ID
+        or index.get("campaign_run") is not False
+        or index.get("all_passed") is not True
+        or index.get("provider_thread_ids") != expected_threads
+        or index.get("distinct_fresh_thread_ids") is not True
+        or index.get("all_jsonschema_validations_passed") is not True
+        or index.get("all_prompts_delivered_by_closed_stdin") is not True
+        or index.get("semantic_prompt_bytes_in_any_argv") is not False
+    ):
+        errors.append("rejected grader-probe preserved index facts differ")
+    for probe_id in ("ordinary", "installation"):
+        result = load_json(failed_root / probe_id / "result.json")
+        if (
+            result.get("campaign_run") is not False
+            or result.get("all_passed") is not True
+            or result.get("authority_effect") != "none"
+            or result.get("probe_runner", {}).get("sha256")
+            != required_status["bound_probe_runner_sha256"]
+            or result.get("campaign_runner", {}).get("sha256")
+            != CLAUDE_RUNNER_SHA256
+        ):
+            errors.append(
+                f"rejected grader-probe {probe_id} result differs"
+            )
+    return errors
+
+
 def _validate_final_boundary_bytes() -> list[str]:
     """Fail closed if any audited runner/boundary byte changes."""
 
     expected = {
         HARNESS_DIR / "campaign_runner.py": (
-            565450,
+            568475,
             CLAUDE_RUNNER_SHA256,
         ),
         CLAUDE_MCP_BRIDGE: (56742, CLAUDE_BRIDGE_SHA256),
@@ -5378,11 +5773,15 @@ def _validate_final_boundary_bytes() -> list[str]:
         HARNESS_DIR / "public_cli.py": (6047, PUBLIC_CLI_SHA256),
         PUBLIC_CLI_BROKER: (16736, PUBLIC_CLI_BROKER_SHA256),
         HARNESS_DIR / "auth_gate_selftest.py": (
-            125542,
+            135165,
             AUTH_GATE_SELFTEST_SHA256,
         ),
+        HARNESS_DIR / "grader_surface_probe.py": (
+            47388,
+            GRADER_SURFACE_PROBE_SHA256,
+        ),
         HARNESS_DIR / "campaign_common.py": (
-            31291,
+            31462,
             CAMPAIGN_COMMON_SHA256,
         ),
     }

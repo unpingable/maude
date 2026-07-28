@@ -1,7 +1,7 @@
 {
   "governor_state_removal_authorized": false,
-  "installed_environment": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/venv",
-  "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/venv/bin/maude",
+  "installed_environment": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i10/installation/venv",
+  "maude_entrypoint": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/install-i10/installation/venv/bin/maude",
   "maude_package_removal_authorized": true,
   "project_removal_authorized": false,
   "retained_state_owner": "synthetic-platform-team"

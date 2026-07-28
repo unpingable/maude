@@ -1,7 +1,7 @@
 {
   "approval_binding": {
-    "approval_witness_digest": "sha256:5d33b4abef7ee51e3b15d3b389f1ef60a2f9abd48d77b2e9013360238fba0348",
-    "source_plan_digest": "sha256:1d1c294573f8d7157c64c088b44a245d8283f42bed82d778fd5828bab95a8b8a"
+    "approval_witness_digest": "sha256:2d07f9537c3c81088b168617c04c199247b6cb87550eb11e99d40a518fecadad",
+    "source_plan_digest": "sha256:0de77a9bb32a81d276adc3caa8a12b66eff34f1637262653c7b4d5a6b991926f"
   },
   "authority_contract": {
     "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
@@ -234,7 +234,7 @@
     "sentence": "Synthetic runtime fixture; authority effect none."
   },
   "grant": {
-    "approval_witness_digest": "sha256:5d33b4abef7ee51e3b15d3b389f1ef60a2f9abd48d77b2e9013360238fba0348",
+    "approval_witness_digest": "sha256:2d07f9537c3c81088b168617c04c199247b6cb87550eb11e99d40a518fecadad",
     "behavior": "normal",
     "commands": [
       {
@@ -247,12 +247,12 @@
     ],
     "derivation_version": "execution-grant/v1",
     "enforcement": "declared-effects-only",
-    "grant_digest": "sha256:bf22f3cbdd60a9a04bb6d9fd204cddb6cdd55d073dda9cbcdf6378df89f76abc",
-    "grant_id": "sgr_bf22f3cbdd60",
+    "grant_digest": "sha256:3c1b47fb6d9c4dfffb4b32e8cbf2c753244af3937b1cd7376bcc0417d7e8f094",
+    "grant_id": "sgr_3c1b47fb6d9c",
     "horizon": "run",
     "kind": "active",
     "recent_uses": [],
-    "source_plan_digest": "sha256:1d1c294573f8d7157c64c088b44a245d8283f42bed82d778fd5828bab95a8b8a",
+    "source_plan_digest": "sha256:0de77a9bb32a81d276adc3caa8a12b66eff34f1637262653c7b4d5a6b991926f",
     "state": "active",
     "unmet_axes": [],
     "write_paths": [
@@ -316,7 +316,7 @@
       "clusters/store-17/apps/menu/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-api\nspec:\n  template:\n    spec:\n      containers:\n        - name: menu-api\n          image: registry.example.invalid/menu-api:2.7.3\n",
       "clusters/store-17/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - apps/menu/deployment.yaml\n"
     },
-    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s01/repo"
+    "path": "/tmp/maude-synth-maude-baseline-20260728T032857-0400/maude-s01/repo"
   },
   "workspace_effect": {
     "apply_at": "launch",

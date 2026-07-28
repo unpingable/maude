@@ -1,0 +1,12 @@
+{
+  "disposable_lab_destroyed": true,
+  "private_socket_cleanup": {
+    "all_removed": true,
+    "directories": [],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-37e9bc30133a"
+  },
+  "probe_id": "ordinary",
+  "provider_home_destroyed": true,
+  "schema": "maude.synthetic-operator.grader-surface-probe-cleanup.v1"
+}

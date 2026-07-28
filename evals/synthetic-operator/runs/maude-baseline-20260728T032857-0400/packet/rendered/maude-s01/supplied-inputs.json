@@ -1,0 +1,147 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260728T032857-0400",
+  "evaluator_materialization_source": null,
+  "generated_visible_state": null,
+  "run_id": "maude-s01",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s01/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "terminal_bridge_disclosure": {
+    "artifact": "public_cli.py",
+    "implementation_visible": true,
+    "maude_or_runtime_implementation_source": false,
+    "purpose": "evaluation-only public Unix-socket client; it exposes no driver queue and adds no Maude commands or product semantics"
+  },
+  "user_prompt": {
+    "bytes": 2264,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s01/operator-prompt.md",
+    "sha256": "6515c587c4869220f201fb94e3abfb4e6be40a00666d4ef4c69ccdac26c8baa4"
+  },
+  "visible_files": [
+    {
+      "bytes": 192,
+      "destination": "../repo/clusters/store-17/apps/menu/deployment.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/fixture/clusters/store-17/apps/menu/deployment.yaml",
+      "sha256": "1aa21ca0fe182f033ca285d08ef5444abc236268f2cbc540ad1c0e6a5ffa4d8b"
+    },
+    {
+      "bytes": 105,
+      "destination": "../repo/clusters/store-17/kustomization.yaml",
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/fixture/clusters/store-17/kustomization.yaml",
+      "sha256": "88d350904dd55032b3300991ba393744244f5640f279c194e414b6777556aeab"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "destination": "maude",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator-retrospective",
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "destination": "public_cli.py",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 779,
+      "destination": "task/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260728T032857-0400/packet/rendered/maude-s01/operator-task.md",
+      "sha256": "15e5c1e0e34e57a8fb7b30f4c9cfd0306131b63ef176970b4ef3c8bfa45552f8"
+    },
+    {
+      "bytes": 147,
+      "destination": "task/lab_approval_ux-task-01",
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/lab_approval_ux-task-01",
+      "sha256": "2d07f9537c3c81088b168617c04c199247b6cb87550eb11e99d40a518fecadad"
+    },
+    {
+      "bytes": 601,
+      "destination": "task/packet.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/packet.json",
+      "sha256": "29bf5f362e6a6211f8e03fd9dbdb2b7728a41421366d587f3076b105db219bbd"
+    },
+    {
+      "bytes": 1805,
+      "destination": "task/plan.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/plan.md",
+      "sha256": "0de77a9bb32a81d276adc3caa8a12b66eff34f1637262653c7b4d5a6b991926f"
+    },
+    {
+      "bytes": 197,
+      "destination": "task/playbook.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/playbook.json",
+      "sha256": "6a8f8bdbb4c08ab9adf7bc6b05c14d6d1f173839c0d62a5bd8c3f0ff15fda84e"
+    },
+    {
+      "bytes": 252,
+      "destination": "task/ration-card.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/ration-card.json",
+      "sha256": "9f5e92ab790a1bd12fb009ce52b3a4bfb2d4151a24d0ab18c6505ae6f354635a"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/runtime.json",
+    "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/patch.diff",
+    "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/expected-disposition.json",
+    "Maude and runtime implementation source",
+    "runtime RPC transcript and private state during the run",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}
