@@ -1,0 +1,5 @@
+--- a/config/api.yaml
++++ b/config/api.yaml
+@@ -1 +1 @@
+-retries: 2
++retries: 3

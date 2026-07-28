@@ -1,0 +1,9 @@
+[Unit]
+Description=Menu board renderer
+
+[Service]
+ExecStart=/usr/bin/env menu-board --foreground
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,138 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:6c9117a16ef7f5a7a2328e878afc40fb2d44e03339771167aeffd7d960ad23ae",
+    "source_plan_digest": "sha256:787c5a12d3de570c0ee9c68359acff27ca4d6aa17d151c274fa7e04d963d3386"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": null,
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_15",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:45:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_15_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-15"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_15",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {
+    "launch": {
+      "code": -32041,
+      "data": {
+        "reason": "runtime policy refused dispatch"
+      },
+      "message": "dispatch refused by runtime gate"
+    }
+  },
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:6c9117a16ef7f5a7a2328e878afc40fb2d44e03339771167aeffd7d960ad23ae",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:2755d3d8c7065afabbd4f0b47398e6eda3819344bcdb10fbd2a4b6853f93a700",
+    "grant_id": "sgr_2755d3d8c706",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:787c5a12d3de570c0ee9c68359acff27ca4d6aa17d151c274fa7e04d963d3386",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "deploy/worker.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "refusal",
+    "error": {
+      "code": -32041,
+      "data": {
+        "reason": "runtime policy refused dispatch"
+      },
+      "message": "dispatch refused by runtime gate"
+    },
+    "status": "created"
+  },
+  "promotion": null,
+  "runtime": {
+    "behavior": "launch_refusal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s15-runtime-refusal-before-dispatch",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:8fa573a8cc88a86c906ccf87d29393200e5051203aa8babfff1b056a3d5ed5ae",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 45,
+          "path": "deploy/worker.yaml",
+          "sha256": "sha256:00d60c5cb66e9e66a6597aca6d3a2319f6a06a0722136d87a08e4abad9d734a8"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "deploy/worker.yaml": "image: registry.example.invalid/worker:4.2.0\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s15/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

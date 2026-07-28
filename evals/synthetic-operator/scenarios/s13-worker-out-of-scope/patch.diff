@@ -1,0 +1,6 @@
+--- a/deploy/overlays/store-17/menu.yaml
++++ b/deploy/overlays/store-17/menu.yaml
+@@ -5,2 +5,2 @@
+ spec:
+-  replicas: 3
++  replicas: 4

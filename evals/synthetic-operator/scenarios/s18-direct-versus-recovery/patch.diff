@@ -1,0 +1,5 @@
+--- a/config/scheduler.yaml
++++ b/config/scheduler.yaml
+@@ -1 +1 @@
+-batch_size: 20
++batch_size: 25

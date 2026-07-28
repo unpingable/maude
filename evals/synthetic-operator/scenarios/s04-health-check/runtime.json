@@ -1,0 +1,326 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:2bfe6d7a5492f38960c3c11a682cf9f4816c19279d12863e983de920e582eec3",
+    "source_plan_digest": "sha256:afeab475d8fd40dddddf5a2a56b59db738eb9ae8c04a7526e766c552653ce3fd"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "deploy/menu-board/deployment.yaml"
+    ],
+    "diff_fixture": "--- a/deploy/menu-board/deployment.yaml\n+++ b/deploy/menu-board/deployment.yaml\n@@ -12 +12,6 @@\n             - containerPort: 8080\n+          readinessProbe:\n+            httpGet:\n+              path: /ready\n+              port: 8080\n+            initialDelaySeconds: 5\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_04",
+    "result_files": {
+      "deploy/menu-board/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-board\nspec:\n  template:\n    spec:\n      containers:\n        - name: menu-board\n          image: registry.example.invalid/menu-board:5.4.1\n          ports:\n            - containerPort: 8080\n          readinessProbe:\n            httpGet:\n              path: /ready\n              port: 8080\n            initialDelaySeconds: 5\n",
+      "deploy/menu-board/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - deployment.yaml\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_04",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:34:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-04"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:34:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:34:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_04_01",
+        "tool_input": {
+          "file_path": "deploy/menu-board/deployment.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:34:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_04_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_04_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:34:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_04_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:34:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_04_02",
+        "tool_input": {
+          "argv": [
+            "kustomize",
+            "build",
+            "deploy/menu-board"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:34:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_04_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_04_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:34:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: kustomize build deploy/menu-board\nreturncode: 0\ncandidate_tree: files=2 sha256:e273634f23bac6bd77b780b75f3bd9f8a150077cf534d21af9e0ad454234f9e7\nchanged_file: deploy/menu-board/deployment.yaml bytes=383 sha256:d5f1464cbbff883c8d281d6630a5eaa2b60231fa43376c8a8f420ae7230b7c31\nsupport_context: files=1 sha256:eacd58170071a24f5ae687e0d907ce8a2b191905cf58df0bc85ec16df97f563b",
+        "tool_call_id": "tc_ux_task_04_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 2,
+          "candidate_tree_digest": "sha256:e273634f23bac6bd77b780b75f3bd9f8a150077cf534d21af9e0ad454234f9e7",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 383,
+              "path": "deploy/menu-board/deployment.yaml",
+              "sha256": "sha256:d5f1464cbbff883c8d281d6630a5eaa2b60231fa43376c8a8f420ae7230b7c31"
+            }
+          ],
+          "command": {
+            "argv": [
+              "kustomize",
+              "build",
+              "deploy/menu-board"
+            ],
+            "program": "kustomize"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 1,
+            "tree_digest": "sha256:eacd58170071a24f5ae687e0d907ce8a2b191905cf58df0bc85ec16df97f563b"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:34:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_04_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_04_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_04",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:2bfe6d7a5492f38960c3c11a682cf9f4816c19279d12863e983de920e582eec3",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "build",
+          "deploy/menu-board"
+        ],
+        "program": "kustomize"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:63c6e44a363556fa7bb950e91ae7679ac004f387a007239eec8e56fd3421d443",
+    "grant_id": "sgr_63c6e44a3635",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:afeab475d8fd40dddddf5a2a56b59db738eb9ae8c04a7526e766c552653ce3fd",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "deploy/menu-board/deployment.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41004,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "deploy/menu-board/deployment.yaml"
+    ],
+    "diff_fixture": "--- a/deploy/menu-board/deployment.yaml\n+++ b/deploy/menu-board/deployment.yaml\n@@ -12 +12,6 @@\n             - containerPort: 8080\n+          readinessProbe:\n+            httpGet:\n+              path: /ready\n+              port: 8080\n+            initialDelaySeconds: 5\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_04",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s04-health-check",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 2,
+      "candidate_tree_digest": "sha256:e273634f23bac6bd77b780b75f3bd9f8a150077cf534d21af9e0ad454234f9e7",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 383,
+          "path": "deploy/menu-board/deployment.yaml",
+          "sha256": "sha256:d5f1464cbbff883c8d281d6630a5eaa2b60231fa43376c8a8f420ae7230b7c31"
+        }
+      ],
+      "command": {
+        "argv": [
+          "kustomize",
+          "build",
+          "deploy/menu-board"
+        ],
+        "program": "kustomize"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 1,
+        "tree_digest": "sha256:eacd58170071a24f5ae687e0d907ce8a2b191905cf58df0bc85ec16df97f563b"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "deploy/menu-board/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-board\nspec:\n  template:\n    spec:\n      containers:\n        - name: menu-board\n          image: registry.example.invalid/menu-board:5.4.1\n          ports:\n            - containerPort: 8080\n",
+      "deploy/menu-board/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - deployment.yaml\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s04/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

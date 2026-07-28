@@ -1,0 +1,9 @@
+--- a/terraform/variables.tf
++++ b/terraform/variables.tf
+@@ -5,4 +5,4 @@
+   validation {
+-    condition     = var.replicas >= 1 && var.replicas <= 500
+-    error_message = "replicas must be between 1 and 500"
++    condition     = var.replicas >= 1 && var.replicas <= 50
++    error_message = "replicas must be between 1 and 50"
+   }

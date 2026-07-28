@@ -1,0 +1,350 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:56c2b6f2c16641e62cac3b941880c7a673f5d470e26edcfb1790410bab249192",
+    "source_plan_digest": "sha256:9bc4c57e07284aff50c847029b9fb1afa90eb11c4b79b7aff768da7b1006a806"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "config/scheduler.yaml"
+    ],
+    "diff_fixture": "--- a/config/scheduler.yaml\n+++ b/config/scheduler.yaml\n@@ -1 +1 @@\n-batch_size: 20\n+batch_size: 25\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_18",
+    "result_files": {
+      "config/scheduler.yaml": "batch_size: 25\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_18",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:48:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-18"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:48:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:48:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_002",
+      "kind": "agent_output",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_001",
+      "payload": {
+        "text": "Recovery proves that the original operation succeeded."
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:48:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_003",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_002",
+      "payload": {
+        "tool_call_id": "tc_ux_task_18_01",
+        "tool_input": {
+          "file_path": "config/scheduler.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 3,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:48:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_004",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_003",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_18_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_18_01"
+      ],
+      "seq": 4,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:48:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_005",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_004",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_18_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:48:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_006",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_005",
+      "payload": {
+        "tool_call_id": "tc_ux_task_18_02",
+        "tool_input": {
+          "argv": [
+            "git",
+            "diff",
+            "--check"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 6,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:48:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_007",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_006",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_18_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_18_02"
+      ],
+      "seq": 7,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:48:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_008",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_007",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: git diff --check\nreturncode: 0\ncandidate_tree: files=1 sha256:8a2867f4a1ad0ca1fa33711ae29cbb3b91be3814b1a9a0cfb8051700106dba11\nchanged_file: config/scheduler.yaml bytes=15 sha256:7efd27da2e51b0c8e50975d18c98d0c7296912525941b31e8ad091d7f1aa8145\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_18_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:8a2867f4a1ad0ca1fa33711ae29cbb3b91be3814b1a9a0cfb8051700106dba11",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 15,
+              "path": "config/scheduler.yaml",
+              "sha256": "sha256:7efd27da2e51b0c8e50975d18c98d0c7296912525941b31e8ad091d7f1aa8145"
+            }
+          ],
+          "command": {
+            "argv": [
+              "git",
+              "diff",
+              "--check"
+            ],
+            "program": "git"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:48:09Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_18_009",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_18_008",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 9,
+      "session_id": "sess_ux_task_18",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:56c2b6f2c16641e62cac3b941880c7a673f5d470e26edcfb1790410bab249192",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:abfcab802a802d7223023bec793d6dad54dacd380682e9902b435b2ac3834691",
+    "grant_id": "sgr_abfcab802a80",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:9bc4c57e07284aff50c847029b9fb1afa90eb11c4b79b7aff768da7b1006a806",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "config/scheduler.yaml"
+    ]
+  },
+  "initial_sessions": [
+    {
+      "backend_kind": "synthetic_fixture",
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s18/repo",
+      "exit_code": 0,
+      "session_id": "sess_ux_task_18",
+      "status": "exited",
+      "task": "Determine the current disposition of the batch-size change and report the evidence supporting it.",
+      "updated_at": "2026-07-27T03:48:59Z"
+    }
+  ],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41018,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "config/scheduler.yaml"
+    ],
+    "diff_fixture": "--- a/config/scheduler.yaml\n+++ b/config/scheduler.yaml\n@@ -1 +1 @@\n-batch_size: 20\n+batch_size: 25\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_18",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s18-direct-versus-recovery",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:8a2867f4a1ad0ca1fa33711ae29cbb3b91be3814b1a9a0cfb8051700106dba11",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 15,
+          "path": "config/scheduler.yaml",
+          "sha256": "sha256:7efd27da2e51b0c8e50975d18c98d0c7296912525941b31e8ad091d7f1aa8145"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "config/scheduler.yaml": "batch_size: 20\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s18/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

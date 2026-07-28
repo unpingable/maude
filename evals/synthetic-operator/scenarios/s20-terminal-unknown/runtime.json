@@ -1,0 +1,199 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:330b788921e3fda56628c65a98d8a4281d2bd6edcc3752b1738095f150a286b8",
+    "source_plan_digest": "sha256:90d77c169e06361285a46d07658ad93702bba09dd7e18006411960066cff7154"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": null,
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_20",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:50:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_20_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-20"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_20",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:50:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_20_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_20_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_20",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:50:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_20_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_20_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_20_01",
+        "tool_input": {
+          "file_path": "deploy/api.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_20",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:50:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_20_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_20_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_20_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_20_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_20",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:50:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_20_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_20_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_20_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_20",
+      "source_layer": "adapter"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:330b788921e3fda56628c65a98d8a4281d2bd6edcc3752b1738095f150a286b8",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:d3fe224fbb38b320725a97e2f05163d597b837e948adeb5f88e007613ec53879",
+    "grant_id": "sgr_d3fe224fbb38",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:90d77c169e06361285a46d07658ad93702bba09dd7e18006411960066cff7154",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "deploy/api.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "disconnect_after_dispatch",
+    "kind": "disconnect",
+    "pid": 41020,
+    "status": "running"
+  },
+  "promotion": null,
+  "runtime": {
+    "behavior": "disconnect_after_dispatch",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s20-terminal-unknown",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:c4dbc9f9b66ef27d7f54b57bec300d6c694a3a34d9fcb59d7f24200ec57a6e61",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 42,
+          "path": "deploy/api.yaml",
+          "sha256": "sha256:e26c56c84cbb0fce06b9d583bd50e636381dd5e5f18654c1569af2af2a534035"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "deploy/api.yaml": "image: registry.example.invalid/api:9.0.0\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s20/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

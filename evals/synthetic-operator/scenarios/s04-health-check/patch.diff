@@ -1,0 +1,9 @@
+--- a/deploy/menu-board/deployment.yaml
++++ b/deploy/menu-board/deployment.yaml
+@@ -12 +12,6 @@
+             - containerPort: 8080
++          readinessProbe:
++            httpGet:
++              path: /ready
++              port: 8080
++            initialDelaySeconds: 5

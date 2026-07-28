@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Determine the current disposition of the API image change and report the evidence supporting it.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-20",
+  "plan": "plan.md",
+  "review_requirement": "Base the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "program": "git"
+    }
+  ]
+}

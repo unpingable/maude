@@ -1,0 +1,332 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:df8a7ce2cad26490eff7f8ef21e9ae0377f6a83643547e9f8ad114a32025e074",
+    "source_plan_digest": "sha256:a8c22522093ce574d5c86f2d0f59231d91e6c80e8310f480d6013f4f993c0aee"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "ansible/roles/edge/tasks/packages.yml"
+    ],
+    "diff_fixture": "--- a/ansible/roles/edge/tasks/packages.yml\n+++ b/ansible/roles/edge/tasks/packages.yml\n@@ -6,3 +6,2 @@\n       - jq\n-      - telnetd\n     state: present\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_10",
+    "result_files": {
+      "ansible.cfg": "[defaults]\ninventory = inventory.ini\nroles_path = ansible/roles\nretry_files_enabled = False\n",
+      "ansible/roles/edge/tasks/main.yml": "---\n- name: Load edge package tasks\n  ansible.builtin.import_tasks: packages.yml\n",
+      "ansible/roles/edge/tasks/packages.yml": "---\n- name: Install edge support packages\n  ansible.builtin.package:\n    name:\n      - chrony\n      - jq\n    state: present\n",
+      "inventory.ini": "[edge]\nedge-synthetic ansible_connection=local\n",
+      "site.yml": "---\n- name: Configure synthetic edge hosts\n  hosts: edge\n  gather_facts: false\n  roles:\n    - edge\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_10",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:40:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-10"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:40:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:40:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_10_01",
+        "tool_input": {
+          "file_path": "ansible/roles/edge/tasks/packages.yml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:40:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_10_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_10_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:40:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_10_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:40:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_10_02",
+        "tool_input": {
+          "argv": [
+            "ansible-playbook",
+            "--syntax-check",
+            "site.yml"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:40:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_10_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_10_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:40:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: ansible-playbook --syntax-check site.yml\nreturncode: 0\ncandidate_tree: files=5 sha256:662273f147a7761e012a65a6bbb6830914a51f87c33a0f5d40f0887d1f2926ea\nchanged_file: ansible/roles/edge/tasks/packages.yml bytes=124 sha256:7c82959e14a8c0c6e935203d856f4eef07fa00d5b994edda24e429f9864866fb\nsupport_context: files=4 sha256:ce362c84c520f7fc293bd3d7639855d1855f82f1ed83369ab1d0cc6274435a9c",
+        "tool_call_id": "tc_ux_task_10_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 5,
+          "candidate_tree_digest": "sha256:662273f147a7761e012a65a6bbb6830914a51f87c33a0f5d40f0887d1f2926ea",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 124,
+              "path": "ansible/roles/edge/tasks/packages.yml",
+              "sha256": "sha256:7c82959e14a8c0c6e935203d856f4eef07fa00d5b994edda24e429f9864866fb"
+            }
+          ],
+          "command": {
+            "argv": [
+              "ansible-playbook",
+              "--syntax-check",
+              "site.yml"
+            ],
+            "program": "ansible-playbook"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 4,
+            "tree_digest": "sha256:ce362c84c520f7fc293bd3d7639855d1855f82f1ed83369ab1d0cc6274435a9c"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:40:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_10_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_10_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_10",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:df8a7ce2cad26490eff7f8ef21e9ae0377f6a83643547e9f8ad114a32025e074",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "--syntax-check",
+          "site.yml"
+        ],
+        "program": "ansible-playbook"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:847443532e2c709c7870952de4b7bfbd92b03b9433ac152f301133dc9e9d825b",
+    "grant_id": "sgr_847443532e2c",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:a8c22522093ce574d5c86f2d0f59231d91e6c80e8310f480d6013f4f993c0aee",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "ansible/roles/edge/tasks/packages.yml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41010,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "ansible/roles/edge/tasks/packages.yml"
+    ],
+    "diff_fixture": "--- a/ansible/roles/edge/tasks/packages.yml\n+++ b/ansible/roles/edge/tasks/packages.yml\n@@ -6,3 +6,2 @@\n       - jq\n-      - telnetd\n     state: present\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_10",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s10-obsolete-daemon-config",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 5,
+      "candidate_tree_digest": "sha256:662273f147a7761e012a65a6bbb6830914a51f87c33a0f5d40f0887d1f2926ea",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 124,
+          "path": "ansible/roles/edge/tasks/packages.yml",
+          "sha256": "sha256:7c82959e14a8c0c6e935203d856f4eef07fa00d5b994edda24e429f9864866fb"
+        }
+      ],
+      "command": {
+        "argv": [
+          "ansible-playbook",
+          "--syntax-check",
+          "site.yml"
+        ],
+        "program": "ansible-playbook"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 4,
+        "tree_digest": "sha256:ce362c84c520f7fc293bd3d7639855d1855f82f1ed83369ab1d0cc6274435a9c"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "ansible.cfg": "[defaults]\ninventory = inventory.ini\nroles_path = ansible/roles\nretry_files_enabled = False\n",
+      "ansible/roles/edge/tasks/main.yml": "---\n- name: Load edge package tasks\n  ansible.builtin.import_tasks: packages.yml\n",
+      "ansible/roles/edge/tasks/packages.yml": "---\n- name: Install edge support packages\n  ansible.builtin.package:\n    name:\n      - chrony\n      - jq\n      - telnetd\n    state: present\n",
+      "inventory.ini": "[edge]\nedge-synthetic ansible_connection=local\n",
+      "site.yml": "---\n- name: Configure synthetic edge hosts\n  hosts: edge\n  gather_facts: false\n  roles:\n    - edge\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

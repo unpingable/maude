@@ -1,0 +1,6 @@
+--- a/ansible/roles/edge/tasks/packages.yml
++++ b/ansible/roles/edge/tasks/packages.yml
+@@ -6,3 +6,2 @@
+       - jq
+-      - telnetd
+     state: present

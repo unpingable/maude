@@ -1,0 +1,5 @@
+--- a/config/queue.yaml
++++ b/config/queue.yaml
+@@ -1 +1 @@
+-max_inflight: 100
++max_inflight: 80

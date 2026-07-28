@@ -1,0 +1,83 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "capture": [
+    "complete provider transcript",
+    "all shell commands and outputs",
+    "clean-room filesystem inventory before and after",
+    "environment allowlist",
+    "package inventory before and after",
+    "executable resolution before and after",
+    "endpoint type, ownership, and public response",
+    "network and sibling-access denial evidence"
+  ],
+  "clean_room": {
+    "home": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/home",
+    "host_config_inherited": false,
+    "host_environment_inherited": false,
+    "host_source_mounted": false,
+    "initial_cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/operator",
+    "installed_distribution_module_bytes_mounted": true,
+    "operator_task_network": "denied by the provider tool sandbox; attempts are recorded",
+    "pip": "24.0",
+    "product_repository_checkout_mounted": false,
+    "production_access": false,
+    "production_credentials": false,
+    "provider_transport_network": "retained for the model session only",
+    "python": "3.12.3",
+    "read_only_paths": [
+      "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/media",
+      "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/docs"
+    ],
+    "release_source_archive_mounted": false,
+    "root": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation",
+    "sibling_checkout_mounted": false,
+    "writable_paths": [
+      "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/home",
+      "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/operator",
+      "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/work"
+    ],
+    "xdg_runtime_dir": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i10/installation/run"
+  },
+  "fault_profile": "package_removal_documentation_absent",
+  "governor_state": "retained_external_state",
+  "installation_state": "preinstalled_frozen_2_4_0_dedicated_environment",
+  "permissions": "normal",
+  "public_command_contract": {
+    "allowed_classes": [
+      "filesystem inspection",
+      "Python virtual-environment creation",
+      "literal package installation and inventory commands",
+      "Maude public CLI/TUI adapter",
+      "Unix-socket reachability and public protocol response"
+    ],
+    "implementation_or_evaluator_files": "only installed Maude distribution/module bytes are mounted; checkout source, git metadata, tests, architecture notes, sibling source, and evaluator files are unmounted",
+    "interface": "ordinary POSIX shell, system Python, pip, git, and a mechanically real frozen Maude installation; installed module bytes are the declared source-visibility exception, with no checkout, command rewriting, or package mediator",
+    "operator task network actions": "denied and recorded"
+  },
+  "run_id": "install-i10",
+  "scenario_id": "i10-removal-reset-boundary",
+  "schema": "maude.synthetic-install-environment.v1",
+  "source_media": "not_needed",
+  "source_visibility": "installed-distribution",
+  "source_visibility_exception": {
+    "excludes": [
+      "git metadata",
+      "tests",
+      "architecture notes",
+      "sibling source",
+      "evaluator expectations"
+    ],
+    "operator_instruction": "Do not inspect implementation internals to answer the UX task.",
+    "reason": "a mechanically real installed Python distribution necessarily exposes installed module bytes",
+    "scope": "installed-distribution"
+  },
+  "system_under_test": {
+    "commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+    "name": "maude",
+    "surface": "installation and first-run public surfaces",
+    "version": "2.4.0"
+  },
+  "task_id": "install-task-10",
+  "visible_fixture_root": "fixture"
+}

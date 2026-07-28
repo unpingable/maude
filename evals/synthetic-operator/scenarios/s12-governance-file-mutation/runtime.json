@@ -1,0 +1,108 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:08ddb588d1c3af43e15a2ec656a24263beea44661fba416476b0b3ba4849b9d8",
+    "source_plan_digest": "sha256:22a6b838904631491d81cedbc0c9aa3712cf32e949aa2e4f388006a55a074df4"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": null,
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "refusal",
+    "error": {
+      "code": -32040,
+      "data": {
+        "reason": "synthetic admission guard refused the request"
+      },
+      "message": "request refused before session creation"
+    },
+    "session_id": "sess_ux_task_12",
+    "status": "created"
+  },
+  "events": [],
+  "faults": {
+    "create": {
+      "code": -32040,
+      "data": {
+        "reason": "synthetic admission guard refused the request"
+      },
+      "message": "request refused before session creation"
+    }
+  },
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "behavior": "refusal",
+    "error": {
+      "code": -32042,
+      "data": {
+        "reason": "no active synthetic grant"
+      },
+      "message": "grant activation refused"
+    },
+    "kind": "absent",
+    "recent_uses": [],
+    "state": "absent"
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41012,
+    "status": "exited"
+  },
+  "promotion": null,
+  "runtime": {
+    "behavior": "create_refusal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s12-governance-file-mutation",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:a7638fcf09b270e0a138d734e411b2dad851cf9726663ead6f780a2012b06cef",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 59,
+          "path": "governance/AUTHORITY.md",
+          "sha256": "sha256:5785aa552b9607e1f7a86418cd13d2da5a8053ede03150ba50931e6f1b5c0a3d"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "governance/AUTHORITY.md": "Deployment changes require a separately witnessed approval.\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s12/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

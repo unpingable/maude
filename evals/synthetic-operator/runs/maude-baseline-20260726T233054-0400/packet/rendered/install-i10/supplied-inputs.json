@@ -1,0 +1,157 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "evaluator_materialization_source": {
+    "bytes": 39860,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+    "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+  },
+  "generated_visible_state": {
+    "destination": "venv",
+    "installation_media_provenance": {
+      "bytes": 39860,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+      "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+    },
+    "kind": "fresh offline installed distribution",
+    "materializer": "literal system venv and pip --no-index --require-hashes",
+    "setup_transcript_mounted_for_operator": false,
+    "wheelhouse_mounted_for_operator": false
+  },
+  "run_id": "install-i10",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude-installation",
+  "system_prompt": {
+    "bytes": 1799,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-system.md",
+    "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+  },
+  "terminal_bridge_disclosure": null,
+  "user_prompt": {
+    "bytes": 3883,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-prompt.md",
+    "sha256": "ceb321ebd9a4cb7643f802723abbcf242d40af51459139928052ee2f16e45792"
+  },
+  "visible_files": [
+    {
+      "bytes": 12981,
+      "destination": "README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "destination": "docs/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "destination": "operator/operator-pty",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_pty.py",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator/operator-retrospective",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 117,
+      "destination": "project/.governor/ownership.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/project/.governor/ownership.json",
+      "sha256": "983698a6586c790b1f722fc35f24ee99ee4da33b6ff453ec36c260102e5f3550"
+    },
+    {
+      "bytes": 120,
+      "destination": "project/ownership.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/project/ownership.json",
+      "sha256": "2114cf3753d37d969b64d6f485055cd2470fba15e7f9b6ac12cdd104d1e4cc0e"
+    },
+    {
+      "bytes": 817,
+      "destination": "pyproject.toml",
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1649,
+      "destination": "task/assignment.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-task.md",
+      "sha256": "f91b4468c1aec88093f88f505e84ac77cfd674e034fa95fbe955cd719c0a5aeb"
+    },
+    {
+      "bytes": 416,
+      "destination": "task/handoff.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/handoff.json",
+      "sha256": "8eacb5f5c577367089548c7d92adfdba6e0012dcc305659167602a13ef526361"
+    },
+    {
+      "bytes": 1776,
+      "destination": "task/task.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/task.json",
+      "sha256": "51436c12ebdc68f8e3afff7a68326db1c4eed1cd500f02b770bd1f6f44b13a2c"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/README.md",
+    "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/environment.json",
+    "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/expected-disposition.json",
+    "repository checkout, git metadata, tests, and architecture notes",
+    "host environment, config, credentials, and package cache",
+    "Agent Governor and sibling checkouts",
+    "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary",
+    "installation wheelhouse, build transcript, and materializer logs",
+    "other installation runs and setup evidence",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

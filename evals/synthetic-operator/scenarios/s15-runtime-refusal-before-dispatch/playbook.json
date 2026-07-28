@@ -1,0 +1,5 @@
+{
+  "description": "Use the supplied packet to change the worker image from 4.2.0 to 4.2.1 and report the resulting disposition.",
+  "playbook_id": "synthetic.ux-task-15",
+  "schema": "synthetic-playbook.v1"
+}

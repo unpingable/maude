@@ -1,0 +1,326 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:5d33b4abef7ee51e3b15d3b389f1ef60a2f9abd48d77b2e9013360238fba0348",
+    "source_plan_digest": "sha256:1d1c294573f8d7157c64c088b44a245d8283f42bed82d778fd5828bab95a8b8a"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "clusters/store-17/apps/menu/deployment.yaml"
+    ],
+    "diff_fixture": "--- a/clusters/store-17/apps/menu/deployment.yaml\n+++ b/clusters/store-17/apps/menu/deployment.yaml\n@@ -9,2 +9,2 @@\n         - name: menu-api\n-          image: registry.example.invalid/menu-api:2.7.3\n+          image: registry.example.invalid/menu-api:2.7.4\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_01",
+    "result_files": {
+      "clusters/store-17/apps/menu/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-api\nspec:\n  template:\n    spec:\n      containers:\n        - name: menu-api\n          image: registry.example.invalid/menu-api:2.7.4\n",
+      "clusters/store-17/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - apps/menu/deployment.yaml\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_01",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:31:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-01"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:31:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:31:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_01_01",
+        "tool_input": {
+          "file_path": "clusters/store-17/apps/menu/deployment.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:31:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_01_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_01_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:31:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_01_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:31:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_01_02",
+        "tool_input": {
+          "argv": [
+            "kustomize",
+            "build",
+            "clusters/store-17"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:31:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_01_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_01_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:31:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: kustomize build clusters/store-17\nreturncode: 0\ncandidate_tree: files=2 sha256:d09dc5268f35bd52ae2ca2ca5b4ea1daae0386153a79cca76991a90f125cbb55\nchanged_file: clusters/store-17/apps/menu/deployment.yaml bytes=192 sha256:cc23b9d8ce1904ff6dd38a7205558c28de4d4bc75cfbde166641ebb501e206ec\nsupport_context: files=1 sha256:4e5a32ec6eacd4580153ce3c7eb15b65e8237e00873d37a1177ec71906e46563",
+        "tool_call_id": "tc_ux_task_01_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 2,
+          "candidate_tree_digest": "sha256:d09dc5268f35bd52ae2ca2ca5b4ea1daae0386153a79cca76991a90f125cbb55",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 192,
+              "path": "clusters/store-17/apps/menu/deployment.yaml",
+              "sha256": "sha256:cc23b9d8ce1904ff6dd38a7205558c28de4d4bc75cfbde166641ebb501e206ec"
+            }
+          ],
+          "command": {
+            "argv": [
+              "kustomize",
+              "build",
+              "clusters/store-17"
+            ],
+            "program": "kustomize"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 1,
+            "tree_digest": "sha256:4e5a32ec6eacd4580153ce3c7eb15b65e8237e00873d37a1177ec71906e46563"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:31:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_01_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_01_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_01",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:5d33b4abef7ee51e3b15d3b389f1ef60a2f9abd48d77b2e9013360238fba0348",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "build",
+          "clusters/store-17"
+        ],
+        "program": "kustomize"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:bf22f3cbdd60a9a04bb6d9fd204cddb6cdd55d073dda9cbcdf6378df89f76abc",
+    "grant_id": "sgr_bf22f3cbdd60",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:1d1c294573f8d7157c64c088b44a245d8283f42bed82d778fd5828bab95a8b8a",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "clusters/store-17/apps/menu/deployment.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41001,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "clusters/store-17/apps/menu/deployment.yaml"
+    ],
+    "diff_fixture": "--- a/clusters/store-17/apps/menu/deployment.yaml\n+++ b/clusters/store-17/apps/menu/deployment.yaml\n@@ -9,2 +9,2 @@\n         - name: menu-api\n-          image: registry.example.invalid/menu-api:2.7.3\n+          image: registry.example.invalid/menu-api:2.7.4\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_01",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s01-kubernetes-image-update",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 2,
+      "candidate_tree_digest": "sha256:d09dc5268f35bd52ae2ca2ca5b4ea1daae0386153a79cca76991a90f125cbb55",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 192,
+          "path": "clusters/store-17/apps/menu/deployment.yaml",
+          "sha256": "sha256:cc23b9d8ce1904ff6dd38a7205558c28de4d4bc75cfbde166641ebb501e206ec"
+        }
+      ],
+      "command": {
+        "argv": [
+          "kustomize",
+          "build",
+          "clusters/store-17"
+        ],
+        "program": "kustomize"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 1,
+        "tree_digest": "sha256:4e5a32ec6eacd4580153ce3c7eb15b65e8237e00873d37a1177ec71906e46563"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "clusters/store-17/apps/menu/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: menu-api\nspec:\n  template:\n    spec:\n      containers:\n        - name: menu-api\n          image: registry.example.invalid/menu-api:2.7.3\n",
+      "clusters/store-17/kustomization.yaml": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n  - apps/menu/deployment.yaml\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s01/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

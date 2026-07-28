@@ -1,0 +1,5 @@
+{
+  "description": "Raise only the api container memory limit from 256Mi to 384Mi; leave requests and CPU limits unchanged.",
+  "playbook_id": "synthetic.ux-task-03",
+  "schema": "synthetic-playbook.v1"
+}

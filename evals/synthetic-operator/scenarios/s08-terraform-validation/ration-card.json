@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "terraform -chdir=terraform validate"
+  ],
+  "allowed_write_paths": [
+    "terraform/variables.tf"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

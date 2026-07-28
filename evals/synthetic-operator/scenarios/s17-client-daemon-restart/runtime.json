@@ -1,0 +1,245 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:0eb08a5578a492147c8f8bc7a234181560a362bec834d93cfeada262f6881b7a",
+    "source_plan_digest": "sha256:834f93518c0a85002353e1c34b045ac90106361f033ae11c3125039c5c0a1da6"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "config/proxy.yaml"
+    ],
+    "diff_fixture": "--- a/config/proxy.yaml\n+++ b/config/proxy.yaml\n@@ -1 +1 @@\n-upstream_timeout_seconds: 15\n+upstream_timeout_seconds: 20\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_17",
+    "result_files": {
+      "config/proxy.yaml": "upstream_timeout_seconds: 20\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_17",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:47:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-17"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:47:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_17_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:47:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_002",
+      "kind": "agent_output",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_17_001",
+      "payload": {
+        "text": "The runtime has committed the result."
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:47:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_003",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_17_002",
+      "payload": {
+        "tool_call_id": "tc_ux_task_17_01",
+        "tool_input": {
+          "file_path": "config/proxy.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 3,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:47:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_004",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_17_003",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_17_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_17_01"
+      ],
+      "seq": 4,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:47:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_17_005",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_17_004",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_17_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_17",
+      "source_layer": "adapter"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:0eb08a5578a492147c8f8bc7a234181560a362bec834d93cfeada262f6881b7a",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:a8e84b6034aee2a5538847ab26c468a34456c36917f3bdc19de896f901277269",
+    "grant_id": "sgr_a8e84b6034ae",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:834f93518c0a85002353e1c34b045ac90106361f033ae11c3125039c5c0a1da6",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "config/proxy.yaml"
+    ]
+  },
+  "initial_sessions": [
+    {
+      "backend_kind": "synthetic_fixture",
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "exit_code": null,
+      "session_id": "sess_ux_task_17",
+      "status": "running",
+      "task": "Continue handling the supplied proxy timeout change and report its current disposition.",
+      "updated_at": "2026-07-27T03:47:59Z"
+    }
+  ],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41017,
+    "status": "running"
+  },
+  "promotion": {
+    "changed_files": [
+      "config/proxy.yaml"
+    ],
+    "diff_fixture": "--- a/config/proxy.yaml\n+++ b/config/proxy.yaml\n@@ -1 +1 @@\n-upstream_timeout_seconds: 15\n+upstream_timeout_seconds: 20\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_17",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s17-client-daemon-restart",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:110934179f37a8d3c1822b6e5f89bdbcf9916ebe59633b92c2dca7b8bee5f367",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 29,
+          "path": "config/proxy.yaml",
+          "sha256": "sha256:ecd3a1b264d7062e3aa0f6eadb0f7f4dfe86b72a3be95d4af9f2b9723ec55780"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "config/proxy.yaml": "upstream_timeout_seconds: 15\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

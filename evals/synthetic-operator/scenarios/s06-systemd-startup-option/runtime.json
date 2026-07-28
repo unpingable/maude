@@ -1,0 +1,324 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:0870262da0266c6d04d3f03f6b7cec3f63d4e1a937aec84d67c55477a4b97ffc",
+    "source_plan_digest": "sha256:80a6d25308b7cbeeecbf6f0984bacf9d0404287f1c7ac7ea68f9276a01c18184"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "systemd/menu-board.service"
+    ],
+    "diff_fixture": "--- a/systemd/menu-board.service\n+++ b/systemd/menu-board.service\n@@ -4,3 +4,3 @@\n [Service]\n-ExecStart=/usr/bin/env menu-board --foreground\n+ExecStart=/usr/bin/env menu-board --foreground --config /etc/menu-board/config.toml\n Restart=on-failure\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_06",
+    "result_files": {
+      "systemd/menu-board.service": "[Unit]\nDescription=Menu board renderer\n\n[Service]\nExecStart=/usr/bin/env menu-board --foreground --config /etc/menu-board/config.toml\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_06",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:36:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-06"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:36:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:36:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_06_01",
+        "tool_input": {
+          "file_path": "systemd/menu-board.service"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:36:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_06_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_06_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:36:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_06_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:36:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_06_02",
+        "tool_input": {
+          "argv": [
+            "systemd-analyze",
+            "verify",
+            "systemd/menu-board.service"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:36:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_06_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_06_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:36:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: systemd-analyze verify systemd/menu-board.service\nreturncode: 0\ncandidate_tree: files=1 sha256:ff45e60761c8cb5109983450b990184d117864b9b47bac74801dc40234b35ce5\nchanged_file: systemd/menu-board.service bytes=191 sha256:c865d1da15f1075977b9a8040dbc11dbe71831336421f2c3ef44ade4911a5b28\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_06_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:ff45e60761c8cb5109983450b990184d117864b9b47bac74801dc40234b35ce5",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 191,
+              "path": "systemd/menu-board.service",
+              "sha256": "sha256:c865d1da15f1075977b9a8040dbc11dbe71831336421f2c3ef44ade4911a5b28"
+            }
+          ],
+          "command": {
+            "argv": [
+              "systemd-analyze",
+              "verify",
+              "systemd/menu-board.service"
+            ],
+            "program": "systemd-analyze"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:36:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_06_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_06_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_06",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:0870262da0266c6d04d3f03f6b7cec3f63d4e1a937aec84d67c55477a4b97ffc",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "verify",
+          "systemd/menu-board.service"
+        ],
+        "program": "systemd-analyze"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:6406b0d45ce49d357cf33db9d25a7a4f16dc957496559e551fe0d73339fa5197",
+    "grant_id": "sgr_6406b0d45ce4",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:80a6d25308b7cbeeecbf6f0984bacf9d0404287f1c7ac7ea68f9276a01c18184",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "systemd/menu-board.service"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41006,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "systemd/menu-board.service"
+    ],
+    "diff_fixture": "--- a/systemd/menu-board.service\n+++ b/systemd/menu-board.service\n@@ -4,3 +4,3 @@\n [Service]\n-ExecStart=/usr/bin/env menu-board --foreground\n+ExecStart=/usr/bin/env menu-board --foreground --config /etc/menu-board/config.toml\n Restart=on-failure\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_06",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s06-systemd-startup-option",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:ff45e60761c8cb5109983450b990184d117864b9b47bac74801dc40234b35ce5",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 191,
+          "path": "systemd/menu-board.service",
+          "sha256": "sha256:c865d1da15f1075977b9a8040dbc11dbe71831336421f2c3ef44ade4911a5b28"
+        }
+      ],
+      "command": {
+        "argv": [
+          "systemd-analyze",
+          "verify",
+          "systemd/menu-board.service"
+        ],
+        "program": "systemd-analyze"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "systemd/menu-board.service": "[Unit]\nDescription=Menu board renderer\n\n[Service]\nExecStart=/usr/bin/env menu-board --foreground\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s06/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

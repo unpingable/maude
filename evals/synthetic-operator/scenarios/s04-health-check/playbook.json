@@ -1,0 +1,5 @@
+{
+  "description": "Add an HTTP readiness probe on /ready port 8080 with a five-second initial delay.",
+  "playbook_id": "synthetic.ux-task-04",
+  "schema": "synthetic-playbook.v1"
+}

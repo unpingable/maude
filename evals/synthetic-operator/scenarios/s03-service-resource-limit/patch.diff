@@ -1,0 +1,6 @@
+--- a/deploy/api/deployment.yaml
++++ b/deploy/api/deployment.yaml
+@@ -14,2 +14,2 @@
+               cpu: 500m
+-              memory: 256Mi
++              memory: 384Mi

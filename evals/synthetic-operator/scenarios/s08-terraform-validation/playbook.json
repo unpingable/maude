@@ -1,0 +1,5 @@
+{
+  "description": "Cap replicas at 50 in the variable validation rule. Validate only; never plan or apply infrastructure.",
+  "playbook_id": "synthetic.ux-task-08",
+  "schema": "synthetic-playbook.v1"
+}

@@ -1,0 +1,86 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "custody": {
+    "artifact_serialized_after_initial_inspection": true,
+    "ordering_basis": "The campaign root ran these commands before creating campaign artifacts and retained their exact outputs in the active task record.",
+    "wall_clock_captured": false,
+    "warning": "This later serialization preserves the observed bytes but is not an independently timestamped proof of ordering."
+  },
+  "observations": {
+    "repository_root": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "/home/jbeck/git/agent_gov_ui/maude\n"
+    },
+    "branch": {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "main\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "9d5a54f476a52826379a9ae8d6710551253a6493\n"
+    },
+    "origin": {
+      "argv": [
+        "git",
+        "remote",
+        "get-url",
+        "origin"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "github-unpingable:unpingable/maude.git\n"
+    },
+    "status_short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "upstream": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--abbrev-ref",
+        "@{upstream}"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "origin/main\n"
+    },
+    "upstream_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "@{upstream}"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c\n"
+    }
+  },
+  "repository_path": "/home/jbeck/git/agent_gov_ui/maude",
+  "schema": "maude.synthetic-operator.initial-repository-observation.v1"
+}

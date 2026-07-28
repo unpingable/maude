@@ -1,0 +1,157 @@
+{
+  "archive_mounted_for_operator": false,
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "evaluator_materialization_source": {
+    "bytes": 39860,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+    "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+  },
+  "generated_visible_state": {
+    "destination": null,
+    "installation_media_provenance": {
+      "bytes": 39860,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+      "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+    },
+    "kind": "none",
+    "materializer": null,
+    "setup_transcript_mounted_for_operator": false,
+    "wheelhouse_mounted_for_operator": false
+  },
+  "run_id": "install-i09",
+  "schema": "maude.synthetic-operator.frozen-supplied-inputs.v1",
+  "setup_transcript_mounted_for_operator": false,
+  "surface": "maude-installation",
+  "system_prompt": {
+    "bytes": 1799,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-system.md",
+    "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+  },
+  "terminal_bridge_disclosure": null,
+  "user_prompt": {
+    "bytes": 3640,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-prompt.md",
+    "sha256": "e4c23dad6185a9536a2f86eba44267b41762551ef7bfeb852fcfa4ae3e7c35a7"
+  },
+  "visible_files": [
+    {
+      "bytes": 12981,
+      "destination": "README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "destination": "docs/README.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "destination": "docs/commands.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "destination": "docs/configuration.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "destination": "operator/operator-pty",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_pty.py",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "destination": "operator/operator-retrospective",
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "destination": "pyproject.toml",
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 221,
+      "destination": "state/prior-installation.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/state/prior-installation.json",
+      "sha256": "84d06966e96b2514f70d24c1f51590e10db75997a942fe45c3f91d5e638be5eb"
+    },
+    {
+      "bytes": 1404,
+      "destination": "task/assignment.md",
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-task.md",
+      "sha256": "f209c954534472159eebb910925e6b59821d0aa79924903644ea3d2537b0c040"
+    },
+    {
+      "bytes": 309,
+      "destination": "task/handoff.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/handoff.json",
+      "sha256": "02ba57421384c6b3f3298643ce3bbb24e2066396997ec66fd3f1f68adfb42662"
+    },
+    {
+      "bytes": 117,
+      "destination": "task/state-ownership.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/state/ownership.json",
+      "sha256": "54a34d947f32e5d9480d23d0e4c7de1914789f233462533c89916729d3fcd709"
+    },
+    {
+      "bytes": 1529,
+      "destination": "task/task.json",
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/task.json",
+      "sha256": "8993c22aa92d395ae389eccaebd13934ab651197c277926babf5c0d1ab1a9572"
+    }
+  ],
+  "withheld": [
+    "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/README.md",
+    "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/environment.json",
+    "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/expected-disposition.json",
+    "product source and installed distribution",
+    "host environment, config, credentials, and package cache",
+    "Agent Governor and sibling checkouts",
+    "rubric, taxonomy, expected disposition, prior runs, and evaluator commentary",
+    "installation wheelhouse, build transcript, and materializer logs",
+    "other installation runs and setup evidence",
+    "grading rubric and failure taxonomy",
+    "expected answers or expected refusal points",
+    "prior run transcripts and grades",
+    "evaluator commentary and campaign findings"
+  ]
+}

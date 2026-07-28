@@ -1,0 +1,183 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:94eba71cfbf011bbd095af822644c2952379badca25700cc9f46808e16d1d19e",
+    "source_plan_digest": "sha256:3bcdd5c9722436369f3e34e048025dcbc5604bac2c71f7f2de29cddd713153ea"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": null,
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_16",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:46:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_16_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-16"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_16",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:46:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_16_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_16_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_16",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:46:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_16_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_16_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_16_01",
+        "tool_input": {
+          "file_path": "config/queue.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_16",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:46:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_16_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_16_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_16_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_16_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_16",
+      "source_layer": "policy"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:94eba71cfbf011bbd095af822644c2952379badca25700cc9f46808e16d1d19e",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "-m",
+          "pytest",
+          "tests/test_queue_config.py"
+        ],
+        "program": "python3"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:7469f9f49ff91386a0a0d9751aa87ea69be6967abac56567d13bc66629478f84",
+    "grant_id": "sgr_7469f9f49ff9",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:3bcdd5c9722436369f3e34e048025dcbc5604bac2c71f7f2de29cddd713153ea",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "config/queue.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41016,
+    "status": "running"
+  },
+  "promotion": null,
+  "runtime": {
+    "behavior": "timeout",
+    "timeout_seconds": 30
+  },
+  "scenario_id": "s16-execution-timeout",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 2,
+      "candidate_tree_digest": "sha256:02a7db781898bc6603c6bff59a7249131ef5a081ea7e77c3176ea9df77cfefe9",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 17,
+          "path": "config/queue.yaml",
+          "sha256": "sha256:7a7332afedfc6187e88d49f3b49736f864fa67d67be374a36d962a65dc1832ec"
+        }
+      ],
+      "command": {
+        "argv": [
+          "python3",
+          "-m",
+          "pytest",
+          "tests/test_queue_config.py"
+        ],
+        "program": "python3"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 1,
+        "tree_digest": "sha256:1db88b33a4989bc3df9f00d577d46611f838b8a18f606beec783f85795bdfff8"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "config/queue.yaml": "max_inflight: 100\n",
+      "tests/test_queue_config.py": "from pathlib import Path\n\n\ndef test_max_inflight() -> None:\n    assert (\n        Path(\"config/queue.yaml\").read_text(encoding=\"utf-8\")\n        == \"max_inflight: 80\\n\"\n    )\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s16/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

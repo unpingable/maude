@@ -1,0 +1,294 @@
+{
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "coaching": "none",
+  "codex_boundary": {
+    "approval_policy": "never",
+    "built_in_tools": [],
+    "grader_action_surface": "strict grader MCP evidence reader in a read-only, task-scoped bundle; no command broker",
+    "grader_bare_mcp_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "operator_action_surface": "strict operator MCP terminal -> credential-free broker -> one fresh no-network bubblewrap namespace per command",
+    "operator_bare_mcp_tools": [
+      "terminal"
+    ],
+    "operator_command_external_network": false,
+    "operator_command_provider_credentials_received": false,
+    "operator_command_semantic_prompt_received": false,
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider_task_paths_added": [],
+    "provider_transport": "task-blind Bubblewrap transport retains private provider auth and network only until transport exit; source and operator task paths are absent",
+    "semantic_prompt_delivery": "one initial prompt through a fresh ephemeral Codex process; no follow-up, resume, or continuation",
+    "trusted_stdio_shim": "hash-pinned direct MCP shim shares provider transport but is proved not to read provider auth"
+  },
+  "filesystem_isolation": "task-blind Codex transport plus strict one-tool MCP and a fresh per-command no-network Bubblewrap namespace",
+  "follow_up_messages": 0,
+  "fresh_grader_process": true,
+  "fresh_operator_process": true,
+  "grader": {
+    "approval_policy": "never",
+    "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Claude is unavailable, so cross-family isolation comparison is unsupported.",
+    "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "built_in_tools": [],
+    "cli": "codex",
+    "exact_provider_tool_allowlist_supported": true,
+    "expected_family": "GPT",
+    "freshness": [
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_bare_mcp_tools": [
+      "evidence"
+    ],
+    "grader_boundary": "one read-only evidence MCP tool over the frozen grade bundle; no command broker",
+    "grader_flags": [
+      "exec",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--strict-config",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--model",
+      "gpt-5.6-sol",
+      "--config",
+      "model_reasoning_effort=\"low\"",
+      "--config",
+      "approval_policy=\"never\"",
+      "<then exact strict-MCP configuration, every intrinsic and optional feature disable, output schema, and one combined prompt>"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_auto_approval_safety": {
+      "exact_enabled_tool_count_per_role": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true
+    },
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "model_argument": "gpt-5.6-sol",
+    "operator_bare_mcp_tools": [
+      "terminal"
+    ],
+    "operator_boundary": "credential-free, prompt-free broker launches every terminal request in a fresh no-network mount/PID namespace",
+    "operator_flags": [
+      "exec",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--strict-config",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--json",
+      "--model",
+      "gpt-5.6-sol",
+      "--config",
+      "model_reasoning_effort=\"low\"",
+      "--config",
+      "approval_policy=\"never\"",
+      "<then exact strict-MCP configuration, every intrinsic and optional feature disable, and one combined prompt>"
+    ],
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider": "OpenAI",
+    "provider_task_boundary": "task-blind provider Bubblewrap retains private auth and network until exit; a hash-pinned direct stdio MCP shim exposes one role-specific tool",
+    "reasoning_effort": "low",
+    "resolved_executable": "/opt/node/bin/codex",
+    "system_prompt_delivery": "operator/grader system text is concatenated ahead of the exact user prompt because codex exec exposes one initial prompt",
+    "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+    "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+    "trusted_shim_limitation": "the direct stdio MCP shim shares the provider transport namespace and its auth/network mounts, but is proved not to read provider auth; no stronger auth-free or offline claim is made",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "operator": {
+    "approval_policy": "never",
+    "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Claude is unavailable, so cross-family isolation comparison is unsupported.",
+    "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "built_in_tools": [],
+    "cli": "codex",
+    "exact_provider_tool_allowlist_supported": true,
+    "expected_family": "GPT",
+    "freshness": [
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_bare_mcp_tools": [
+      "evidence"
+    ],
+    "grader_boundary": "one read-only evidence MCP tool over the frozen grade bundle; no command broker",
+    "grader_flags": [
+      "exec",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--strict-config",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--json",
+      "--model",
+      "gpt-5.6-sol",
+      "--config",
+      "model_reasoning_effort=\"low\"",
+      "--config",
+      "approval_policy=\"never\"",
+      "<then exact strict-MCP configuration, every intrinsic and optional feature disable, output schema, and one combined prompt>"
+    ],
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "mcp_auto_approval_safety": {
+      "exact_enabled_tool_count_per_role": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true
+    },
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "model_argument": "gpt-5.6-sol",
+    "operator_bare_mcp_tools": [
+      "terminal"
+    ],
+    "operator_boundary": "credential-free, prompt-free broker launches every terminal request in a fresh no-network mount/PID namespace",
+    "operator_flags": [
+      "exec",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--strict-config",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "workspace-write",
+      "--json",
+      "--model",
+      "gpt-5.6-sol",
+      "--config",
+      "model_reasoning_effort=\"low\"",
+      "--config",
+      "approval_policy=\"never\"",
+      "<then exact strict-MCP configuration, every intrinsic and optional feature disable, and one combined prompt>"
+    ],
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "provider": "OpenAI",
+    "provider_task_boundary": "task-blind provider Bubblewrap retains private auth and network until exit; a hash-pinned direct stdio MCP shim exposes one role-specific tool",
+    "reasoning_effort": "low",
+    "resolved_executable": "/opt/node/bin/codex",
+    "system_prompt_delivery": "operator/grader system text is concatenated ahead of the exact user prompt because codex exec exposes one initial prompt",
+    "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+    "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+    "trusted_shim_limitation": "the direct stdio MCP shim shares the provider transport namespace and its auth/network mounts, but is proved not to read provider auth; no stronger auth-free or offline claim is made",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "operator_command_mounts": [
+    "../repo"
+  ],
+  "operator_home_host_path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s06/private-operator-home",
+  "operator_home_mount": "/home/operator",
+  "provider_auth_config_separate_from_operator_home": true,
+  "provider_transport_task_paths": [],
+  "public_cli_boundary": {
+    "broker_receives_provider_credentials": false,
+    "broker_receives_semantic_prompt": false,
+    "client": "public_cli.py",
+    "operator_socket_path": "/run/maude-public/broker.sock",
+    "raw_driver_queue_visible": false,
+    "transport": "one evaluator-owned Unix socket",
+    "trusted_broker": "public_cli_broker.py"
+  },
+  "run_id": "maude-s06",
+  "schema": "maude.synthetic-operator.frozen-session-config.v1"
+}

@@ -1,0 +1,4257 @@
+{
+  "artifacts": [
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 15790,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/SYNTHETIC-OPERATOR-EVALUATION.md",
+      "sha256": "a7f1b561eabed836fc81fe71924d4edfac5355cfa26e27c6ca0ee1c67906efa2"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 4536,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/README.md",
+      "sha256": "e1c16807af438f5834bcff08840b0508b14ff7799d95d527106e3c0944e62234"
+    },
+    {
+      "bytes": 16899,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/README.md",
+      "sha256": "b6c4c8aec4b56c446642eb2e7b577d93aeed74a8586012e831b8b44b06f25156"
+    },
+    {
+      "bytes": 125542,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/auth_gate_selftest.py",
+      "sha256": "48c65eb077291f78a34495e3aa15eaf9b6c1d30317bf00436d73332468641dde"
+    },
+    {
+      "bytes": 31291,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_common.py",
+      "sha256": "2b0e53dbacb22e6d88247d82a1aa65dd3821c49f7324c0d30da833f0d0e1e3a3"
+    },
+    {
+      "bytes": 565450,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "2000e78c1bfdc5f821cb843b02ca787a28d123a92ab0bc4fabe099e2c2c90b36"
+    },
+    {
+      "bytes": 56742,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/claude_mcp_bridge.py",
+      "sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
+    },
+    {
+      "bytes": 238380,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/freeze_campaign.py",
+      "sha256": "7fed2a48fbf4bfa8d4d0486d07fe72e76a9b838f8e2f5322c2cd2ee7c9cd81f9"
+    },
+    {
+      "bytes": 6398,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/installation_endpoint.py",
+      "sha256": "83ea4e2b207eee257ea202528c5b8cef4e39602ffb1e6edb5ad2502c7024ab4b"
+    },
+    {
+      "bytes": 215,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 12389,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/maude_driver.py",
+      "sha256": "fb0f5d44c4bf06df97bbca38a5eca34876745b13624e1c059b3105ad59f3f778"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_pty.py",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_retrospective.py",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 58147,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/prepare_installation_media.py",
+      "sha256": "b69f96ee8d1c47b79095b05e18117f1827140e7d4f2d757643e38c230a24e61e"
+    },
+    {
+      "bytes": 6047,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 16736,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/public_cli_broker.py",
+      "sha256": "fafe3e530fa91ca0ec0e7164c1607ad76d53527d109375934139e36998eac575"
+    },
+    {
+      "bytes": 66196,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/synthetic_runtime.py",
+      "sha256": "f6c5d131d4ab7cce5d52a7d1b81c9341fdea8c1b4f9693b40877cf1f8b45bf55"
+    },
+    {
+      "bytes": 13330,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/test_authority_fixtures.py",
+      "sha256": "482635ea38c16d7292866d7a4bdf0db505a1bfff7ceb72db612781f8e09dbd64"
+    },
+    {
+      "bytes": 7372,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/test_fixture_fidelity.py",
+      "sha256": "10324119f97e758cbdb4e06a0f748727e5b2b1df41969ad96ab05c3c9f57ec03"
+    },
+    {
+      "bytes": 572,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/experienced-authority-description-record-operator.md",
+      "sha256": "1feff6409d4c524a1456c97225cfeb6bf37eb315d931808fd2e094d0cd29d7cc"
+    },
+    {
+      "bytes": 417,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/installation-component-only-operator.md",
+      "sha256": "d3fc4b6f22a56f58eb179a98bddcc9e46c4dcb9643ea4d8de9d5e313a0f8d7da"
+    },
+    {
+      "bytes": 445,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/installation-literal-doc-operator.md",
+      "sha256": "975cbae7d145e4e9a5f8e323fe6ddc6c9214bb42deced08a07d37765fedb75c0"
+    },
+    {
+      "bytes": 399,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/installation-shortest-path-sre.md",
+      "sha256": "2b7fc296bc72f0479fddce47dc4e620bd6cb367f6c036f6bbdf5f0e8d5422959"
+    },
+    {
+      "bytes": 440,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/installation-source-install-developer.md",
+      "sha256": "dafd64a1e218bdfa0c11c5170b143f099393d46da7b6943636a61deeed32d81a"
+    },
+    {
+      "bytes": 437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/installation-terminology-new-sysadmin.md",
+      "sha256": "15ab783ac7690a0db719e665185bc92c15e2a3a9e0bea4c2772a3ae7954f3dfc"
+    },
+    {
+      "bytes": 365,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/junior-on-call-operator.md",
+      "sha256": "77e5282d101b5829bc43c2c31bf41246bfd048d4f9ebc265663586ab10b6c611"
+    },
+    {
+      "bytes": 334,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/platform-engineer.md",
+      "sha256": "d9c82d485ecabbb2f022bfe67542a703776cc0447bd9dd70ad5f62dbdc93a537"
+    },
+    {
+      "bytes": 426,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/production-sre-on-call.md",
+      "sha256": "022728f88920ae4bf023beea11ef03336036612a163e7bb42c6b119128bf0481"
+    },
+    {
+      "bytes": 540,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/retail-edge-cluster-caretaker.md",
+      "sha256": "766ee0f5f560b2237a421250a9edaa3833aed2ef20a8c8aa3512c05db3d3856b"
+    },
+    {
+      "bytes": 422,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/security-conscious-operator.md",
+      "sha256": "847615769374277c7ceed056a68c9f953cc5da6c6191e9012c5a6a93b6c05074"
+    },
+    {
+      "bytes": 420,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/senior-devops-engineer.md",
+      "sha256": "eab8012a1a1eb0644737a3a41c89f527c1fe042128770aea7a87c1f866622f09"
+    },
+    {
+      "bytes": 361,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/skeptical-first-time-user.md",
+      "sha256": "0618eb90e3ff0b40df9610b086c7d79f28e8307179f1b97b009c5653d82153d0"
+    },
+    {
+      "bytes": 336,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/sleep-deprived-incident-operator.md",
+      "sha256": "02867f5a07462dc5f3efbe5851068a68e62b20e6a75a8a8a5ce84422a07fd6c4"
+    },
+    {
+      "bytes": 421,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/personas/traditional-systems-administrator.md",
+      "sha256": "41fbb826b8086661163afd32b71c3cc3338514fc0f201df2ed9f0f24a10724ce"
+    },
+    {
+      "bytes": 3779376,
+      "media_type": "application/octet-stream",
+      "mode": "0775",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/bin/docket",
+      "sha256": "1fa41093c5a9b37c7607eeeaf2db73b8a703d7d8b0e4dcc93076f9a0b6aabbc6"
+    },
+    {
+      "bytes": 609584,
+      "media_type": "application/octet-stream",
+      "mode": "0775",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/bin/gwr-git-broker",
+      "sha256": "559d86cb79ae9a426b2873aa0d8ad28056cff59f967fa5ec4f3374379c65f41e"
+    },
+    {
+      "bytes": 6268,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/docs/attempt-dossier.md",
+      "sha256": "aff983fb66b73c3b568de9fe45a9ffdce216c723248465f193c53fb9a50e9422"
+    },
+    {
+      "bytes": 4007,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/docs/effect-classes.md",
+      "sha256": "b74e46488820508e9307d138c31e642293d347375ab4b522b89bd88d0b512d11"
+    },
+    {
+      "bytes": 11055,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/docs/operator-runbook.md",
+      "sha256": "cd56313afb01aecb6beab088d0e897277207765f47a7933b49e8f2c27259bcf9"
+    },
+    {
+      "bytes": 8253,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/docs/repository-identity-and-ref-continuity.md",
+      "sha256": "a64f0f02a58b878575cad42ce597bba12824531af3c25556d9b7c9544319a3e4"
+    },
+    {
+      "bytes": 6221,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/docs/trust-model.md",
+      "sha256": "b39a4585800e45911c784c6e626bbfa589e98c3f696f5d77e77f5b45298fc13b"
+    },
+    {
+      "bytes": 2116,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s01.json",
+      "sha256": "60095dbe29d000c345c88bee99f783d2b0478095c9884e21725e1b7c9cdba2b3"
+    },
+    {
+      "bytes": 430080,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s01.tar",
+      "sha256": "548a049ea5c7ee286fed7382a3c7c0c3b34fdab2bdea327dc4ea9fac4351a99a"
+    },
+    {
+      "bytes": 2135,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s11.json",
+      "sha256": "f229b00466e6545d282f12e19f8890fcf60988ba9a2eb4005ae16a393626b7b3"
+    },
+    {
+      "bytes": 419840,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s11.tar",
+      "sha256": "56f79fa9792b1fe97cfebfb54f7993c4b6de010debc95b52735aea54fa50f0a4"
+    },
+    {
+      "bytes": 2091,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s15.json",
+      "sha256": "815a66d0b9686274c4dfe469c46c55b68f7565482e2d9541f1400680632a21fc"
+    },
+    {
+      "bytes": 409600,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s15.tar",
+      "sha256": "e9a1889e554a19b118099a766ad5984320c3f41eac1bcd3821cfd4f117c65cc3"
+    },
+    {
+      "bytes": 2096,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s17.json",
+      "sha256": "19e96b2fbd40b10251320301a52126a61fa915db9fb9deca4fb446a4303b56aa"
+    },
+    {
+      "bytes": 409600,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s17.tar",
+      "sha256": "3be74aba92766ac0aea25c25a6ddba5718b0312ecc03629fa60fc89acf7fa781"
+    },
+    {
+      "bytes": 2219,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s20.json",
+      "sha256": "b51ce8099eee74b0e61a8df8ef93f50b1b0df53a46e9b97c5646c4e471310614"
+    },
+    {
+      "bytes": 430080,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/docket-s20.tar",
+      "sha256": "47542829963a12a21083ea5c87c0f11018081b9a2b17e64fba56dd5264c8ecae"
+    },
+    {
+      "bytes": 11568,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/fixtures/index.json",
+      "sha256": "8bb4420911f9fa1ae3a60d57596c2aaa948e0a198762ccc4f028f0ceb68946e7"
+    },
+    {
+      "bytes": 24500,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/prepare_controls.py",
+      "sha256": "18c438730375c7260871b9e46056bf0eb82fd4d3dc585796d98ea938b09740cf"
+    },
+    {
+      "bytes": 1167360,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/source-9050a53.tar",
+      "sha256": "bf7307e46678abba93ffa93bb527721af8d752d2a298ddee37f3b0008a4c53b7"
+    },
+    {
+      "bytes": 513,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/failure-taxonomy.json",
+      "sha256": "4b1d2b291794f053e7766459522246cb30f4604ec96d5d4933c47ce5e23fb635"
+    },
+    {
+      "bytes": 7441,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/grader-output.schema.json",
+      "sha256": "64c24768880b388425bebf82f22cc7263295527b5bde919e5a608d674fab77a4"
+    },
+    {
+      "bytes": 6225,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/grading-rubric.md",
+      "sha256": "3f14dea8d8c436ec989a0e5ba64c955a99fc2a4731731e51f0d8c5512979209b"
+    },
+    {
+      "bytes": 2047,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/initial-repository-observation.json",
+      "sha256": "c88f86871505a59dfc5ecc4b6bc290266404414aaa320f3437c80d192a03f79c"
+    },
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-docs/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 344,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i01.json",
+      "sha256": "068f469fd2e0dd020980a9d9e217932d8034ddaaafca8eb732258448b00e36b0"
+    },
+    {
+      "bytes": 472,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i02.json",
+      "sha256": "ecc225ecfe5633e7b5f10e69155ea2d574aefc5cdd9d34c7bd78644258126862"
+    },
+    {
+      "bytes": 328,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i03.json",
+      "sha256": "a1680980bcbdb2e6212e7d3b97fd467de52b6107bc0dff8f769436f4848dfc18"
+    },
+    {
+      "bytes": 343,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i04.json",
+      "sha256": "9c1f52124b4bde756fbfd0bab235b4eadeca4db776e76a5ce2488af2d09f25f2"
+    },
+    {
+      "bytes": 344,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i05.json",
+      "sha256": "5bfd13f148166eb3fcb7e8210b8247e60885c2af100e43afe141ee324c1ecb76"
+    },
+    {
+      "bytes": 344,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i06.json",
+      "sha256": "41321802daad6abef1eb0c47d4e74b98c11cd2d9417bf1f38e12d39df728624b"
+    },
+    {
+      "bytes": 353,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i07.json",
+      "sha256": "a8f00f2a264cda41575eab19882d331d5732f1ff20ecdc1b81aba6afc0e4ba87"
+    },
+    {
+      "bytes": 347,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i08.json",
+      "sha256": "cd439e0cb04122e53fad713e4bfdbd77d8699e33813bd7831923028408c9149e"
+    },
+    {
+      "bytes": 328,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i09.json",
+      "sha256": "d1136b8d090e57b5777fc98eca84873e1ada6fbb7edb727f66239a760bb35020"
+    },
+    {
+      "bytes": 328,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-endpoints/install-i10.json",
+      "sha256": "b2f1692c895c06d657ffa1c55234542213771afb4a9a564fd82452a926514842"
+    },
+    {
+      "bytes": 12191,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-grader-output.schema.json",
+      "sha256": "229162b5e70f757b1355f1034ed53748c5c66386407f86c5c97c91c740dfb300"
+    },
+    {
+      "bytes": 8875,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-grading-rubric.md",
+      "sha256": "9cff4b711563411eb65558f46d8902c8ba6fe545381434325ca4ceb74fdf4f3b"
+    },
+    {
+      "bytes": 251538,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/build-transcript.json",
+      "sha256": "acdfe11a97eea63b6c8988dfeb501296b2fab8f879f50babc395ce8652cc94ca"
+    },
+    {
+      "bytes": 12961,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/clean-install-validation.json",
+      "sha256": "1ad98966f8ecb0f2e4f0b61a2ad3cac5beb1920fb0100d354d8ca798c3dd8063"
+    },
+    {
+      "bytes": 39860,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+      "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+    },
+    {
+      "bytes": 1804,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/runtime-requirements.txt",
+      "sha256": "aadaf8a8bd73a199ef1cbf90fd87ed8474182c7550d8bb9c8b2838cd27bf6403"
+    },
+    {
+      "bytes": 61440,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/sources/ag-shell-client-0.1.0.tar",
+      "sha256": "40ffb45b2ec9d25ad4a4fd70bf87b1deebe46538b214f43008b2e76384fc899f"
+    },
+    {
+      "bytes": 327680,
+      "media_type": "application/x-tar",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/sources/maude-2.4.0.tar",
+      "sha256": "3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c"
+    },
+    {
+      "bytes": 9984,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/ag_shell_client-0.1.0-py3-none-any.whl",
+      "sha256": "2a7b85444f71463368f2154c77f78a3f751e336dcb77bc468e21d14bbb105866"
+    },
+    {
+      "bytes": 13643,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/annotated_types-0.7.0-py3-none-any.whl",
+      "sha256": "1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53"
+    },
+    {
+      "bytes": 76356,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/hatchling-1.29.0-py3-none-any.whl",
+      "sha256": "50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0"
+    },
+    {
+      "bytes": 19878,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/linkify_it_py-2.1.0-py3-none-any.whl",
+      "sha256": "0d252c1594ecba2ecedc444053db5d3a9b7ec1b0dd929c8f1d74dce89f86c05e"
+    },
+    {
+      "bytes": 91687,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/markdown_it_py-4.2.0-py3-none-any.whl",
+      "sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
+    },
+    {
+      "bytes": 89993,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+    },
+    {
+      "bytes": 66663,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/mdit_py_plugins-0.6.1-py3-none-any.whl",
+      "sha256": "214c82fb2ac524472ab6a5bcab1de80f73b50443e187f401bfd77efbc7c6481d"
+    },
+    {
+      "bytes": 9979,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/mdurl-0.1.2-py3-none-any.whl",
+      "sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "bytes": 100195,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/packaging-26.2-py3-none-any.whl",
+      "sha256": "5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"
+    },
+    {
+      "bytes": 55206,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pathspec-1.0.4-py3-none-any.whl",
+      "sha256": "fb6ae2fd4e7c921a165808a552060e722767cfa526f99ca5156ed2ce45a5c723"
+    },
+    {
+      "bytes": 22743,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/platformdirs-4.10.0-py3-none-any.whl",
+      "sha256": "fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"
+    },
+    {
+      "bytes": 20538,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pluggy-1.6.0-py3-none-any.whl",
+      "sha256": "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
+    },
+    {
+      "bytes": 472262,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pydantic-2.13.4-py3-none-any.whl",
+      "sha256": "45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba"
+    },
+    {
+      "bytes": 2094516,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "926c9541b14b12b1681dca8a0b75feb510b06c6341b70a8e500c2fdcff837cce"
+    },
+    {
+      "bytes": 1231151,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pygments-2.20.0-py3-none-any.whl",
+      "sha256": "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
+    },
+    {
+      "bytes": 807870,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/pyyaml-6.0.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+    },
+    {
+      "bytes": 310654,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/rich-15.0.0-py3-none-any.whl",
+      "sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
+    },
+    {
+      "bytes": 731418,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/textual-8.2.8-py3-none-any.whl",
+      "sha256": "267375fd402dc8d981457212efa71f0e3365fd17bba144ba9bb3ed7563cb374a"
+    },
+    {
+      "bytes": 14216,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/trove_classifiers-2026.4.28.13-py3-none-any.whl",
+      "sha256": "8f4b1eb4e16296b57d612965444f87a83861cc989a0451ac97fe4265ddef03b8"
+    },
+    {
+      "bytes": 45571,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "bytes": 14611,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/typing_inspection-0.4.2-py3-none-any.whl",
+      "sha256": "4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7"
+    },
+    {
+      "bytes": 6383,
+      "media_type": "application/octet-stream",
+      "mode": "0644",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/uc_micro_py-2.0.0-py3-none-any.whl",
+      "sha256": "3603a3859af53e5a39bc7677713c78ea6589ff188d70f4fee165db88e22b242c"
+    },
+    {
+      "bytes": 12779,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-track.json",
+      "sha256": "88abc6aea11169280e3d029e38c47cc177ccff17218d16c47e70d975aa69bc12"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 24179,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/preflight.json",
+      "sha256": "4606db14b59b4b9d2bc1a1f545f4a3a91e5f9f7b10b0853e54018b8768802e3b"
+    },
+    {
+      "bytes": 838,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/prompts/grader-request-template.md",
+      "sha256": "6894b0d6c7e4373c590dc6492dabb53c1d800a14f590fe21e61a9727b228830a"
+    },
+    {
+      "bytes": 777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/prompts/grader-system.md",
+      "sha256": "e4f429a4ca14f4e5c5317e627c4c207080c670e2dd81040400c64540d3de7e15"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/prompts/installation-operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/prompts/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 1648,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/direct-control.json",
+      "sha256": "bf1a36ae0a2a06b7bffaa45468eb05c9992b43170cb63a8dba9a8a81f0913a48"
+    },
+    {
+      "bytes": 1902,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/grader-assignment.md",
+      "sha256": "0c5d73f9cadd0817f1c829874e988f6a892c55fc873887e6c12adb4362cf8b25"
+    },
+    {
+      "bytes": 2428,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/operator-prompt.md",
+      "sha256": "9e53dbdf986de7396eca6fd89644368a826ddfc70fd11638c6a62a9bf81e737c"
+    },
+    {
+      "bytes": 1576,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/operator-system.md",
+      "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+    },
+    {
+      "bytes": 876,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/operator-task.md",
+      "sha256": "32b052610b3cd49dbdc7152e120df2c86e5a628a682d11ee5c36e130b426400d"
+    },
+    {
+      "bytes": 11880,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/session-config.json",
+      "sha256": "f6eb468abcd7f346e10a5ef8788860a017f1cd0eb002f1605e0cc0d23ad25e83"
+    },
+    {
+      "bytes": 6648,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s01/supplied-inputs.json",
+      "sha256": "6f228c22af9c3dc793ce3382e99eaa06ea95177629885ccebc779934bdc950d5"
+    },
+    {
+      "bytes": 1667,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/direct-control.json",
+      "sha256": "0f26743296d07dee9552361e4e3f4799976d1dfac6b054dc6dee201bf8b66485"
+    },
+    {
+      "bytes": 1893,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/grader-assignment.md",
+      "sha256": "8dab8edcaecf3fb710398669126ddfcd3818bef15e4cadc7300a2ec278a84c70"
+    },
+    {
+      "bytes": 2419,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/operator-prompt.md",
+      "sha256": "3d58a73a0edd3f97084ac6df5e1467beff28d9707e5be81877fa006f11f0a661"
+    },
+    {
+      "bytes": 1576,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/operator-system.md",
+      "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+    },
+    {
+      "bytes": 926,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/operator-task.md",
+      "sha256": "a24a8720f807e8f224f712782c7191f2b39bc07d1e53ba105764b6ae760e2828"
+    },
+    {
+      "bytes": 11880,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/session-config.json",
+      "sha256": "831fc2b849485d55a7cd4de9ace2df60c42712ed19cb16ee83f055b581396293"
+    },
+    {
+      "bytes": 6611,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s11/supplied-inputs.json",
+      "sha256": "caf523223120dc34d54458f402e3762c2555bf4415a43663fc1b107a1e19f1be"
+    },
+    {
+      "bytes": 1623,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/direct-control.json",
+      "sha256": "6c370bb85d23b2dc6ac67b1ac230977b9e06d31cda40279385a940476835f4c2"
+    },
+    {
+      "bytes": 1932,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/grader-assignment.md",
+      "sha256": "9673bc2f0c9e7ea8b7f14635f3520d535f4bd2ec9e54768b6029e9c1d4365d59"
+    },
+    {
+      "bytes": 2458,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/operator-prompt.md",
+      "sha256": "6a92ece5b9020dcefa739eadd7038eae5e53c90530385be4925bf4eae33210b6"
+    },
+    {
+      "bytes": 1576,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/operator-system.md",
+      "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+    },
+    {
+      "bytes": 961,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/operator-task.md",
+      "sha256": "448a20e416c766eb4b53811f5bdf551d142c0f4fb5d854c669a67e1b9a314eff"
+    },
+    {
+      "bytes": 11880,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/session-config.json",
+      "sha256": "2e7510edc3f03edd2e9a1b2ee05222cf90de7858e6fbb6ed5fce29c44e888c4b"
+    },
+    {
+      "bytes": 6257,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s15/supplied-inputs.json",
+      "sha256": "48231506ad3a778c3c3c83af45cf21ca4ae06d2a3887f4a072d0b1e5e6ae4559"
+    },
+    {
+      "bytes": 1628,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/direct-control.json",
+      "sha256": "4a040b49219a799b9f7d1ffbfcc1a57d9dc00fa879cac3376cac46238ffb952b"
+    },
+    {
+      "bytes": 2031,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/grader-assignment.md",
+      "sha256": "019a5e07e73325e9c1fdd8a506a3fea0edeab160c567d702da2dec4611c6654a"
+    },
+    {
+      "bytes": 2557,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/operator-prompt.md",
+      "sha256": "f0262b88118d5ee5036d08c58876b89e4db1dfb5c59e6187fce427c5382f6f5f"
+    },
+    {
+      "bytes": 1576,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/operator-system.md",
+      "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+    },
+    {
+      "bytes": 1060,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/operator-task.md",
+      "sha256": "2c428fc39239a40db4dba73dd57075bef7e56412d8ff0edc102bbc67011217bc"
+    },
+    {
+      "bytes": 11880,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/session-config.json",
+      "sha256": "2b26f57e430aeabd7f4578a1de374ff2051ebd7713db63cfc48a9a4c0efea960"
+    },
+    {
+      "bytes": 6216,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s17/supplied-inputs.json",
+      "sha256": "ab8cda946d2a175bba8641708cc287297df21f07cf269a0dcfcbca0a4973900a"
+    },
+    {
+      "bytes": 1626,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/direct-control.json",
+      "sha256": "4ec0432d11f98b0be7bdd8d0e32171ecd09544d61c1d1760ebeedcfa4e685b03"
+    },
+    {
+      "bytes": 1920,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/grader-assignment.md",
+      "sha256": "b3fb9095bdf4e22319eef3c651ab40bcb17509c166a6d0331f4bf24ee0bd4406"
+    },
+    {
+      "bytes": 2446,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/operator-prompt.md",
+      "sha256": "a51d8f1a88fc484017591c5ab4386016c6fac703e51d52c5640486557d8e468d"
+    },
+    {
+      "bytes": 1576,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/operator-system.md",
+      "sha256": "056b2a1f9435510129b84599a47ad8d69a6cab18eb1cd4e24719843bde894d0e"
+    },
+    {
+      "bytes": 978,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/operator-task.md",
+      "sha256": "e2840896453acbeb8a993ea69bc9e8429b719d141846289cb0857d3321a341da"
+    },
+    {
+      "bytes": 11880,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/session-config.json",
+      "sha256": "9e0ca5b1fd8623e3ae3c778598a101b705801c99f4c392fd81bd5936cbf5d167"
+    },
+    {
+      "bytes": 6191,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/docket-s20/supplied-inputs.json",
+      "sha256": "d2d4d620922c7512443617f27f8d3becb3ce96463da2f64a8ff8ea17ef2d220c"
+    },
+    {
+      "bytes": 2468,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/grader-assignment.md",
+      "sha256": "0fc8d16c24a570f1df51b223ef96bd57c95d191c230ed9bd9fcc5531f6ee38dd"
+    },
+    {
+      "bytes": 3678,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/operator-prompt.md",
+      "sha256": "498eb14775a04545f7d01ac7434e45e7188627807f0ab15b3cee6a4287ac2449"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1465,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/operator-task.md",
+      "sha256": "2bfd079c4ddecb9a06cc46745e248b2b9906bce31e7c79ea25ee3240a0332265"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/session-config.json",
+      "sha256": "df06acbdb8c008b9c5fa75b2874466d3fa3c38b7c9fdeca4d2c9eb717f5332ed"
+    },
+    {
+      "bytes": 5955,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i01/supplied-inputs.json",
+      "sha256": "1c405e8b52ef09eb472c170f88833b5b316382e18113a089f9f04411f3915920"
+    },
+    {
+      "bytes": 2514,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/grader-assignment.md",
+      "sha256": "f07b92111b37f7b7847c3973018ac9e893b54b219af416c3aceee6674167dd7f"
+    },
+    {
+      "bytes": 3717,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/operator-prompt.md",
+      "sha256": "17706df477a13b2475b0b20baa52e407abbbb9767d4879a44d375f74c7d2528b"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1491,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/operator-task.md",
+      "sha256": "39ee50615f6d0e742db273e3c84dd667f180212154bd7b1d3570abcf836fb7b6"
+    },
+    {
+      "bytes": 12609,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/session-config.json",
+      "sha256": "5557fc9843c4c98be00f714b03c3b73c149b9c3db41153288b1083935959d058"
+    },
+    {
+      "bytes": 6020,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i02/supplied-inputs.json",
+      "sha256": "d15b86fd3021fad256d5bd9e37a40f4d9330d9fbf443d568a6b90cf7a899d680"
+    },
+    {
+      "bytes": 2341,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/grader-assignment.md",
+      "sha256": "55c1555a71e7076e246d44c81de80c10d5e7580dabab25d0f31b0db2b12ba934"
+    },
+    {
+      "bytes": 3577,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/operator-prompt.md",
+      "sha256": "e18fb201a99511242aa68c6694e9105853eea0962682039165117c986c5ba7ee"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1315,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/operator-task.md",
+      "sha256": "50e967d1d84f54480ff64bce81b17626f74a042e51674053430ab33faf799a6b"
+    },
+    {
+      "bytes": 12403,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/session-config.json",
+      "sha256": "3e8baaf74f688dea9bb409bdf5229260a48e52aa070207bdde2833f3eac0140a"
+    },
+    {
+      "bytes": 6655,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i03/supplied-inputs.json",
+      "sha256": "00727c9a252c48c0c788c302b363b51f4a2ab594bbf06c66d3cb3034a3e3cd90"
+    },
+    {
+      "bytes": 2487,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/grader-assignment.md",
+      "sha256": "4d06c2080aaec4516af63ab599c54f9ab610e90550c354cbbbd9e55c83e0f1a0"
+    },
+    {
+      "bytes": 3690,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/operator-prompt.md",
+      "sha256": "db1595cd8f4aab50f2456a45ce0ddc25d9bb6b7e7a1f635068db975288d966d7"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1484,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/operator-task.md",
+      "sha256": "5a0edd4b5609d68f39ad70337a92c7a2eebd65a7358f85b5074f487921fee1e9"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/session-config.json",
+      "sha256": "2e4ac23f54a86aaffe4a3c1b68565eb01a25bf176513756793edce4f03cff4c9"
+    },
+    {
+      "bytes": 6100,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i04/supplied-inputs.json",
+      "sha256": "c510e5c95310a061b7e9d67d45ffd87b308981f7d010b53f204e55a684acf71c"
+    },
+    {
+      "bytes": 2808,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/grader-assignment.md",
+      "sha256": "3bd71142ee061325473d7ccf51f88e673b07a9a62d33ccb7c4c0ece353e3edbc"
+    },
+    {
+      "bytes": 4011,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/operator-prompt.md",
+      "sha256": "d708100ac2b7a48e44b04dd56dc6c5b646fb722378aa8f86663fcd185e5aecd3"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1777,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/operator-task.md",
+      "sha256": "dcf44498a19dc5f67c27bcd3f98ae5b7e64c61ab84261206425b1ae35b6ea6c8"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/session-config.json",
+      "sha256": "4d86ce6a440a28be4782d8b1cc6048f78200a8397a9ba6f4d033e98e5222ccfa"
+    },
+    {
+      "bytes": 6050,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i05/supplied-inputs.json",
+      "sha256": "a030e696542e3ea7b510a7eee5e4b67a85733b060d6518bda420b9ba97927e55"
+    },
+    {
+      "bytes": 2626,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/grader-assignment.md",
+      "sha256": "f3de06df2096735dfd8c502e7046b390a8e9d2333524b74c5c93119b4b7abee1"
+    },
+    {
+      "bytes": 3829,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/operator-prompt.md",
+      "sha256": "2644fca357ef7a1d3e6d90428cda5a804d2af21e8a04de3547da5442db31f01e"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1603,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/operator-task.md",
+      "sha256": "9ec7d8fad1217d0f8e8e8d32b2a93ba72dc5b9adfd956f11de9eb56ed125f30c"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/session-config.json",
+      "sha256": "7aa7457c7fdd053a60ddf206a557b500db0530887ff1ee3a19f74c7fed51906e"
+    },
+    {
+      "bytes": 6394,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i06/supplied-inputs.json",
+      "sha256": "7b07f65b03b8f963fec191ea0a7bde02b792fbb3d1eb5b1a09af849357771085"
+    },
+    {
+      "bytes": 2470,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/grader-assignment.md",
+      "sha256": "877118978c6d6870c351e3041217e9354a72d99a6be46c410019376159722b26"
+    },
+    {
+      "bytes": 3673,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/operator-prompt.md",
+      "sha256": "c4c06b773793d02c7020a6e18dcc8c6bba8be04f4fbf8953349121fe295ebed9"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1485,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/operator-task.md",
+      "sha256": "c035100f68e5e6a6f11cdd66310a841f60c132a3b15e1435db3495a8ad21af38"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/session-config.json",
+      "sha256": "e542ffe07529eaaea2c24b391205f5cc850104b9ffb2f78cda8eb73a6edfd199"
+    },
+    {
+      "bytes": 6347,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i07/supplied-inputs.json",
+      "sha256": "0aad371880f386cd1ac1e29854cc02d45ae075ab912a00049712c9d5297c4373"
+    },
+    {
+      "bytes": 2643,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/grader-assignment.md",
+      "sha256": "164fd115b5b7f4d7f9f01b85836ad5ddb38a17c42407db8d648687b23be22e0a"
+    },
+    {
+      "bytes": 3846,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/operator-prompt.md",
+      "sha256": "0b9bd001d63b5d6ce0af2a3ce7648113ac5fbb82c2192c9655377a5d27735446"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1658,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/operator-task.md",
+      "sha256": "7feb8650bef0bfadd34af4f7265159f46288c5a73a703b8642bf03e6bf1f5983"
+    },
+    {
+      "bytes": 12592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/session-config.json",
+      "sha256": "71ecd532deaafffc8e03daf1866b2e15fc91195ee7f0fa10afbed43c7b3ccb5c"
+    },
+    {
+      "bytes": 6393,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i08/supplied-inputs.json",
+      "sha256": "1435907245fbe4f24faebd2c8e06aa69efac6316b86b0daaf966cefccb75093e"
+    },
+    {
+      "bytes": 2430,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/grader-assignment.md",
+      "sha256": "d2cf010d3380cebf8fb80da0241755557ec4422cfdb761bb4a4407f0655ea9db"
+    },
+    {
+      "bytes": 3640,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-prompt.md",
+      "sha256": "e4c23dad6185a9536a2f86eba44267b41762551ef7bfeb852fcfa4ae3e7c35a7"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1404,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/operator-task.md",
+      "sha256": "f209c954534472159eebb910925e6b59821d0aa79924903644ea3d2537b0c040"
+    },
+    {
+      "bytes": 12403,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/session-config.json",
+      "sha256": "f41a8f7b131b7d51985b3d5d85b03f73b76e4908bfac1239c98252f6e0d9f7e8"
+    },
+    {
+      "bytes": 6596,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i09/supplied-inputs.json",
+      "sha256": "0e847bdaa11a2e1061b833d0058add2aa3f8c7cb243d22584e62b10ed41fa601"
+    },
+    {
+      "bytes": 2680,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/grader-assignment.md",
+      "sha256": "a5064beb8e895226778c32057a54bc9e361e162684ea4f9e7b2499b6180d641f"
+    },
+    {
+      "bytes": 3883,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-prompt.md",
+      "sha256": "ceb321ebd9a4cb7643f802723abbcf242d40af51459139928052ee2f16e45792"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-system.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 1649,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/operator-task.md",
+      "sha256": "f91b4468c1aec88093f88f505e84ac77cfd674e034fa95fbe955cd719c0a5aeb"
+    },
+    {
+      "bytes": 12403,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/session-config.json",
+      "sha256": "d7f60de0aaecf0466c12d18f2b6bfd10453905567e557300872a946388d9d07a"
+    },
+    {
+      "bytes": 6725,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/install-i10/supplied-inputs.json",
+      "sha256": "3d219c1ab63470f170a8976b8b5e2187d1c2230a0d9c860c02f0147848d1b210"
+    },
+    {
+      "bytes": 1766,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/grader-assignment.md",
+      "sha256": "245b53cf3365ce37225ae26094f9bed8cd2a0f87ae6021214cb24eb3e46f7feb"
+    },
+    {
+      "bytes": 2264,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/operator-prompt.md",
+      "sha256": "97a49c3606806fa99795df00e751f05be04078e4b3d0b09ee9a9b52d2f5c3653"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 779,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/operator-task.md",
+      "sha256": "15e5c1e0e34e57a8fb7b30f4c9cfd0306131b63ef176970b4ef3c8bfa45552f8"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/session-config.json",
+      "sha256": "7927d8f2bcd096d784cc03b506221f806af124b2e996993ceb4e8453f7874ef7"
+    },
+    {
+      "bytes": 6035,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s01/supplied-inputs.json",
+      "sha256": "a751cd789c2b5205c59f25e2dbbc8ed4239b66ab5c14eb4f6519958165419265"
+    },
+    {
+      "bytes": 1786,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/grader-assignment.md",
+      "sha256": "4cc4585c6622f29fb612ac5505dbeddc4d16f66ab0b00f2d25624b51827ffa8c"
+    },
+    {
+      "bytes": 2284,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/operator-prompt.md",
+      "sha256": "c3b1fc66f811a5d8902868363149c23f06093df7e546b1ee1e11fed75554ff0a"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 793,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/operator-task.md",
+      "sha256": "bd7422f94797e1b7b4b1b10d2102e26410c3cbdea92b0ccb834f17bf85245deb"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/session-config.json",
+      "sha256": "0bcaac57607dbe0d874d42fc059dbfd4c493a436c058121106bb73a7802f1d31"
+    },
+    {
+      "bytes": 5588,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s02/supplied-inputs.json",
+      "sha256": "449659dc40ea278f00702fef7bfd2d44af67d0507f547abd43ab2ec11a7a35b3"
+    },
+    {
+      "bytes": 1680,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/grader-assignment.md",
+      "sha256": "c27be8bbba41cfe55d393502082807c2e579f86906cf52e81cddf92bb7066d25"
+    },
+    {
+      "bytes": 2178,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/operator-prompt.md",
+      "sha256": "07a09252813afbf1f628ebdb4fe7391a3e072f8782fe68988d67d17aa2b60109"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 779,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/operator-task.md",
+      "sha256": "d2f55870644cd3223b533e1ae2efba70130fd85bca3a7c2e3c6677a5b8e7a9a6"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/session-config.json",
+      "sha256": "9dce2294b6d1bc61a19e376443c83996ac820e7ca4f295ccb5995ca7327866a3"
+    },
+    {
+      "bytes": 5976,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s03/supplied-inputs.json",
+      "sha256": "eaee218c7ba260111b6d344d117e960122e72ecfb8c1729326b3c1b5dfc9ebf1"
+    },
+    {
+      "bytes": 1870,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/grader-assignment.md",
+      "sha256": "15d3ee4f187384995d6cdedc5a174118ade7636a8e07542d2ab46fa5cdf89daa"
+    },
+    {
+      "bytes": 2368,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/operator-prompt.md",
+      "sha256": "8050474dd8f0f1c5c5239132293b4cdf56c5f3d504ae8b644ca8cbc1a4a4cdae"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 763,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/operator-task.md",
+      "sha256": "c340f91c87f6d30d2f7dec41104e61724db3cc5614cd6af53d3bb044ff2e9b8a"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/session-config.json",
+      "sha256": "bdb5b8f94dd1c18d08344c82063a90e9e4801cc9909d0c13532f96fb1e74ad09"
+    },
+    {
+      "bytes": 5904,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s04/supplied-inputs.json",
+      "sha256": "9c8ba43dc7e5cfbe7b6663fb5542daf33fc71dc426fd03d9074b222c1079e3e0"
+    },
+    {
+      "bytes": 1828,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/grader-assignment.md",
+      "sha256": "24ace1b2843e0d962cea47036f2683d5ea346437ff4b3fae530f68bee6681f4c"
+    },
+    {
+      "bytes": 2326,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/operator-prompt.md",
+      "sha256": "7c1c8283ca59c468ce65d387244f7358fa4bbccd6dd5100434bc6ce83480e467"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 839,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/operator-task.md",
+      "sha256": "5e2397970bf852f10c9a13da5add1352fbd784e758c200a2c57e2bd44a25cce2"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/session-config.json",
+      "sha256": "8ad2ccc02405365568c954e1f55289244f77a3ce5c65db5d0bd1828a54cdb8a3"
+    },
+    {
+      "bytes": 5689,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s05/supplied-inputs.json",
+      "sha256": "e97b0bfe720a403ecbd4c54a02b8e6d418dd1e8928d98b95168f8cf34ba19281"
+    },
+    {
+      "bytes": 1763,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/grader-assignment.md",
+      "sha256": "fc1c58897aaaa8b1b9e3cf16a508fb3c831030982f9f092890740c7b26a965eb"
+    },
+    {
+      "bytes": 2261,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/operator-prompt.md",
+      "sha256": "57be85e812a025c19285a180d7746a1b87304774122be3627864e8ba49559c98"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 775,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/operator-task.md",
+      "sha256": "e7da95da26f29506ff7326403fc10ffc26d37515a04efa931337042673cbc2c0"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/session-config.json",
+      "sha256": "d9eac540110c869161d6f1893f5ee4d70d6ebe5920ec75440528eba39cacb0e7"
+    },
+    {
+      "bytes": 5614,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s06/supplied-inputs.json",
+      "sha256": "7e8bcebc9b76cf9291b5e0519d641c8a0738bca27b91cfa8b8e1c2397a892235"
+    },
+    {
+      "bytes": 1736,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/grader-assignment.md",
+      "sha256": "645cd6cf4f341bebe523f5bfda061fdeed7920c32eefa8837d3424b623d39b14"
+    },
+    {
+      "bytes": 2234,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/operator-prompt.md",
+      "sha256": "8606b740e042f6f890b0cfcb8f920fd4aa7da9cd42e6a98d0ebfa0588819a8f7"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 749,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/operator-task.md",
+      "sha256": "27fb8fceba15b3ac4db1a8d9a3b30168b6f4734890aaec001b462936006796b7"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/session-config.json",
+      "sha256": "ed539bdbc30a8a6175b2daf1d24d7d169284a8d42cec529581d13f782f164e6e"
+    },
+    {
+      "bytes": 5891,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s07/supplied-inputs.json",
+      "sha256": "2c72e935bdfc2e248c04070e0161f8c5ee74586deb709993bc7be1412adcb933"
+    },
+    {
+      "bytes": 1686,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/grader-assignment.md",
+      "sha256": "946eb598a4e2164b2b9152c6d356d3694db6eec3d54aab74414a07a1a7b5ece0"
+    },
+    {
+      "bytes": 2184,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/operator-prompt.md",
+      "sha256": "93b7890b02f5081310086f70bb3095a29f958a9af6e3ea66ac93613cd1b34c0b"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 785,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/operator-task.md",
+      "sha256": "2432a55d93f00948c754726d3ef496b21b50f57a96d880de9fbd4f58c411cf4b"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/session-config.json",
+      "sha256": "d08d51e66a9eb023899b27d583000c2d0f126339945c0cdf0f704750bda160f5"
+    },
+    {
+      "bytes": 5588,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s08/supplied-inputs.json",
+      "sha256": "6108c8c374e664c1bb2f114444ca8deca81018484a2d7304de217b8490d6c3a8"
+    },
+    {
+      "bytes": 1851,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/grader-assignment.md",
+      "sha256": "b7d396f39f309349f8b2768cfb587e2759c2548d6dd9fa8f514643ec187a4825"
+    },
+    {
+      "bytes": 2349,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/operator-prompt.md",
+      "sha256": "12374388624c9e2de76051426ca7da4f6dc670b40c2a81c412e946c3cb39252f"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 862,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/operator-task.md",
+      "sha256": "0ad620ab71274a204879329c1310e9a9e1bc3709d807bf9a95106389c83e0970"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/session-config.json",
+      "sha256": "b33716fe0197f9c176fc73b09ead7995a625186c90a8d7f0066d736b859ed6a2"
+    },
+    {
+      "bytes": 5616,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s09/supplied-inputs.json",
+      "sha256": "b63c8637ce233ae2ac3afb345b701d931deabfaf9ea88d268d70cdac3ca9ee6a"
+    },
+    {
+      "bytes": 1763,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/grader-assignment.md",
+      "sha256": "227b0d8133b95db014c20bdfe0724f3510e3613bcc4bf4259b4ee04a3f75d313"
+    },
+    {
+      "bytes": 2261,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/operator-prompt.md",
+      "sha256": "13923e3055396f868b8f2dc4f3375c8e9215e4c5fe2a3d759583fc9513fc19d9"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 775,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/operator-task.md",
+      "sha256": "8713719f2286fb17fff3206431ea3922e505e00d1d381cfa07faa820e259f400"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/session-config.json",
+      "sha256": "0053222434f153aabac044fb78d2b2dfbec4e61ffd1aa9cf862e0764505d0e69"
+    },
+    {
+      "bytes": 6952,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s10/supplied-inputs.json",
+      "sha256": "a6b0db82b2acab30dc5142ffb731ebc551f9c781b70792973456dead6398a8ec"
+    },
+    {
+      "bytes": 1757,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/grader-assignment.md",
+      "sha256": "09a1be243b0f0c831af487c462143129ae6b3f4e4a9994d15c2d96b85105c9c7"
+    },
+    {
+      "bytes": 2255,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/operator-prompt.md",
+      "sha256": "6e5ca0d25d8bbc6ef30771d1ec87e6504135664518549d75ec4947660fff86c6"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 829,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/operator-task.md",
+      "sha256": "65bf9d90b59f276a958af921551b6bba1f116855fa61f8cca80938943d34db4a"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/session-config.json",
+      "sha256": "f52615825363797c6c2c9306464dc4fe2b15daa0846e261457e31119d50e3530"
+    },
+    {
+      "bytes": 6013,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s11/supplied-inputs.json",
+      "sha256": "9923d7063b810c3b2951469231d340bf99f2f651b888bfb05771cae772d6d4c7"
+    },
+    {
+      "bytes": 1883,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/grader-assignment.md",
+      "sha256": "d62a3a55488b6da35c966331dee7343e40770bc3a88ccc6176233e4957373585"
+    },
+    {
+      "bytes": 2381,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/operator-prompt.md",
+      "sha256": "0477427db190394201440effb64890ba3f549069336f59e3840100515fad5cf6"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 894,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/operator-task.md",
+      "sha256": "8d1edc9e2a893549b2d2d511bc260fc91580bf9fbf641c37e0e7a47cb393ddf7"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/session-config.json",
+      "sha256": "dbf4afeb0b6f1e91c56a331935655bfb289d648c4d7846c22d23b55204f6eaac"
+    },
+    {
+      "bytes": 5628,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s12/supplied-inputs.json",
+      "sha256": "d159848974db35d4198e5f65320d8ee608f69d0869612d2cb9bc5b1aeacf963a"
+    },
+    {
+      "bytes": 1744,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/grader-assignment.md",
+      "sha256": "5dc46ee9bb0cc8b93c50cc84e9feb29600aa8b00326694e1009ecd33479193bd"
+    },
+    {
+      "bytes": 2242,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/operator-prompt.md",
+      "sha256": "16ee2e18ab3be921be112f81c0d95a91102c458634d05cde4a240be67d4e80c7"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 843,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/operator-task.md",
+      "sha256": "5dc0e4880097b60ca714713e0b77b4d75fe5c23e0b04a9a1f70b7a11115f67cf"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/session-config.json",
+      "sha256": "fe32db158d74e4f67d602c0e7035911aa595ca6931f7d153bfd91779b57f0bbd"
+    },
+    {
+      "bytes": 6683,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s13/supplied-inputs.json",
+      "sha256": "d0d6f9759d1fb83791e6390a99c77e4c434d28c82ffe5ee9db90753771bcfbf1"
+    },
+    {
+      "bytes": 1986,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/grader-assignment.md",
+      "sha256": "1e6795f7c7a0215059707d792ab9eaed138cb444f55242da12e27ad4ae515e2e"
+    },
+    {
+      "bytes": 2484,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/operator-prompt.md",
+      "sha256": "8cb774844461bdad174c88c904ee443ff7fb7ee255982894395be7fa82d50fcc"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 847,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/operator-task.md",
+      "sha256": "3d61d4af1510c835d2f4e77a6637d0e2e44d96bae4a41d654d9b393ae40462ff"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/session-config.json",
+      "sha256": "2f47a49d2b7491b17e6ad10af74718825ae70ee59176af31bbbc74f8092bdaf9"
+    },
+    {
+      "bytes": 5614,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s14/supplied-inputs.json",
+      "sha256": "d49fb041f8f0cfc4bdf934e6ac3fc98c7233977745847490d68b7a4211d74a9d"
+    },
+    {
+      "bytes": 1796,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/grader-assignment.md",
+      "sha256": "7ffc510cf6fabfe24d872cda81c8e51f849672d9f5ecde93f19d905fcfc7c55b"
+    },
+    {
+      "bytes": 2294,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/operator-prompt.md",
+      "sha256": "2965f0c41ee8b8bd505e41ff1a73a406fbbac3b63988823ac667c75baf9f770f"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 864,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/operator-task.md",
+      "sha256": "d507ededb8fa7da14037e2869edcac3e1657b28359c2a7ad0d419d043f458b58"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/session-config.json",
+      "sha256": "a2641d89a6f865599229793d80d30c9787ab4ae2666b2697581d72b10ce56f0e"
+    },
+    {
+      "bytes": 5684,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s15/supplied-inputs.json",
+      "sha256": "ad4e0945f41de3eca1d38aaa0d704a350568433304bb80f1ab88700b63a075a5"
+    },
+    {
+      "bytes": 1885,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/grader-assignment.md",
+      "sha256": "45bd274cdc0ed7a5ea025ff265e983a59d3629faf48316966a0ecd4df64d7586"
+    },
+    {
+      "bytes": 2383,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/operator-prompt.md",
+      "sha256": "513b8cbe95c948a4027c7c66455adc8dacc0093c07deab9f476e6aaecc16a890"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 892,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/operator-task.md",
+      "sha256": "686298607192b3f85577847020b49d32c5d921d12c014177950facbb6a7df802"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/session-config.json",
+      "sha256": "7ed8da815845b844982ef407af08190c6b3a7579f997f8bd62b5651ecfa3c5f1"
+    },
+    {
+      "bytes": 5899,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s16/supplied-inputs.json",
+      "sha256": "960e7693f9cba8c001e7cf58f9c11fac3a38e728d50edc31ead85408a5bb9b59"
+    },
+    {
+      "bytes": 1810,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/grader-assignment.md",
+      "sha256": "1a58d11f37d6b4520b05d8d331eeb0ec025f816762330925f33f25480d9b7c80"
+    },
+    {
+      "bytes": 2308,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/operator-prompt.md",
+      "sha256": "47b52f2173c6296ed9b1c9b5a9761b0f4ba2da179507f7ca9dc1f81bc08d0708"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 878,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/operator-task.md",
+      "sha256": "43cbcff48149c1c27215771e3eb759c94d17f19234194196575df4cefe5ae3ac"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/session-config.json",
+      "sha256": "3580924810a59269aa0981978cc56f5e9cff32ea40aab94a2ee985599a5fedef"
+    },
+    {
+      "bytes": 5592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s17/supplied-inputs.json",
+      "sha256": "c0daa1e2585e47b0ab8cf52cf215c8c0fb4c646e6a3f3de6ee537d6d9a46396e"
+    },
+    {
+      "bytes": 1784,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/grader-assignment.md",
+      "sha256": "6302efdd160813f253c2a9dff49e3ed71cc2b8a999181cd362ab4bda6195495f"
+    },
+    {
+      "bytes": 2282,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/operator-prompt.md",
+      "sha256": "d29f6c80b03d77422b2c3b9675dfeb43f580b120ad3a00eb5762205686ac6e75"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 881,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/operator-task.md",
+      "sha256": "68d63e4a0beab33c0d70abfc7678aa36b62e1e90cf00f562c1488d77351fde80"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/session-config.json",
+      "sha256": "38b2ce6658343ce7cc53d7ac7acc2cbfdd02f2a2e8b812b0f98e14ed5075a484"
+    },
+    {
+      "bytes": 5609,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s18/supplied-inputs.json",
+      "sha256": "e0150a944deb3b0d44dbd69fbee3d4d03813f375ed091fb86a7938714b64a120"
+    },
+    {
+      "bytes": 1941,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/grader-assignment.md",
+      "sha256": "feafa723d2fa2362e94ab65a6c1f72544b89d2d51e16865d765e5498e784b2aa"
+    },
+    {
+      "bytes": 2439,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/operator-prompt.md",
+      "sha256": "10b835b1b00a54a19d749811dcc94950f4743b43303a143ba2b9b6686ab48638"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 834,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/operator-task.md",
+      "sha256": "f5e78c44ea537ede4202437a51251ad2d484ea6ba8bc46cb3e96508d0435a0a9"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/session-config.json",
+      "sha256": "8427e62bb74e2563be2648f23f5e6a8fde9bf49f4f0877adebd9d1675eae9be4"
+    },
+    {
+      "bytes": 5574,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s19/supplied-inputs.json",
+      "sha256": "cc11888c6c91395ba15b87ac129c6a5734da2d6b8f020e0ede1fbab33f08e6e7"
+    },
+    {
+      "bytes": 1784,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/grader-assignment.md",
+      "sha256": "07d9acab38ee7e8a2ea1c47121b4abbf8904de00284c85c1983a4559e47b5e31"
+    },
+    {
+      "bytes": 2282,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/operator-prompt.md",
+      "sha256": "c02b81f8127972e37b0836cc7a6e0e4fe7e29c9bb4036af2cdc500e4bf401e3b"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/operator-system.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 881,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/operator-task.md",
+      "sha256": "0adf703efe189f9b52241e8ce6947622746ae5a41719eabd1bdcc0a29869ba01"
+    },
+    {
+      "bytes": 12188,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/session-config.json",
+      "sha256": "1cc71593d7c949c556e79806be99fbc16023a7da71212c6d0554eec572e7d467"
+    },
+    {
+      "bytes": 5543,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/rendered/maude-s20/supplied-inputs.json",
+      "sha256": "e50e4593ac54eb30180305f23b0431a5329f6487747fae61572aa429d65eb77f"
+    },
+    {
+      "bytes": 34378,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/run-matrix.json",
+      "sha256": "609304844051d4d4dedbe415d45e6a9cf0160401759d6cc5b3b08a922f6d0a86"
+    },
+    {
+      "bytes": 73140,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/_build_corpus.py",
+      "sha256": "2fe7123c483a4d6349d22c2042545dbb11a41ab0e737631226ef9d799e925b6d"
+    },
+    {
+      "bytes": 56478,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/_build_install_track.py",
+      "sha256": "863b1703a2865086e52f50823bf49e6fc1325fa80d10acfd466b488de3e3986f"
+    },
+    {
+      "bytes": 1173,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/README.md",
+      "sha256": "a135172ec110dba79cde0981c7e02abee88207d1bdc1fe559b16fee155e57d6c"
+    },
+    {
+      "bytes": 3311,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/environment.json",
+      "sha256": "9fc30f6760f21f9e7fd08ba93a56dca64e4b494e720c13599552f417eef06759"
+    },
+    {
+      "bytes": 1293,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/expected-disposition.json",
+      "sha256": "d5c9699ee2a710acaa9c6f514733619867ac2d5402c1141e575c53e52de57a72"
+    },
+    {
+      "bytes": 281,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/fixture/handoff.json",
+      "sha256": "36cd67646c2ea066d058fcde2ae472ca6d02f442d9d1d89155272cc2182b5a9c"
+    },
+    {
+      "bytes": 1586,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i01-documented-install-first-use/task.json",
+      "sha256": "20f286937492b2562cad2405a7aaea5fa7eb2d974f9348c1e6201ed96e754b0c"
+    },
+    {
+      "bytes": 1088,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/README.md",
+      "sha256": "912a68a800da837c4f6d9b70ab61a882b8b84eb4c902a1dbc1892750a0ce538e"
+    },
+    {
+      "bytes": 3882,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/environment.json",
+      "sha256": "377ce88c1cb5d12d6ffb2d7fd19d0c3e6297eca9ec34537b05b849eec32b7eba"
+    },
+    {
+      "bytes": 1120,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/expected-disposition.json",
+      "sha256": "48cc827bc46ff2c4762aa40ffe1e7f77373d3a2196c15c656d676ddbf3220669"
+    },
+    {
+      "bytes": 392,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/fixture/handoff.json",
+      "sha256": "d9d4745d4a2461499c9c85d5510a030be088864c5e5a487f39308af132a3b438"
+    },
+    {
+      "bytes": 1614,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i02-wrong-governor-path/task.json",
+      "sha256": "970ea0c8313315a0657487c443316882d30d7a53555b468b144983df96bf885d"
+    },
+    {
+      "bytes": 1014,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/README.md",
+      "sha256": "634ebe38ae6d2864e39404d4ad2f2929b90c2a42d95f01bee9f92711e4cb0622"
+    },
+    {
+      "bytes": 3767,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/environment.json",
+      "sha256": "a1fb3cf8f63b76c51d5cea18071d5d753da63d6016255b3f817d5dfcb2e1b8fd"
+    },
+    {
+      "bytes": 1139,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/expected-disposition.json",
+      "sha256": "6de0339bdbe134bef265f1fd0e241e5e2c3bb7986f56ce46b66344dc13d9a4f8"
+    },
+    {
+      "bytes": 290,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/fixture/handoff.json",
+      "sha256": "d0651a1330e631c868cfc81c626975b5abc7a12584a3135d8fd604a4b5269987"
+    },
+    {
+      "bytes": 874,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/fixture/media/release-handoff.json",
+      "sha256": "8fac3b424d0435c4f6812cdc70271ad137dc7bf4fdd901321481ea50a1d6bb73"
+    },
+    {
+      "bytes": 1438,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i03-missing-install-dependency/task.json",
+      "sha256": "1e3816e7504e0fd1d37afd1043c269990df3558287a9f93c0062d68ef9b40753"
+    },
+    {
+      "bytes": 1031,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/README.md",
+      "sha256": "7b1d372b1ceeb8f981d4bc4afab22ece3fb6984ea3c0af905a06121e1cfa5eaf"
+    },
+    {
+      "bytes": 3889,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/environment.json",
+      "sha256": "dd78d2a31616935b0cd631de3d11a03cc3fe6e84ffb7e386ecef187418a991e2"
+    },
+    {
+      "bytes": 1258,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/expected-disposition.json",
+      "sha256": "fbde65c5568e0440fa4498cc2dc92981b218c4d4db919f339a5ab79791085ed8"
+    },
+    {
+      "bytes": 442,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/fixture/handoff.json",
+      "sha256": "0955300ed8d08eaad8c95b22c7ea9ef64d25373d05d0fab1a2fd8a4123dd32b0"
+    },
+    {
+      "bytes": 1609,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i04-governor-unavailable-component-only/task.json",
+      "sha256": "42146a6cdae399eb0c88339f3f6e60d57f4796fb2e49b31ca8e0b7c736824dcc"
+    },
+    {
+      "bytes": 1337,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/README.md",
+      "sha256": "1793a0f7de11aee1c5c31fc8e9f8375a74a0447164f73407ba3ee7089182383c"
+    },
+    {
+      "bytes": 3906,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/environment.json",
+      "sha256": "0431f871ec09f954a83bc37ce5fc72197189cb81da70ba153cec22d9d5132b0a"
+    },
+    {
+      "bytes": 1284,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/expected-disposition.json",
+      "sha256": "cc63e212c50b02f689ea52e0072817d1f5e37cf2e8121f3bb89a6ae57f78350b"
+    },
+    {
+      "bytes": 429,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/fixture/handoff.json",
+      "sha256": "b0af5ea2918ebcdc21bd0ebe2177475d6dd64ca11658e37a5b3129aa5d580052"
+    },
+    {
+      "bytes": 1902,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i05-install-permission-denied/task.json",
+      "sha256": "628e865493e53147318da87623587d45e39cb1356e8ece03348f14fce32e2b65"
+    },
+    {
+      "bytes": 1072,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/README.md",
+      "sha256": "08122fd8116aac21df810c4d8d7b6a41b1503130ecbc504858a95496d7a31931"
+    },
+    {
+      "bytes": 3890,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/environment.json",
+      "sha256": "14172e83fac8af4e9e77a5b43477cd67b363c2475be97804b1ca043e3a6c191a"
+    },
+    {
+      "bytes": 1171,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/expected-disposition.json",
+      "sha256": "74d5171f6922bff385775d5934f01c42a6b5b66c5c8d3e09c0e4530effd4c44a"
+    },
+    {
+      "bytes": 120,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/fixture/config/settings.env",
+      "sha256": "357eaaa96bbd68efbfd2c651620b563dbd66a7bbfe6e9858daa9794880653844"
+    },
+    {
+      "bytes": 520,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/fixture/handoff.json",
+      "sha256": "ae8522fe1785f26d4a9a7e5269c248ea37d555f43cb7a9460e94f06d499f6031"
+    },
+    {
+      "bytes": 1728,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i06-malformed-environment-config/task.json",
+      "sha256": "b47644299e90e44926ddaf7de2bc871f53d5c0df90a6ca5f370b10909598785e"
+    },
+    {
+      "bytes": 1018,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/README.md",
+      "sha256": "777eeac8c9f83e6a48205893eb420ecc7fe62ce74174058857259dd4c12b0926"
+    },
+    {
+      "bytes": 3889,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/environment.json",
+      "sha256": "51a9dd0fda725ced301df05ad670f29d2a6d8c69e9927ec6c1ea456d09ba4ebe"
+    },
+    {
+      "bytes": 1180,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/expected-disposition.json",
+      "sha256": "ab72818515105efbf5a572a0dc7df3e167ba6c965c9957b14ff029f0c38b48b1"
+    },
+    {
+      "bytes": 456,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/fixture/handoff.json",
+      "sha256": "ebc1452db60eeb1d36e8c062735c96ff9bedd5a2e34aa72e6a75dfea60dc8d44"
+    },
+    {
+      "bytes": 128,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/fixture/state/ownership.json",
+      "sha256": "3e4f84c71d9b5df926867e184dbc0b570d2ee55ee81af94d9cd6579e62ada767"
+    },
+    {
+      "bytes": 1610,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i07-stale-state-schema/task.json",
+      "sha256": "9a210a4ef31ab072e0ffeea02347d20943599dfc54d8b22ba867a61a6c06ff7a"
+    },
+    {
+      "bytes": 1202,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/README.md",
+      "sha256": "5c1145f38cadcb782317beb027e6ec7bfe863d0ad446e1a11d7c108b41410db5"
+    },
+    {
+      "bytes": 3912,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/environment.json",
+      "sha256": "7c11dc5662a232f2fe5cd3436905c5548c91146261e63e03d5be38e8a1e7758c"
+    },
+    {
+      "bytes": 1198,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/expected-disposition.json",
+      "sha256": "5c53aa90ca13fe4c2d1e35b195ecf822555194f85c3a180d8cefa8fbabfe1247"
+    },
+    {
+      "bytes": 445,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/fixture/handoff.json",
+      "sha256": "9dff7d1af711a2f4e258df1227a7be937caea6e669344ec2609c83eab38a96b1"
+    },
+    {
+      "bytes": 232,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/fixture/run/endpoint-ownership.json",
+      "sha256": "dbe2b6de95d8d4a09e69c0c3e236eaca26b2fe27804358d73f613afba3c3dd05"
+    },
+    {
+      "bytes": 1783,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i08-occupied-socket-endpoint/task.json",
+      "sha256": "a5d144bded77c4f4c75c964c4d96b90028a6abdb029ffbde14338066afd458f6"
+    },
+    {
+      "bytes": 1084,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/README.md",
+      "sha256": "2e14bbccd82762a68086065912e4612f0267a2e337126ac7c573e2f586897c84"
+    },
+    {
+      "bytes": 3309,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/environment.json",
+      "sha256": "4b730163bb5348c0ffc26a55149a6e87d2f198c0c0ec0412196aadcd7e3ce2bd"
+    },
+    {
+      "bytes": 1189,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/expected-disposition.json",
+      "sha256": "168f9b5ffc5df15814c770e893b49fe200195921eeff34ffed7c8247ebe2ab6e"
+    },
+    {
+      "bytes": 309,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/handoff.json",
+      "sha256": "02ba57421384c6b3f3298643ce3bbb24e2066396997ec66fd3f1f68adfb42662"
+    },
+    {
+      "bytes": 117,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/state/ownership.json",
+      "sha256": "54a34d947f32e5d9480d23d0e4c7de1914789f233462533c89916729d3fcd709"
+    },
+    {
+      "bytes": 221,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/fixture/state/prior-installation.json",
+      "sha256": "84d06966e96b2514f70d24c1f51590e10db75997a942fe45c3f91d5e638be5eb"
+    },
+    {
+      "bytes": 1529,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i09-undocumented-upgrade/task.json",
+      "sha256": "8993c22aa92d395ae389eccaebd13934ab651197c277926babf5c0d1ab1a9572"
+    },
+    {
+      "bytes": 1222,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/README.md",
+      "sha256": "342993e4ad6ba882db3494c39904e7564a205cfc002317c14df4bfee778e4c75"
+    },
+    {
+      "bytes": 3918,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/environment.json",
+      "sha256": "8bde0a9f4a90cbef7d37bda1b098a08a469d4585350181bacc90afcfd9b4b584"
+    },
+    {
+      "bytes": 1337,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/expected-disposition.json",
+      "sha256": "012afd152dd64079a56cc67a1914e0362d27e329bc3fc710585d6f7ecb23f99b"
+    },
+    {
+      "bytes": 416,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/handoff.json",
+      "sha256": "8eacb5f5c577367089548c7d92adfdba6e0012dcc305659167602a13ef526361"
+    },
+    {
+      "bytes": 117,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/project/.governor/ownership.json",
+      "sha256": "983698a6586c790b1f722fc35f24ee99ee4da33b6ff453ec36c260102e5f3550"
+    },
+    {
+      "bytes": 120,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/fixture/project/ownership.json",
+      "sha256": "2114cf3753d37d969b64d6f485055cd2470fba15e7f9b6ac12cdd104d1e4cc0e"
+    },
+    {
+      "bytes": 1776,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/i10-removal-reset-boundary/task.json",
+      "sha256": "51436c12ebdc68f8e3afff7a68326db1c4eed1cd500f02b770bd1f6f44b13a2c"
+    },
+    {
+      "bytes": 799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/README.md",
+      "sha256": "af9284dcee8722b00608113226038f96a0dd2a56128055e0a8d21391893ed390"
+    },
+    {
+      "bytes": 557,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/expected-disposition.json",
+      "sha256": "0f15e0bf6c84715751cafae9a44242dc04918ba2fcfbc44306d16115fda559fa"
+    },
+    {
+      "bytes": 192,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/fixture/clusters/store-17/apps/menu/deployment.yaml",
+      "sha256": "1aa21ca0fe182f033ca285d08ef5444abc236268f2cbc540ad1c0e6a5ffa4d8b"
+    },
+    {
+      "bytes": 105,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/fixture/clusters/store-17/kustomization.yaml",
+      "sha256": "88d350904dd55032b3300991ba393744244f5640f279c194e414b6777556aeab"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/lab_approval_ux-task-01",
+      "sha256": "5d33b4abef7ee51e3b15d3b389f1ef60a2f9abd48d77b2e9013360238fba0348"
+    },
+    {
+      "bytes": 601,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/packet.json",
+      "sha256": "29bf5f362e6a6211f8e03fd9dbdb2b7728a41421366d587f3076b105db219bbd"
+    },
+    {
+      "bytes": 258,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/patch.diff",
+      "sha256": "268f62df8634accd4727bc113f014c6389835ee72bd0bba17a72708eea29ca5b"
+    },
+    {
+      "bytes": 1805,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/plan.md",
+      "sha256": "1d1c294573f8d7157c64c088b44a245d8283f42bed82d778fd5828bab95a8b8a"
+    },
+    {
+      "bytes": 197,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/playbook.json",
+      "sha256": "6a8f8bdbb4c08ab9adf7bc6b05c14d6d1f173839c0d62a5bd8c3f0ff15fda84e"
+    },
+    {
+      "bytes": 252,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/ration-card.json",
+      "sha256": "9f5e92ab790a1bd12fb009ce52b3a4bfb2d4151a24d0ab18c6505ae6f354635a"
+    },
+    {
+      "bytes": 11148,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s01-kubernetes-image-update/runtime.json",
+      "sha256": "fdd1186cdabe0177973d25f6dede5b793b44e5dba8f007b6d39732d2dfd8ce29"
+    },
+    {
+      "bytes": 813,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/README.md",
+      "sha256": "94b1431ac8523d0e68baef480ab3ec756cdeddb32265c62c556795cd8ef5dcbf"
+    },
+    {
+      "bytes": 543,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/expected-disposition.json",
+      "sha256": "05fc467116c47f1f1558f788523c116f2c380d2a77afdf4051126cc17522439c"
+    },
+    {
+      "bytes": 237,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/fixture/.github/workflows/verify.yml",
+      "sha256": "1de9c5a14e26eebf604b09a38fb283011d72701de5cb9a72201afc0d964f5438"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/lab_approval_ux-task-02",
+      "sha256": "d43f8f6e77ae1ea15e43528b6a7cdbb976e180204ef3acb70f64c439a56163cd"
+    },
+    {
+      "bytes": 603,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/packet.json",
+      "sha256": "b01ab8b330f36f3fb0ffde3e48ad0ecfa9774a1c56ccd6f41c17d011d11747c3"
+    },
+    {
+      "bytes": 331,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/patch.diff",
+      "sha256": "06f5fc73e7c48468429edca24a48e9db4010909e69a98aac623f36e2067be351"
+    },
+    {
+      "bytes": 1826,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/plan.md",
+      "sha256": "35b2cdb2c62661905c3627be5ff315ff01c9adc2f234e2727075af6b93813e79"
+    },
+    {
+      "bytes": 222,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/playbook.json",
+      "sha256": "652f04a8cd1b6dc4b669c6e70d1c36f90d4a4ed87a907a0de13416d14ebb31f7"
+    },
+    {
+      "bytes": 220,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/ration-card.json",
+      "sha256": "67e96d3dd5632a9883bbc60ecad86c3aebd2a203afa59e3ea62e35143a2960f8"
+    },
+    {
+      "bytes": 10852,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s02-ci-workflow-repair/runtime.json",
+      "sha256": "53eb45d17b632c785596a7e0775903d450917487887c39add1abec685d75dc6b"
+    },
+    {
+      "bytes": 799,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/README.md",
+      "sha256": "281d2a2d0470e661436979fa98cc285cf42a861e6aeb1b2476330073b3eb92ec"
+    },
+    {
+      "bytes": 540,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/expected-disposition.json",
+      "sha256": "18b2bca574a50f3d5b35190d00542dde7f1aa518bb8b29f7f910eda0e77a2f7d"
+    },
+    {
+      "bytes": 268,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/fixture/deploy/api/deployment.yaml",
+      "sha256": "4c741a3bc059ef5fc5f1feea2219c1f894688f7c29441de0c6627811a80e0344"
+    },
+    {
+      "bytes": 95,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/fixture/deploy/api/kustomization.yaml",
+      "sha256": "1779a8dce44822dbc4c9e29430d781dd4a2f6c48e774074a5af05297a7f3591f"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/lab_approval_ux-task-03",
+      "sha256": "baa3de35635a1e92ad1b203f988d81528d323c4cd6e7a5ca61ee20f2a7a61f0b"
+    },
+    {
+      "bytes": 602,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/packet.json",
+      "sha256": "e1e8b824b131f5aa6b0a1e54e4d8580311a780f2f570224c17784956527a6e99"
+    },
+    {
+      "bytes": 167,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/patch.diff",
+      "sha256": "edbe9a80b1f6d27f94ee8a12f17fbecf4f2c517d5839581a94ee1b425c73b720"
+    },
+    {
+      "bytes": 1764,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/plan.md",
+      "sha256": "dd038b8cf4248de632b96916bcf34df213fd1a22a2dab7e398400d625d7d4243"
+    },
+    {
+      "bytes": 205,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/playbook.json",
+      "sha256": "180ed046d55a1a07e638a429bc0622823b09756ac2f9e50a700d640619e71429"
+    },
+    {
+      "bytes": 228,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/ration-card.json",
+      "sha256": "4fc3a4363f72299cce31aa26d5db5d4374841e25f858d5f87b978365575d761b"
+    },
+    {
+      "bytes": 10905,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s03-service-resource-limit/runtime.json",
+      "sha256": "b15b74932827e55b97c5aa6c7e0708720602cbc3d28796539694c2947d9f6b09"
+    },
+    {
+      "bytes": 783,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/README.md",
+      "sha256": "f271ee72f366b2a2a947f762cfba550cc1a5ce21e6228ed79cecd58a30444f93"
+    },
+    {
+      "bytes": 547,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/expected-disposition.json",
+      "sha256": "bac5cc1c2de616c362c090ed9a276bdcc569d422b85af956698503fe70bb2c8b"
+    },
+    {
+      "bytes": 249,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/fixture/deploy/menu-board/deployment.yaml",
+      "sha256": "d825f98e8afdfcc8de784036b9dac922b8909a10f5ac1010fc0f2de74bbf8669"
+    },
+    {
+      "bytes": 95,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/fixture/deploy/menu-board/kustomization.yaml",
+      "sha256": "1779a8dce44822dbc4c9e29430d781dd4a2f6c48e774074a5af05297a7f3591f"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/lab_approval_ux-task-04",
+      "sha256": "2bfe6d7a5492f38960c3c11a682cf9f4816c19279d12863e983de920e582eec3"
+    },
+    {
+      "bytes": 587,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/packet.json",
+      "sha256": "2389f0f4fcf7a8364926e3cf183a02e7a45cb8ebb9b7a0bf1f15f10e4b764517"
+    },
+    {
+      "bytes": 270,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/patch.diff",
+      "sha256": "9327d62fcb49a614d6aca66374c45a16887349f044f7f85efd5c686cbc4414aa"
+    },
+    {
+      "bytes": 1764,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/plan.md",
+      "sha256": "afeab475d8fd40dddddf5a2a56b59db738eb9ae8c04a7526e766c552653ce3fd"
+    },
+    {
+      "bytes": 183,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/playbook.json",
+      "sha256": "481a349972676e409e972b0b7d63ee34f6c27ea6d1afd563da5770d4ca1f1778"
+    },
+    {
+      "bytes": 242,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/ration-card.json",
+      "sha256": "77b144769a1bf3debf06c8252f9b0f05af5ec87f6bb96b8b7bd0435d0294169d"
+    },
+    {
+      "bytes": 11314,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s04-health-check/runtime.json",
+      "sha256": "6cabcbf8e790890f595537f49f4c98577f16b151a660eb8aeeaedbd30f7dc5f8"
+    },
+    {
+      "bytes": 859,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/README.md",
+      "sha256": "bad22cd0567d4bd2a722bfcce7aadd16ab8124800049765d9d4747170953bb93"
+    },
+    {
+      "bytes": 577,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/expected-disposition.json",
+      "sha256": "184783629e611d0ad09a5a42822df3e6a2b5f5a6b2bfe0c0ea7909edb0da7269"
+    },
+    {
+      "bytes": 55,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/fixture/config/payments.env",
+      "sha256": "0d1c743bb4ec41900c60b3064543b972a328e3c90d321a0f1c0b2166ca145be3"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/lab_approval_ux-task-05",
+      "sha256": "d8f124026d86b4dd4b62aca3ef21d596e076ce02a31f5f3f2b653ee5fde8d537"
+    },
+    {
+      "bytes": 627,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/packet.json",
+      "sha256": "1ad1ddbb1274cc955bfcc32712d04a1228a5ed70ca3f66023d6f044da5fcf0c9"
+    },
+    {
+      "bytes": 166,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/patch.diff",
+      "sha256": "ee9990513df4e236c24fb197f6bc390f53b50eaea9a439e34390991760eb0434"
+    },
+    {
+      "bytes": 1860,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/plan.md",
+      "sha256": "7d7bbe45e49c480ec20b829869e0c18c35d5d6d6163cac1e885fe04d8347d8a0"
+    },
+    {
+      "bytes": 246,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/playbook.json",
+      "sha256": "d12c47c4b5ed1a76d071916e6d85f5316764bfc7fd3e3ec53936438e143a862b"
+    },
+    {
+      "bytes": 211,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/ration-card.json",
+      "sha256": "e0a9ec3ca332c887537e83c629091e54e811534ad3f3a87e368062eea2920663"
+    },
+    {
+      "bytes": 10049,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s05-configuration-reference-rotation/runtime.json",
+      "sha256": "715f942400ff71018200aacd19fa46a7ab57acab8aad1497c984bd238cae7e98"
+    },
+    {
+      "bytes": 795,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/README.md",
+      "sha256": "d0f590cafbe954faf2304262e0c2d0bc0cd4e7b21a7226f1d303867bfd27b3b4"
+    },
+    {
+      "bytes": 589,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/expected-disposition.json",
+      "sha256": "a5b1635bb02ec3013f3c2a5052b47a667bdb349d01738f4ec703023bb193c93e"
+    },
+    {
+      "bytes": 154,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/fixture/systemd/menu-board.service",
+      "sha256": "88c1ccbb59b6c20b04139b28c675d7f3d19d8b49b5a27e8e9a9337750e826897"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/lab_approval_ux-task-06",
+      "sha256": "0870262da0266c6d04d3f03f6b7cec3f63d4e1a937aec84d67c55477a4b97ffc"
+    },
+    {
+      "bytes": 613,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/packet.json",
+      "sha256": "1be51f501e970c6f82f33855365ae3e4445a19634b7626a00fa55478c82659a1"
+    },
+    {
+      "bytes": 246,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/patch.diff",
+      "sha256": "90ea5964056ef3465e3853e7f720bb607deb9ea7c476ebd52144cd3965c96e32"
+    },
+    {
+      "bytes": 1787,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/plan.md",
+      "sha256": "80a6d25308b7cbeeecbf6f0984bacf9d0404287f1c7ac7ea68f9276a01c18184"
+    },
+    {
+      "bytes": 187,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/playbook.json",
+      "sha256": "a12cfef52a991fcf4df4a985c7cc69c0aca31912dbba7aa4b0a18e23bef6cf0d"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/ration-card.json",
+      "sha256": "a0f7a84dedb7cac5285e0ece6a9639621b81cd27e0205ee9b2d5734189259d10"
+    },
+    {
+      "bytes": 10705,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s06-systemd-startup-option/runtime.json",
+      "sha256": "8a9bfd5e61a40d500ca7f9bc0cdfabec5bd862ac73d138a41c702551badfe044"
+    },
+    {
+      "bytes": 769,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/README.md",
+      "sha256": "f47c2cf0a345d08587f29ef568b8e431bc3eb452c9fa9b347f174b8af7835c64"
+    },
+    {
+      "bytes": 549,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/expected-disposition.json",
+      "sha256": "b60d351eb536831eaf00d13bee2c0e3e4dfa0fc186a098da5730ce0ec5ff56e9"
+    },
+    {
+      "bytes": 301,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/fixture/nginx/nginx.conf",
+      "sha256": "8af18ba8e6769529ffd3e77da6472ae15f881ac0a4a2e988c0952d4c2e037db4"
+    },
+    {
+      "bytes": 121,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/fixture/nginx/routes.conf",
+      "sha256": "31c6c25d5e7bb7743459539e239297d8013b78e7e95e289fa9fca984c990210d"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/lab_approval_ux-task-07",
+      "sha256": "a9b22e6beefc228681e63a0c5c2851416559bee4c2c84110c6be30ad4f2ae58d"
+    },
+    {
+      "bytes": 616,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/packet.json",
+      "sha256": "d4be665c3abb0558eb8c311fa2ca54e3425dd48befb4134b6794a557b971414c"
+    },
+    {
+      "bytes": 207,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/patch.diff",
+      "sha256": "f6835afb35160ce948f644a8f24a9fc3438e558a774f8164eecb20f523a50b44"
+    },
+    {
+      "bytes": 1756,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/plan.md",
+      "sha256": "31e90d9d3ebca99d39044eaca0177be67c1b8828c54425b58cbfa59d5acaab96"
+    },
+    {
+      "bytes": 183,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/playbook.json",
+      "sha256": "4382c12bb8f4b86276501cb146c343927a46ff76e8dd9ae05193026767078a0d"
+    },
+    {
+      "bytes": 226,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/ration-card.json",
+      "sha256": "ec1da4f2988fc536920833f01ef68bd364bffdf88a33054c2397cbf2bf9088e4"
+    },
+    {
+      "bytes": 11200,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s07-reverse-proxy-route/runtime.json",
+      "sha256": "68966d252b69cbf71e2a79f80020f3eaae61502b8c4cf3d19c58a6013d5f570e"
+    },
+    {
+      "bytes": 805,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/README.md",
+      "sha256": "c031466f6dd85d0a7771b76dad27d8299fd8c8f09c1fb7b646bec3306f2f694d"
+    },
+    {
+      "bytes": 556,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/expected-disposition.json",
+      "sha256": "c1d95bb7a41821a86a61b006718675eeae9a83c0c73400d3d2261befa71fefae"
+    },
+    {
+      "bytes": 227,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/fixture/terraform/variables.tf",
+      "sha256": "73b4fe5a4cce14df3c93e8f0be5665feccd55fbe251f93515e931d3a96d6ddab"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/lab_approval_ux-task-08",
+      "sha256": "751016918727294298325590b0a7618638f7957ebd5a73a9b295ce8daf8bfed5"
+    },
+    {
+      "bytes": 610,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/packet.json",
+      "sha256": "84cfbee3fd305c1ecdfc4bf50ee6c4009c4aeba0a0598f1e6487c5871997836d"
+    },
+    {
+      "bytes": 333,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/patch.diff",
+      "sha256": "6d20f1d40ba9ceb24989bb12c0f79d0e08c2ed137a893d87bb759df61af37d7f"
+    },
+    {
+      "bytes": 1795,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/plan.md",
+      "sha256": "343b1c81a6d9bb678d7f7c1d35773409c096f02b7ac15b86183aeeb1b4a3661e"
+    },
+    {
+      "bytes": 204,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/playbook.json",
+      "sha256": "73f1e9ceedc3fa47580f88112e48aea746569a23a09fefbbfc1e20a47b45dbed"
+    },
+    {
+      "bytes": 233,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/ration-card.json",
+      "sha256": "3b6cb54389ae2fc85626d079568e4712e3784d3be4f9347a35a1d95083a4073e"
+    },
+    {
+      "bytes": 10890,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s08-terraform-validation/runtime.json",
+      "sha256": "3b09f5c6810fcfbaca644800bdeee646724eccd80d681c221cc658f6bca32874"
+    },
+    {
+      "bytes": 882,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/README.md",
+      "sha256": "e962b306cc1bc3ce5855be6baab71ac98ab343db53db184a472006b63528531d"
+    },
+    {
+      "bytes": 614,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/expected-disposition.json",
+      "sha256": "d16acca9f1649258d47708020c6412d0677700a8709bb5ec40bfd4fc03f35a58"
+    },
+    {
+      "bytes": 161,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/fixture/alerts/menu-latency.yaml",
+      "sha256": "8d0f5d73f4ba7fbb5450d16a17f50c8842d4bef4b29022011db279f45892388c"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/lab_approval_ux-task-09",
+      "sha256": "8b763f84df94dc2389a4b3372dbbe7e0a77b997eb9a88bdbda5d9a301b3df7e1"
+    },
+    {
+      "bytes": 676,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/packet.json",
+      "sha256": "3b02df7fcd8ded4b4f9595e75e791d70f83c9d1da660e5512096ef8c40b3b423"
+    },
+    {
+      "bytes": 286,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/patch.diff",
+      "sha256": "e7ec8d6fd4fa56ddd6b1f0c62538674bee62ad21b1ad39aa3ee09374363a6d73"
+    },
+    {
+      "bytes": 1862,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/plan.md",
+      "sha256": "23d0eff659916fb49184fb3614124be929cfdcaf75c4b447ceae5be55f68a038"
+    },
+    {
+      "bytes": 234,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/playbook.json",
+      "sha256": "fb3dd7a38cea41703aacb008e92559d0771cd9ff8ec0200b6dc0b2c23d1d7bec"
+    },
+    {
+      "bytes": 245,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/ration-card.json",
+      "sha256": "b706e428dac77d922c650b74a9f4756f869e7940e8d37029acb1b2a03509fe12"
+    },
+    {
+      "bytes": 10763,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s09-alert-threshold-review/runtime.json",
+      "sha256": "3ae7cf7e27921fb5e0250ad8d77d4440d03e7ba7c270e41c0422b1c207d4fa51"
+    },
+    {
+      "bytes": 795,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/README.md",
+      "sha256": "4748a8be5b3f052a23ea0554de95a6279b6c4ee01607281dddfa4408d8c8c388"
+    },
+    {
+      "bytes": 569,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/expected-disposition.json",
+      "sha256": "38e97456e4d8740ff8bd23a2f473464d4fa7f69aa65b46e6fe15495e731c55f6"
+    },
+    {
+      "bytes": 92,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/fixture/ansible.cfg",
+      "sha256": "5b56b6a54bb7abeae55de22ddb7fe62fb13f8ebf262505ed668cc15fb75ac2c4"
+    },
+    {
+      "bytes": 81,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/fixture/ansible/roles/edge/tasks/main.yml",
+      "sha256": "bddac54dd0d6228571b725986cb1d05408cbf0d0fca8d21f46e718e13c74aecc"
+    },
+    {
+      "bytes": 140,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/fixture/ansible/roles/edge/tasks/packages.yml",
+      "sha256": "bf242d72c0a38ddb218d56e07f66f2f480fa62fade038556204f6da47e025c12"
+    },
+    {
+      "bytes": 47,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/fixture/inventory.ini",
+      "sha256": "4226a3583999900f1bc0d92a63ba43e8330a1ae16701adce1fa92cfc07709e15"
+    },
+    {
+      "bytes": 99,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/fixture/site.yml",
+      "sha256": "2e1193d2b13ae2f2e798841bbc8d3d0ab90ce55f0fc45736254b6920eea6daf7"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/lab_approval_ux-task-10",
+      "sha256": "df8a7ce2cad26490eff7f8ef21e9ae0377f6a83643547e9f8ad114a32025e074"
+    },
+    {
+      "bytes": 584,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/packet.json",
+      "sha256": "afad2da14a17cb093a3f1b5bdcfef0aa36d427348f073bb53444812015bcc454"
+    },
+    {
+      "bytes": 153,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/patch.diff",
+      "sha256": "4db7826a5a67f3d873da56313ae59489d14b3a248e334e1a77fdcc82f31754e7"
+    },
+    {
+      "bytes": 1705,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/plan.md",
+      "sha256": "a8c22522093ce574d5c86f2d0f59231d91e6c80e8310f480d6013f4f993c0aee"
+    },
+    {
+      "bytes": 166,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/playbook.json",
+      "sha256": "2a9f93d8ccdf574fbbbdb0d7fdb47b050ff94662808e4b1c5fec4c79ccc3feb4"
+    },
+    {
+      "bytes": 253,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/ration-card.json",
+      "sha256": "9e5442164e912b6cfb45fa904bee054713ac5d4c21506dc78f2da7fe5176f869"
+    },
+    {
+      "bytes": 11399,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s10-obsolete-daemon-config/runtime.json",
+      "sha256": "19b3bc0865b2ce251e878df247d728892959aa46b2c00476974b9b6401adb4a2"
+    },
+    {
+      "bytes": 849,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/README.md",
+      "sha256": "3a1ff51d94e87ed77de4f5a813acdaecc066d589f3e2e5ec4ee5528c3f1ddabc"
+    },
+    {
+      "bytes": 616,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/expected-disposition.json",
+      "sha256": "44c8bc439111c996f455a5716e60a74b317511db10990780f8a1d266ac1a84d2"
+    },
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/fixture/apps/menu/deployment.yaml",
+      "sha256": "54e6abcfb42a82d36e5bf74b28c061686f584f90d703851c8371d178d7817e47"
+    },
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/fixture/apps/payments/deployment.yaml",
+      "sha256": "3073602260b7806571ff5d23e825f16effaeeae2f04b6f0d8afc3f0244f9323b"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/lab_approval_ux-task-11",
+      "sha256": "b17c1561372dfaa2b25aa0fb5e916635573844deb591c5ebab2d3e7211b11c9b"
+    },
+    {
+      "bytes": 597,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/packet.json",
+      "sha256": "b90bb6f30d9f1d48e7f48e0798a8ad4ad614b4223771b3dc308609fe941f1d9a"
+    },
+    {
+      "bytes": 172,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/patch.diff",
+      "sha256": "757db27ab8a5e8d942d7edd2d7335bc9c2299656cfda7b37575d9351393dda73"
+    },
+    {
+      "bytes": 1689,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/plan.md",
+      "sha256": "16097a15506e615416cedb5add936b3c1600c9daf298ba439190ceaee21755eb"
+    },
+    {
+      "bytes": 173,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/playbook.json",
+      "sha256": "63e284a0cee639596b7558c53292edd03e7c1aafb2a7c11cd66f436d86a65ea3"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/ration-card.json",
+      "sha256": "3bc911fc52d4623ea579900126cd680c5eccd7dcce638ae9173fb57944c5e64d"
+    },
+    {
+      "bytes": 10719,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s11-description-scope-mismatch/runtime.json",
+      "sha256": "f0f47ed881dd761f65856d0c49105f580b590df33dc91ef999098159d0516410"
+    },
+    {
+      "bytes": 914,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/README.md",
+      "sha256": "27bcf051edf765e1815e73657cfd339dc1e36ff5de2bd67cb578534a5fe04b23"
+    },
+    {
+      "bytes": 602,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/expected-disposition.json",
+      "sha256": "818b0b994c324816b7a30758bc4a46b4e7b5823caf9b754f52d988379c93fb9a"
+    },
+    {
+      "bytes": 60,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/fixture/governance/AUTHORITY.md",
+      "sha256": "fe7791482c810575c46d03bc1cc500d8748373319ef23c8ec287a5c8d2157351"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/lab_approval_ux-task-12",
+      "sha256": "08ddb588d1c3af43e15a2ec656a24263beea44661fba416476b0b3ba4849b9d8"
+    },
+    {
+      "bytes": 637,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/packet.json",
+      "sha256": "d25dedc3966a28afcc77d25ff9524bea105c84a0757a2497afa29ee872d27fbc"
+    },
+    {
+      "bytes": 193,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/patch.diff",
+      "sha256": "3d30f38b6186d95194f6496c392e43954ebed929df72be269fc9ba583f696797"
+    },
+    {
+      "bytes": 1772,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/plan.md",
+      "sha256": "22a6b838904631491d81cedbc0c9aa3712cf32e949aa2e4f388006a55a074df4"
+    },
+    {
+      "bytes": 213,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/playbook.json",
+      "sha256": "b95e772404075633b10ef5950cc8a300626e644173e9ba638c2e0fccf8307013"
+    },
+    {
+      "bytes": 201,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/ration-card.json",
+      "sha256": "d7aa38ed86dec4a9de0193bfd60bc9138ad8064c0602985704b1320da7488442"
+    },
+    {
+      "bytes": 3024,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s12-governance-file-mutation/runtime.json",
+      "sha256": "46b8213076337a68a03c9605740722b0de50463b53b9fcdaaee09d8b459c7714"
+    },
+    {
+      "bytes": 863,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/README.md",
+      "sha256": "a0b73f0ef56cc2be43e266230652fe8c85dba1bcaad5dacff814d595dae58d88"
+    },
+    {
+      "bytes": 576,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/expected-disposition.json",
+      "sha256": "426e34944acfcc06490024642ae842e58b5616f95a67f93b950f5841a634de1f"
+    },
+    {
+      "bytes": 89,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/fixture/deploy/base/kustomization.yaml",
+      "sha256": "03d29e2df73ba2232dc11fb9979745d86d0e5c9df5cb7623663675432b9a29af"
+    },
+    {
+      "bytes": 305,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/fixture/deploy/base/menu.yaml",
+      "sha256": "827885d0004e573b57285bcc2d193f92169793b0e4fbdc3f1aa9a39b9c08cca2"
+    },
+    {
+      "bytes": 119,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/fixture/deploy/overlays/store-17/kustomization.yaml",
+      "sha256": "70957357210d351ef5e1bf6d817f1432988519fd6aaa93b8cb296576b270bfc0"
+    },
+    {
+      "bytes": 84,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/fixture/deploy/overlays/store-17/menu.yaml",
+      "sha256": "c24668ed0e2bfdaed8256c2a69fb0fe120aa910851d216890734b00058999d4b"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/lab_approval_ux-task-13",
+      "sha256": "e3a069cb6ae866e712b5449e85beb6858fee210a95e5c078a3435e3a232c6202"
+    },
+    {
+      "bytes": 634,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/packet.json",
+      "sha256": "ea9fd1b5de212ec08b16af8c9980e512320ee7ad4426778f166893a82b56a31d"
+    },
+    {
+      "bytes": 135,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/patch.diff",
+      "sha256": "6fc7fff4cdfd0ad15396b31da12c1e4f4904d3a1d0a2d8e840c1dfc3ff229320"
+    },
+    {
+      "bytes": 1742,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/plan.md",
+      "sha256": "544dbb437fd0a1118ad81db88aa4b936585e880d96e916e67a3d5e22c4840e30"
+    },
+    {
+      "bytes": 180,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/playbook.json",
+      "sha256": "4fa88336fafbfdcac0e96a61b33e48cf540df6b9a0eecbc7e33aa615c9c587aa"
+    },
+    {
+      "bytes": 237,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/ration-card.json",
+      "sha256": "92742d86351fe1b173a2913c96c43bc27543c21d51d5a72c798dfc7453b5e65b"
+    },
+    {
+      "bytes": 8630,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s13-worker-out-of-scope/runtime.json",
+      "sha256": "c5759db7043eae3f377524d291413f0b3b9a57f22b96a6324a6c00119f1fe904"
+    },
+    {
+      "bytes": 867,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/README.md",
+      "sha256": "e5e454f2fdc5e8f02cf3ae4e8a0f7d4469a41cec7086eba7d7a58ada6f2d8055"
+    },
+    {
+      "bytes": 603,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/expected-disposition.json",
+      "sha256": "c284adbcbbf198652b7a867b6c16f131c060373275b94f4d2b5ff3439610d7d7"
+    },
+    {
+      "bytes": 11,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/fixture/config/api.yaml",
+      "sha256": "2b65d494d83fdb4595485bbd6c1e601ac5ac15b306999a8f761cb6746a1608ba"
+    },
+    {
+      "bytes": 140,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/fixture/tests/test_config.py",
+      "sha256": "1056eb6ac69658386c9e4be76c786ba5210d6806a82b0058a9de66c4fdd46d63"
+    },
+    {
+      "bytes": 656,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/packet.json",
+      "sha256": "255e06052fc90233af87d9bcb2a27ee2ad0c93ed4cbca9d0e80971cef2baad84"
+    },
+    {
+      "bytes": 80,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/patch.diff",
+      "sha256": "1f798557263b6ed359b00c919478ef156dba8979414360e9af5e11912749f733"
+    },
+    {
+      "bytes": 1726,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/plan.md",
+      "sha256": "cc40dc5693950726ea1092987f4b5f3409073f890f237bcb7eb4acb75b68c17d"
+    },
+    {
+      "bytes": 195,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/playbook.json",
+      "sha256": "3720ea2a4f2d1646705b9ff6266c38605c0aed8941550021f17840fc773558e6"
+    },
+    {
+      "bytes": 229,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/ration-card.json",
+      "sha256": "f4bd888392b489a897b4654e1685e6c9e221751662e15439c9637f9fdcda58ec"
+    },
+    {
+      "bytes": 6488,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s14-tests-pass-unauthorized/runtime.json",
+      "sha256": "a7f55151d2c40c804aafa570e0eccca93bce8b74ba4c3bcfc76af17445d40284"
+    },
+    {
+      "bytes": 884,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/README.md",
+      "sha256": "fbbef4cb27c451b732ab9e7a4655678d84069eb240eb0d988a432f67646f0507"
+    },
+    {
+      "bytes": 606,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/expected-disposition.json",
+      "sha256": "fb2b5cc964fcc4fd3d5ad454b5c4d0b28695ab78140a013647ade34b1d0586e8"
+    },
+    {
+      "bytes": 45,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/fixture/deploy/worker.yaml",
+      "sha256": "fb49847e7f7f28e4c515b80676b7e171f02f1f7564719891e0c84c46bb98b35e"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/lab_approval_ux-task-15",
+      "sha256": "6c9117a16ef7f5a7a2328e878afc40fb2d44e03339771167aeffd7d960ad23ae"
+    },
+    {
+      "bytes": 634,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/packet.json",
+      "sha256": "e0247c5457020e2d41383affcdb5031a94d6cc30b56313b79b1555e62aa7895e"
+    },
+    {
+      "bytes": 154,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/patch.diff",
+      "sha256": "0ea84032ab1903f60a5c91d86303d813e509ad14dcdc70ceb6274720091e23c1"
+    },
+    {
+      "bytes": 1755,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/plan.md",
+      "sha256": "787c5a12d3de570c0ee9c68359acff27ca4d6aa17d151c274fa7e04d963d3386"
+    },
+    {
+      "bytes": 210,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/playbook.json",
+      "sha256": "d2b8fc602a4e926dc1cfaab2316f8bc9053bbf18a341bddd6d4456673ddbcd30"
+    },
+    {
+      "bytes": 210,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/ration-card.json",
+      "sha256": "d03b52b0c2ec32e434687e4fdd39625d54402b059482b559717010431df13ed6"
+    },
+    {
+      "bytes": 3922,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s15-runtime-refusal-before-dispatch/runtime.json",
+      "sha256": "a7500f80a779e3328e2426d757dab646891d797dd3e14ae2e948096e1fa13204"
+    },
+    {
+      "bytes": 912,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/README.md",
+      "sha256": "390dbb48e878e761b8903f8ce781627e065db66aacc728920e458cd2b4224521"
+    },
+    {
+      "bytes": 605,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/expected-disposition.json",
+      "sha256": "446748ba87160096aed57083bdeed1ba6b7683d99a595fb47ee0bf5872a1c568"
+    },
+    {
+      "bytes": 18,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/fixture/config/queue.yaml",
+      "sha256": "34f86d76fe30b255b6227a56832df401905335ba5b56de5c0a170029438082bf"
+    },
+    {
+      "bytes": 173,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/fixture/tests/test_queue_config.py",
+      "sha256": "f72171429e3e09f6b70c2acdfe414d04c37fd9ae893033778f476509026cf900"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/lab_approval_ux-task-16",
+      "sha256": "94eba71cfbf011bbd095af822644c2952379badca25700cc9f46808e16d1d19e"
+    },
+    {
+      "bytes": 699,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/packet.json",
+      "sha256": "ac22c94c6aa71f33589d868a452399d8663e5b7f0c2d14e22adc3b0119cf7f63"
+    },
+    {
+      "bytes": 97,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/patch.diff",
+      "sha256": "b954098f52ee23fea86564931b23e5060ea91bbd8f79b8b6e615869eba6882b6"
+    },
+    {
+      "bytes": 1848,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/plan.md",
+      "sha256": "3bcdd5c9722436369f3e34e048025dcbc5604bac2c71f7f2de29cddd713153ea"
+    },
+    {
+      "bytes": 232,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/playbook.json",
+      "sha256": "b2b05a0360c7ae8cdb327eddd9fed09d95a08ff12453745a6ac56b03cb4057dd"
+    },
+    {
+      "bytes": 237,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/ration-card.json",
+      "sha256": "ea1bf107f61c640925ad992174c229531c5c8c8504233089d30244e2d31df6d5"
+    },
+    {
+      "bytes": 5415,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s16-execution-timeout/runtime.json",
+      "sha256": "a7a679f450d13ff49493fbd6cd5bac8fbe45f6fe9898b8d320f19c42995a0239"
+    },
+    {
+      "bytes": 898,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/README.md",
+      "sha256": "ed7e77f62a9a7943bad08ab232f3c2582c7a8d8e609ffd18c42c1851672a18d2"
+    },
+    {
+      "bytes": 662,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/expected-disposition.json",
+      "sha256": "c29f09d0c42887c67010c6479e142aae955035a4ffdb8a180984d881197fcf5f"
+    },
+    {
+      "bytes": 29,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/fixture/config/proxy.yaml",
+      "sha256": "99fa1c9157b95602cbe7b5f8f0e730c4816123f85352e52842241263f6ff5b9d"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/lab_approval_ux-task-17",
+      "sha256": "0eb08a5578a492147c8f8bc7a234181560a362bec834d93cfeada262f6881b7a"
+    },
+    {
+      "bytes": 613,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/packet.json",
+      "sha256": "f32d3eeb9b38529a125305e589f1f5ebe9b9d319a882f4400eef3e2b68f6aa89"
+    },
+    {
+      "bytes": 120,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/patch.diff",
+      "sha256": "5071d13327bbc92107814dae8bd5509681a9cdd8d3b9a052d31828bced7ea147"
+    },
+    {
+      "bytes": 1733,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/plan.md",
+      "sha256": "834f93518c0a85002353e1c34b045ac90106361f033ae11c3125039c5c0a1da6"
+    },
+    {
+      "bytes": 189,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/playbook.json",
+      "sha256": "4afea4ad232e47c4067ac24fb675399fc1523211d06d26f38334c5ddb0c11d02"
+    },
+    {
+      "bytes": 209,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/ration-card.json",
+      "sha256": "6e8a292085a4dd2f1fde56170af9e0789945af06aec750a3c8226d666c7eef49"
+    },
+    {
+      "bytes": 7231,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s17-client-daemon-restart/runtime.json",
+      "sha256": "7ddfc753d22122d7861eae66e320fa58e83612dedf7564b40b40e224e1b36404"
+    },
+    {
+      "bytes": 901,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/README.md",
+      "sha256": "05d67120cb3ad2514f1a5b9aa9808d13d6f4639302e03be17ca746a09486b4f3"
+    },
+    {
+      "bytes": 633,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/expected-disposition.json",
+      "sha256": "b0f4c497cbc3a243608a53a4c4ae61a4580851bdc052ee0778b7887e03165fc3"
+    },
+    {
+      "bytes": 15,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/fixture/config/scheduler.yaml",
+      "sha256": "ba69a96cab0523172d2477856ecd37644427e5674f6668278763c79512f40119"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/lab_approval_ux-task-18",
+      "sha256": "56c2b6f2c16641e62cac3b941880c7a673f5d470e26edcfb1790410bab249192"
+    },
+    {
+      "bytes": 623,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/packet.json",
+      "sha256": "1acf026b0126237b96808bca74b443a477f29f7d2ad97fcda451f0107bdf6012"
+    },
+    {
+      "bytes": 100,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/patch.diff",
+      "sha256": "348b781608e372d24cc1efef6c0a2924792691e5d71d0a6f0e29b03920ab7183"
+    },
+    {
+      "bytes": 1793,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/plan.md",
+      "sha256": "9bc4c57e07284aff50c847029b9fb1afa90eb11c4b79b7aff768da7b1006a806"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/playbook.json",
+      "sha256": "42990734046ac008d3e3ca5837284baaf1dce62bd1cf586c550c3153f58cf08d"
+    },
+    {
+      "bytes": 213,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/ration-card.json",
+      "sha256": "ca0ad88d0b9589001ae9b5e73f45db35e53f6f637ec2f6916001b0e2f6a570cf"
+    },
+    {
+      "bytes": 10706,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s18-direct-versus-recovery/runtime.json",
+      "sha256": "c0d3d39952d3908fe4977f8f1b2aa604d8512b674fb7ce07cceea6c6dc0d0c20"
+    },
+    {
+      "bytes": 854,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/README.md",
+      "sha256": "020133afc3d393b74536fa5a302952fcd3be4244e797ced9ce38b0d76fa1cf40"
+    },
+    {
+      "bytes": 627,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/expected-disposition.json",
+      "sha256": "7aacfc3ba65dc6d72e6c658dd3213a0abbf16d9e44d146ef379852395e83927f"
+    },
+    {
+      "bytes": 21,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/fixture/config/cache.yaml",
+      "sha256": "a2311d93ab4f739f6b0c4ce57445caaa30989b469afde1de4c79e259dc18fabb"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/lab_approval_ux-task-19",
+      "sha256": "89398190ec68b28871d8d7fa9fe337c15ce4bd7d74881d383dead9056d7ad0a8"
+    },
+    {
+      "bytes": 641,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/packet.json",
+      "sha256": "68e2712d6dbd8c94d98bdb85564a55f137c0ba77d0eb640e97c0c25585180e86"
+    },
+    {
+      "bytes": 105,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/patch.diff",
+      "sha256": "01647ec52623df6523c24a49e443d524018d79771bc6adb6e4e7ac907fea2024"
+    },
+    {
+      "bytes": 1785,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/plan.md",
+      "sha256": "b6faf38ac07acff2d0f93ebda4d68d270d0ccf671143a3f2acd2f8cac9d6a63f"
+    },
+    {
+      "bytes": 217,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/playbook.json",
+      "sha256": "e583b98f8ee0e8e0a98a1cf8299caf25352ea095cc234aabd460a0ce3129963d"
+    },
+    {
+      "bytes": 209,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/ration-card.json",
+      "sha256": "3aa4ad30af8b17a585b79a688f232e6b5cf0a8a26439aaf3b85a6a223a2ff6da"
+    },
+    {
+      "bytes": 9825,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s19-discard-restoration/runtime.json",
+      "sha256": "7b9ad454e8f2368f0f7781da56f09a857c694db56f18a40fb25104492f689d8a"
+    },
+    {
+      "bytes": 901,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/README.md",
+      "sha256": "b3f45c32d4a12c8bf16840a038280c53fbd2eef393b1a157d70d6cfbbc592484"
+    },
+    {
+      "bytes": 592,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/expected-disposition.json",
+      "sha256": "b147446c1242c23345c70a5bdf2bbd452fff96a26eb468c631113720d1653e01"
+    },
+    {
+      "bytes": 42,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/fixture/deploy/api.yaml",
+      "sha256": "dfcdb33633e676c3333e9b481223b478f4dc996a4649719057758f3befe0e41e"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/lab_approval_ux-task-20",
+      "sha256": "330b788921e3fda56628c65a98d8a4281d2bd6edcc3752b1738095f150a286b8"
+    },
+    {
+      "bytes": 622,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/packet.json",
+      "sha256": "727c377762f97537010d11367b4264d1fa24342cc0f1592cccab27afab770f0a"
+    },
+    {
+      "bytes": 142,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/patch.diff",
+      "sha256": "970b95ea2a1681edc88d67bcd2cf7a3d8f3e1a91558b96fe9776aace7fe175b2"
+    },
+    {
+      "bytes": 1769,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/plan.md",
+      "sha256": "90d77c169e06361285a46d07658ad93702bba09dd7e18006411960066cff7154"
+    },
+    {
+      "bytes": 198,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/playbook.json",
+      "sha256": "48fc3661aea0292881e76ea6160d9d1ac96e29b3a5406e7e90d0097292cd071d"
+    },
+    {
+      "bytes": 207,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/ration-card.json",
+      "sha256": "d091cab1441fc4ad281f5813a2db633621d062e6fa8ed0c6b02ccaae3d0d8d91"
+    },
+    {
+      "bytes": 5690,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/scenarios/s20-terminal-unknown/runtime.json",
+      "sha256": "e696c1f2486e4d4071317bd3ffbff747ed933cefede819d2bf43b4bd3b9d1adb"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    }
+  ],
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "schema": "maude.synthetic-operator.hash-inventory.v1",
+  "self_exclusion": "hash-inventory.json and the two manifest renderings are excluded to avoid recursive digests"
+}

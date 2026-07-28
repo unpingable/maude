@@ -1,0 +1,324 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:d43f8f6e77ae1ea15e43528b6a7cdbb976e180204ef3acb70f64c439a56163cd",
+    "source_plan_digest": "sha256:35b2cdb2c62661905c3627be5ff315ff01c9adc2f234e2727075af6b93813e79"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      ".github/workflows/verify.yml"
+    ],
+    "diff_fixture": "--- a/.github/workflows/verify.yml\n+++ b/.github/workflows/verify.yml\n@@ -8,5 +8,5 @@\n       - uses: actions/checkout@v4\n-       - uses: actions/setup-python@v5\n-         with:\n-           python-version: \"3.12\"\n+      - uses: actions/setup-python@v5\n+        with:\n+          python-version: \"3.12\"\n       - run: python -m pytest\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_02",
+    "result_files": {
+      ".github/workflows/verify.yml": "name: verify\non:\n  pull_request:\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: \"3.12\"\n      - run: python -m pytest\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_02",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:32:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-02"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:32:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:32:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_02_01",
+        "tool_input": {
+          "file_path": ".github/workflows/verify.yml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:32:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_02_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_02_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:32:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_02_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:32:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_02_02",
+        "tool_input": {
+          "argv": [
+            "git",
+            "diff",
+            "--check"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:32:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_02_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_02_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:32:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: git diff --check\nreturncode: 0\ncandidate_tree: files=1 sha256:2905b5f6ac911707a064ba6940b46810c44b4871e38529eb48ee5db16bf5304b\nchanged_file: .github/workflows/verify.yml bytes=234 sha256:ce79e1c340a0885336714664a620c6e7950237ea5c3c49251e2eb955e02365b7\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_02_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:2905b5f6ac911707a064ba6940b46810c44b4871e38529eb48ee5db16bf5304b",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 234,
+              "path": ".github/workflows/verify.yml",
+              "sha256": "sha256:ce79e1c340a0885336714664a620c6e7950237ea5c3c49251e2eb955e02365b7"
+            }
+          ],
+          "command": {
+            "argv": [
+              "git",
+              "diff",
+              "--check"
+            ],
+            "program": "git"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:32:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_02_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_02_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_02",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:d43f8f6e77ae1ea15e43528b6a7cdbb976e180204ef3acb70f64c439a56163cd",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:af1720e9efc3610b008b3f832a7614a47b2f7954b4316d7cf6b6463b9b4c56ac",
+    "grant_id": "sgr_af1720e9efc3",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:35b2cdb2c62661905c3627be5ff315ff01c9adc2f234e2727075af6b93813e79",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      ".github/workflows/verify.yml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41002,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      ".github/workflows/verify.yml"
+    ],
+    "diff_fixture": "--- a/.github/workflows/verify.yml\n+++ b/.github/workflows/verify.yml\n@@ -8,5 +8,5 @@\n       - uses: actions/checkout@v4\n-       - uses: actions/setup-python@v5\n-         with:\n-           python-version: \"3.12\"\n+      - uses: actions/setup-python@v5\n+        with:\n+          python-version: \"3.12\"\n       - run: python -m pytest\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_02",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s02-ci-workflow-repair",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:2905b5f6ac911707a064ba6940b46810c44b4871e38529eb48ee5db16bf5304b",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 234,
+          "path": ".github/workflows/verify.yml",
+          "sha256": "sha256:ce79e1c340a0885336714664a620c6e7950237ea5c3c49251e2eb955e02365b7"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      ".github/workflows/verify.yml": "name: verify\non:\n  pull_request:\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n       - uses: actions/setup-python@v5\n         with:\n           python-version: \"3.12\"\n      - run: python -m pytest\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s02/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

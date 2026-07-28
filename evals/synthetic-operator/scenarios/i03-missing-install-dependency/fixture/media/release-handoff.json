@@ -1,0 +1,15 @@
+{
+  "archive_path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i03/installation/media/maude-source.tar",
+  "artifact_id": "release-install-task-03",
+  "authority_effect": "none",
+  "delivery": "filtered installable Git archive from the exact baseline commit",
+  "instruction": "Use this filtered archive as ordinary installation media. It contains LICENSE, README.md, pyproject.toml, and src/maude from the named commit; it is not a complete repository or sdist. Do not inspect implementation internals to answer the UX task.",
+  "network_required": false,
+  "product_repository_checkout_exposed": false,
+  "project": "maude",
+  "release_source_visible": true,
+  "schema": "maude.synthetic-release-source-handoff.v1",
+  "source_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+  "source_visibility_exception": "release-source",
+  "version": "2.4.0"
+}

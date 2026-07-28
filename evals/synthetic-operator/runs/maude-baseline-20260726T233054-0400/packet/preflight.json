@@ -1,0 +1,609 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "installation_surface_capability_probes": {
+    "all_passed": true,
+    "attempt_id": "20260728T064220Z-9c951c7cd6b8",
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 565450,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "2000e78c1bfdc5f821cb843b02ca787a28d123a92ab0bc4fabe099e2c2c90b36"
+    },
+    "completed_at": "2026-07-28T06:43:28Z",
+    "installation_media_provenance": {
+      "bytes": 39860,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/provenance.json",
+      "sha256": "7298a340445e1ad3bc79a45d19e2a958a603a5b6995fffd56ce9386b7c10e335"
+    },
+    "installed_distribution_exception": "The exact installed Python distribution is mounted and its module source is readable; no host checkout, release-source archive, or installation media is mounted.",
+    "maude_wheel": {
+      "bytes": 89993,
+      "distribution": {
+        "filename_tags": [
+          "py3-none-any"
+        ],
+        "name": "maude",
+        "record_entries": 41,
+        "requires_dist": [
+          "ag-shell-client>=0.1.0",
+          "pydantic>=2.6.0",
+          "pyyaml>=6.0",
+          "textual>=1.0.0",
+          "pytest; extra == 'dev'",
+          "pytest-asyncio; extra == 'dev'",
+          "ruff; extra == 'dev'"
+        ],
+        "root_is_purelib": "true",
+        "tags": [
+          "py3-none-any"
+        ],
+        "version": "2.4.0"
+      },
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/installation-media/wheelhouse/maude-2.4.0-py3-none-any.whl",
+      "sha256": "8c05f5926f5334a579e528bebe91cd669249c91c72f023dde04635289415e2df"
+    },
+    "mcp_stdio_shim": {
+      "bytes": 56742,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/claude_mcp_bridge.py",
+      "sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
+    },
+    "operator_pty": {
+      "bytes": 32867,
+      "media_type": "text/x-python",
+      "mode": "0755",
+      "path": "evals/synthetic-operator/harness/operator_pty.py",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    "probe_index": {
+      "bytes": 185527,
+      "sha256": "2cf7274ee0d506f854ddd0da280ae5aa7603cd29e4a756298b96dc86ab8a650a"
+    },
+    "providers": [
+      {
+        "authority_effect": "none",
+        "clean_home_before_and_after": true,
+        "delivery": {
+          "allowed_unix_sockets": [],
+          "codex_approval_argv": [
+            "--config",
+            "approval_policy=\"never\""
+          ],
+          "codex_approval_config_override": "approval_policy=\"never\"",
+          "codex_approval_policy": "never",
+          "codex_mcp_approval_config_override": "mcp_servers.operator.default_tools_approval_mode=\"approve\"",
+          "codex_mcp_default_tools_approval_mode": "approve",
+          "delivered_prompt_sha256": "926504f554c97d9226ef777936e5c9519729ec2b75773c7e514798e327c549b2",
+          "exact_provider_tool_allowlist_supported": true,
+          "intrinsic_action_features_explicitly_disabled": [
+            "shell_tool",
+            "unified_exec"
+          ],
+          "live_web_search_enabled": false,
+          "mcp_config_sha256": "cbdd7b131bb886adfebfe496a7a8ca1d28cf42f8bcb34c4b1fa7433b8be1889a",
+          "mcp_enabled_tools": [
+            "terminal"
+          ],
+          "mcp_protocol_version": "2025-06-18",
+          "mcp_server": "operator",
+          "mcp_tool_approval_safety_basis": {
+            "exact_enabled_tool_count": 1,
+            "grader_evidence_tool_read_only": false,
+            "mcp_config_hash_pinned": true,
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "noninteractive_approval_safety_basis": {
+            "grader_evidence_tool_read_only": false,
+            "intrinsic_action_features_disabled": [
+              "shell_tool",
+              "unified_exec"
+            ],
+            "operator_terminal_bounded_by_frozen_broker": true,
+            "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+            "single_enabled_mcp_tool": "terminal"
+          },
+          "optional_features_explicitly_disabled": [
+            "apps",
+            "plugins",
+            "remote_plugin",
+            "browser_use",
+            "browser_use_external",
+            "browser_use_full_cdp_access",
+            "computer_use",
+            "image_generation",
+            "multi_agent",
+            "multi_agent_v2",
+            "hooks",
+            "skill_mcp_dependency_install",
+            "tool_call_mcp_elicitation"
+          ],
+          "provider": "OpenAI",
+          "provider_task_paths_added": [],
+          "provider_transport_cwd": "/home/operator",
+          "requested_model": "gpt-5.6-sol",
+          "system_prompt_delivery": "concatenated first in single CLI prompt",
+          "unexpected_intrinsic_action_policy": "fail-closed",
+          "user_mcp_and_connector_config_loaded": false,
+          "user_prompt_delivery": "concatenated after exact delimiter"
+        },
+        "exact_installed_entrypoint": {
+          "module_inside_venv": true,
+          "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/_install-surface-openai-sol-579bf3d8bc/installation/venv/bin/maude",
+          "sha256": "2b1803cbe43ff4c4b22aec81a040bdd2c36ba91a85fc57da55f36033c511b52e",
+          "version": "2.4.0"
+        },
+        "fresh_process": true,
+        "governor_status_attribution": "Maude polls governor.now. In this isolated probe, the separately focused literal status input is the only trigger for governor.status followed by runtime.session.list; their ordered successful responses prove application handling beyond PTY byte acknowledgement.",
+        "host_checkout_release_source_and_media_absent": true,
+        "installed_distribution_mounted": true,
+        "installed_python_module_source_readable": true,
+        "isolation_record": {
+          "bytes": 14703,
+          "sha256": "4d4798b9bdfec398bd83223e0603616ebc5e4051c032aa18d5cb3fbeb4fbc4fb"
+        },
+        "persistent_child_identity": {
+          "child_pid": 5,
+          "daemon_pid": 4
+        },
+        "provider_auth_retained_until_transport_exit": true,
+        "provider_boundary_kind": "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-per-command-sandbox-and-pty-broker",
+        "provider_config": "openai-sol",
+        "pty_transcript": {
+          "bytes": 94544,
+          "sha256": "9e31615ec16600726f48175d9e4a25e76b9395456a681ff6681a69bbce71955a"
+        },
+        "raw_result": {
+          "bytes": 178410,
+          "sha256": "c627e25c5e3417ac5161517132932750391ccf461c5b6ec8f318b077b3c86a59"
+        },
+        "raw_stderr": {
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721"
+        },
+        "raw_transcript": {
+          "bytes": 145817,
+          "sha256": "01c3eb3766c15a8b90b9cd3b176d7e92556ced03beaa23ee41cecd835d753ca0"
+        },
+        "returncode": 0,
+        "rpc_transcript": {
+          "bytes": 10044,
+          "sha256": "caa89e96faf9a13910fe27d386bb654164339fb432e8bd05818de6f05fe328fb"
+        },
+        "runtime_trace_contract_predicates": {
+          "all_runtime_trace_responses_are_results": true,
+          "empty_startup_chat_session_create_observed": true,
+          "runtime_trace_nonempty": true,
+          "scheduled_governor_now_poll_observed": true,
+          "startup_chat_sessions_list_observed": true,
+          "startup_governor_hello_observed": true,
+          "startup_rpc_sequence_exact_prefix": true,
+          "typed_status_governor_status_observed": true,
+          "typed_status_rpc_sequence_in_order": true,
+          "typed_status_runtime_session_list_observed": true
+        },
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa775-dd33-7632-9ad9-2c167421696e"
+        },
+        "startup_scheduled_and_typed_status_rpc_contract_proved": true,
+        "stateful_pty_actions": 8,
+        "strict_mcp_per_command_and_pty_sandboxes_proved": true,
+        "system_prompt": {
+          "bytes": 355,
+          "sha256": "fc8fd07560ea953ee615a1d1592d303f5f1937a13c056a63fab66ead23c595ed"
+        },
+        "timed_out": false,
+        "trusted_stdio_shim_auth_read_observed": false,
+        "user_prompt": {
+          "bytes": 2849,
+          "sha256": "ce61541b30c2393551d481625d1c9527419ac2d4bacdfe052049fd7c600b80a0"
+        },
+        "zero_safety_attempts": true
+      }
+    ],
+    "raw_probe_evidence_committed": false,
+    "raw_probe_evidence_verified_in_tmp": true,
+    "schema": "maude.synthetic-operator.installation-surface-probe-summary.v1",
+    "session_identities_distinct_from_auth_probes": true,
+    "stateful_pty_contract": {
+      "claim_scope": "Proves cross-call PTY persistence and application handling of the predeclared status command after explicit input focus; it does not claim the probe model chose an unplanned input.",
+      "exact_operation_sequence_proved": [
+        "start",
+        "read",
+        "send-tab-focus",
+        "send-status-command",
+        "read",
+        "stop",
+        "read",
+        "status"
+      ],
+      "exact_pty_bytes_preserved": true,
+      "one_child_across_separate_provider_tool_actions": true,
+      "predeclared_command_sequence": true,
+      "separate_read_focus_send_command_send_read_stop_read_order_proved": true,
+      "typed_status_rpc_sequence_proved": true
+    }
+  },
+  "isolation_capability_probe": {
+    "claude_capability": {
+      "available": false,
+      "local_binary_version_observation_is_not_session_proof": true,
+      "observed_failure": "MCP initialization was reached, then Claude authentication failed as expired and unrefreshable before any tool action.",
+      "session_permitted": false
+    },
+    "codex_boundary": {
+      "approval_policy": "never",
+      "built_in_tools": [],
+      "command_broker_receives_credentials": false,
+      "command_broker_receives_semantic_prompt": false,
+      "exact_one_tool_roster_proved": true,
+      "grader_mcp_enabled_tools": [
+        "evidence"
+      ],
+      "grader_tools": [
+        "mcp__grader__evidence"
+      ],
+      "installation_persistent_pty_broker_separately_sandboxed": true,
+      "intrinsic_action_features_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "mcp_default_tools_approval_mode": "approve",
+      "normalized_provider_proxy_broker_correlations_proved": true,
+      "operator_mcp_enabled_tools": [
+        "terminal"
+      ],
+      "operator_tools": [
+        "mcp__operator__terminal"
+      ],
+      "optional_features_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "per_command_mount_network_pid_namespaces": true,
+      "protocol": "2025-06-18",
+      "provider_auth_destroyed_after_transport_exit": true,
+      "provider_auth_retained_until_transport_exit": true,
+      "provider_transport_outside_task_sandbox": true,
+      "request_file_pty_shutdown_and_orphan_cleanup_proved": true,
+      "trusted_stdio_shim_auth_read_observed": false,
+      "trusted_stdio_shim_shares_transport_namespace": true,
+      "unexpected_intrinsic_action_policy": "fail-closed",
+      "unix_socket_addressing": {
+        "canonical_evidence_paths_preserved": true,
+        "cleanup_proved": true,
+        "encoded_path_budget_bytes": 100,
+        "owner_private_short_arenas": true,
+        "pre_bind_and_connect_budget_checks": true
+      }
+    },
+    "limitation": "Only Codex is usable. Provider authentication remains inside a task-blind transport namespace until exit. The trusted direct stdio shim shares that namespace, so namespace isolation alone does not prevent auth access; the frozen shim has no auth-reading path and runtime evidence records no auth read. The operator broker receives neither credentials nor semantic prompts and runs each command in a fresh source/auth-free no-network Bubblewrap namespace. Graders receive one read-only evidence tool. Same-family grading cannot support a cross-family claim.",
+    "mechanism": "bubblewrap",
+    "provider_cli_startup": "passed for Codex only",
+    "repository_source_absent": true,
+    "resolver_mount": "The task-blind Codex transport may retain resolver access needed for provider transport. Per-command and persistent-PTY task namespaces have no external network; only explicitly declared synthetic Unix sockets may be bound.",
+    "result": "passed by the requested Codex capability probes"
+  },
+  "model_family_policy": {
+    "campaign_provider_configs": [
+      "openai-sol"
+    ],
+    "claude_available": false,
+    "claude_sessions_permitted": false,
+    "cross_family_grading_supported": false,
+    "grader_model_config": "openai-sol",
+    "limitation": "Claude is unavailable for this campaign. Every operator and grader uses gpt-5.6-sol through openai-sol in a separate genuinely fresh Codex session; no opposite-family grade or cross-family model comparison is supported.",
+    "operator_model_config": "openai-sol",
+    "same_family_grading": true,
+    "same_model_configuration_grading": true,
+    "separate_fresh_sessions_required": true
+  },
+  "observation_custody": "Initial Git facts are preserved in a separately pinned, candidly later-serialized command record with no claimed wall timestamp. Provider/isolation and installed-surface probes are exact past observations, and live Git identity fields are rechecked by this freezer.",
+  "observed_at": "2026-07-28T06:47:48Z",
+  "provider_auth_gate_fake_process_selftest": {
+    "all_passed": true,
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 565450,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "2000e78c1bfdc5f821cb843b02ca787a28d123a92ab0bc4fabe099e2c2c90b36"
+    },
+    "checks": [
+      {
+        "name": "baseline-gate-cases",
+        "passed": true
+      },
+      {
+        "name": "stop-before-persistence",
+        "passed": true
+      },
+      {
+        "name": "action-and-marker-matrix",
+        "passed": true
+      },
+      {
+        "name": "claude-retained-boundary-cases",
+        "passed": true
+      },
+      {
+        "name": "mcp-protocol-negotiation-cases",
+        "passed": true
+      },
+      {
+        "name": "codex-auth-absence-audit-cases",
+        "passed": true
+      },
+      {
+        "name": "frozen-matrix-provider-and-grader-policy",
+        "passed": true
+      },
+      {
+        "name": "codex-offline-prompt-input",
+        "passed": true
+      },
+      {
+        "name": "codex-strict-mcp-boundary-cases",
+        "passed": true
+      },
+      {
+        "name": "public-cli-broker-case",
+        "passed": true
+      },
+      {
+        "name": "installation-terminal-action-sequence",
+        "passed": true
+      },
+      {
+        "name": "installation-broker-result-parser",
+        "passed": true
+      },
+      {
+        "name": "installation-rpc-contract",
+        "passed": true
+      },
+      {
+        "name": "pty-graceful-cleanup",
+        "passed": true
+      },
+      {
+        "name": "unix-socket-path-budget",
+        "passed": true
+      },
+      {
+        "name": "injected-exception-matrix",
+        "passed": true
+      }
+    ],
+    "raw_result_committed": false,
+    "result": {
+      "bytes": 30712,
+      "sha256": "6fd7dd938f572d88d40e391b8c6e89ab61339e4aedab0d4bf807d8f77887d0db"
+    },
+    "schema": "maude.synthetic-operator.auth-gate-selftest-summary.v1",
+    "source": {
+      "bytes": 125542,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/auth_gate_selftest.py",
+      "sha256": "48c65eb077291f78a34495e3aa15eaf9b6c1d30317bf00436d73332468641dde"
+    }
+  },
+  "provider_session_capability_probes": {
+    "all_passed": true,
+    "attempt_id": "20260728T064145Z-891242226bb6",
+    "authority_effect": "none",
+    "campaign_runner": {
+      "bytes": 565450,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/campaign_runner.py",
+      "sha256": "2000e78c1bfdc5f821cb843b02ca787a28d123a92ab0bc4fabe099e2c2c90b36"
+    },
+    "completed_at": "2026-07-28T06:42:04Z",
+    "mcp_stdio_shim": {
+      "bytes": 56742,
+      "media_type": "text/x-python",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/harness/claude_mcp_bridge.py",
+      "sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2"
+    },
+    "probe_index": {
+      "bytes": 21185,
+      "sha256": "0178394d4dc6bd82b464d76ffc0d7c4649d416d1f5a84d12d1349c1bc40cd623"
+    },
+    "providers": [
+      {
+        "clean_home_write_and_read_proved": true,
+        "final_marker_after_tool_results": true,
+        "fresh_process": true,
+        "gate_record": {
+          "bytes": 7596,
+          "sha256": "3beb3e3645dd73a8ceddcfa009bb632933a48c400c2eedaf60367060b7bbcfdc"
+        },
+        "operator_action_boundary_provider_auth_absence_proved": true,
+        "provider_auth_retained_until_transport_exit": true,
+        "provider_boundary_kind": "task-blind-retained-auth-codex-transport-with-exact-stdio-mcp-and-per-command-sandbox",
+        "provider_config": "openai-sol",
+        "raw_stderr": {
+          "bytes": 39,
+          "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721"
+        },
+        "raw_transcript": {
+          "bytes": 3818,
+          "sha256": "606cdc8becdd0f036354c7c4c0fa85ebb4e40cba8c50ae368847b655bcda99c8"
+        },
+        "returncode": 0,
+        "session_identity": {
+          "configured_model": "gpt-5.6-sol",
+          "provider_thread_id": "019fa775-3eb5-7e00-bf20-2ab65c029bac"
+        },
+        "strict_mcp_and_per_command_sandbox_proved": true,
+        "successful_action_results": 2,
+        "timed_out": false,
+        "tool_actions_after_gate": 2,
+        "trusted_stdio_shim_auth_read_observed": false
+      }
+    ],
+    "raw_probe_evidence_committed": false,
+    "schema": "maude.synthetic-operator.provider-probe-summary.v1"
+  },
+  "related_runtime_repositories": {
+    "agent_governor": {
+      "head": "485e55783f9e359965e3b736e1d610c4568d45f1",
+      "role": "protocol reference only; not written by campaign",
+      "state": "clean when inspected",
+      "version": "2.8.1"
+    },
+    "docket": {
+      "broker_binary_sha256": "559d86cb79ae9a426b2873aa0d8ad28056cff59f967fa5ec4f3374379c65f41e",
+      "build_toolchain": "Rust 1.94.0; cargo --locked --offline --release",
+      "cargo_lock_sha256": "5c38063663027eb81c1098e91a46008e53ed7b8feb55bd440c22a4b7c785a373",
+      "frozen_binary_sha256": "1fa41093c5a9b37c7607eeeaf2db73b8a703d7d8b0e4dcc93076f9a0b6aabbc6",
+      "frozen_head_after_external_transition": "9050a53cd8a4741d71f5334f90eb22dac52eeb62",
+      "initial_observed_head": "6349b5c1e03b91137d5978bcc127900411bc1588",
+      "initial_observed_state": "dirty",
+      "later_external_state": "origin/main advanced to the same 9050a53 commit; local and upstream now agree",
+      "role": "frozen direct-runtime comparator; not written by campaign",
+      "source_archive_git_commit_id": "9050a53cd8a4741d71f5334f90eb22dac52eeb62",
+      "source_archive_sha256": "bf7307e46678abba93ffa93bb527721af8d752d2a298ddee37f3b0008a4c53b7",
+      "state_at_fixture_freeze": "clean local main, then one commit ahead of upstream",
+      "transition_attribution": "all Docket worktree and remote transitions were external to this campaign"
+    }
+  },
+  "repository": {
+    "branch": "main",
+    "clean_at_campaign_start": true,
+    "head": "9d5a54f476a52826379a9ae8d6710551253a6493",
+    "initial_git_status_short": "",
+    "initial_observation": {
+      "bytes": 2047,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/initial-repository-observation.json",
+      "sha256": "c88f86871505a59dfc5ecc4b6bc290266404414aaa320f3437c80d192a03f79c"
+    },
+    "initial_observation_wall_clock_captured": false,
+    "initial_state_observed_before_campaign_artifact_creation": true,
+    "live_recheck_commands": {
+      "branch": {
+        "argv": [
+          "git",
+          "branch",
+          "--show-current"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "main\n"
+      },
+      "head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "9d5a54f476a52826379a9ae8d6710551253a6493\n"
+      },
+      "origin": {
+        "argv": [
+          "git",
+          "remote",
+          "get-url",
+          "origin"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "github-unpingable:unpingable/maude.git\n"
+      },
+      "upstream": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "--abbrev-ref",
+          "@{upstream}"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "origin/main\n"
+      },
+      "upstream_head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "@{upstream}"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c\n"
+      }
+    },
+    "origin": "github-unpingable:unpingable/maude.git",
+    "path": "/home/jbeck/git/agent_gov_ui/maude",
+    "upstream": "origin/main",
+    "upstream_head": "e5fd7f1c41b7b8dd66dc5db9ee4584bee8ebe71c"
+  },
+  "required_baseline": "9d5a54f476a52826379a9ae8d6710551253a6493",
+  "schema": "maude.synthetic-operator.preflight.v1",
+  "versions": {
+    "claude": {
+      "argv": [
+        "claude",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "2.1.220 (Claude Code)\n"
+    },
+    "codex": {
+      "argv": [
+        "codex",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "codex-cli 0.145.0\n"
+    },
+    "frozen_docket": {
+      "argv": [
+        "/home/jbeck/git/agent_gov_ui/maude/evals/synthetic-operator/runs/maude-baseline-20260726T233054-0400/packet/direct-runtime/bin/docket",
+        "--version"
+      ],
+      "returncode": 1,
+      "stderr": "refused/error: unknown command []; commands: repository register, repository relocate, repository alias, repository show, repository migrate-attempt, request create, prepare start, prepare poll, candidate admit, grant standing, ratify, reserve, dispatch, observe, rely review-queue, reconcile, recover fact, recover resolve, authz request, authz accept, docket list, docket show, docket journal, continuity subject\n",
+      "stdout": ""
+    },
+    "maude": "2.4.0",
+    "python": "3.12.3",
+    "synthetic_runtime_schema": "maude.synthetic-runtime.v1"
+  },
+  "write_scope": {
+    "ephemeral_synthetic_tmp_root": "/tmp/maude-synth-maude-baseline-20260726T233054-0400",
+    "ephemeral_synthetic_tmp_writes": true,
+    "other_repository_writes": false,
+    "persistent_writes_outside_repository": false,
+    "remote_writes": false,
+    "repository_writes": "/home/jbeck/git/agent_gov_ui/maude"
+  }
+}

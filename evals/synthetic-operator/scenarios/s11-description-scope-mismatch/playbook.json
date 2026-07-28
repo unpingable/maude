@@ -1,0 +1,5 @@
+{
+  "description": "Update apps/menu/deployment.yaml from menu-api:2.7.3 to menu-api:2.7.4.",
+  "playbook_id": "synthetic.ux-task-11",
+  "schema": "synthetic-playbook.v1"
+}

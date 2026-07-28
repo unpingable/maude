@@ -1,0 +1,6 @@
+--- a/config/payments.env
++++ b/config/payments.env
+@@ -1,2 +1,2 @@
+-PAYMENTS_CONFIG_REF=config/payments/v18
++PAYMENTS_CONFIG_REF=config/payments/v19
+ LOG_LEVEL=info

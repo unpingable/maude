@@ -1,0 +1,30 @@
+{
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "component": "Maude",
+  "constraints": {
+    "authority_effect": "none",
+    "external_side_effects": "denied",
+    "network": "denied",
+    "production": "denied",
+    "sibling_checkout_install_or_mutation": "denied",
+    "sudo": "denied"
+  },
+  "evidence_requested": [
+    "commands attempted and exact observable responses",
+    "package and executable state before and after",
+    "configuration source and resolved endpoint",
+    "first public Maude result or exact blocking error",
+    "ownership boundary and final disposition"
+  ],
+  "goal": "Attempt the documented isolated source installation, determine whether it completed, and report the next safe operational action.",
+  "handoff": {
+    "baseline_source_archive": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/install-i03/installation/media/maude-source.tar",
+    "network_exception_available": false,
+    "source_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+    "source_visibility_exception": "release-source"
+  },
+  "review_condition": "A partial environment or an importable subset is not a completed installation.",
+  "schema": "maude.synthetic-install-task.v1",
+  "situation": "A clean Python 3.12 host has a filtered installable archive from the exact baseline Maude Git commit and no pre-populated Python package cache. Task network access is prohibited.",
+  "task_id": "install-task-03"
+}

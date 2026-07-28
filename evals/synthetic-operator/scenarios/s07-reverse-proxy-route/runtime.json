@@ -1,0 +1,338 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:a9b22e6beefc228681e63a0c5c2851416559bee4c2c84110c6be30ad4f2ae58d",
+    "source_plan_digest": "sha256:31e90d9d3ebca99d39044eaca0177be67c1b8828c54425b58cbfa59d5acaab96"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "nginx/routes.conf"
+    ],
+    "diff_fixture": "--- a/nginx/routes.conf\n+++ b/nginx/routes.conf\n@@ -2,3 +2,3 @@\n     proxy_set_header X-Request-ID $request_id;\n-    proxy_pass http://order-history-v1:8080;\n+    proxy_pass http://order-history-v2:8080;\n }\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_07",
+    "result_files": {
+      "nginx/nginx.conf": "error_log stderr;\npid /tmp/maude-synthetic-nginx.pid;\n\nevents {}\n\nhttp {\n    upstream order-history-v1 {\n        server 127.0.0.1:18081;\n    }\n    upstream order-history-v2 {\n        server 127.0.0.1:18082;\n    }\n    server {\n        listen 127.0.0.1:18080;\n        include nginx/routes.conf;\n    }\n}\n",
+      "nginx/routes.conf": "location /order-history/ {\n    proxy_set_header X-Request-ID $request_id;\n    proxy_pass http://order-history-v2:8080;\n}\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_07",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:37:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-07"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:37:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:37:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_07_01",
+        "tool_input": {
+          "file_path": "nginx/routes.conf"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:37:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_07_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_07_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:37:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_07_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:37:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_07_02",
+        "tool_input": {
+          "argv": [
+            "nginx",
+            "-p",
+            ".",
+            "-t",
+            "-c",
+            "nginx/nginx.conf"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:37:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_07_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_07_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:37:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: nginx -p . -t -c nginx/nginx.conf\nreturncode: 0\ncandidate_tree: files=2 sha256:ae6e27b08fba825f51bd9709aff636aab90a903d633eef22a2f306bd0f429930\nchanged_file: nginx/routes.conf bytes=121 sha256:dda06a9a10c8cb89b66d89cdcd665d440ece63e19b5b0d8d0c568b3d579c315b\nsupport_context: files=1 sha256:8e2122646d8a6698dfa538cd0c6513d1a94c7d6ae0bfad0c676677acec6b12f4",
+        "tool_call_id": "tc_ux_task_07_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 2,
+          "candidate_tree_digest": "sha256:ae6e27b08fba825f51bd9709aff636aab90a903d633eef22a2f306bd0f429930",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 121,
+              "path": "nginx/routes.conf",
+              "sha256": "sha256:dda06a9a10c8cb89b66d89cdcd665d440ece63e19b5b0d8d0c568b3d579c315b"
+            }
+          ],
+          "command": {
+            "argv": [
+              "nginx",
+              "-p",
+              ".",
+              "-t",
+              "-c",
+              "nginx/nginx.conf"
+            ],
+            "program": "nginx"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 1,
+            "tree_digest": "sha256:8e2122646d8a6698dfa538cd0c6513d1a94c7d6ae0bfad0c676677acec6b12f4"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:37:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_07_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_07_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_07",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:a9b22e6beefc228681e63a0c5c2851416559bee4c2c84110c6be30ad4f2ae58d",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "-p",
+          ".",
+          "-t",
+          "-c",
+          "nginx/nginx.conf"
+        ],
+        "program": "nginx"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:65d281067523da76b60d7d28c7a3c21c733c0ce97b15f4c7ade9001a0d337344",
+    "grant_id": "sgr_65d281067523",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:31e90d9d3ebca99d39044eaca0177be67c1b8828c54425b58cbfa59d5acaab96",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "nginx/routes.conf"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41007,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "nginx/routes.conf"
+    ],
+    "diff_fixture": "--- a/nginx/routes.conf\n+++ b/nginx/routes.conf\n@@ -2,3 +2,3 @@\n     proxy_set_header X-Request-ID $request_id;\n-    proxy_pass http://order-history-v1:8080;\n+    proxy_pass http://order-history-v2:8080;\n }\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_07",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s07-reverse-proxy-route",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 2,
+      "candidate_tree_digest": "sha256:ae6e27b08fba825f51bd9709aff636aab90a903d633eef22a2f306bd0f429930",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 121,
+          "path": "nginx/routes.conf",
+          "sha256": "sha256:dda06a9a10c8cb89b66d89cdcd665d440ece63e19b5b0d8d0c568b3d579c315b"
+        }
+      ],
+      "command": {
+        "argv": [
+          "nginx",
+          "-p",
+          ".",
+          "-t",
+          "-c",
+          "nginx/nginx.conf"
+        ],
+        "program": "nginx"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 1,
+        "tree_digest": "sha256:8e2122646d8a6698dfa538cd0c6513d1a94c7d6ae0bfad0c676677acec6b12f4"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "nginx/nginx.conf": "error_log stderr;\npid /tmp/maude-synthetic-nginx.pid;\n\nevents {}\n\nhttp {\n    upstream order-history-v1 {\n        server 127.0.0.1:18081;\n    }\n    upstream order-history-v2 {\n        server 127.0.0.1:18082;\n    }\n    server {\n        listen 127.0.0.1:18080;\n        include nginx/routes.conf;\n    }\n}\n",
+      "nginx/routes.conf": "location /order-history/ {\n    proxy_set_header X-Request-ID $request_id;\n    proxy_pass http://order-history-v1:8080;\n}\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

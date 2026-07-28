@@ -1,0 +1,5 @@
+--- a/config/proxy.yaml
++++ b/config/proxy.yaml
+@@ -1 +1 @@
+-upstream_timeout_seconds: 15
++upstream_timeout_seconds: 20

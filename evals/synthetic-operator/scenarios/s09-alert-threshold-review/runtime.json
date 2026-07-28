@@ -1,0 +1,328 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:8b763f84df94dc2389a4b3372dbbe7e0a77b997eb9a88bdbda5d9a301b3df7e1",
+    "source_plan_digest": "sha256:23d0eff659916fb49184fb3614124be929cfdcaf75c4b447ceae5be55f68a038"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "alerts/menu-latency.yaml"
+    ],
+    "diff_fixture": "--- a/alerts/menu-latency.yaml\n+++ b/alerts/menu-latency.yaml\n@@ -4,3 +4,3 @@\n       - alert: MenuApiHighLatency\n-        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n+        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75\n         for: 10m\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_09",
+    "result_files": {
+      "alerts/menu-latency.yaml": "groups:\n  - name: menu\n    rules:\n      - alert: MenuApiHighLatency\n        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75\n        for: 10m\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_09",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:39:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-09"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:39:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:39:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_09_01",
+        "tool_input": {
+          "file_path": "alerts/menu-latency.yaml"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:39:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_09_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_09_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:39:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_09_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:39:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_09_02",
+        "tool_input": {
+          "argv": [
+            "promtool",
+            "check",
+            "rules",
+            "alerts/menu-latency.yaml"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:39:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_09_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_09_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:39:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: promtool check rules alerts/menu-latency.yaml\nreturncode: 0\ncandidate_tree: files=1 sha256:9fe75f50e16e9ecd8e9ba66f17fc9427b3e2e8ff578c5f768c399475a9bc8015\nchanged_file: alerts/menu-latency.yaml bytes=162 sha256:b2b125d992257ad489809c148abdfba65adf77f29799938f023478e1842341c5\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_09_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:9fe75f50e16e9ecd8e9ba66f17fc9427b3e2e8ff578c5f768c399475a9bc8015",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 162,
+              "path": "alerts/menu-latency.yaml",
+              "sha256": "sha256:b2b125d992257ad489809c148abdfba65adf77f29799938f023478e1842341c5"
+            }
+          ],
+          "command": {
+            "argv": [
+              "promtool",
+              "check",
+              "rules",
+              "alerts/menu-latency.yaml"
+            ],
+            "program": "promtool"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:39:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_09_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_09_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_09",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:8b763f84df94dc2389a4b3372dbbe7e0a77b997eb9a88bdbda5d9a301b3df7e1",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "check",
+          "rules",
+          "alerts/menu-latency.yaml"
+        ],
+        "program": "promtool"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:0eaeceda00f5f45c99d1b842ed905b925baace1080e65f11bbbac98e4513b185",
+    "grant_id": "sgr_0eaeceda00f5",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:23d0eff659916fb49184fb3614124be929cfdcaf75c4b447ceae5be55f68a038",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "alerts/menu-latency.yaml"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41009,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "alerts/menu-latency.yaml"
+    ],
+    "diff_fixture": "--- a/alerts/menu-latency.yaml\n+++ b/alerts/menu-latency.yaml\n@@ -4,3 +4,3 @@\n       - alert: MenuApiHighLatency\n-        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n+        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75\n         for: 10m\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_09",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s09-alert-threshold-review",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:9fe75f50e16e9ecd8e9ba66f17fc9427b3e2e8ff578c5f768c399475a9bc8015",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 162,
+          "path": "alerts/menu-latency.yaml",
+          "sha256": "sha256:b2b125d992257ad489809c148abdfba65adf77f29799938f023478e1842341c5"
+        }
+      ],
+      "command": {
+        "argv": [
+          "promtool",
+          "check",
+          "rules",
+          "alerts/menu-latency.yaml"
+        ],
+        "program": "promtool"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "alerts/menu-latency.yaml": "groups:\n  - name: menu\n    rules:\n      - alert: MenuApiHighLatency\n        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n        for: 10m\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

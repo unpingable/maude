@@ -1,0 +1,324 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:d8f124026d86b4dd4b62aca3ef21d596e076ce02a31f5f3f2b653ee5fde8d537",
+    "source_plan_digest": "sha256:7d7bbe45e49c480ec20b829869e0c18c35d5d6d6163cac1e885fe04d8347d8a0"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "config/payments.env"
+    ],
+    "diff_fixture": "--- a/config/payments.env\n+++ b/config/payments.env\n@@ -1,2 +1,2 @@\n-PAYMENTS_CONFIG_REF=config/payments/v18\n+PAYMENTS_CONFIG_REF=config/payments/v19\n LOG_LEVEL=info\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_05",
+    "result_files": {
+      "config/payments.env": "PAYMENTS_CONFIG_REF=config/payments/v19\nLOG_LEVEL=info\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_05",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:35:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-05"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:35:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:35:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_05_01",
+        "tool_input": {
+          "file_path": "config/payments.env"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:35:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_05_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_05_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:35:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_05_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:35:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_05_02",
+        "tool_input": {
+          "argv": [
+            "git",
+            "diff",
+            "--check"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:35:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_05_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_05_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:35:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: git diff --check\nreturncode: 0\ncandidate_tree: files=1 sha256:fb4cb3e7e9d95b0e457d091591600231b2a038596b20cc8cba2fccacf605232b\nchanged_file: config/payments.env bytes=55 sha256:3a410e63dc259524665901343f18a77f24b0ee03537e44581d52f9ab5d5d34cf\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_05_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:fb4cb3e7e9d95b0e457d091591600231b2a038596b20cc8cba2fccacf605232b",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 55,
+              "path": "config/payments.env",
+              "sha256": "sha256:3a410e63dc259524665901343f18a77f24b0ee03537e44581d52f9ab5d5d34cf"
+            }
+          ],
+          "command": {
+            "argv": [
+              "git",
+              "diff",
+              "--check"
+            ],
+            "program": "git"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:35:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_05_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_05_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_05",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:d8f124026d86b4dd4b62aca3ef21d596e076ce02a31f5f3f2b653ee5fde8d537",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:d6e38aad2ea967db3f39459c97258cc82ce3a71b6e5c08165946913026d7b8ee",
+    "grant_id": "sgr_d6e38aad2ea9",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:7d7bbe45e49c480ec20b829869e0c18c35d5d6d6163cac1e885fe04d8347d8a0",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "config/payments.env"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41005,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "config/payments.env"
+    ],
+    "diff_fixture": "--- a/config/payments.env\n+++ b/config/payments.env\n@@ -1,2 +1,2 @@\n-PAYMENTS_CONFIG_REF=config/payments/v18\n+PAYMENTS_CONFIG_REF=config/payments/v19\n LOG_LEVEL=info\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_05",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s05-configuration-reference-rotation",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:fb4cb3e7e9d95b0e457d091591600231b2a038596b20cc8cba2fccacf605232b",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 55,
+          "path": "config/payments.env",
+          "sha256": "sha256:3a410e63dc259524665901343f18a77f24b0ee03537e44581d52f9ab5d5d34cf"
+        }
+      ],
+      "command": {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "program": "git"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "config/payments.env": "PAYMENTS_CONFIG_REF=config/payments/v18\nLOG_LEVEL=info\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s05/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

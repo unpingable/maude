@@ -1,0 +1,324 @@
+{
+  "approval_binding": {
+    "approval_witness_digest": "sha256:751016918727294298325590b0a7618638f7957ebd5a73a9b295ce8daf8bfed5",
+    "source_plan_digest": "sha256:343b1c81a6d9bb678d7f7c1d35773409c096f02b7ac15b86183aeeb1b4a3661e"
+  },
+  "authority_contract": {
+    "agent_gov_commit": "485e55783f9e359965e3b736e1d610c4568d45f1",
+    "approval_witness_version": "approval-witness/v1",
+    "execution_grant_derivation_version": "execution-grant/v1"
+  },
+  "candidate": {
+    "changed_files": [
+      "terraform/variables.tf"
+    ],
+    "diff_fixture": "--- a/terraform/variables.tf\n+++ b/terraform/variables.tf\n@@ -5,4 +5,4 @@\n   validation {\n-    condition     = var.replicas >= 1 && var.replicas <= 500\n-    error_message = \"replicas must be between 1 and 500\"\n+    condition     = var.replicas >= 1 && var.replicas <= 50\n+    error_message = \"replicas must be between 1 and 50\"\n   }\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_08",
+    "result_files": {
+      "terraform/variables.tf": "variable \"replicas\" {\n  type        = number\n  description = \"Desired worker replicas\"\n\n  validation {\n    condition     = var.replicas >= 1 && var.replicas <= 50\n    error_message = \"replicas must be between 1 and 50\"\n  }\n}\n"
+    }
+  },
+  "clock_start": "2026-07-27T03:30:00Z",
+  "create": {
+    "behavior": "normal",
+    "session_id": "sess_ux_task_08",
+    "status": "created"
+  },
+  "events": [
+    {
+      "at": "2026-07-27T03:38:00Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_000",
+      "kind": "session_created",
+      "lane": "governed",
+      "parent_event_id": null,
+      "payload": {
+        "status": "created",
+        "task_ref": "packet-ux-task-08"
+      },
+      "receipt_ids": [],
+      "seq": 0,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:38:01Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_001",
+      "kind": "session_running",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_000",
+      "payload": {
+        "status": "running"
+      },
+      "receipt_ids": [],
+      "seq": 1,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "supervisor"
+    },
+    {
+      "at": "2026-07-27T03:38:02Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_002",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_001",
+      "payload": {
+        "tool_call_id": "tc_ux_task_08_01",
+        "tool_input": {
+          "file_path": "terraform/variables.tf"
+        },
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 2,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:38:03Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_003",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_002",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_08_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_08_01"
+      ],
+      "seq": 3,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:38:04Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_004",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_003",
+      "payload": {
+        "returncode": 0,
+        "tool_call_id": "tc_ux_task_08_01",
+        "tool_name": "Edit"
+      },
+      "receipt_ids": [],
+      "seq": 4,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:38:05Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_005",
+      "kind": "tool_call_proposed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_004",
+      "payload": {
+        "tool_call_id": "tc_ux_task_08_02",
+        "tool_input": {
+          "argv": [
+            "terraform",
+            "-chdir=terraform",
+            "validate"
+          ]
+        },
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [],
+      "seq": 5,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:38:06Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_006",
+      "kind": "tool_call_allowed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_005",
+      "payload": {
+        "decision": "allowed_by_active_grant",
+        "tool_call_id": "tc_ux_task_08_02",
+        "tool_name": "Bash"
+      },
+      "receipt_ids": [
+        "rcpt_ux_task_08_02"
+      ],
+      "seq": 6,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "policy"
+    },
+    {
+      "at": "2026-07-27T03:38:07Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_007",
+      "kind": "tool_call_completed",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_006",
+      "payload": {
+        "returncode": 0,
+        "stdout": "Synthetic validator observation; no live action occurred.\ncommand: terraform -chdir=terraform validate\nreturncode: 0\ncandidate_tree: files=1 sha256:567522df3fa0ede9526b4c1b97a5b1de3bc4edfb7fecd58785b95d7af9d3d084\nchanged_file: terraform/variables.tf bytes=225 sha256:7c33461e610e81079043e8de473481436e6eaf5537f40bc1c9d62ed2147e616a\nsupport_context: files=0 sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "tool_call_id": "tc_ux_task_08_02",
+        "tool_name": "Bash",
+        "validation_evidence": {
+          "candidate_file_count": 1,
+          "candidate_tree_digest": "sha256:567522df3fa0ede9526b4c1b97a5b1de3bc4edfb7fecd58785b95d7af9d3d084",
+          "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+          "changed_files": [
+            {
+              "bytes": 225,
+              "path": "terraform/variables.tf",
+              "sha256": "sha256:7c33461e610e81079043e8de473481436e6eaf5537f40bc1c9d62ed2147e616a"
+            }
+          ],
+          "command": {
+            "argv": [
+              "terraform",
+              "-chdir=terraform",
+              "validate"
+            ],
+            "program": "terraform"
+          },
+          "returncode": 0,
+          "schema": "maude.synthetic-validation-evidence.v1",
+          "support_context": {
+            "file_count": 0,
+            "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+          }
+        }
+      },
+      "receipt_ids": [],
+      "seq": 7,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "adapter"
+    },
+    {
+      "at": "2026-07-27T03:38:08Z",
+      "backend_kind": "synthetic_fixture",
+      "correlation_id": null,
+      "event_id": "evt_ux_task_08_008",
+      "kind": "session_exited",
+      "lane": "governed",
+      "parent_event_id": "evt_ux_task_08_007",
+      "payload": {
+        "returncode": 0
+      },
+      "receipt_ids": [],
+      "seq": 8,
+      "session_id": "sess_ux_task_08",
+      "source_layer": "supervisor"
+    }
+  ],
+  "faults": {},
+  "governor": {
+    "context_id": "synthetic-lab",
+    "initialized": true,
+    "mode": "code",
+    "pill": "OK",
+    "sentence": "Synthetic runtime fixture; authority effect none."
+  },
+  "grant": {
+    "approval_witness_digest": "sha256:751016918727294298325590b0a7618638f7957ebd5a73a9b295ce8daf8bfed5",
+    "behavior": "normal",
+    "commands": [
+      {
+        "argv_prefix": [
+          "-chdir=terraform",
+          "validate"
+        ],
+        "program": "terraform"
+      }
+    ],
+    "derivation_version": "execution-grant/v1",
+    "enforcement": "declared-effects-only",
+    "grant_digest": "sha256:ca71bd4562ce0c75b00a22b12aaed49e7c9cd4c1846eb8422ef688f37e3043c9",
+    "grant_id": "sgr_ca71bd4562ce",
+    "horizon": "run",
+    "kind": "active",
+    "recent_uses": [],
+    "source_plan_digest": "sha256:343b1c81a6d9bb678d7f7c1d35773409c096f02b7ac15b86183aeeb1b4a3661e",
+    "state": "active",
+    "unmet_axes": [],
+    "write_paths": [
+      "terraform/variables.tf"
+    ]
+  },
+  "initial_sessions": [],
+  "interventions": [],
+  "launch": {
+    "behavior": "normal",
+    "pid": 41008,
+    "status": "exited"
+  },
+  "promotion": {
+    "changed_files": [
+      "terraform/variables.tf"
+    ],
+    "diff_fixture": "--- a/terraform/variables.tf\n+++ b/terraform/variables.tf\n@@ -5,4 +5,4 @@\n   validation {\n-    condition     = var.replicas >= 1 && var.replicas <= 500\n-    error_message = \"replicas must be between 1 and 500\"\n+    condition     = var.replicas >= 1 && var.replicas <= 50\n+    error_message = \"replicas must be between 1 and 50\"\n   }\n",
+    "diff_stat": "1 file(s) changed",
+    "excluded_files": [],
+    "promotion_id": "prom_ux_task_08",
+    "repo_path": "${WORKSPACE}",
+    "status": "pending"
+  },
+  "runtime": {
+    "behavior": "normal",
+    "timeout_seconds": null
+  },
+  "scenario_id": "s08-terraform-validation",
+  "schema": "maude.synthetic-runtime.v1",
+  "validation_evidence": [
+    {
+      "candidate_file_count": 1,
+      "candidate_tree_digest": "sha256:567522df3fa0ede9526b4c1b97a5b1de3bc4edfb7fecd58785b95d7af9d3d084",
+      "candidate_tree_encoding": "canonical-json-path-to-utf8-text-v1",
+      "changed_files": [
+        {
+          "bytes": 225,
+          "path": "terraform/variables.tf",
+          "sha256": "sha256:7c33461e610e81079043e8de473481436e6eaf5537f40bc1c9d62ed2147e616a"
+        }
+      ],
+      "command": {
+        "argv": [
+          "terraform",
+          "-chdir=terraform",
+          "validate"
+        ],
+        "program": "terraform"
+      },
+      "returncode": 0,
+      "schema": "maude.synthetic-validation-evidence.v1",
+      "support_context": {
+        "file_count": 0,
+        "tree_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "workspace": {
+    "base_files": {
+      "terraform/variables.tf": "variable \"replicas\" {\n  type        = number\n  description = \"Desired worker replicas\"\n\n  validation {\n    condition     = var.replicas >= 1 && var.replicas <= 500\n    error_message = \"replicas must be between 1 and 500\"\n  }\n}\n"
+    },
+    "path": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s08/repo"
+  },
+  "workspace_effect": {
+    "apply_at": "launch",
+    "apply_patch": "patch.diff",
+    "reject_restores": true
+  }
+}

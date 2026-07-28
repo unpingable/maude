@@ -1,0 +1,7 @@
+--- a/alerts/menu-latency.yaml
++++ b/alerts/menu-latency.yaml
+@@ -4,3 +4,3 @@
+       - alert: MenuApiHighLatency
+-        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0
++        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75
+         for: 10m

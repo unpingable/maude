@@ -1,0 +1,7 @@
+--- a/nginx/routes.conf
++++ b/nginx/routes.conf
+@@ -2,3 +2,3 @@
+     proxy_set_header X-Request-ID $request_id;
+-    proxy_pass http://order-history-v1:8080;
++    proxy_pass http://order-history-v2:8080;
+ }

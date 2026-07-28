@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Raise only the api container memory limit from 256Mi to 384Mi; leave requests and CPU limits unchanged.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-03",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "kustomize",
+        "build",
+        "deploy/api"
+      ],
+      "program": "kustomize"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "operator_may_migrate_or_delete": false,
+  "owner": "synthetic-platform-team",
+  "schema": "synthetic-state-ownership.v1"
+}

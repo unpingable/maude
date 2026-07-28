@@ -1,0 +1,5 @@
+{
+  "description": "Determine the current disposition of the batch-size change and report the evidence supporting it.",
+  "playbook_id": "synthetic.ux-task-18",
+  "schema": "synthetic-playbook.v1"
+}
