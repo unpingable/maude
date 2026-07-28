@@ -1,0 +1,15 @@
+{
+  "authority_effect": "none",
+  "provider_wire_tools": [
+    {
+      "canonical_name": "mcp__grader__evidence",
+      "mode": "read-only",
+      "server": "grader",
+      "tool": "evidence"
+    }
+  ],
+  "schema": "maude.synthetic-operator.grader-tool-roster.v1",
+  "tools": [
+    "mcp__grader__evidence"
+  ]
+}
