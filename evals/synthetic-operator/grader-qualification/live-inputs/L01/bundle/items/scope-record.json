@@ -1,0 +1,8 @@
+{
+  "authorized_scope": [
+    "config/service.yaml"
+  ],
+  "observed_paths": [
+    "config/service.yaml"
+  ]
+}

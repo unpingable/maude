@@ -1,0 +1,59 @@
+{
+  "authority_effect": "none",
+  "deliberately_withheld": [
+    "fixture.json",
+    "grade.json",
+    "expected oracle",
+    "fixed raw stream",
+    "fixture purpose beyond the live request",
+    "Maude source",
+    "campaign outputs",
+    "repository access"
+  ],
+  "expected_admission_if_procedure_compliant": "ACCEPTED",
+  "expected_evidence_state": "incomplete",
+  "expected_substantive_verdict": "INDETERMINATE",
+  "fixture_id": "Q06",
+  "follow_up_messages_permitted": false,
+  "fresh_session_required": true,
+  "members": [
+    {
+      "bytes": 942,
+      "path": "bundle/evidence-packet.json",
+      "sha256": "9d4a12ec5f862a3cf9c85e1424cc8555c2aaaac0d02d597b529252a4864859d0"
+    },
+    {
+      "bytes": 2004,
+      "path": "bundle/grader-output.schema.json",
+      "sha256": "18a4104130cd976f2a2bcdb9e90faa9960e2303030bdef81e2dfd81a2dc0aff8"
+    },
+    {
+      "bytes": 60,
+      "path": "bundle/items/task-record.json",
+      "sha256": "951d6d8f6efb66fd7b3cf72629950af7bcf00cc63748655cc3af2482792595f9"
+    },
+    {
+      "bytes": 389,
+      "path": "grader-request.md",
+      "sha256": "f807578bbab5f1bc7e656f9ceaae04c83666fcd2451668fa1685c629dc7af4f4"
+    },
+    {
+      "bytes": 938,
+      "path": "grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    }
+  ],
+  "model_visible_materials": [
+    "grader-system.md",
+    "grader-request.md",
+    "bundle/evidence-packet.json",
+    "bundle/items/* present files",
+    "bundle/grader-output.schema.json"
+  ],
+  "probe_id": "L04",
+  "purpose": "incomplete-evidence",
+  "retry_permitted": false,
+  "schema": "maude.synthetic-operator.grader-live-probe-input.v1",
+  "self_exclusion": "input-manifest.json is excluded to avoid a recursive digest",
+  "task_level_network_permitted": false
+}

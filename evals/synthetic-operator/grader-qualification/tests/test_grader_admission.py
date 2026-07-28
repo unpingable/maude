@@ -20,6 +20,7 @@ from grader_admission import (  # noqa: E402
     load_json,
     result_matches_expected,
     sha256_file,
+    strict_grade_from_stream,
     validate_fixture,
     validate_result_shape,
     verify_fixture_inventory,
@@ -86,6 +87,48 @@ def test_prohibited_attempt_is_recorded_at_started_and_stays_sticky() -> None:
     assert result["substantive_verdict"] == "INDETERMINATE"
     assert [value["code"] for value in result["violations"]] == [
         "UNROSTERED_TOOL_ATTEMPT"
+    ]
+
+
+def test_strict_grade_stream_extractor_requires_one_json_answer(
+    tmp_path: Path,
+) -> None:
+    assert strict_grade_from_stream(
+        QUALIFICATION_DIR / "fixtures/Q01/raw/grader.stdout.jsonl"
+    )
+    invalid = tmp_path / "invalid.jsonl"
+    invalid.write_text(
+        json.dumps(
+            {
+                "type": "item.completed",
+                "item": {
+                    "type": "agent_message",
+                    "text": "not JSON",
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    assert strict_grade_from_stream(invalid) is None
+
+
+def test_malformed_live_stream_becomes_rejected_procedure(
+    tmp_path: Path,
+) -> None:
+    fixture = tmp_path / "fixture"
+    shutil.copytree(QUALIFICATION_DIR / "fixtures/Q01", fixture)
+    (fixture / "raw/grader.stdout.jsonl").write_bytes(b"{not-json}\n")
+    (fixture / "grade.json").write_text("{}\n", encoding="utf-8")
+    result = validate_fixture(
+        fixture,
+        roster_path=ROSTER,
+        grade_schema_path=GRADE_SCHEMA,
+    )
+    assert result["admission"] == "REJECTED"
+    assert result["procedure_result"] == "EVALUATOR_FAILURE"
+    assert "INVALID_RAW_STREAM" in [
+        value["code"] for value in result["violations"]
     ]
 
 

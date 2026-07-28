@@ -39,6 +39,7 @@ VIOLATION_CODES = {
     "DETERMINATE_UNAVAILABLE_VERDICT",
     "EVIDENCE_STATE_MISMATCH",
     "INVALID_EVIDENCE_RESULT",
+    "INVALID_RAW_STREAM",
     "INVALID_VERDICT_STRUCTURE",
     "MISSING_EVIDENCE_MISMATCH",
     "MULTIPLE_STRUCTURED_VERDICTS",
@@ -398,6 +399,26 @@ def _strict_grade_from_events(
     return grades[0][0], grades[0][1], violations
 
 
+def strict_grade_from_stream(path: Path) -> dict[str, Any] | None:
+    """Return the sole strict JSON grade, or ``None`` when it is not unique."""
+
+    try:
+        events = load_jsonl(path)
+    except AdmissionInputError:
+        return None
+    grade, _event_number, violations = _strict_grade_from_events(events)
+    if any(
+        value["code"]
+        in {
+            "INVALID_VERDICT_STRUCTURE",
+            "MULTIPLE_STRUCTURED_VERDICTS",
+        }
+        for value in violations
+    ):
+        return None
+    return grade
+
+
 def _read_result(
     *,
     item: dict[str, Any],
@@ -523,8 +544,22 @@ def validate_fixture(
     items = _packet_items(fixture_dir, packet)
     evidence_state, missing_evidence = _derived_evidence_state(packet, items)
     packet_bytes = packet_path.read_bytes()
-    events = load_jsonl(fixture_dir / "raw" / "grader.stdout.jsonl")
+    raw_stream_path = fixture_dir / "raw" / "grader.stdout.jsonl"
+    stream_error: str | None = None
+    try:
+        events = load_jsonl(raw_stream_path)
+    except AdmissionInputError as exc:
+        events = []
+        stream_error = str(exc)
     grade, verdict_event, violations = _strict_grade_from_events(events)
+    if stream_error is not None:
+        _append_unique_violation(
+            violations,
+            _violation(
+                "INVALID_RAW_STREAM",
+                detail=stream_error,
+            ),
+        )
 
     observed_requests: list[dict[str, Any]] = []
     action_identities: dict[str, dict[str, Any]] = {}

@@ -1,0 +1,6 @@
+{
+  "ambient_discovery_needed": false,
+  "documented_command": "python -m pip install maude.whl",
+  "package": "maude",
+  "required_component": "governor endpoint"
+}

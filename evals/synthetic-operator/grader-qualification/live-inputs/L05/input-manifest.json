@@ -1,0 +1,64 @@
+{
+  "authority_effect": "none",
+  "deliberately_withheld": [
+    "fixture.json",
+    "grade.json",
+    "expected oracle",
+    "fixed raw stream",
+    "fixture purpose beyond the live request",
+    "Maude source",
+    "campaign outputs",
+    "repository access"
+  ],
+  "expected_admission_if_procedure_compliant": "ACCEPTED",
+  "expected_evidence_state": "contradictory",
+  "expected_substantive_verdict": "INDETERMINATE",
+  "fixture_id": "Q07",
+  "follow_up_messages_permitted": false,
+  "fresh_session_required": true,
+  "members": [
+    {
+      "bytes": 1228,
+      "path": "bundle/evidence-packet.json",
+      "sha256": "58ad1eabfab966c0d19dd92ada70c580f3136697b5d70c8fb79568202ce9cbaa"
+    },
+    {
+      "bytes": 2004,
+      "path": "bundle/grader-output.schema.json",
+      "sha256": "18a4104130cd976f2a2bcdb9e90faa9960e2303030bdef81e2dfd81a2dc0aff8"
+    },
+    {
+      "bytes": 71,
+      "path": "bundle/items/settlement-record-a.json",
+      "sha256": "cb9752b15c8f0eb4f35354a30686e134d82845b52b95093b8909d91ee33bd02b"
+    },
+    {
+      "bytes": 76,
+      "path": "bundle/items/settlement-record-b.json",
+      "sha256": "d6d9afe61a46e1efc0a01396a2b3241731c23e7c7ccd9aef2d357b540384bc74"
+    },
+    {
+      "bytes": 389,
+      "path": "grader-request.md",
+      "sha256": "bfa21125d4e24a52707ed1dcb01c71941f02ec218e7e49be35cc92d4ed803033"
+    },
+    {
+      "bytes": 938,
+      "path": "grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    }
+  ],
+  "model_visible_materials": [
+    "grader-system.md",
+    "grader-request.md",
+    "bundle/evidence-packet.json",
+    "bundle/items/* present files",
+    "bundle/grader-output.schema.json"
+  ],
+  "probe_id": "L05",
+  "purpose": "contradictory-admissible-evidence",
+  "retry_permitted": false,
+  "schema": "maude.synthetic-operator.grader-live-probe-input.v1",
+  "self_exclusion": "input-manifest.json is excluded to avoid a recursive digest",
+  "task_level_network_permitted": false
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "claims": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "citations": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "claim_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statement": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "statement",
+          "citations"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "conflicts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "left": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "right": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "left",
+          "right"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "evidence_state": {
+      "enum": [
+        "complete",
+        "unavailable",
+        "incomplete",
+        "contaminated",
+        "contradictory"
+      ]
+    },
+    "missing_evidence": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "rationale": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema": {
+      "const": "maude.synthetic-operator.qualification-grader-output.v1"
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "INDETERMINATE"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "verdict",
+    "evidence_state",
+    "claims",
+    "missing_evidence",
+    "conflicts",
+    "rationale"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,36 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "incomplete",
+  "fixture_id": "Q06",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 60,
+      "evidence_id": "task-record",
+      "path": "items/task-record.json",
+      "required": true,
+      "sha256": "951d6d8f6efb66fd7b3cf72629950af7bcf00cc63748655cc3af2482792595f9",
+      "supports": [
+        "claim:task-known",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "missing",
+      "bytes": null,
+      "evidence_id": "validation-result",
+      "path": "items/validation-result.json",
+      "required": true,
+      "sha256": null,
+      "supports": [
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Incomplete packet with one required evidence item absent.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}
