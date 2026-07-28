@@ -19,6 +19,7 @@ import re
 import secrets
 import select
 import selectors
+import shlex
 import shutil
 import signal
 import stat
@@ -114,6 +115,8 @@ HOST_SOURCE_ROOT = Path("/home/jbeck/git/agent_gov_ui")
 QUARANTINE_ROOT = Path("/tmp") / "maude-synthetic-operator-quarantine"
 DEFAULT_TIMEOUT = 1200
 AUTH_GATE_PROBE_TIMEOUT = 300
+COMMAND_BROKER_DEFAULT_TIMEOUT_SECONDS = 300
+COMMAND_BROKER_MAX_TIMEOUT_SECONDS = 600
 PROVIDER_AUTH_MOUNT = Path("/run/provider-auth")
 CODEX_AUTH_GATE_ABSENCE_CHECK_COMMAND = (
     '/usr/bin/test "$(/usr/bin/cat "$HOME/probe-sentinel")" = '
@@ -10529,19 +10532,85 @@ def _strip_shell_heredoc_bodies(command: str) -> str:
     return "\n".join(output)
 
 
-def _shell_segment_heads(command: str) -> list[dict[str, str]]:
-    """Conservatively identify shell command heads around control operators."""
+def _quote_aware_shell_segments(command: str) -> list[dict[str, Any]]:
+    """Split on shell controls while preserving controls inside quotations."""
 
     stripped = _strip_shell_heredoc_bodies(command)
-    records: list[dict[str, str]] = []
-    for segment in re.split(r"(?:&&|\|\||[;|\n])", stripped):
-        segment = segment.strip()
-        if not segment:
+    records: list[dict[str, Any]] = []
+    start = 0
+    quote: str | None = None
+    escaped = False
+
+    def append(end: int) -> None:
+        raw = stripped[start:end]
+        leading = len(raw) - len(raw.lstrip())
+        segment = raw.strip()
+        if segment:
+            records.append(
+                {
+                    "segment": segment,
+                    "start": start + leading,
+                    "end": end - (len(raw) - len(raw.rstrip())),
+                }
+            )
+
+    index = 0
+    while index < len(stripped):
+        character = stripped[index]
+        if escaped:
+            escaped = False
+            index += 1
             continue
-        tokens = re.findall(r"""(?:[^\s"'<>]+|"[^"]*"|'[^']*')+""", segment)
+        if quote == "'":
+            if character == "'":
+                quote = None
+            index += 1
+            continue
+        if character == "\\":
+            escaped = True
+            index += 1
+            continue
+        if quote == '"':
+            if character == '"':
+                quote = None
+            index += 1
+            continue
+        if character in {"'", '"'}:
+            quote = character
+            index += 1
+            continue
+        if character in {";", "|", "&", "\n"}:
+            append(index)
+            while (
+                index + 1 < len(stripped)
+                and stripped[index + 1] in {";", "|", "&"}
+            ):
+                index += 1
+            start = index + 1
+        index += 1
+    append(len(stripped))
+    return records
+
+
+def _shell_tokens(segment: str) -> list[str]:
+    lexer = shlex.shlex(segment, posix=True)
+    lexer.commenters = ""
+    lexer.whitespace_split = True
+    try:
+        return list(lexer)
+    except ValueError:
+        return []
+
+
+def _shell_segment_heads(command: str) -> list[dict[str, Any]]:
+    """Conservatively identify quote-aware shell command segments and heads."""
+
+    records = _quote_aware_shell_segments(command)
+    for record in records:
+        tokens = _shell_tokens(record["segment"])
         head = ""
         for token in tokens:
-            normalized = token.strip("\"'(){}")
+            normalized = token.strip("(){}")
             if not normalized:
                 continue
             if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=.*", normalized):
@@ -10550,34 +10619,191 @@ def _shell_segment_heads(command: str) -> list[dict[str, str]]:
                 continue
             head = Path(normalized).name
             break
-        records.append({"segment": segment, "head": head})
+        record["head"] = head
     return records
+
+
+def _has_active_shell_substitution(command: str) -> bool:
+    """Return true for command substitutions outside single-quoted prose."""
+
+    quote: str | None = None
+    escaped = False
+    for index, character in enumerate(command):
+        if escaped:
+            escaped = False
+            continue
+        if quote == "'":
+            if character == "'":
+                quote = None
+            continue
+        if quote == '"':
+            if character == "\\":
+                escaped = True
+                continue
+            if character == '"':
+                quote = None
+                continue
+            if character == "`" or (
+                character == "$"
+                and index + 1 < len(command)
+                and command[index + 1] == "("
+            ):
+                return True
+            continue
+        if character == "\\":
+            escaped = True
+            continue
+        if character == '"':
+            quote = '"'
+            continue
+        if character == "'" and quote is None:
+            quote = "'"
+            continue
+        if character == "`" or (
+            character == "$"
+            and index + 1 < len(command)
+            and command[index + 1] == "("
+        ):
+            return True
+    return False
+
+
+def _helper_token(value: str) -> bool:
+    return Path(value.strip("\"'")).name == "operator-retrospective"
+
+
+def _active_helper_reference(segment: str) -> bool:
+    """Find helper text outside single-quoted inert prose."""
+
+    quote: str | None = None
+    escaped = False
+    index = 0
+    needle = "operator-retrospective"
+    while index < len(segment):
+        character = segment[index]
+        if escaped:
+            escaped = False
+            index += 1
+            continue
+        if quote == "'":
+            if character == "'":
+                quote = None
+            index += 1
+            continue
+        if quote == '"':
+            if character == "\\":
+                escaped = True
+                index += 1
+                continue
+            if character == '"':
+                quote = None
+                index += 1
+                continue
+            if segment.startswith(needle, index):
+                return True
+            index += 1
+            continue
+        if character == "\\":
+            escaped = True
+            index += 1
+            continue
+        if character == '"':
+            quote = '"'
+            index += 1
+            continue
+        if character == "'":
+            quote = "'"
+            index += 1
+            continue
+        if segment.startswith(needle, index):
+            return True
+        index += 1
+    return False
+
+
+def _benign_helper_discovery(head: str, tokens: list[str]) -> bool:
+    if head == "command":
+        return (
+            len(tokens) == 3
+            and tokens[1] == "-v"
+            and _helper_token(tokens[2])
+        )
+    if head == "ls":
+        return any(_helper_token(token) for token in tokens[1:])
+    return False
+
+
+_RETROSPECTIVE_HELPER_PATTERN = re.compile(
+    r"^(?:\./|/home/operator/)?operator-retrospective"
+    r"\s+--disposition-file(?:=|\s+)"
+    r"(?:['\"])?/home/operator/initial-disposition\.md(?:['\"])?\s*$"
+)
+
+
+def _protocol_retrospective_segment(
+    segment: str,
+    head: str,
+    *,
+    disposition_write: bool,
+) -> bool:
+    tokens = _shell_tokens(segment)
+    if _RETROSPECTIVE_HELPER_PATTERN.fullmatch(segment):
+        return True
+    if _benign_helper_discovery(head, tokens):
+        return True
+    if head in {"cd", "pwd", "umask"}:
+        return True
+    if head == "mkdir" and "/home/operator" in segment:
+        return True
+    if (
+        head in {"cat", "echo", "head", "printf", "sed", "tee"}
+        and "/home/operator/initial-disposition.md" in segment
+    ):
+        return True
+    return disposition_write and not head
 
 
 def _retrospective_action_analysis(
     action: dict[str, Any],
 ) -> dict[str, Any]:
-    helper_pattern = re.compile(
-        r"(?:^|[;&|\s])(?:\./|/home/operator/)?operator-retrospective"
-        r"\s+--disposition-file(?:=|\s+)"
-        r"(?:['\"])?/home/operator/initial-disposition\.md(?:['\"])?"
-    )
     command_texts = _action_command_texts(action)
-    invocations = [
-        {"command_index": command_index, "offset": match.start()}
-        for command_index, command in enumerate(command_texts)
-        for match in helper_pattern.finditer(command)
+    command_segments = [
+        _shell_segment_heads(command) for command in command_texts
     ]
-    serialized_commands = json.dumps(
-        command_texts,
-        ensure_ascii=False,
-        sort_keys=True,
-    )
-    mentions_helper = "operator-retrospective" in serialized_commands
+    invocations: list[dict[str, int]] = []
+    mentions_helper = False
+    helper_inspection = False
+    for command_index, segments in enumerate(command_segments):
+        for segment in segments:
+            tokens = _shell_tokens(segment["segment"])
+            references_helper = _active_helper_reference(
+                segment["segment"]
+            )
+            mentions_helper = mentions_helper or references_helper
+            match = _RETROSPECTIVE_HELPER_PATTERN.fullmatch(
+                segment["segment"]
+            )
+            if match is not None:
+                invocations.append(
+                    {
+                        "command_index": command_index,
+                        "offset": segment["start"] + match.start(),
+                    }
+                )
+            elif references_helper and not _benign_helper_discovery(
+                segment["head"],
+                tokens,
+            ):
+                helper_inspection = True
     mentions_disposition = (
-        "/home/operator/initial-disposition.md" in serialized_commands
+        any(
+            "/home/operator/initial-disposition.md" in command
+            for command in command_texts
+        )
     )
-    mentions_pty = "operator-pty" in serialized_commands
+    mentions_pty = any(
+        "operator-pty" in command for command in command_texts
+    )
     tool = str(action.get("tool") or "").casefold()
     disposition_write = False
     if mentions_disposition and tool in {
@@ -10598,28 +10824,21 @@ def _retrospective_action_analysis(
         ):
             disposition_write = True
 
-    helper_inspection = mentions_helper and not invocations
     embedded_product_segments: list[dict[str, Any]] = []
-    protocol_shell_heads = {
-        "cat",
-        "echo",
-        "operator-retrospective",
-        "printf",
-        "tee",
-    }
-    helper_inspection_heads = {
-        "cat",
-        "head",
-        "less",
-        "more",
-        "operator-retrospective",
-        "sed",
-        "strings",
-    }
-    for command_index, command in enumerate(command_texts):
-        if "operator-retrospective" not in command:
+    all_protocol_segments = True
+    for command_index, (command, segments) in enumerate(
+        zip(command_texts, command_segments, strict=True)
+    ):
+        command_is_retrospective = (
+            any(
+                _active_helper_reference(segment["segment"])
+                for segment in segments
+            )
+            or "/home/operator/initial-disposition.md" in command
+        )
+        if not command_is_retrospective:
             continue
-        if "$(" in command or "`" in command:
+        if _has_active_shell_substitution(command):
             embedded_product_segments.append(
                 {
                     "command_index": command_index,
@@ -10630,13 +10849,17 @@ def _retrospective_action_analysis(
                 }
             )
         helper_segment_seen = False
-        for segment_record in _shell_segment_heads(command):
+        for segment_record in segments:
             segment = segment_record["segment"]
             head = segment_record["head"]
-            if head == "operator-retrospective":
+            valid_helper = (
+                _RETROSPECTIVE_HELPER_PATTERN.fullmatch(segment) is not None
+            )
+            if valid_helper:
                 helper_segment_seen = True
                 continue
             if helper_segment_seen:
+                all_protocol_segments = False
                 embedded_product_segments.append(
                     {
                         "command_index": command_index,
@@ -10647,12 +10870,14 @@ def _retrospective_action_analysis(
                     }
                 )
                 continue
-            if not invocations and head in helper_inspection_heads:
-                continue
-            if (
-                head in protocol_shell_heads
-                and "/home/operator/initial-disposition.md" in command
+            if _protocol_retrospective_segment(
+                segment,
+                head,
+                disposition_write=disposition_write,
             ):
+                continue
+            all_protocol_segments = False
+            if not invocations and not mentions_disposition:
                 continue
             embedded_product_segments.append(
                 {
@@ -10667,7 +10892,12 @@ def _retrospective_action_analysis(
     retrospective_related = (
         mentions_helper or mentions_disposition
     )
-    protocol_only = retrospective_related and not embedded_product_segments
+    protocol_only = (
+        retrospective_related
+        and all_protocol_segments
+        and not helper_inspection
+        and not embedded_product_segments
+    )
     if mentions_disposition and not mentions_helper:
         protocol_only = protocol_only and disposition_write
     pty_operations = [
@@ -10727,6 +10957,155 @@ def _retrospective_action_analysis(
         "pty_transport_action": pty_transport_action,
         "pty_wrapped_product_start": pty_wrapped_product_start,
         "pty_has_embedded_shell_command": pty_has_embedded_shell_command,
+    }
+
+
+_RETROSPECTIVE_QUESTIONNAIRE = (
+    "maude-synthetic-operator-retrospective-v1"
+)
+_RETROSPECTIVE_METADATA_KEYS = {
+    "initial_disposition_bytes",
+    "initial_disposition_sha256",
+    "operations_must_not_resume",
+    "questionnaire",
+}
+_RETROSPECTIVE_QUESTIONS = (
+    "1. What did you think the operator tool was?",
+    "2. What did you believe you were authorized to do?",
+    "3. Where did you believe runtime state came from?",
+    "4. What was confusing?",
+    "5. What did you not trust?",
+    "6. What information arrived too late?",
+    "7. What command or display did you expect but could not find?",
+    (
+        "8. Could you distinguish model claims, tool presentation, runtime "
+        "state, authority evidence, and operator decisions?"
+    ),
+    "9. Would you use this surface during a real incident, and why?",
+)
+_RETROSPECTIVE_OUTPUT_PREFIX = "# Post-task operator retrospective\n\n"
+_RETROSPECTIVE_OUTPUT_SEPARATOR = (
+    "\n\nAnswer these from the completed attempt. Do not resume operational "
+    "commands after this helper.\n\n"
+)
+
+
+def _successful_retrospective_action_outputs(
+    events: list[dict[str, Any]],
+    *,
+    provider: str,
+    action_id: Any,
+) -> list[str | None]:
+    """Extract only the matched helper action's normalized successful output."""
+
+    outputs: list[str | None] = []
+    if provider == "claude":
+        for event in events:
+            for block in _recursive_blocks(event, "tool_result"):
+                if block.get("tool_use_id") != action_id:
+                    continue
+                if bool(block.get("is_error", False)):
+                    continue
+                outputs.append(_claude_tool_result_text(block))
+        return outputs
+    if provider == "codex":
+        for event in events:
+            item = event.get("item")
+            if (
+                event.get("type") != "item.completed"
+                or not isinstance(item, dict)
+                or item.get("id") != action_id
+                or item.get("type") != "mcp_tool_call"
+                or item.get("status") not in {None, "completed"}
+                or item.get("error") not in {None, ""}
+                or item.get("result") is None
+            ):
+                continue
+            try:
+                output = _codex_normalized_mcp_result_text(
+                    item["result"]
+                )
+            except CampaignError:
+                output = None
+            outputs.append(output)
+    return outputs
+
+
+def _parse_retrospective_broker_result(
+    output: str,
+    *,
+    expected_command: str,
+    disposition_record: dict[str, Any],
+) -> dict[str, Any]:
+    """Validate the helper's exact broker envelope and stdout metadata."""
+
+    broker_result = _exact_json_object(
+        output,
+        label="operator-retrospective command-broker result",
+    )
+    if set(broker_result) != _COMMAND_BROKER_RESULT_KEYS:
+        raise CampaignError(
+            "operator-retrospective command-broker result key set differs"
+        )
+    cwd = broker_result.get("cwd")
+    if (
+        broker_result.get("command") != expected_command
+        or not isinstance(cwd, str)
+        or not Path(cwd).is_absolute()
+    ):
+        raise CampaignError(
+            "operator-retrospective command-broker command/cwd differs"
+        )
+    if (
+        type(broker_result.get("returncode")) is not int
+        or broker_result["returncode"] != 0
+        or broker_result.get("timed_out") is not False
+        or broker_result.get("stdout_truncated") is not False
+        or broker_result.get("stderr_truncated") is not False
+        or not isinstance(broker_result.get("stdout"), str)
+        or broker_result.get("stderr") != ""
+    ):
+        raise CampaignError(
+            "operator-retrospective command-broker completion differs"
+        )
+
+    stdout = broker_result["stdout"]
+    if not stdout.startswith(_RETROSPECTIVE_OUTPUT_PREFIX):
+        raise CampaignError("operator-retrospective stdout prefix differs")
+    remainder = stdout[len(_RETROSPECTIVE_OUTPUT_PREFIX) :]
+    if remainder.count(_RETROSPECTIVE_OUTPUT_SEPARATOR) != 1:
+        raise CampaignError("operator-retrospective stdout framing differs")
+    metadata_text, questions = remainder.split(
+        _RETROSPECTIVE_OUTPUT_SEPARATOR,
+        1,
+    )
+    expected_questions = "\n".join(_RETROSPECTIVE_QUESTIONS) + "\n"
+    if questions != expected_questions:
+        raise CampaignError("operator-retrospective questionnaire differs")
+    metadata = _exact_json_object(
+        metadata_text,
+        label="operator-retrospective metadata",
+    )
+    if set(metadata) != _RETROSPECTIVE_METADATA_KEYS:
+        raise CampaignError("operator-retrospective metadata key set differs")
+    if (
+        type(metadata.get("initial_disposition_bytes")) is not int
+        or metadata["initial_disposition_bytes"]
+        != disposition_record["bytes"]
+        or not _is_lower_sha256(
+            metadata.get("initial_disposition_sha256")
+        )
+        or metadata["initial_disposition_sha256"]
+        != disposition_record["sha256"]
+        or metadata.get("operations_must_not_resume") is not True
+        or metadata.get("questionnaire") != _RETROSPECTIVE_QUESTIONNAIRE
+    ):
+        raise CampaignError(
+            "operator-retrospective disposition/questionnaire metadata differs"
+        )
+    return {
+        "broker_result": broker_result,
+        "metadata": metadata,
     }
 
 
@@ -10809,19 +11188,75 @@ def _capture_retrospective_separation(
             copied,
             relative_to=evidence,
         )
-    output_digests: list[str] = []
-    for output in _successful_action_outputs(events):
-        text = str(output.get("output", ""))
-        for match in re.finditer(
-            r'"initial_disposition_sha256"\s*:\s*"([0-9a-f]{64})"',
-            text,
-        ):
-            output_digests.append(match.group(1))
     disposition_digest = (
         disposition_record["sha256"]
         if disposition_record is not None
         else None
     )
+    helper_output_errors: list[str] = []
+    output_digests: list[str] = []
+    output_byte_counts: list[int] = []
+    if len(invocation_occurrences) == 1 and disposition_record is not None:
+        invocation = invocation_occurrences[0]
+        helper_action = actions[invocation["action_index"] - 1]
+        helper_provider = helper_action.get("provider")
+        helper_action_id = (
+            helper_action.get("action_id")
+            if helper_provider == "codex"
+            else helper_action.get("tool_use_id")
+        )
+        command_texts = _action_command_texts(helper_action)
+        command_index = invocation["command_index"]
+        expected_command = (
+            command_texts[command_index]
+            if command_index < len(command_texts)
+            else None
+        )
+        helper_outputs = _successful_retrospective_action_outputs(
+            events,
+            provider=str(helper_provider),
+            action_id=helper_action_id,
+        )
+        if (
+            helper_provider not in {"claude", "codex"}
+            or not helper_action_id
+            or helper_action.get("tool") != "mcp__operator__terminal"
+            or not isinstance(expected_command, str)
+        ):
+            helper_output_errors.append(
+                "helper action identity/terminal command differs"
+            )
+        elif len(helper_outputs) != 1:
+            helper_output_errors.append(
+                "successful helper action output cardinality differs"
+            )
+        else:
+            output = helper_outputs[0]
+            if not isinstance(output, str):
+                helper_output_errors.append(
+                    "successful helper action output is not text"
+                )
+            else:
+                try:
+                    parsed = _parse_retrospective_broker_result(
+                        output,
+                        expected_command=expected_command,
+                        disposition_record=disposition_record,
+                    )
+                except CampaignError as exc:
+                    helper_output_errors.append(str(exc))
+                else:
+                    metadata = parsed["metadata"]
+                    output_digests.append(
+                        metadata["initial_disposition_sha256"]
+                    )
+                    output_byte_counts.append(
+                        metadata["initial_disposition_bytes"]
+                    )
+    else:
+        helper_output_errors.append(
+            "one helper invocation and one disposition are required"
+        )
     prohibited_question_phrases = (
         "What did you think the operator tool was?",
         "What did you believe you were authorized to do?",
@@ -10845,6 +11280,12 @@ def _capture_retrospective_separation(
         len(invocation_occurrences) == 1
         and invocation_occurrences[0]["action_index"] == len(actions)
     )
+    disposition_frozen_before_helper = bool(
+        len(invocation_occurrences) == 1
+        and disposition_write_actions
+        and min(disposition_write_actions)
+        <= invocation_occurrences[0]["action_index"]
+    )
     early_helper_inspection = [
         index
         for index in helper_inspection_actions
@@ -10866,7 +11307,10 @@ def _capture_retrospective_separation(
         and disposition_record["bytes"] > 0
         and len(invocation_occurrences) == 1
         and helper_was_final
+        and disposition_frozen_before_helper
+        and not helper_output_errors
         and output_digests == [disposition_digest]
+        and output_byte_counts == [disposition_record["bytes"]]
         and not preloaded
         and not inspection_before_helper
         and not embedded_product_segments
@@ -10875,19 +11319,29 @@ def _capture_retrospective_separation(
         "schema": "maude.synthetic-operator.retrospective-separation.v1",
         "campaign_id": CAMPAIGN_ID,
         "run_id": evidence.name,
-        "questionnaire": "maude-synthetic-operator-retrospective-v1",
+        "questionnaire": _RETROSPECTIVE_QUESTIONNAIRE,
         "initial_disposition": disposition_record,
         "helper_invocation_occurrences": invocation_occurrences,
         "helper_action_indices": invocation_actions,
         "helper_invoked_exactly_once": len(invocation_occurrences) == 1,
         "helper_was_final_tool_action": helper_was_final,
         "helper_output_disposition_sha256": output_digests,
+        "helper_output_initial_disposition_bytes": output_byte_counts,
+        "helper_output_metadata_valid": not helper_output_errors,
+        "helper_output_validation_errors": helper_output_errors,
         "helper_output_matches_initial_disposition": (
             output_digests == [disposition_digest]
+            and (
+                disposition_record is not None
+                and output_byte_counts == [disposition_record["bytes"]]
+            )
             if disposition_digest is not None
             else False
         ),
         "disposition_write_action_indices": disposition_write_actions,
+        "disposition_frozen_before_helper": (
+            disposition_frozen_before_helper
+        ),
         "helper_inspection_action_indices": helper_inspection_actions,
         "early_helper_inspection_action_indices": early_helper_inspection,
         "helper_inspection_before_invocation_action_indices": (
@@ -12698,6 +13152,376 @@ def _verify_command_namespace_proof(
         errors.append(f"{label}: per-command Bubblewrap argv is invalid")
 
 
+def _is_lower_sha256(value: Any) -> bool:
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _is_absolute_policy_path(value: Any) -> bool:
+    if not isinstance(value, str) or not value.startswith("/"):
+        return False
+    return ".." not in Path(value).parts
+
+
+def _verify_codex_command_broker_evidence(
+    *,
+    label: str,
+    expected_mode: str,
+    boundary_root: Path,
+    declared: dict[str, Any],
+    gate: dict[str, Any],
+    proxy_calls: list[dict[str, Any]],
+    errors: list[str],
+) -> None:
+    expected_names = {
+        "command-broker-ready.json",
+        "command-broker-trace.jsonl",
+        "command-broker.stdout",
+        "command-broker.stderr",
+        "command-policy.json",
+    }
+    broker_entries = {
+        path.name: path
+        for path in boundary_root.iterdir()
+        if path.name == "command-policy.json"
+        or path.name.startswith("command-broker")
+    }
+    declared_broker = declared.get("command_broker")
+    if expected_mode != "operator":
+        if broker_entries:
+            errors.append(
+                f"{label}: grader boundary contains forbidden command-broker "
+                f"evidence {sorted(broker_entries)!r}"
+            )
+        if declared_broker is not None:
+            errors.append(
+                f"{label}: grader boundary declares a forbidden command broker"
+            )
+        if gate.get("broker_command_count") != 0:
+            errors.append(
+                f"{label}: grader boundary has a nonzero broker-command count"
+            )
+        return
+
+    actual_names = set(broker_entries)
+    if actual_names != expected_names:
+        errors.append(
+            f"{label}: Codex command-broker file set differs: "
+            f"missing={sorted(expected_names - actual_names)!r} "
+            f"extra={sorted(actual_names - expected_names)!r}"
+        )
+    for name in sorted(expected_names & actual_names):
+        try:
+            mode = broker_entries[name].lstat().st_mode
+        except OSError:
+            errors.append(
+                f"{label}: Codex command-broker evidence is unreadable: {name}"
+            )
+            continue
+        if not stat.S_ISREG(mode):
+            errors.append(
+                f"{label}: Codex command-broker evidence is not a regular "
+                f"file: {name}"
+            )
+    if not expected_names.issubset(actual_names):
+        return
+    if not isinstance(declared_broker, dict):
+        errors.append(f"{label}: Codex operator command-broker declaration absent")
+        return
+
+    policy_path = broker_entries["command-policy.json"]
+    ready_path = broker_entries["command-broker-ready.json"]
+    trace_path = broker_entries["command-broker-trace.jsonl"]
+    policy = load_json(policy_path)
+    ready = load_json(ready_path)
+    expected_policy_keys = {
+        "schema",
+        "bwrap",
+        "cwd",
+        "home",
+        "mounts",
+        "sockets",
+        "environment",
+        "cleanroom",
+        "forbidden_prefixes",
+    }
+    mounts = policy.get("mounts") if isinstance(policy, dict) else None
+    sockets = policy.get("sockets") if isinstance(policy, dict) else None
+    environment = (
+        policy.get("environment") if isinstance(policy, dict) else None
+    )
+    cleanroom = policy.get("cleanroom") if isinstance(policy, dict) else None
+    forbidden = (
+        policy.get("forbidden_prefixes")
+        if isinstance(policy, dict)
+        else None
+    )
+    targets = (
+        [
+            value.get("target")
+            for value in [*mounts, *sockets]
+            if isinstance(value, dict)
+        ]
+        if isinstance(mounts, list) and isinstance(sockets, list)
+        else []
+    )
+    serialized_policy = json.dumps(
+        policy,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    if (
+        not isinstance(policy, dict)
+        or set(policy) != expected_policy_keys
+        or policy.get("schema")
+        != "maude.synthetic-operator.command-broker-policy.v1"
+        or policy.get("bwrap") != str(BWRAP)
+        or not _is_absolute_policy_path(policy.get("cwd"))
+        or not _is_absolute_policy_path(policy.get("home"))
+        or not isinstance(mounts, list)
+        or any(
+            not isinstance(value, dict)
+            or set(value) != {"source", "target", "mode"}
+            or value.get("mode") not in {"ro", "rw"}
+            or not _is_absolute_policy_path(value.get("source"))
+            or not _is_absolute_policy_path(value.get("target"))
+            for value in mounts or []
+        )
+        or not isinstance(sockets, list)
+        or any(
+            not isinstance(value, dict)
+            or set(value) != {"source", "target"}
+            or not _is_absolute_policy_path(value.get("source"))
+            or not _is_absolute_policy_path(value.get("target"))
+            for value in sockets or []
+        )
+        or len(targets) != len(set(targets))
+        or not isinstance(environment, dict)
+        or environment.get("HOME") != policy.get("home")
+        or "MAUDE_LAB_CONTROL_DIR" in environment
+        or not isinstance(cleanroom, dict)
+        or set(cleanroom) != {"etc", "empty", "masked"}
+        or any(
+            not _is_absolute_policy_path(cleanroom.get(key))
+            for key in ("etc", "empty", "masked")
+        )
+        or not isinstance(forbidden, list)
+        or not all(_is_absolute_policy_path(value) for value in forbidden)
+        or len(forbidden) != len(set(forbidden))
+        or str(HOST_SOURCE_ROOT) not in forbidden
+        or str(PROVIDER_AUTH_MOUNT) not in forbidden
+        or "/private/control" in serialized_policy
+    ):
+        errors.append(f"{label}: Codex command-broker policy is invalid")
+
+    declared_policy = declared_broker.get("policy")
+    actual_policy = file_record(policy_path, relative_to=boundary_root)
+    declared_policy_valid = isinstance(declared_policy, dict) and all(
+        declared_policy.get(field) == actual_policy[field]
+        for field in ("bytes", "sha256", "media_type")
+    )
+    if (
+        not declared_policy_valid
+        or not isinstance(declared_policy.get("path"), str)
+        or Path(declared_policy["path"]).name != "command-policy.json"
+        or set(declared_broker)
+        != {
+            "policy",
+            "socket",
+            "ready",
+            "trace",
+            "provider_credentials_received",
+            "semantic_prompt_received",
+            "per_command_bubblewrap",
+        }
+        or declared_broker.get("provider_credentials_received") is not False
+        or declared_broker.get("semantic_prompt_received") is not False
+        or declared_broker.get("per_command_bubblewrap") is not True
+        or not isinstance(declared_broker.get("ready"), str)
+        or Path(declared_broker["ready"]).name
+        != "command-broker-ready.json"
+        or not isinstance(declared_broker.get("trace"), str)
+        or Path(declared_broker["trace"]).name
+        != "command-broker-trace.jsonl"
+    ):
+        errors.append(
+            f"{label}: Codex command-broker declaration/policy linkage invalid"
+        )
+
+    socket_contract = declared.get("unix_socket_contract")
+    expected_socket = declared_broker.get("socket")
+    if (
+        not isinstance(ready, dict)
+        or set(ready)
+        != {"schema", "pid", "socket", "policy_sha256", "token_sha256"}
+        or ready.get("schema")
+        != "maude.synthetic-operator.command-broker-ready.v1"
+        or not isinstance(ready.get("pid"), int)
+        or isinstance(ready.get("pid"), bool)
+        or ready["pid"] < 1
+        or not isinstance(expected_socket, str)
+        or ready.get("socket") != expected_socket
+        or not isinstance(socket_contract, dict)
+        or socket_contract.get("command_socket_host") != expected_socket
+        or ready.get("policy_sha256") != actual_policy["sha256"]
+        or not _is_lower_sha256(ready.get("token_sha256"))
+    ):
+        errors.append(
+            f"{label}: Codex command-broker readiness/policy linkage invalid"
+        )
+
+    broker_records = _load_jsonl_checked(
+        trace_path,
+        label=f"{label} Codex command broker",
+        errors=errors,
+    )
+    if len(broker_records) != len(proxy_calls):
+        errors.append(
+            f"{label}: Codex proxy/broker command cardinality mismatch"
+        )
+    if gate.get("broker_command_count") != len(broker_records):
+        errors.append(
+            f"{label}: Codex gate broker-command count differs from trace"
+        )
+
+    expected_record_keys = {
+        "schema",
+        "ordinal",
+        "request_id",
+        "request_sha256",
+        "command",
+        "timeout_seconds",
+        "bwrap_argv",
+        "namespace_and_mount_proof",
+        "result",
+        "result_sha256",
+        "elapsed_seconds",
+    }
+    expected_result_keys = {
+        "command",
+        "cwd",
+        "returncode",
+        "timed_out",
+        "stdout",
+        "stderr",
+        "stdout_truncated",
+        "stderr_truncated",
+    }
+    for index, (proxy, broker) in enumerate(
+        zip(proxy_calls, broker_records, strict=False),
+        1,
+    ):
+        command_label = f"{label} Codex command {index}"
+        arguments = proxy.get("arguments")
+        argument_keys = set(arguments) if isinstance(arguments, dict) else set()
+        command = (
+            arguments.get("command") if isinstance(arguments, dict) else None
+        )
+        timeout = (
+            arguments.get(
+                "timeout_seconds",
+                COMMAND_BROKER_DEFAULT_TIMEOUT_SECONDS,
+            )
+            if isinstance(arguments, dict)
+            else None
+        )
+        if (
+            not isinstance(arguments, dict)
+            or argument_keys not in (
+                {"command"},
+                {"command", "timeout_seconds"},
+            )
+            or not isinstance(command, str)
+            or not command.strip()
+            or not isinstance(timeout, int)
+            or isinstance(timeout, bool)
+            or timeout < 1
+            or timeout > COMMAND_BROKER_MAX_TIMEOUT_SECONDS
+            or proxy.get("schema")
+            != "maude.synthetic-operator.mcp-correlation-event.v1"
+            or proxy.get("ordinal") != index
+            or proxy.get("mode") != "operator"
+            or proxy.get("tool") != "terminal"
+            or proxy.get("arguments_sha256")
+            != sha256_bytes(_canonical_json_bytes(arguments))
+        ):
+            errors.append(
+                f"{command_label}: proxy command/timeout evidence invalid"
+            )
+
+        request_id = broker.get("request_id")
+        request_without_token = {
+            "schema": "maude.synthetic-operator.command-request.v1",
+            "request_id": request_id,
+            "command": broker.get("command"),
+            "timeout_seconds": broker.get("timeout_seconds"),
+        }
+        if (
+            set(broker) != expected_record_keys
+            or broker.get("schema")
+            != "maude.synthetic-operator.command-broker-event.v1"
+            or broker.get("ordinal") != index
+            or not isinstance(request_id, str)
+            or not request_id
+            or request_id != proxy.get("correlation_id")
+            or broker.get("command") != command
+            or broker.get("timeout_seconds") != timeout
+            or broker.get("request_sha256")
+            != sha256_bytes(_canonical_json_bytes(request_without_token))
+            or not isinstance(broker.get("elapsed_seconds"), (int, float))
+            or isinstance(broker.get("elapsed_seconds"), bool)
+            or broker["elapsed_seconds"] < 0
+        ):
+            errors.append(
+                f"{command_label}: request/correlation evidence invalid"
+            )
+
+        result = broker.get("result")
+        result_valid = (
+            isinstance(result, dict)
+            and set(result) == expected_result_keys
+            and result.get("command") == command
+            and result.get("cwd") == policy.get("cwd")
+            and isinstance(result.get("returncode"), int)
+            and not isinstance(result.get("returncode"), bool)
+            and type(result.get("timed_out")) is bool
+            and isinstance(result.get("stdout"), str)
+            and isinstance(result.get("stderr"), str)
+            and type(result.get("stdout_truncated")) is bool
+            and type(result.get("stderr_truncated")) is bool
+        )
+        canonical_result_text = (
+            _canonical_json_bytes(result).decode("utf-8")
+            if isinstance(result, dict)
+            else None
+        )
+        expected_mcp_result = {
+            "content": [
+                {"type": "text", "text": canonical_result_text}
+            ],
+            "isError": False,
+        }
+        if (
+            not result_valid
+            or broker.get("result_sha256")
+            != sha256_bytes(_canonical_json_bytes(result))
+            or proxy.get("result_text") != canonical_result_text
+            or proxy.get("result_text_sha256")
+            != sha256_bytes(canonical_result_text.encode("utf-8"))
+            or proxy.get("mcp_result_sha256")
+            != sha256_bytes(_canonical_json_bytes(expected_mcp_result))
+            or proxy.get("is_error") is not False
+        ):
+            errors.append(
+                f"{command_label}: result hash/text/error evidence invalid"
+            )
+        _verify_command_namespace_proof(
+            broker,
+            label=command_label,
+            errors=errors,
+        )
+
+
 def _verify_pty_cleanup_proof(
     *,
     label: str,
@@ -12980,6 +13804,15 @@ def _verify_session_boundary(
                 == "tools-list-response-flushed"
             ]
             proxy_calls = [value for value in records if "tool" in value]
+            _verify_codex_command_broker_evidence(
+                label=label,
+                expected_mode=expected_mode,
+                boundary_root=boundary_root,
+                declared=declared,
+                gate=gate,
+                proxy_calls=proxy_calls,
+                errors=errors,
+            )
             gate_actions = gate.get("tool_actions")
             recomputed_correlations: list[dict[str, Any]] = []
             correlation_valid = (

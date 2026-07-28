@@ -2134,6 +2134,306 @@ def codex_normalized_mcp_result_shape_cases() -> dict[str, Any]:
     }
 
 
+def codex_committed_broker_verifier_cases(
+    diagnostics_root: Path,
+) -> dict[str, Any]:
+    """Exercise committed Codex broker verification without a provider."""
+
+    cases_root = diagnostics_root / "codex-committed-broker-verifier"
+
+    def write_jsonl(path: Path, values: list[dict[str, Any]]) -> None:
+        path.write_bytes(
+            b"".join(
+                runner._canonical_json_bytes(value) + b"\n"
+                for value in values
+            )
+        )
+
+    def fixture(name: str) -> dict[str, Any]:
+        raw = cases_root / name / "raw"
+        boundary_root = raw / "codex-mcp-boundary"
+        operator = cases_root / name / "operator"
+        home = cases_root / name / "home"
+        cleanroom = cases_root / name / "cleanroom"
+        for path in (boundary_root, operator, home, cleanroom):
+            path.mkdir(parents=True)
+        for name_part in ("etc", "empty", "masked"):
+            (cleanroom / name_part).mkdir()
+        policy = {
+            "schema": "maude.synthetic-operator.command-broker-policy.v1",
+            "bwrap": str(runner.BWRAP),
+            "cwd": str(operator),
+            "home": str(runner.OPERATOR_HOME_MOUNT),
+            "mounts": [
+                {
+                    "source": str(operator),
+                    "target": str(operator),
+                    "mode": "ro",
+                },
+                {
+                    "source": str(home),
+                    "target": str(runner.OPERATOR_HOME_MOUNT),
+                    "mode": "rw",
+                },
+            ],
+            "sockets": [],
+            "environment": {
+                "HOME": str(runner.OPERATOR_HOME_MOUNT),
+                "PATH": "/usr/bin:/bin",
+            },
+            "cleanroom": {
+                key: str(cleanroom / key)
+                for key in ("etc", "empty", "masked")
+            },
+            "forbidden_prefixes": [
+                str(runner.HOST_SOURCE_ROOT),
+                str(cases_root / name / "provider-home"),
+                str(runner.PROVIDER_AUTH_MOUNT),
+            ],
+        }
+        policy_path = boundary_root / "command-policy.json"
+        runner.write_json(policy_path, policy)
+        socket_path = str(cases_root / name / "broker.sock")
+        ready = {
+            "schema": "maude.synthetic-operator.command-broker-ready.v1",
+            "pid": 12345,
+            "socket": socket_path,
+            "policy_sha256": runner.sha256_file(policy_path),
+            "token_sha256": "2" * 64,
+        }
+        runner.write_json(
+            boundary_root / "command-broker-ready.json",
+            ready,
+        )
+        for stream in ("command-broker.stdout", "command-broker.stderr"):
+            (boundary_root / stream).write_bytes(b"")
+
+        command = "printf 'synthetic\\n'"
+        timeout = 20
+        result = {
+            "command": command,
+            "cwd": str(operator),
+            "returncode": 0,
+            "timed_out": False,
+            "stdout": "synthetic\n",
+            "stderr": "",
+            "stdout_truncated": False,
+            "stderr_truncated": False,
+        }
+        result_text = runner._canonical_json_bytes(result).decode("utf-8")
+        request_id = "000001-synthetic"
+        arguments = {"command": command, "timeout_seconds": timeout}
+        proxy = {
+            "schema": "maude.synthetic-operator.mcp-correlation-event.v1",
+            "ordinal": 1,
+            "mcp_request_id": 4,
+            "correlation_id": request_id,
+            "mode": "operator",
+            "tool": "terminal",
+            "arguments": arguments,
+            "arguments_sha256": runner.sha256_bytes(
+                runner._canonical_json_bytes(arguments)
+            ),
+            "result_text": result_text,
+            "result_text_sha256": runner.sha256_bytes(
+                result_text.encode("utf-8")
+            ),
+            "mcp_result_sha256": runner.sha256_bytes(
+                runner._canonical_json_bytes(
+                    {
+                        "content": [
+                            {"type": "text", "text": result_text}
+                        ],
+                        "isError": False,
+                    }
+                )
+            ),
+            "is_error": False,
+            "elapsed_seconds": 0.01,
+        }
+        request_without_token = {
+            "schema": "maude.synthetic-operator.command-request.v1",
+            "request_id": request_id,
+            "command": command,
+            "timeout_seconds": timeout,
+        }
+        broker = {
+            "schema": "maude.synthetic-operator.command-broker-event.v1",
+            "ordinal": 1,
+            "request_id": request_id,
+            "request_sha256": runner.sha256_bytes(
+                runner._canonical_json_bytes(request_without_token)
+            ),
+            "command": command,
+            "timeout_seconds": timeout,
+            "bwrap_argv": [
+                str(runner.BWRAP),
+                "--unshare-pid",
+                "--unshare-net",
+            ],
+            "namespace_and_mount_proof": {
+                "namespaces": {
+                    name_part: {"distinct": True}
+                    for name_part in ("mnt", "net", "pid")
+                },
+                "external_network_namespace": "unshared",
+                "forbidden_paths_visible": [],
+                "provider_auth_mount_visible": False,
+                "pre_exec_forbidden_descriptor_targets": [],
+                "inside_pre_exec_file_descriptors": [
+                    {"fd": descriptor, "target": f"pipe:[{descriptor}]"}
+                    for descriptor in (0, 1, 2)
+                ],
+            },
+            "result": result,
+            "result_sha256": runner.sha256_bytes(
+                runner._canonical_json_bytes(result)
+            ),
+            "elapsed_seconds": 0.02,
+        }
+        trace_path = boundary_root / "command-broker-trace.jsonl"
+        write_jsonl(trace_path, [broker])
+        declared = {
+            "command_broker": {
+                "policy": runner.file_record(policy_path),
+                "socket": socket_path,
+                "ready": str(boundary_root / "command-broker-ready.json"),
+                "trace": str(trace_path),
+                "provider_credentials_received": False,
+                "semantic_prompt_received": False,
+                "per_command_bubblewrap": True,
+            },
+            "unix_socket_contract": {
+                "command_socket_host": socket_path,
+            },
+        }
+        gate = {
+            "schema": (
+                "maude.synthetic-operator."
+                "codex-retained-provider-boundary.v1"
+            ),
+            "provider_config": "openai-sol",
+            "broker_command_count": 1,
+        }
+        runner.write_json(boundary_root / "declared-boundary.json", declared)
+        runner.write_json(boundary_root / "proxy-ready.json", {})
+        write_jsonl(boundary_root / "proxy-trace.jsonl", [proxy])
+        runner.write_json(boundary_root / "cleanup.json", {})
+        runner.write_json(raw / "provider-auth-gate.json", gate)
+        return {
+            "raw": raw,
+            "boundary_root": boundary_root,
+            "declared": declared,
+            "gate": gate,
+            "proxy_calls": [proxy],
+            "trace_path": trace_path,
+        }
+
+    def verify(case: dict[str, Any], mode: str = "operator") -> list[str]:
+        errors: list[str] = []
+        runner._verify_codex_command_broker_evidence(
+            label="synthetic operator",
+            expected_mode=mode,
+            boundary_root=case["boundary_root"],
+            declared=case["declared"],
+            gate=case["gate"],
+            proxy_calls=case["proxy_calls"],
+            errors=errors,
+        )
+        return errors
+
+    baseline = fixture("baseline")
+    assert verify(baseline) == []
+
+    rejected: list[str] = []
+    missing_trace = fixture("missing-trace")
+    missing_trace["trace_path"].unlink()
+    missing_errors = verify(missing_trace)
+    assert any(
+        "command-broker file set differs" in error
+        and "command-broker-trace.jsonl" in error
+        for error in missing_errors
+    )
+    rejected.append("missing-trace")
+
+    shared_network = fixture("shared-network")
+    shared_record = json.loads(
+        shared_network["trace_path"].read_text(encoding="utf-8")
+    )
+    shared_record["namespace_and_mount_proof"][
+        "external_network_namespace"
+    ] = "shared"
+    write_jsonl(shared_network["trace_path"], [shared_record])
+    shared_errors = verify(shared_network)
+    assert any(
+        "PID/mount/network separation proof invalid" in error
+        for error in shared_errors
+    )
+    rejected.append("external-network-namespace-shared")
+
+    bad_correlation = fixture("bad-correlation")
+    bad_correlation["proxy_calls"][0]["correlation_id"] = "other"
+    assert any(
+        "request/correlation evidence invalid" in error
+        for error in verify(bad_correlation)
+    )
+    rejected.append("proxy-broker-correlation")
+
+    bad_result = fixture("bad-result")
+    bad_result["proxy_calls"][0]["is_error"] = True
+    assert any(
+        "result hash/text/error evidence invalid" in error
+        for error in verify(bad_result)
+    )
+    rejected.append("result-error-semantics")
+
+    bad_ready = fixture("bad-ready")
+    ready_path = (
+        bad_ready["boundary_root"] / "command-broker-ready.json"
+    )
+    ready = json.loads(ready_path.read_text(encoding="utf-8"))
+    ready["policy_sha256"] = "0" * 64
+    runner.write_json(ready_path, ready)
+    assert any(
+        "readiness/policy linkage invalid" in error
+        for error in verify(bad_ready)
+    )
+    rejected.append("ready-policy-digest")
+
+    grader_with_broker = fixture("grader-with-broker")
+    assert any(
+        "grader boundary contains forbidden command-broker evidence" in error
+        for error in verify(grader_with_broker, mode="grader")
+    )
+    rejected.append("grader-command-broker-files")
+
+    integration_errors: list[str] = []
+    runner._verify_session_boundary(
+        label="synthetic shared-network operator",
+        config_id="openai-sol",
+        raw=shared_network["raw"],
+        transcript=shared_network["raw"] / "unused-transcript.jsonl",
+        metadata={
+            "provider_auth_bootstrap": {"gate": shared_network["gate"]}
+        },
+        expected_tools=None,
+        expected_mode="operator",
+        errors=integration_errors,
+    )
+    assert any(
+        "PID/mount/network separation proof invalid" in error
+        for error in integration_errors
+    )
+    return {
+        "baseline_accepted": True,
+        "tamper_cases_rejected": sorted(rejected),
+        "session_boundary_wiring_exercised": True,
+        "provider_invoked": False,
+        "network_invoked": False,
+        "all_passed": True,
+    }
+
+
 def codex_strict_mcp_boundary_cases(
     diagnostics_root: Path,
 ) -> dict[str, Any]:
@@ -2434,6 +2734,414 @@ def retrospective_action_deduplication_case() -> dict[str, Any]:
         "helper_invocation_count": len(paired_analysis["invocations"]),
         "helper_name_in_result_only_counted": False,
         "all_passed": True,
+    }
+
+
+def retrospective_separation_cases(
+    diagnostics_root: Path,
+) -> dict[str, Any]:
+    """Exercise exact helper results and replay the 15 preserved Maude runs."""
+
+    disposition = b"Disposition: STOP SAFELY.\n"
+    disposition_record = {
+        "bytes": len(disposition),
+        "sha256": runner.sha256_bytes(disposition),
+    }
+    helper_command = (
+        "./operator-retrospective --disposition-file "
+        "/home/operator/initial-disposition.md"
+    )
+
+    def helper_output(
+        command: str = helper_command,
+        *,
+        metadata_changes: dict[str, Any] | None = None,
+        broker_changes: dict[str, Any] | None = None,
+        question_suffix: str = "",
+    ) -> str:
+        metadata = {
+            "initial_disposition_bytes": disposition_record["bytes"],
+            "initial_disposition_sha256": disposition_record["sha256"],
+            "operations_must_not_resume": True,
+            "questionnaire": runner._RETROSPECTIVE_QUESTIONNAIRE,
+        }
+        metadata.update(metadata_changes or {})
+        stdout = (
+            runner._RETROSPECTIVE_OUTPUT_PREFIX
+            + json.dumps(metadata, sort_keys=True)
+            + runner._RETROSPECTIVE_OUTPUT_SEPARATOR
+            + "\n".join(runner._RETROSPECTIVE_QUESTIONS)
+            + "\n"
+            + question_suffix
+        )
+        broker = {
+            "command": command,
+            "cwd": "/home/operator",
+            "returncode": 0,
+            "stderr": "",
+            "stderr_truncated": False,
+            "stdout": stdout,
+            "stdout_truncated": False,
+            "timed_out": False,
+        }
+        broker.update(broker_changes or {})
+        return runner._canonical_json_bytes(broker).decode("utf-8")
+
+    parsed = runner._parse_retrospective_broker_result(
+        helper_output(),
+        expected_command=helper_command,
+        disposition_record=disposition_record,
+    )
+    assert parsed["metadata"]["initial_disposition_bytes"] == len(disposition)
+    assert (
+        parsed["metadata"]["initial_disposition_sha256"]
+        == disposition_record["sha256"]
+    )
+    claude_outputs = runner._successful_retrospective_action_outputs(
+        [
+            {
+                "type": "user",
+                "message": {
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "claude-helper",
+                            "is_error": False,
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": helper_output(),
+                                }
+                            ],
+                        }
+                    ]
+                },
+            }
+        ],
+        provider="claude",
+        action_id="claude-helper",
+    )
+    assert claude_outputs == [helper_output()]
+    runner._parse_retrospective_broker_result(
+        claude_outputs[0],
+        expected_command=helper_command,
+        disposition_record=disposition_record,
+    )
+
+    invalid_outputs = {
+        "wrong-byte-count": helper_output(
+            metadata_changes={"initial_disposition_bytes": len(disposition) + 1}
+        ),
+        "wrong-digest": helper_output(
+            metadata_changes={"initial_disposition_sha256": "0" * 64}
+        ),
+        "wrong-questionnaire-id": helper_output(
+            metadata_changes={"questionnaire": "other"}
+        ),
+        "resume-allowed": helper_output(
+            metadata_changes={"operations_must_not_resume": False}
+        ),
+        "questionnaire-text-changed": helper_output(question_suffix="extra\n"),
+        "nonzero-result": helper_output(
+            broker_changes={"returncode": 1}
+        ),
+        "timed-out-result": helper_output(
+            broker_changes={"timed_out": True}
+        ),
+        "truncated-result": helper_output(
+            broker_changes={"stdout_truncated": True}
+        ),
+        "unexpected-stderr": helper_output(
+            broker_changes={"stderr": "warning\n"}
+        ),
+        "wrong-command": helper_output(command="printf wrong"),
+    }
+    rejected_outputs: list[str] = []
+    for name, output in invalid_outputs.items():
+        try:
+            runner._parse_retrospective_broker_result(
+                output,
+                expected_command=helper_command,
+                disposition_record=disposition_record,
+            )
+        except runner.CampaignError:
+            rejected_outputs.append(name)
+        else:
+            raise AssertionError(
+                f"invalid retrospective helper result accepted: {name}"
+            )
+    duplicate_key_output = helper_output()[:-1] + ',"cwd":"/other"}'
+    try:
+        runner._parse_retrospective_broker_result(
+            duplicate_key_output,
+            expected_command=helper_command,
+            disposition_record=disposition_record,
+        )
+    except runner.CampaignError:
+        rejected_outputs.append("duplicate-broker-key")
+    else:
+        raise AssertionError(
+            "retrospective helper result accepted a duplicate broker key"
+        )
+
+    valid_action_commands = {
+        "write-and-helper": (
+            "printf '%s\\n' 'Disposition with `ticks`; $(quoted)' "
+            "> /home/operator/initial-disposition.md && "
+            + helper_command
+        ),
+        "newline-helper": (
+            "printf '%s\\n' 'Disposition with a | pipe; still prose' "
+            "> /home/operator/initial-disposition.md\n"
+            + helper_command
+        ),
+        "cd-and-helper": "cd /home/operator && " + helper_command,
+    }
+    for command in valid_action_commands.values():
+        analysis = runner._retrospective_action_analysis(
+            {
+                "provider": "codex",
+                "tool": "mcp__operator__terminal",
+                "action_id": "helper",
+                "input": {"command": command},
+            }
+        )
+        assert len(analysis["invocations"]) == 1
+        assert analysis["helper_inspection"] is False
+        assert analysis["embedded_product_segments"] == []
+        assert analysis["protocol_only"] is True
+    assert (
+        runner._has_active_shell_substitution(
+            "printf '%s\\n' 'literal $(not-run) and `not-run`'"
+        )
+        is False
+    )
+    assert (
+        runner._has_active_shell_substitution(
+            'printf "%s\\n" "$(would-run)"'
+        )
+        is True
+    )
+    quoted_helper_prose = runner._retrospective_action_analysis(
+        {
+            "tool": "mcp__operator__terminal",
+            "input": {
+                "command": (
+                    "printf '%s\\n' 'operator-retrospective "
+                    "--disposition-file "
+                    "/home/operator/initial-disposition.md' "
+                    "> /home/operator/initial-disposition.md"
+                )
+            },
+        }
+    )
+    assert quoted_helper_prose["invocations"] == []
+    assert quoted_helper_prose["mentions_helper"] is False
+
+    for command in (
+        "ls -l plan.md ./operator-retrospective",
+        "command -v operator-retrospective",
+    ):
+        analysis = runner._retrospective_action_analysis(
+            {"tool": "mcp__operator__terminal", "input": {"command": command}}
+        )
+        assert analysis["mentions_helper"] is True
+        assert analysis["helper_inspection"] is False
+
+    for command in (
+        "cat ./operator-retrospective",
+        "sed -n '1,40p' ./operator-retrospective",
+        "cat $(command -v operator-retrospective)",
+        "./operator-retrospective --help",
+    ):
+        analysis = runner._retrospective_action_analysis(
+            {"tool": "mcp__operator__terminal", "input": {"command": command}}
+        )
+        assert analysis["helper_inspection"] is True
+        assert analysis["invocations"] == []
+
+    post_helper = runner._retrospective_action_analysis(
+        {
+            "tool": "mcp__operator__terminal",
+            "input": {"command": helper_command + "; ./maude status"},
+        }
+    )
+    assert len(post_helper["invocations"]) == 1
+    assert post_helper["embedded_product_segments"]
+
+    case_root = diagnostics_root / "retrospective-separation"
+    operator_home = case_root / "operator"
+    evidence = case_root / "evidence"
+    operator_home.mkdir(parents=True)
+    evidence.mkdir(parents=True)
+    (operator_home / "initial-disposition.md").write_bytes(disposition)
+    write_command = (
+        "printf disposition > /home/operator/initial-disposition.md"
+    )
+
+    def action(identity: str, command: str) -> dict[str, Any]:
+        return {
+            "provider": "codex",
+            "tool": "mcp__operator__terminal",
+            "action_id": identity,
+            "input": {"command": command},
+        }
+
+    def completion(
+        identity: str,
+        output: str,
+        *,
+        succeeded: bool = True,
+    ) -> dict[str, Any]:
+        return {
+            "type": "item.completed",
+            "item": {
+                "id": identity,
+                "type": "mcp_tool_call",
+                "status": "completed",
+                "error": None if succeeded else "synthetic failure",
+                "result": (
+                    {
+                        "content": [{"type": "text", "text": output}],
+                        "structured_content": None,
+                    }
+                    if succeeded
+                    else None
+                ),
+            },
+        }
+
+    baseline = runner._capture_retrospective_separation(
+        [
+            action("write", write_command),
+            action("helper", helper_command),
+        ],
+        [completion("helper", helper_output())],
+        operator_home,
+        evidence,
+        system_prompt="operator system",
+        user_prompt="operator task",
+    )
+    assert baseline["separation_valid"] is True
+    assert baseline["helper_output_metadata_valid"] is True
+    assert baseline["disposition_frozen_before_helper"] is True
+
+    spoofed = runner._capture_retrospective_separation(
+        [
+            action("spoof", write_command),
+            action("helper-missing", helper_command),
+        ],
+        [
+            completion("spoof", helper_output(command=write_command)),
+            completion("helper-missing", "", succeeded=False),
+        ],
+        operator_home,
+        evidence,
+        system_prompt="operator system",
+        user_prompt="operator task",
+    )
+    assert spoofed["separation_valid"] is False
+    assert spoofed["helper_output_disposition_sha256"] == []
+
+    after_helper = runner._capture_retrospective_separation(
+        [
+            action("write", write_command),
+            action("helper", helper_command),
+            action("later", "./maude status"),
+        ],
+        [completion("helper", helper_output())],
+        operator_home,
+        evidence,
+        system_prompt="operator system",
+        user_prompt="operator task",
+    )
+    assert after_helper["separation_valid"] is False
+    assert after_helper["operations_after_helper"] == 1
+
+    preserved_campaign_id = "maude-baseline-20260728T032857-0400"
+    preserved_root = (
+        runner.REPO_ROOT
+        / "evals"
+        / "synthetic-operator"
+        / "runs"
+        / preserved_campaign_id
+    )
+    replayed: list[str] = []
+    for number in range(1, 16):
+        run_id = f"maude-s{number:02d}"
+        run_root = preserved_root / run_id
+        actions = json.loads(
+            (run_root / "commands-and-actions.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        events = runner._provider_events(run_root / "transcript.jsonl")
+        analyses = [
+            runner._retrospective_action_analysis(value)
+            for value in actions
+        ]
+        invocations = [
+            (index, invocation)
+            for index, analysis in enumerate(analyses, 1)
+            for invocation in analysis["invocations"]
+        ]
+        assert len(invocations) == 1
+        action_index, invocation = invocations[0]
+        assert action_index == len(actions)
+        assert not any(
+            analysis["helper_inspection"] for analysis in analyses
+        )
+        assert not any(
+            analysis["embedded_product_segments"] for analysis in analyses
+        )
+        helper_action = actions[action_index - 1]
+        helper_outputs = runner._successful_retrospective_action_outputs(
+            events,
+            provider=helper_action["provider"],
+            action_id=helper_action["action_id"],
+        )
+        assert len(helper_outputs) == 1
+        assert isinstance(helper_outputs[0], str)
+        frozen = json.loads(
+            (
+                run_root
+                / "observable"
+                / "retrospective"
+                / "separation.json"
+            ).read_text(encoding="utf-8")
+        )["initial_disposition"]
+        replayed_result = runner._parse_retrospective_broker_result(
+            helper_outputs[0],
+            expected_command=runner._action_command_texts(helper_action)[
+                invocation["command_index"]
+            ],
+            disposition_record=frozen,
+        )
+        assert (
+            replayed_result["metadata"]["initial_disposition_sha256"]
+            == frozen["sha256"]
+        )
+        assert (
+            replayed_result["metadata"]["initial_disposition_bytes"]
+            == frozen["bytes"]
+        )
+        replayed.append(run_id)
+
+    return {
+        "exact_helper_result_accepted": True,
+        "claude_helper_result_shape_accepted": True,
+        "invalid_helper_results_rejected": sorted(rejected_outputs),
+        "quote_aware_valid_shapes": sorted(valid_action_commands),
+        "benign_helper_discovery_accepted": ["command-v", "ls-l"],
+        "content_reads_and_premature_execution_rejected": True,
+        "post_helper_command_and_action_rejected": True,
+        "non_helper_digest_did_not_count": True,
+        "preserved_campaign_id": preserved_campaign_id,
+        "preserved_generation_2_runs_replayed": replayed,
+        "preserved_evidence_modified": False,
+        "provider_invoked": False,
+        "network_invoked": False,
+        "all_passed": len(replayed) == 15,
     }
 
 
@@ -3734,6 +4442,12 @@ def main() -> int:
             lambda: codex_strict_mcp_boundary_cases(diagnostics_root),
         ),
         (
+            "codex-committed-broker-verifier",
+            lambda: codex_committed_broker_verifier_cases(
+                diagnostics_root
+            ),
+        ),
+        (
             "public-cli-broker-case",
             lambda: public_cli_broker_case(diagnostics_root),
         ),
@@ -3746,6 +4460,10 @@ def main() -> int:
         (
             "retrospective-action-deduplication",
             retrospective_action_deduplication_case,
+        ),
+        (
+            "retrospective-separation-cases",
+            lambda: retrospective_separation_cases(diagnostics_root),
         ),
         (
             "public-socket-policy",
@@ -3832,6 +4550,7 @@ def main() -> int:
             "claude_retained_transport_contract_exercised": True,
             "claude_mcp_boundary_simulated_locally": True,
             "codex_strict_mcp_boundary_simulated_locally": True,
+            "codex_committed_broker_verifier_exercised": True,
             "codex_offline_prompt_input_invoked": True,
             "mcp_protocol_negotiation_exercised": True,
             "public_cli_broker_simulated_locally": True,
