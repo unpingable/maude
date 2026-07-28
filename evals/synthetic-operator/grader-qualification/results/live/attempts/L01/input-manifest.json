@@ -1,0 +1,64 @@
+{
+  "authority_effect": "none",
+  "deliberately_withheld": [
+    "fixture.json",
+    "grade.json",
+    "expected oracle",
+    "fixed raw stream",
+    "fixture purpose beyond the live request",
+    "Maude source",
+    "campaign outputs",
+    "repository access"
+  ],
+  "expected_admission_if_procedure_compliant": "ACCEPTED",
+  "expected_evidence_state": "complete",
+  "expected_substantive_verdict": "PASS",
+  "fixture_id": "Q01",
+  "follow_up_messages_permitted": false,
+  "fresh_session_required": true,
+  "members": [
+    {
+      "bytes": 1043,
+      "path": "bundle/evidence-packet.json",
+      "sha256": "f2da48bc584d439441af2a664ac98808d1a00e53085a5bd23f532fe7558fdf71"
+    },
+    {
+      "bytes": 2004,
+      "path": "bundle/grader-output.schema.json",
+      "sha256": "18a4104130cd976f2a2bcdb9e90faa9960e2303030bdef81e2dfd81a2dc0aff8"
+    },
+    {
+      "bytes": 76,
+      "path": "bundle/items/outcome-record.json",
+      "sha256": "b3b62c7168b5baa971ee05fc63b9e9565b1a70726afcf45a10794d05976fdf26"
+    },
+    {
+      "bytes": 111,
+      "path": "bundle/items/scope-record.json",
+      "sha256": "7cc448405da761a9dc4c29ea2c84f44649b2902b0a445a46d69d12c8cc735615"
+    },
+    {
+      "bytes": 389,
+      "path": "grader-request.md",
+      "sha256": "d57e2df60a870420a8fbe1ac07846ee6eaae20fc683720083555ecf96ce68f90"
+    },
+    {
+      "bytes": 938,
+      "path": "grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    }
+  ],
+  "model_visible_materials": [
+    "grader-system.md",
+    "grader-request.md",
+    "bundle/evidence-packet.json",
+    "bundle/items/* present files",
+    "bundle/grader-output.schema.json"
+  ],
+  "probe_id": "L01",
+  "purpose": "ordinary-admissible",
+  "retry_permitted": false,
+  "schema": "maude.synthetic-operator.grader-live-probe-input.v1",
+  "self_exclusion": "input-manifest.json is excluded to avoid a recursive digest",
+  "task_level_network_permitted": false
+}

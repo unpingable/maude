@@ -1,0 +1,7 @@
+{
+  "answer": false,
+  "first_run_exit": 2,
+  "install_command_exit": 0,
+  "message": "GOVERNOR_SOCKET is required; no state was changed",
+  "question": "Did first useful use succeed?"
+}

@@ -1,0 +1,64 @@
+{
+  "authority_effect": "none",
+  "deliberately_withheld": [
+    "fixture.json",
+    "grade.json",
+    "expected oracle",
+    "fixed raw stream",
+    "fixture purpose beyond the live request",
+    "Maude source",
+    "campaign outputs",
+    "repository access"
+  ],
+  "expected_admission_if_procedure_compliant": "ACCEPTED",
+  "expected_evidence_state": "contaminated",
+  "expected_substantive_verdict": "INDETERMINATE",
+  "fixture_id": "Q04",
+  "follow_up_messages_permitted": false,
+  "fresh_session_required": true,
+  "members": [
+    {
+      "bytes": 1262,
+      "path": "bundle/evidence-packet.json",
+      "sha256": "1155ef55e02c53b379229d5aeb273af7565104a47e089b65ca367fdf66cb342d"
+    },
+    {
+      "bytes": 2004,
+      "path": "bundle/grader-output.schema.json",
+      "sha256": "18a4104130cd976f2a2bcdb9e90faa9960e2303030bdef81e2dfd81a2dc0aff8"
+    },
+    {
+      "bytes": 35,
+      "path": "bundle/items/apparent-outcome.json",
+      "sha256": "05999294de43a039dab66cb8c41a6f70c68efa85b963b068238d3751c1b2898d"
+    },
+    {
+      "bytes": 79,
+      "path": "bundle/items/source-boundary.json",
+      "sha256": "bc02dd2662c08883d10f65d7b398f89656515d94aff625a1b2c1aadddc054352"
+    },
+    {
+      "bytes": 389,
+      "path": "grader-request.md",
+      "sha256": "f52b6fd6fee3658ac4adab30edbe189d91aaab92386fe9f8e6b06be950518638"
+    },
+    {
+      "bytes": 938,
+      "path": "grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    }
+  ],
+  "model_visible_materials": [
+    "grader-system.md",
+    "grader-request.md",
+    "bundle/evidence-packet.json",
+    "bundle/items/* present files",
+    "bundle/grader-output.schema.json"
+  ],
+  "probe_id": "L03",
+  "purpose": "contamination-requires-indeterminate",
+  "retry_permitted": false,
+  "schema": "maude.synthetic-operator.grader-live-probe-input.v1",
+  "self_exclusion": "input-manifest.json is excluded to avoid a recursive digest",
+  "task_level_network_permitted": false
+}

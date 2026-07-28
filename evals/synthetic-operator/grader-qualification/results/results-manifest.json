@@ -1,0 +1,676 @@
+{
+  "authority_effect": "none",
+  "file_count": 133,
+  "generation_five_campaign_artifacts_included": false,
+  "generation_four_artifacts_included": false,
+  "members": [
+    {
+      "bytes": 30479,
+      "path": "deterministic-qualification.json",
+      "sha256": "3727d364d8f4f891436243a036dd5cdb746c8d4e192f3d665c20699d8b8d259c"
+    },
+    {
+      "bytes": 481,
+      "path": "live/attempts/L01/action-accounting.json",
+      "sha256": "873c171ed5d12a92327c3024c2bcd8e651fbd60bebf162f2a6ad992dcdeee76b"
+    },
+    {
+      "bytes": 307,
+      "path": "live/attempts/L01/attempt-started.json",
+      "sha256": "29eea75a36e1f9c45a58d5ce47aff74c232d03bb96c6676d8ac18e507498fdf4"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L01/clean-home-after.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L01/clean-home-before.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L01/commands-and-actions.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 389,
+      "path": "live/attempts/L01/grader-request.md",
+      "sha256": "d57e2df60a870420a8fbe1ac07846ee6eaae20fc683720083555ecf96ce68f90"
+    },
+    {
+      "bytes": 938,
+      "path": "live/attempts/L01/grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    },
+    {
+      "bytes": 1956,
+      "path": "live/attempts/L01/input-manifest.json",
+      "sha256": "19f54808c21b619a45697c72f0521e6ed38e634e41bd59dab5ac1423e74c0064"
+    },
+    {
+      "bytes": 10664,
+      "path": "live/attempts/L01/invocation.json",
+      "sha256": "31bab7035b7d42bfd495dd5eaca16b1e3ed624c3a889a31454d24fbfb692be94"
+    },
+    {
+      "bytes": 11197,
+      "path": "live/attempts/L01/isolation-result.json",
+      "sha256": "60eb2b19e82f0acbdb20099bae549800ff615217c6a53c1a009304a09e30f6b6"
+    },
+    {
+      "bytes": 6692,
+      "path": "live/attempts/L01/probe-result.json",
+      "sha256": "d3b8833050913c5a8aecfa33bed2fe0a7e8ad34f96df5dcf4c1b58bfcb1eeafb"
+    },
+    {
+      "bytes": 11094,
+      "path": "live/attempts/L01/provider-runtime-probe.json",
+      "sha256": "145f5434079315c7d450e53fcb6c8b843093aff4cb3d822622bdd1f7bc64644b"
+    },
+    {
+      "bytes": 320,
+      "path": "live/attempts/L01/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3087,
+      "path": "live/attempts/L01/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "5e8003b95a1859a8589a26f6e95694d1e98d4d3056db3ce7384b14ba09a7cf25"
+    },
+    {
+      "bytes": 348,
+      "path": "live/attempts/L01/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "aa81753fbfeb3a37abda8d5ae4732dc5fd7bc4229d57612aa18ca0c9e6aea427"
+    },
+    {
+      "bytes": 755,
+      "path": "live/attempts/L01/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "ffa1928c72f8fec23a5e6ac4d3831e568978e98691afe8c49e36a76cb9235b0b"
+    },
+    {
+      "bytes": 0,
+      "path": "live/attempts/L01/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L01/raw/grader.stdout.jsonl",
+      "sha256": "7852ed35246789981514fd9fb017769f38931d2fc309c71555cc44fe37133ade"
+    },
+    {
+      "bytes": 3765,
+      "path": "live/attempts/L01/raw/provider-auth-gate.json",
+      "sha256": "0196c2832706ba65d3b395d4eaafc191a3ca87428ea9499abf5029d2c69d78b4"
+    },
+    {
+      "bytes": 525,
+      "path": "live/attempts/L01/session-safety-audit.json",
+      "sha256": "6d3eeb2ce1dff70dccb23e26702b861d051eee498db2f25ce38ee6f7581ddbfe"
+    },
+    {
+      "bytes": 1043,
+      "path": "live/attempts/L01/validation-fixture/evidence/evidence-packet.json",
+      "sha256": "f2da48bc584d439441af2a664ac98808d1a00e53085a5bd23f532fe7558fdf71"
+    },
+    {
+      "bytes": 76,
+      "path": "live/attempts/L01/validation-fixture/evidence/items/outcome-record.json",
+      "sha256": "b3b62c7168b5baa971ee05fc63b9e9565b1a70726afcf45a10794d05976fdf26"
+    },
+    {
+      "bytes": 111,
+      "path": "live/attempts/L01/validation-fixture/evidence/items/scope-record.json",
+      "sha256": "7cc448405da761a9dc4c29ea2c84f44649b2902b0a445a46d69d12c8cc735615"
+    },
+    {
+      "bytes": 391,
+      "path": "live/attempts/L01/validation-fixture/fixture.json",
+      "sha256": "5a0cbbbfe06757dac0597b02367f9c73d7ab4eaaaf1765bf13351b17de7eb7d9"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L01/validation-fixture/grade.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L01/validation-fixture/raw/grader.stdout.jsonl",
+      "sha256": "7852ed35246789981514fd9fb017769f38931d2fc309c71555cc44fe37133ade"
+    },
+    {
+      "bytes": 481,
+      "path": "live/attempts/L02/action-accounting.json",
+      "sha256": "873c171ed5d12a92327c3024c2bcd8e651fbd60bebf162f2a6ad992dcdeee76b"
+    },
+    {
+      "bytes": 307,
+      "path": "live/attempts/L02/attempt-started.json",
+      "sha256": "8fc4b6dd45936cf656d25fd728a69b4202be329bbeb3ff1877f976feb2cc123e"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L02/clean-home-after.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L02/clean-home-before.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L02/commands-and-actions.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 389,
+      "path": "live/attempts/L02/grader-request.md",
+      "sha256": "27f7dd627a1cfe3e6c7aad3d7e4be41f1df116458a6b223eabdf3a0bdc7b20de"
+    },
+    {
+      "bytes": 938,
+      "path": "live/attempts/L02/grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    },
+    {
+      "bytes": 1987,
+      "path": "live/attempts/L02/input-manifest.json",
+      "sha256": "84bd511c7087c13af943e10812dcd6b5229da5244f44fd87428ae335328a6d72"
+    },
+    {
+      "bytes": 10664,
+      "path": "live/attempts/L02/invocation.json",
+      "sha256": "dccf6667d66e40bc0c7b458d75bf6329cfb5eea66b45728acd40483ad9d33fe9"
+    },
+    {
+      "bytes": 11197,
+      "path": "live/attempts/L02/isolation-result.json",
+      "sha256": "7305d6df7a0d51b2add06f3c6eb944714cd5c27b20669caa672f62f3dba4c97a"
+    },
+    {
+      "bytes": 6734,
+      "path": "live/attempts/L02/probe-result.json",
+      "sha256": "7811f2a68d072ce2623c43c8aa80fcef62d05310412c0cca61eb5c76c77fe1c0"
+    },
+    {
+      "bytes": 11094,
+      "path": "live/attempts/L02/provider-runtime-probe.json",
+      "sha256": "054c352733a6c2001081937860356eb3bea544fda9a0d526cbe5d49cf87c06cb"
+    },
+    {
+      "bytes": 320,
+      "path": "live/attempts/L02/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3087,
+      "path": "live/attempts/L02/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "cd1a64608f5ad7aec4634031c5b3b5add447eabf969ebe19170913d4ea001f45"
+    },
+    {
+      "bytes": 348,
+      "path": "live/attempts/L02/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "a2117ccae5c2491d29f723637c04b6ae62608bc3aca85aade83d8846be9d0411"
+    },
+    {
+      "bytes": 755,
+      "path": "live/attempts/L02/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "ffa1928c72f8fec23a5e6ac4d3831e568978e98691afe8c49e36a76cb9235b0b"
+    },
+    {
+      "bytes": 0,
+      "path": "live/attempts/L02/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L02/raw/grader.stdout.jsonl",
+      "sha256": "b104d01262d73704423ba512a6e40c076016b167a75543416d1ce4e5a90ff9a0"
+    },
+    {
+      "bytes": 3765,
+      "path": "live/attempts/L02/raw/provider-auth-gate.json",
+      "sha256": "40455cb0cc6381b0acd4e9c9a1e5fe1afd592de9ce6b8d86934a0229b85f93b5"
+    },
+    {
+      "bytes": 525,
+      "path": "live/attempts/L02/session-safety-audit.json",
+      "sha256": "6d3eeb2ce1dff70dccb23e26702b861d051eee498db2f25ce38ee6f7581ddbfe"
+    },
+    {
+      "bytes": 1090,
+      "path": "live/attempts/L02/validation-fixture/evidence/evidence-packet.json",
+      "sha256": "d2098f171fec8b58c938b7ea8e46a34681903575e7d932b030ececd36a9fbfdb"
+    },
+    {
+      "bytes": 166,
+      "path": "live/attempts/L02/validation-fixture/evidence/items/installation-guide.json",
+      "sha256": "d7059f7aedb583c09559838d72c85aa50c15772e2ed77ba0cb41a3fca7ca04b4"
+    },
+    {
+      "bytes": 187,
+      "path": "live/attempts/L02/validation-fixture/evidence/items/installation-result.json",
+      "sha256": "06c30ac4ff57764836230b51eaaf9f49eb6049592fa56499cf6ded967fbde619"
+    },
+    {
+      "bytes": 391,
+      "path": "live/attempts/L02/validation-fixture/fixture.json",
+      "sha256": "c849f5735c3dd54c31728b0553be2595775cdc35dcb6e985c3a4f3dde3a71cd6"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L02/validation-fixture/grade.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L02/validation-fixture/raw/grader.stdout.jsonl",
+      "sha256": "b104d01262d73704423ba512a6e40c076016b167a75543416d1ce4e5a90ff9a0"
+    },
+    {
+      "bytes": 481,
+      "path": "live/attempts/L03/action-accounting.json",
+      "sha256": "873c171ed5d12a92327c3024c2bcd8e651fbd60bebf162f2a6ad992dcdeee76b"
+    },
+    {
+      "bytes": 307,
+      "path": "live/attempts/L03/attempt-started.json",
+      "sha256": "dcd2726bfb87a65a8c541974497afa72a2efa0862ebca3644f3ac2fe97b1a7d9"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L03/clean-home-after.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L03/clean-home-before.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L03/commands-and-actions.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 389,
+      "path": "live/attempts/L03/grader-request.md",
+      "sha256": "f52b6fd6fee3658ac4adab30edbe189d91aaab92386fe9f8e6b06be950518638"
+    },
+    {
+      "bytes": 938,
+      "path": "live/attempts/L03/grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    },
+    {
+      "bytes": 1990,
+      "path": "live/attempts/L03/input-manifest.json",
+      "sha256": "76a9cd40f3293b8d232e594c920e11d7647c00aeba7ecd1870aae1bbc72d536a"
+    },
+    {
+      "bytes": 10664,
+      "path": "live/attempts/L03/invocation.json",
+      "sha256": "14cacfccb5a8cac82d2dc30251d11926c2e19c3e2986df19dd99b7231b5e1e51"
+    },
+    {
+      "bytes": 11197,
+      "path": "live/attempts/L03/isolation-result.json",
+      "sha256": "f6a30939823145f8bd4adc00405bb4ba293a052b748749e71f644bb3993d296d"
+    },
+    {
+      "bytes": 6669,
+      "path": "live/attempts/L03/probe-result.json",
+      "sha256": "bcb64e06b985111cd0db0692b4fb569d65a428c933816030193663f8373d039b"
+    },
+    {
+      "bytes": 11094,
+      "path": "live/attempts/L03/provider-runtime-probe.json",
+      "sha256": "0f796616d9e397f0c60f3445f6e5a95a4e1a9401143821119832db4029270d07"
+    },
+    {
+      "bytes": 320,
+      "path": "live/attempts/L03/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3087,
+      "path": "live/attempts/L03/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "a45caf189c6e35c71a0fc64d01565f7e21d5b23c653911e06a546a68cb20bf77"
+    },
+    {
+      "bytes": 348,
+      "path": "live/attempts/L03/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "a2117ccae5c2491d29f723637c04b6ae62608bc3aca85aade83d8846be9d0411"
+    },
+    {
+      "bytes": 755,
+      "path": "live/attempts/L03/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "ffa1928c72f8fec23a5e6ac4d3831e568978e98691afe8c49e36a76cb9235b0b"
+    },
+    {
+      "bytes": 0,
+      "path": "live/attempts/L03/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L03/raw/grader.stdout.jsonl",
+      "sha256": "94a4dce53fe2d656ea5d75029dee08a2d3493b1db31d0b2513e7a9e47b6ab7df"
+    },
+    {
+      "bytes": 3765,
+      "path": "live/attempts/L03/raw/provider-auth-gate.json",
+      "sha256": "b7b0ac81fb15bcb542b07ffeca31633f1505330e29d4e97e3b5f7b562ff74830"
+    },
+    {
+      "bytes": 525,
+      "path": "live/attempts/L03/session-safety-audit.json",
+      "sha256": "6d3eeb2ce1dff70dccb23e26702b861d051eee498db2f25ce38ee6f7581ddbfe"
+    },
+    {
+      "bytes": 1262,
+      "path": "live/attempts/L03/validation-fixture/evidence/evidence-packet.json",
+      "sha256": "1155ef55e02c53b379229d5aeb273af7565104a47e089b65ca367fdf66cb342d"
+    },
+    {
+      "bytes": 35,
+      "path": "live/attempts/L03/validation-fixture/evidence/items/apparent-outcome.json",
+      "sha256": "05999294de43a039dab66cb8c41a6f70c68efa85b963b068238d3751c1b2898d"
+    },
+    {
+      "bytes": 79,
+      "path": "live/attempts/L03/validation-fixture/evidence/items/source-boundary.json",
+      "sha256": "bc02dd2662c08883d10f65d7b398f89656515d94aff625a1b2c1aadddc054352"
+    },
+    {
+      "bytes": 391,
+      "path": "live/attempts/L03/validation-fixture/fixture.json",
+      "sha256": "e3ff34deb0f65b062afe487d3133d8f01a5e6366993d28e8b8aa8b528cb4aae7"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L03/validation-fixture/grade.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L03/validation-fixture/raw/grader.stdout.jsonl",
+      "sha256": "94a4dce53fe2d656ea5d75029dee08a2d3493b1db31d0b2513e7a9e47b6ab7df"
+    },
+    {
+      "bytes": 481,
+      "path": "live/attempts/L04/action-accounting.json",
+      "sha256": "873c171ed5d12a92327c3024c2bcd8e651fbd60bebf162f2a6ad992dcdeee76b"
+    },
+    {
+      "bytes": 307,
+      "path": "live/attempts/L04/attempt-started.json",
+      "sha256": "aa860a8dd89d9c5d127c64ddd674bed1c2bb0ea297c340fba84c472adef1c2fa"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L04/clean-home-after.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L04/clean-home-before.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L04/commands-and-actions.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 389,
+      "path": "live/attempts/L04/grader-request.md",
+      "sha256": "f807578bbab5f1bc7e656f9ceaae04c83666fcd2451668fa1685c629dc7af4f4"
+    },
+    {
+      "bytes": 938,
+      "path": "live/attempts/L04/grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    },
+    {
+      "bytes": 1799,
+      "path": "live/attempts/L04/input-manifest.json",
+      "sha256": "de89d7831c0ac4f7eb964e26d19e62c2b80ca3b53420b3a9fdba622b516fd595"
+    },
+    {
+      "bytes": 10664,
+      "path": "live/attempts/L04/invocation.json",
+      "sha256": "69103656743b4b5c88afc5345e53c0926f77c7d8bea89de503991273996581c6"
+    },
+    {
+      "bytes": 11197,
+      "path": "live/attempts/L04/isolation-result.json",
+      "sha256": "e173adfd8f1304e63eb2262c5710c05ce3caea0bd61ec2c354f877fdf2fbbee9"
+    },
+    {
+      "bytes": 6664,
+      "path": "live/attempts/L04/probe-result.json",
+      "sha256": "beb05086ad126f4f484e036f739668fa1a06b9de6519856199cec3b96b3bb2a9"
+    },
+    {
+      "bytes": 11094,
+      "path": "live/attempts/L04/provider-runtime-probe.json",
+      "sha256": "0814393d80bc45609ae7b8bec4dbd524d2a08c22e145afee63bada2d119d1d86"
+    },
+    {
+      "bytes": 320,
+      "path": "live/attempts/L04/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3087,
+      "path": "live/attempts/L04/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "db1801f659df0607974ecb1da806fda466855dbf8f124ac8a5b8d6ec7806dc9a"
+    },
+    {
+      "bytes": 348,
+      "path": "live/attempts/L04/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "a2117ccae5c2491d29f723637c04b6ae62608bc3aca85aade83d8846be9d0411"
+    },
+    {
+      "bytes": 755,
+      "path": "live/attempts/L04/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "ffa1928c72f8fec23a5e6ac4d3831e568978e98691afe8c49e36a76cb9235b0b"
+    },
+    {
+      "bytes": 0,
+      "path": "live/attempts/L04/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L04/raw/grader.stdout.jsonl",
+      "sha256": "b99d07de64b0c7e9ab357a499041c94d975b93d4d6544f96711e4b6afb715026"
+    },
+    {
+      "bytes": 3765,
+      "path": "live/attempts/L04/raw/provider-auth-gate.json",
+      "sha256": "d4f06829e65d306d88a3d4852766f761b462140b38015a4743e259f1a18b7fc8"
+    },
+    {
+      "bytes": 525,
+      "path": "live/attempts/L04/session-safety-audit.json",
+      "sha256": "6d3eeb2ce1dff70dccb23e26702b861d051eee498db2f25ce38ee6f7581ddbfe"
+    },
+    {
+      "bytes": 942,
+      "path": "live/attempts/L04/validation-fixture/evidence/evidence-packet.json",
+      "sha256": "9d4a12ec5f862a3cf9c85e1424cc8555c2aaaac0d02d597b529252a4864859d0"
+    },
+    {
+      "bytes": 60,
+      "path": "live/attempts/L04/validation-fixture/evidence/items/task-record.json",
+      "sha256": "951d6d8f6efb66fd7b3cf72629950af7bcf00cc63748655cc3af2482792595f9"
+    },
+    {
+      "bytes": 391,
+      "path": "live/attempts/L04/validation-fixture/fixture.json",
+      "sha256": "e72b20a44a8fd163575f3aebe8f09280c3b2082a7c9acdbe691a0e687d2af5b4"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L04/validation-fixture/grade.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L04/validation-fixture/raw/grader.stdout.jsonl",
+      "sha256": "b99d07de64b0c7e9ab357a499041c94d975b93d4d6544f96711e4b6afb715026"
+    },
+    {
+      "bytes": 481,
+      "path": "live/attempts/L05/action-accounting.json",
+      "sha256": "873c171ed5d12a92327c3024c2bcd8e651fbd60bebf162f2a6ad992dcdeee76b"
+    },
+    {
+      "bytes": 307,
+      "path": "live/attempts/L05/attempt-started.json",
+      "sha256": "5b4367e3ef1ede2f03d46f9f9366693b04a57f3daf39d012938c4439aa1a8d76"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L05/clean-home-after.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 197,
+      "path": "live/attempts/L05/clean-home-before.json",
+      "sha256": "d3e708c3ec891e44b352c7c2f140fe4fff82a1acc59ea482a6fadb9a61194ab8"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L05/commands-and-actions.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 389,
+      "path": "live/attempts/L05/grader-request.md",
+      "sha256": "bfa21125d4e24a52707ed1dcb01c71941f02ec218e7e49be35cc92d4ed803033"
+    },
+    {
+      "bytes": 938,
+      "path": "live/attempts/L05/grader-system.md",
+      "sha256": "3f12cc2f3b07ebe641a85c19a7bcc0b5a0a88811247115d7b860c15849de3feb"
+    },
+    {
+      "bytes": 1995,
+      "path": "live/attempts/L05/input-manifest.json",
+      "sha256": "c35b64144bfd8a413e6cf548927d859e0056bd86c4d59d1edd647d5d60ed437d"
+    },
+    {
+      "bytes": 10664,
+      "path": "live/attempts/L05/invocation.json",
+      "sha256": "252fb38dbad5bef9fd3a80ecc373cc8b48bf272cd0dc45ce04d15beb576007a0"
+    },
+    {
+      "bytes": 11197,
+      "path": "live/attempts/L05/isolation-result.json",
+      "sha256": "40bf54349f7d64c8c1ae1e86dd4ab702ecf6397e6b6cc0dc2b22207195016e58"
+    },
+    {
+      "bytes": 6682,
+      "path": "live/attempts/L05/probe-result.json",
+      "sha256": "c555f8fe340cc8cd0d2e30a49f2709a4536e09ec9d17ef99af5d965226e565bc"
+    },
+    {
+      "bytes": 11094,
+      "path": "live/attempts/L05/provider-runtime-probe.json",
+      "sha256": "23b32de57897f8fa233d1108692ac7f5bd4447cd128b2de78ac5b1e73c1a0caa"
+    },
+    {
+      "bytes": 320,
+      "path": "live/attempts/L05/raw/codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    {
+      "bytes": 3087,
+      "path": "live/attempts/L05/raw/codex-mcp-boundary/declared-boundary.json",
+      "sha256": "d43810b0350b57bff430c12dedad0615016b84ac01fa5517f53932b1dc1e8891"
+    },
+    {
+      "bytes": 348,
+      "path": "live/attempts/L05/raw/codex-mcp-boundary/proxy-ready.json",
+      "sha256": "2ceef41a319f4617c6dac028f7c7f4499966fed6d20de3b85634d17d221a02e8"
+    },
+    {
+      "bytes": 755,
+      "path": "live/attempts/L05/raw/codex-mcp-boundary/proxy-trace.jsonl",
+      "sha256": "ffa1928c72f8fec23a5e6ac4d3831e568978e98691afe8c49e36a76cb9235b0b"
+    },
+    {
+      "bytes": 0,
+      "path": "live/attempts/L05/raw/grader.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L05/raw/grader.stdout.jsonl",
+      "sha256": "de805ed5194da3d2696fdc7f9e0321b00c0c7f431cebfe839e1a7d23eeddaf16"
+    },
+    {
+      "bytes": 3765,
+      "path": "live/attempts/L05/raw/provider-auth-gate.json",
+      "sha256": "08dcaa3511536e2c83cb14b5c16765f8f5d3bd71b217346e0cf9c93013696c0e"
+    },
+    {
+      "bytes": 525,
+      "path": "live/attempts/L05/session-safety-audit.json",
+      "sha256": "6d3eeb2ce1dff70dccb23e26702b861d051eee498db2f25ce38ee6f7581ddbfe"
+    },
+    {
+      "bytes": 1228,
+      "path": "live/attempts/L05/validation-fixture/evidence/evidence-packet.json",
+      "sha256": "58ad1eabfab966c0d19dd92ada70c580f3136697b5d70c8fb79568202ce9cbaa"
+    },
+    {
+      "bytes": 71,
+      "path": "live/attempts/L05/validation-fixture/evidence/items/settlement-record-a.json",
+      "sha256": "cb9752b15c8f0eb4f35354a30686e134d82845b52b95093b8909d91ee33bd02b"
+    },
+    {
+      "bytes": 76,
+      "path": "live/attempts/L05/validation-fixture/evidence/items/settlement-record-b.json",
+      "sha256": "d6d9afe61a46e1efc0a01396a2b3241731c23e7c7ccd9aef2d357b540384bc74"
+    },
+    {
+      "bytes": 391,
+      "path": "live/attempts/L05/validation-fixture/fixture.json",
+      "sha256": "3b5e7a227820c52927e57bb27b12cb782fa33c5cce9d1fba864363cc420e6772"
+    },
+    {
+      "bytes": 3,
+      "path": "live/attempts/L05/validation-fixture/grade.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "bytes": 929,
+      "path": "live/attempts/L05/validation-fixture/raw/grader.stdout.jsonl",
+      "sha256": "de805ed5194da3d2696fdc7f9e0321b00c0c7f431cebfe839e1a7d23eeddaf16"
+    },
+    {
+      "bytes": 3034,
+      "path": "live/qualification-input-gate.json",
+      "sha256": "28a24d6db79503acb77ac08b60c0f7b30370d0a3fd8f94aca54cbca0c29d2365"
+    },
+    {
+      "bytes": 42432,
+      "path": "live-qualification.json",
+      "sha256": "e5ce21becc06cbf3982ad75a30bc0b2ea88fa301aaabe23059cb2825315ff0df"
+    },
+    {
+      "bytes": 10774,
+      "path": "qualification-result.json",
+      "sha256": "6ec7f10000d2f227e7f4e9e016dfde3f3272efc0063321c888adaf088c57fe63"
+    }
+  ],
+  "schema": "maude.synthetic-operator.grader-qualification-results-manifest.v1",
+  "self_exclusion": "results-manifest.json is excluded to avoid a recursive digest",
+  "total_bytes": 368908
+}

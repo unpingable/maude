@@ -1,0 +1,46 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [
+    {
+      "conflict_id": "settlement-conflict",
+      "evidence_ids": [
+        "settlement-record-a",
+        "settlement-record-b"
+      ],
+      "precedence_rule": null
+    }
+  ],
+  "contamination": [],
+  "declared_evidence_state": "contradictory",
+  "fixture_id": "Q07",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 71,
+      "evidence_id": "settlement-record-a",
+      "path": "items/settlement-record-a.json",
+      "required": true,
+      "sha256": "cb9752b15c8f0eb4f35354a30686e134d82845b52b95093b8909d91ee33bd02b",
+      "supports": [
+        "claim:record-a",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "available",
+      "bytes": 76,
+      "evidence_id": "settlement-record-b",
+      "path": "items/settlement-record-b.json",
+      "required": true,
+      "sha256": "d6d9afe61a46e1efc0a01396a2b3241731c23e7c7ccd9aef2d357b540384bc74",
+      "supports": [
+        "claim:record-b",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Contradictory but individually admissible evidence.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

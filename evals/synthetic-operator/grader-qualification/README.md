@@ -44,4 +44,23 @@ only parser, state, and admission behavior. Live success cannot prove a
 structurally absent provider capability when the provider runtime still exposes
 one.
 
+## Recorded result
+
+The deterministic layer passed all 12 fixed fixtures. Five fresh live provider
+attempts then failed before grader evidence access because the exact OpenAI
+response-format surface rejected the frozen output schema. No live grader
+verdict was accepted and no attempt was retried.
+
+The final machine result is
+[`results/qualification-result.json`](results/qualification-result.json). Its
+verdict is:
+
+```text
+NOT-QUALIFIED-VERDICT-VALIDATION
+```
+
+The independently observed Codex resource-discovery capability outside the
+declared roster remains a residual provider limitation. Generation five
+therefore remains closed.
+
 Authority effect: none.
