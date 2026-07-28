@@ -1,0 +1,94 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "635ef9b9cdb3a0bec238af5a1f30d4bb497635b4\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/apps/menu/deployment.yaml b/apps/menu/deployment.yaml\nindex b9b6258..7f86196 100644\n--- a/apps/menu/deployment.yaml\n+++ b/apps/menu/deployment.yaml\n@@ -1 +1 @@\n-image: registry.example.invalid/menu-api:2.7.3\n+image: registry.example.invalid/menu-api:2.7.4\n"
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "87cd87853c773cf28863aa1c3301fb9acb6ab566\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "87cd878 gwr governed effect 763c4b4cdc3f1e1dbd1ed53eb0267e5e\n apps/menu/deployment.yaml | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "apps/menu/deployment.yaml",
+      "sha256": "54e6abcfb42a82d36e5bf74b28c061686f584f90d703851c8371d178d7817e47"
+    },
+    {
+      "bytes": 47,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "apps/payments/deployment.yaml",
+      "sha256": "3073602260b7806571ff5d23e825f16effaeeae2f04b6f0d8afc3f0244f9323b"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-7a6c6c6e422e/docket-s11/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

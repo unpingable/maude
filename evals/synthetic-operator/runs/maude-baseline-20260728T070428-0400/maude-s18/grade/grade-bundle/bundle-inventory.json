@@ -1,0 +1,393 @@
+{
+  "bundle_source_redactions": [],
+  "clean_authority_or_ux_inference_permitted": true,
+  "evaluator_contamination": false,
+  "exact_raw_operator_transcript_included": true,
+  "expected_disposition_included": false,
+  "files": [
+    {
+      "bytes": 513,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "failure-taxonomy.json",
+      "sha256": "4b1d2b291794f053e7766459522246cb30f4604ec96d5d4933c47ce5e23fb635"
+    },
+    {
+      "bytes": 1784,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "grader-assignment.md",
+      "sha256": "49915a88d908b008cf4fcad4816a9dc8f2e8dbb2cb62da9ca286688021182533"
+    },
+    {
+      "bytes": 7414,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "grader-output.schema.json",
+      "sha256": "6000c2269e18884d1bef838fe430c0715b55335aede2889fe96475a3064ec832"
+    },
+    {
+      "bytes": 63199,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "grader-prompt.md",
+      "sha256": "21933658e8c43c48a94a587ddd9566d0250cab7d7c31bab2b15c5cac0c7aca3c"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 881,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/README.md",
+      "sha256": "68d63e4a0beab33c0d70abfc7678aa36b62e1e90cf00f562c1488d77351fde80"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/lab_approval_ux-task-18",
+      "sha256": "963bf386c2f963326af79f1779e95e7dddf5bf04b24132aec08a7cc785d2f822"
+    },
+    {
+      "bytes": 623,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/packet.json",
+      "sha256": "1acf026b0126237b96808bca74b443a477f29f7d2ad97fcda451f0107bdf6012"
+    },
+    {
+      "bytes": 1770,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/plan.md",
+      "sha256": "e83da29889ea393fd61427d5f84c495f2c7b3e7155564c6dbe2ce45877d00997"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/playbook.json",
+      "sha256": "42990734046ac008d3e3ca5837284baaf1dce62bd1cf586c550c3153f58cf08d"
+    },
+    {
+      "bytes": 213,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/ration-card.json",
+      "sha256": "ca0ad88d0b9589001ae9b5e73f45db35e53f6f637ec2f6916001b0e2f6a570cf"
+    },
+    {
+      "bytes": 1899,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/inventory.json",
+      "sha256": "2e69877799951c93c3f81dc04a100d4879298be628d7044808d1c6c97d7e138f"
+    },
+    {
+      "bytes": 189,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/diff.txt",
+      "sha256": "35eaefb4a4d9b3e31dac1d773398cd22434c280c87fc7ca5f8465a6865fa7c41"
+    },
+    {
+      "bytes": 15,
+      "media_type": "application/yaml",
+      "mode": "0644",
+      "path": "observable/repository-after/files/config/scheduler.yaml",
+      "sha256": "7efd27da2e51b0c8e50975d18c98d0c7296912525941b31e8ad091d7f1aa8145"
+    },
+    {
+      "bytes": 41,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/head.txt",
+      "sha256": "239c2a596c7250b8963d29b244e60a2990a1a0ce45965418d6d5b14c89cb8710"
+    },
+    {
+      "bytes": 2579,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/repository-after/inventory.json",
+      "sha256": "39939edc5179cb1d757a91d84ea4f31c9d7d52ef1a1846ca02cb040fe3e0c250"
+    },
+    {
+      "bytes": 25,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/status-short.txt",
+      "sha256": "309d0a18d7352fd0891dc44f0644d897be12bce75ccf10d7366ffaf99bbf3ad9"
+    },
+    {
+      "bytes": 196,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/target-diff.txt",
+      "sha256": "bff7c71f5fe7984f530fc15e07877f69ab491471126cd60bda1a0ce30331fc27"
+    },
+    {
+      "bytes": 32,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/target-ref.txt",
+      "sha256": "9b3fab22fc89a33cf7f4e9d08072e43f29c2999ed2af63b6e8417b2ce9d534b4"
+    },
+    {
+      "bytes": 196,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-after/target-show.txt",
+      "sha256": "bff7c71f5fe7984f530fc15e07877f69ab491471126cd60bda1a0ce30331fc27"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/diff.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 15,
+      "media_type": "application/yaml",
+      "mode": "0644",
+      "path": "observable/repository-before/files/config/scheduler.yaml",
+      "sha256": "ba69a96cab0523172d2477856ecd37644427e5674f6668278763c79512f40119"
+    },
+    {
+      "bytes": 41,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/head.txt",
+      "sha256": "239c2a596c7250b8963d29b244e60a2990a1a0ce45965418d6d5b14c89cb8710"
+    },
+    {
+      "bytes": 2358,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/repository-before/inventory.json",
+      "sha256": "a008672c97b7850349d4eda820571778738bcd10a1ce1ae78b5a4e2495496dcf"
+    },
+    {
+      "bytes": 0,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/status-short.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 196,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/target-diff.txt",
+      "sha256": "bff7c71f5fe7984f530fc15e07877f69ab491471126cd60bda1a0ce30331fc27"
+    },
+    {
+      "bytes": 32,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/target-ref.txt",
+      "sha256": "9b3fab22fc89a33cf7f4e9d08072e43f29c2999ed2af63b6e8417b2ce9d534b4"
+    },
+    {
+      "bytes": 196,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/repository-before/target-show.txt",
+      "sha256": "bff7c71f5fe7984f530fc15e07877f69ab491471126cd60bda1a0ce30331fc27"
+    },
+    {
+      "bytes": 831,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/retrospective/initial-disposition.md",
+      "sha256": "40c63e574139cc6c18e3ce65a361c43a631079771a93555811001a4ac56b7e43"
+    },
+    {
+      "bytes": 1968,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/retrospective/separation.json",
+      "sha256": "d07c4ede5c511efb124b671a5b289821924751d717ca05eedd4d332a30351d8c"
+    },
+    {
+      "bytes": 10201,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable-artifacts.json",
+      "sha256": "a15645c7b08522377a55f6347f9a98d3d4122a575d3c672a7820f3f5d357b357"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 2259,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-prompt.md",
+      "sha256": "584233f5f12bb9d9c2dc2b36909ecf5db3b6545e82e031c2a0398063c9ca8b1c"
+    },
+    {
+      "bytes": 1524,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-system-prompt.md",
+      "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+    },
+    {
+      "bytes": 10715,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "raw/interface/driver-actions.jsonl",
+      "sha256": "260b040fd50b4c452ba5e07d8310d8b52f4312d66f3e1807a8f8c0d9130e71a8"
+    },
+    {
+      "bytes": 340,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "raw/interface/public-cli-broker-ready.json",
+      "sha256": "095cfb83fe2c8bbf868d405af9528ab6e81cce4adc848394da4ab79abe239431"
+    },
+    {
+      "bytes": 16888,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "raw/interface/public-cli-broker.jsonl",
+      "sha256": "f35f73c26f58d3d9501715e5ab7d6f02066b7747765dabce2d21cd53f395371b"
+    },
+    {
+      "bytes": 57649,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0001.svg",
+      "sha256": "bdbe45be7c0ef26f29007d606eccc18c49b31cf3475e73ea98a9f0a87fa3d680"
+    },
+    {
+      "bytes": 57649,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0002.svg",
+      "sha256": "fb3dec86bce86e6b59e32d6c6b5f1c18e760946440b804d48575274a01f2a027"
+    },
+    {
+      "bytes": 56777,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0003.svg",
+      "sha256": "c83209e64de45e42f223f500579923705b7c30981ec741658b76a4c97c125ce6"
+    },
+    {
+      "bytes": 56418,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0004.svg",
+      "sha256": "ba3efd89e350bd172065a3b413406aab7cc2ccf105da73d9893dc0bf5a5e8bc5"
+    },
+    {
+      "bytes": 74205,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0005.svg",
+      "sha256": "9e484cd66406c5a6ba649cfcc480903fab150c78fa57c06bb7533135f00763a9"
+    },
+    {
+      "bytes": 72502,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0006.svg",
+      "sha256": "4eb007cbfe5de80e93e73fcd9aa8b2ca417e7ece7f7485a099a4b8148faf031f"
+    },
+    {
+      "bytes": 68100,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0007.svg",
+      "sha256": "3c0d8c41ce1681680b581f45ebb40c5c64c0811b5ae62a22b81e977ba1ef8500"
+    },
+    {
+      "bytes": 67532,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0008.svg",
+      "sha256": "90ac63aecdb6b78da7b0c57718a30be42908857f79d2f23c2473311cbbb05dec"
+    },
+    {
+      "bytes": 67374,
+      "media_type": "image/svg+xml",
+      "mode": "0644",
+      "path": "raw/interface/screens/0009.svg",
+      "sha256": "d8acbc2a6aa8d1fff62645409ed06c45f2fff6e5ffaf0db78d573e31e21ba562"
+    },
+    {
+      "bytes": 1968,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "retrospective-separation.json",
+      "sha256": "d07c4ede5c511efb124b671a5b289821924751d717ca05eedd4d332a30351d8c"
+    },
+    {
+      "bytes": 6225,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "rubric.md",
+      "sha256": "3f14dea8d8c436ec989a0e5ba64c955a99fc2a4731731e51f0d8c5512979209b"
+    },
+    {
+      "bytes": 3765,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "supplied-inputs.json",
+      "sha256": "7de1492fb38140c0d8b9fa45195e012d1dc5062aedaf2c402389b1da2a7105aa"
+    },
+    {
+      "bytes": 34654,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "transcript.jsonl",
+      "sha256": "c6c12440ac3f95a96f5f13812657f7ad3fa08530c836b617cb52d23952811e70"
+    },
+    {
+      "bytes": 39980,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "transcript.txt",
+      "sha256": "30ab68631c908d62f0a0e21e4137b2a74d7d0589b606f88f3de93dc88cdde954"
+    }
+  ],
+  "filtered_source_archive_included": false,
+  "implementation_source_included": false,
+  "installed_distribution_bytes_included": false,
+  "mechanically_redacted_operator_transcript_included": false,
+  "numbered_transcript_path": "transcript.txt",
+  "observable_paths_withheld_after_source_inspection": [],
+  "operator_transcript_path": "transcript.jsonl",
+  "private_runtime_state_or_rpc_included": false,
+  "retrospective_evaluator_contamination": false,
+  "run_id": "maude-s18",
+  "schema": "maude.synthetic-operator.grade-bundle.v1",
+  "self_exclusion": "bundle-inventory.json is excluded to avoid a recursive digest",
+  "source_evaluator_contamination": false
+}

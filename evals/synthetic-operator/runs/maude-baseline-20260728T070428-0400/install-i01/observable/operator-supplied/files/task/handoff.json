@@ -1,0 +1,5 @@
+{
+  "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/run/governor.sock",
+  "project_directory": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/project",
+  "service_owner": "synthetic-platform-team"
+}

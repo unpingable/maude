@@ -1,0 +1,9 @@
+{
+  "exists": true,
+  "gid": 1000,
+  "is_socket": true,
+  "is_symlink": false,
+  "mode": "0660",
+  "path": "/tmp/maude-synth-7a6c6c6e422e/install-i02/installation/run/xdg/governor-ac8a3cb4568e.sock",
+  "uid": 1000
+}

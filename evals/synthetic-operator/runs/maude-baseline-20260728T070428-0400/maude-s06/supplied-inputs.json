@@ -1,0 +1,112 @@
+{
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-7a6c6c6e422e/maude-s06/operator",
+  "operator_visible_files": [
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "media_type": "text/x-python",
+      "mode": "0644",
+      "path": "public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 775,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/README.md",
+      "sha256": "e7da95da26f29506ff7326403fc10ffc26d37515a04efa931337042673cbc2c0"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "task/lab_approval_ux-task-06",
+      "sha256": "940fc7e21dd81d73f3136cfe1cb8fe7f002033e1bad7d0d8c913957d08e39de3"
+    },
+    {
+      "bytes": 613,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/packet.json",
+      "sha256": "1be51f501e970c6f82f33855365ae3e4445a19634b7626a00fa55478c82659a1"
+    },
+    {
+      "bytes": 1764,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/plan.md",
+      "sha256": "74694373841fc6e12fb100726c2396c9ac81e03a5fe0e588b2e6eae0e100d255"
+    },
+    {
+      "bytes": 187,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/playbook.json",
+      "sha256": "a12cfef52a991fcf4df4a985c7cc69c0aca31912dbba7aa4b0a18e23bef6cf0d"
+    },
+    {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/ration-card.json",
+      "sha256": "a0f7a84dedb7cac5285e0ece6a9639621b81cd27e0205ee9b2d5734189259d10"
+    }
+  ],
+  "repository_base_commit": "bf689ebd9a93479e385a529787998784935e9977",
+  "repository_files": [
+    {
+      "bytes": 154,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "systemd/menu-board.service",
+      "sha256": "88c1ccbb59b6c20b04139b28c675d7f3d19d8b49b5a27e8e9a9337750e826897"
+    }
+  ],
+  "repository_root": "/tmp/maude-synth-7a6c6c6e422e/maude-s06/repo",
+  "run_id": "maude-s06",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s06/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "user_prompt": {
+    "bytes": 2238,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s06/operator-prompt.md",
+    "sha256": "53adfc56ec4eb5d2a6499a74791a583f6510e0ed4a90efe0e91fd6aa92667521"
+  }
+}

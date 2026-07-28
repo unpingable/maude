@@ -1,0 +1,4 @@
+a2d8541 synthetic base fixture
+ clusters/store-17/apps/menu/deployment.yaml | 10 ++++++++++
+ clusters/store-17/kustomization.yaml        |  4 ++++
+ 2 files changed, 14 insertions(+)

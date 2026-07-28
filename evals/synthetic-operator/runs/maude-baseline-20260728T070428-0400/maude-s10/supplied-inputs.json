@@ -1,0 +1,140 @@
+{
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "inventory_scope": "exact regular files visible at session start; generated installation environment is captured separately as observable package and filesystem state",
+  "operator_root": "/tmp/maude-synth-7a6c6c6e422e/maude-s10/operator",
+  "operator_visible_files": [
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 215,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "maude",
+      "sha256": "5b54a03ad3860c21ecb4eee7023e7ad6f42ae38cf8c1614f23431691ac2b7a8e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 6047,
+      "media_type": "text/x-python",
+      "mode": "0644",
+      "path": "public_cli.py",
+      "sha256": "d5dd589b11e42624466867dfc28e0c9663ebdcf345e6769cf6f59af080f2d0b6"
+    },
+    {
+      "bytes": 775,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/README.md",
+      "sha256": "8713719f2286fb17fff3206431ea3922e505e00d1d381cfa07faa820e259f400"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "task/lab_approval_ux-task-10",
+      "sha256": "2bb670f379529287485d76aa0cb626e0e560ff8764aab679cfa42d9df033b1db"
+    },
+    {
+      "bytes": 584,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/packet.json",
+      "sha256": "afad2da14a17cb093a3f1b5bdcfef0aa36d427348f073bb53444812015bcc454"
+    },
+    {
+      "bytes": 1682,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "task/plan.md",
+      "sha256": "9314b067b728c2501991a451e7eaa2701e3e727c91a91ac76b3e15e071388f24"
+    },
+    {
+      "bytes": 166,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/playbook.json",
+      "sha256": "2a9f93d8ccdf574fbbbdb0d7fdb47b050ff94662808e4b1c5fec4c79ccc3feb4"
+    },
+    {
+      "bytes": 253,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "task/ration-card.json",
+      "sha256": "9e5442164e912b6cfb45fa904bee054713ac5d4c21506dc78f2da7fe5176f869"
+    }
+  ],
+  "repository_base_commit": "89820c6e7bdba76ca937edc4cbc3fb453a67b237",
+  "repository_files": [
+    {
+      "bytes": 81,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "ansible/roles/edge/tasks/main.yml",
+      "sha256": "bddac54dd0d6228571b725986cb1d05408cbf0d0fca8d21f46e718e13c74aecc"
+    },
+    {
+      "bytes": 140,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "ansible/roles/edge/tasks/packages.yml",
+      "sha256": "bf242d72c0a38ddb218d56e07f66f2f480fa62fade038556204f6da47e025c12"
+    },
+    {
+      "bytes": 92,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "ansible.cfg",
+      "sha256": "5b56b6a54bb7abeae55de22ddb7fe62fb13f8ebf262505ed668cc15fb75ac2c4"
+    },
+    {
+      "bytes": 47,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "inventory.ini",
+      "sha256": "4226a3583999900f1bc0d92a63ba43e8330a1ae16701adce1fa92cfc07709e15"
+    },
+    {
+      "bytes": 99,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "site.yml",
+      "sha256": "2e1193d2b13ae2f2e798841bbc8d3d0ab90ce55f0fc45736254b6920eea6daf7"
+    }
+  ],
+  "repository_root": "/tmp/maude-synth-7a6c6c6e422e/maude-s10/repo",
+  "run_id": "maude-s10",
+  "schema": "maude.synthetic-operator.materialized-supplied-inputs.v1",
+  "surface": "maude",
+  "system_prompt": {
+    "bytes": 1524,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s10/operator-system.md",
+    "sha256": "2dea7094d1e8b18e69692449f1fb2a1f74c5d8aeaa424e18845be2215fcbd56f"
+  },
+  "user_prompt": {
+    "bytes": 2238,
+    "media_type": "text/markdown",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/rendered/maude-s10/operator-prompt.md",
+    "sha256": "950fc58fb10c19dc53f037329320b7355989362932f3f5d563ab90adffd5243c"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "disposition_frozen_before_helper": true,
+  "disposition_write_action_indices": [
+    5
+  ],
+  "early_helper_inspection_action_indices": [],
+  "embedded_product_segments_in_retrospective_action": [],
+  "evaluator_contamination": false,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    6
+  ],
+  "helper_inspection_action_indices": [],
+  "helper_inspection_before_invocation_action_indices": [],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 6,
+      "command_index": 0,
+      "offset": 56
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [
+    "58b3e990bce0b54c5a26d62b244fcc0f7ec7e2eb0a65e6bbbb6085ce74dea787"
+  ],
+  "helper_output_initial_disposition_bytes": [
+    2252
+  ],
+  "helper_output_matches_initial_disposition": true,
+  "helper_output_metadata_valid": true,
+  "helper_output_validation_errors": [],
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 2252,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "58b3e990bce0b54c5a26d62b244fcc0f7ec7e2eb0a65e6bbbb6085ce74dea787"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 4,
+  "protocol_action_indices": [
+    5,
+    6
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "docket-s20",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": true
+}

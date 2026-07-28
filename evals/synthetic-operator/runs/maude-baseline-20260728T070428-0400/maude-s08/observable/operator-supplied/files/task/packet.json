@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Cap replicas at 50 in the variable validation rule. Validate only; never plan or apply infrastructure.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-08",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "terraform",
+        "-chdir=terraform",
+        "validate"
+      ],
+      "program": "terraform"
+    }
+  ]
+}

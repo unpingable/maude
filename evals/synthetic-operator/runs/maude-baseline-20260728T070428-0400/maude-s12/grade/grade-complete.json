@@ -1,0 +1,11 @@
+{
+  "completed_at": "2026-07-28T12:10:59Z",
+  "grade_sha256": "8256bce73ddc65f2dc18d3f64d43c6aedc39aacd40c567af8c21cf1bd8ba359d",
+  "grader_session": {
+    "configured_model": "gpt-5.6-sol",
+    "provider_thread_id": "019fa8a0-d525-76e2-8628-7c8622a4989e"
+  },
+  "run_id": "maude-s12",
+  "schema": "maude.synthetic-operator.grade-complete.v1",
+  "summary_sha256": "702a5abb8c62b49bffc2ff6f22837096171324340e804cd060578be00565bd54"
+}

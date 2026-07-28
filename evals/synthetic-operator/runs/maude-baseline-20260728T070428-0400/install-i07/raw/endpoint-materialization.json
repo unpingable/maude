@@ -1,0 +1,20 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "chmod": "0660",
+  "endpoint_plan": {
+    "bytes": 353,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "evals/synthetic-operator/runs/maude-baseline-20260728T070428-0400/packet/installation-endpoints/install-i07.json",
+    "sha256": "7c543fc0d1df8993a1989134efa345c16ad1bfbaf6bcb867254e334b95a84c62"
+  },
+  "generated_directories": [],
+  "governor_dir": null,
+  "mode": "incompatible-schema",
+  "resolved_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/run/governor.sock",
+  "run_id": "install-i07",
+  "schema": "maude.synthetic-installation-endpoint-plan.v1",
+  "socket_strategy": "task_handoff",
+  "task_id": "install-task-07"
+}

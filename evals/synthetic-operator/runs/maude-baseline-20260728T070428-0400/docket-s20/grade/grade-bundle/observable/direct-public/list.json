@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/tmp/maude-synth-7a6c6c6e422e/docket-s20/operator/bin/docket",
+    "docket",
+    "list",
+    "--state",
+    "/tmp/maude-synth-7a6c6c6e422e/docket-s20/state",
+    "--json"
+  ],
+  "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/operator",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "{\"list_format\":\"gwr:attempt-list:v1\",\"attempts\":[{\"attempt\":\"2a9172e5ef6cdbd050f5bbe5ec8810cb\",\"state\":\"indeterminate\",\"version\":4,\"settlement\":\"unresolved\",\"premise_qualified\":false,\"admitted_at_ms\":1785237176110,\"effect_class\":\"git-ref-update:v1\",\"repository\":\"/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo\",\"target_ref\":\"refs/gwr/target\",\"allowed_paths\":[\"deploy/api.yaml\"],\"obligations_outstanding\":0}]}\n"
+}

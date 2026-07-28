@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Add --config /etc/menu-board/config.toml to ExecStart and make no other unit changes.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-06",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "systemd-analyze",
+        "verify",
+        "systemd/menu-board.service"
+      ],
+      "program": "systemd-analyze"
+    }
+  ]
+}

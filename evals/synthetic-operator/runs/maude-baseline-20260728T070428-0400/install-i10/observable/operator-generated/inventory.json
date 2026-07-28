@@ -1,0 +1,142 @@
+{
+  "authority_effect": "none",
+  "copied_home_artifacts_source_and_secret_scanned": true,
+  "copied_regular_files": [
+    {
+      "bytes": 48,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "home/.rustup/settings.toml",
+      "sha256": "4a90a5bdb96e92a6e13340af6699933a6d19d8a897fb82c571fc6b2bf1e09411"
+    },
+    {
+      "bytes": 1847,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "home/initial-disposition.md",
+      "sha256": "08cabaa3e25f4a41739f497ae7b33f952b5310bf07592f7e84f2bf8c70924d17"
+    }
+  ],
+  "excluded_regular_files": [
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator/operator-pty",
+      "reason": "frozen operator-supplied input",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0755",
+      "path": "operator/operator-retrospective",
+      "reason": "frozen operator-supplied input",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    }
+  ],
+  "frozen_operator_inputs_copied_as_generated": false,
+  "home_private_namespace_prefixes": [
+    ".cache",
+    ".config",
+    ".local/share",
+    ".local/state",
+    "tmp"
+  ],
+  "installed_environment_copied": false,
+  "operator_maude_config_preserved": true,
+  "release_source_bytes_copied": false,
+  "run_id": "install-i10",
+  "safe_operator_home_artifacts_copied": true,
+  "schema": "maude.synthetic-installation.operator-generated.v1",
+  "source_trees": {
+    "home": {
+      "digest": "c68db68552688003e6f56c701f6167d4b7b30520a870276e67449ed56b4a2ee7",
+      "directories": [
+        {
+          "mode": "0775",
+          "path": ".cache"
+        },
+        {
+          "mode": "0775",
+          "path": ".config"
+        },
+        {
+          "mode": "0775",
+          "path": ".local"
+        },
+        {
+          "mode": "0775",
+          "path": ".local/share"
+        },
+        {
+          "mode": "0775",
+          "path": ".local/state"
+        },
+        {
+          "mode": "0775",
+          "path": ".rustup"
+        },
+        {
+          "mode": "0775",
+          "path": "tmp"
+        }
+      ],
+      "exists": true,
+      "files": [
+        {
+          "bytes": 48,
+          "media_type": "application/toml",
+          "mode": "0664",
+          "path": ".rustup/settings.toml",
+          "sha256": "4a90a5bdb96e92a6e13340af6699933a6d19d8a897fb82c571fc6b2bf1e09411"
+        },
+        {
+          "bytes": 1847,
+          "media_type": "text/markdown",
+          "mode": "0664",
+          "path": "initial-disposition.md",
+          "sha256": "08cabaa3e25f4a41739f497ae7b33f952b5310bf07592f7e84f2bf8c70924d17"
+        }
+      ],
+      "root": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation/home",
+      "sockets": [],
+      "symlinks": []
+    },
+    "operator": {
+      "digest": "cff21eb9c5762083e8a8cfeaf7f29e734fb983c7e0689c922178b4c9fce85799",
+      "directories": [],
+      "exists": true,
+      "files": [
+        {
+          "bytes": 32867,
+          "media_type": "text/plain",
+          "mode": "0755",
+          "path": "operator-pty",
+          "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+        },
+        {
+          "bytes": 2397,
+          "media_type": "text/plain",
+          "mode": "0755",
+          "path": "operator-retrospective",
+          "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+        }
+      ],
+      "root": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation/operator",
+      "sockets": [],
+      "symlinks": []
+    },
+    "work": {
+      "digest": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+      "directories": [],
+      "exists": true,
+      "files": [],
+      "root": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation/work",
+      "sockets": [],
+      "symlinks": []
+    }
+  },
+  "symlinks_preserved_by_inventory_only": true,
+  "uncopied_home_files_individually_indexed": true
+}

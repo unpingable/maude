@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: menu-api
+  template:
+    metadata:
+      labels:
+        app: menu-api
+    spec:
+      containers:
+        - name: menu-api
+          image: registry.example.invalid/menu-api:2.7.4

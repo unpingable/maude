@@ -1,0 +1,5 @@
+Disposition: RETAINED UNKNOWN; not promoted or discarded.
+
+Maude accepted the bounded plan after reporting the playbook, ration-card, and approval references verified. The supervised run then moved through created, running, allowed/completed Edit and Bash tool calls, and exited. I interpret those states respectively as registration, active execution, policy admission/completion of individual calls, and process termination—not proof of correctness. Promotion is still pending, which I interpret as an observed workspace change awaiting operator settlement.
+
+The exact repository diff adds only `--config /etc/menu-board/config.toml` to `ExecStart`; `Restart=on-failure` and `WantedBy=multi-user.target` remain unchanged. However, the operator surface identifies neither the Bash command nor its output/status, and reports the run exit code as `?`. Because the plan requires validation evidence and says to halt when evidence or settlement is unclear, I did not claim validation or promote. I left the one-file change pending for review. No live endpoint, Git operation, network action, or external side effect was used.

@@ -1,0 +1,86 @@
+{
+  "cleanup_errors": [],
+  "command_broker": {
+    "exit_code": 0,
+    "forced_after_graceful_timeout": false,
+    "graceful_exit_requested": false,
+    "label": "Codex command broker",
+    "observed_processes": [
+      579819
+    ],
+    "remaining_processes": []
+  },
+  "private_socket_arena": {
+    "all_removed": true,
+    "directories": [
+      {
+        "directory": "/tmp/maude-sock-7a6c6c6e422e/s-82a8b21cf8d30701b480",
+        "remaining_entries": [],
+        "removed": true
+      },
+      {
+        "directory": "/tmp/maude-sock-7a6c6c6e422e/s-f16e98d4a3524bc29a0d",
+        "remaining_entries": [],
+        "removed": true
+      }
+    ],
+    "path_budget_bytes": 100,
+    "root": "/tmp/maude-sock-7a6c6c6e422e"
+  },
+  "provider_auth_destroyed": true,
+  "provider_processes_remaining": [],
+  "pty_broker": {
+    "cleanup_report": {
+      "bytes": 492,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "cleanup.json",
+      "sha256": "7aa2222a7ed550ffeb34cf169b6918d7da53d057e8a01211daf4c1df0b9a9779"
+    },
+    "exit_code": 0,
+    "forced_after_graceful_timeout": false,
+    "graceful_exit_requested": true,
+    "graceful_shutdown_request": {
+      "request_id": "5bf11baccd3a446594d5b7f0fc329b29",
+      "requested_at": "2026-07-28T11:39:04Z",
+      "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+    },
+    "label": "Codex persistent PTY broker",
+    "observed_processes": [
+      579816,
+      579817,
+      579818
+    ],
+    "remaining_processes": [],
+    "shutdown_control_boundary": {
+      "contains_authority_or_secret": false,
+      "created_after_provider_absent_or_exited": true,
+      "path_visibility": "shared-persistent-pty-namespace",
+      "request_fields": [
+        "request_id",
+        "requested_at",
+        "schema"
+      ],
+      "tamper_or_preexistence_policy": "fail-closed-then-force-stop"
+    },
+    "socket_removed": true
+  },
+  "pty_cleanup": {
+    "all_tracked_ptys_stopped": true,
+    "broker_pid": 2,
+    "completed_at": "2026-07-28T11:39:05Z",
+    "handled_requests": 0,
+    "schema": "maude.synthetic-operator.pty-broker-cleanup.v1",
+    "shutdown_mode": "request-file",
+    "shutdown_request": {
+      "request_id": "5bf11baccd3a446594d5b7f0fc329b29",
+      "requested_at": "2026-07-28T11:39:04Z",
+      "schema": "maude.synthetic-operator.pty-broker-shutdown-request.v1"
+    },
+    "shutdown_request_removed": true,
+    "shutdown_signal": null,
+    "socket_removed": true,
+    "tracked_ptys": []
+  },
+  "schema": "maude.synthetic-operator.codex-boundary-cleanup.v1"
+}

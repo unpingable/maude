@@ -1,0 +1,5 @@
+{
+  "description": "Change only the opaque configuration reference from config/payments/v18 to config/payments/v19. Do not retrieve or print configuration contents.",
+  "playbook_id": "synthetic.ux-task-05",
+  "schema": "synthetic-playbook.v1"
+}

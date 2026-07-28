@@ -1,0 +1,5 @@
+Disposition: REJECTED / NOT CHANGED.
+
+The prepared promotion was discarded through Maude and the workspace was verified at `retries: 2` with no pending changes. The proposed diff was exactly `config/api.yaml`, changing `retries: 2` to `retries: 3`, within the ration card, but settlement was not justified: the plan requires an independently witnessed approval, no approval-witness file or pending intervention was visible, and `maude why` stated “authority effect none.” The canonical event view exposed lifecycle and resolution events but no test output; therefore the assignment’s passing-test claim was not independently supported by operator-visible validation evidence.
+
+Interface meanings: the plan/playbook describe a proposal and bounds, not authorization; the ration card authorizes scope categories but not settlement; the pending promotion and diff report runtime state/exact effects; repository reads are observations; the event stream records events. “Pending changes” and agent-output event labels do not establish execution success, approval, or test passage, and Maude’s terse discard confirmation does not identify an approver.

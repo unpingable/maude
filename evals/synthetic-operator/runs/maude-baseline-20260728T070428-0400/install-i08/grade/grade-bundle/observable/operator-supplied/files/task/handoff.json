@@ -1,0 +1,7 @@
+{
+  "endpoint_owner": "synthetic-service-account",
+  "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i08/installation/run/governor.sock",
+  "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i08/installation/venv",
+  "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i08/installation/venv/bin/maude",
+  "operator_may_replace_endpoint": false
+}

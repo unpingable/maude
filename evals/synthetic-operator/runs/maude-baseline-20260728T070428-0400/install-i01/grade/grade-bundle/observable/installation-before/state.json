@@ -1,0 +1,246 @@
+{
+  "authority_effect": "none",
+  "candidate_installation_states": {
+    "operator/.venv": {
+      "import_or_entrypoint_configuration": [],
+      "inspection_mode": "trusted evaluator read-only data inspection",
+      "maude_distribution_metadata": [],
+      "maude_entrypoint": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/.venv/bin/maude"
+      },
+      "maude_package_modules": [],
+      "operator_mutable_bytes_executed": false,
+      "python": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/.venv/bin/python"
+      },
+      "schema": "maude.synthetic-installation.static-package-probe.v1",
+      "site_packages": [],
+      "venv": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/.venv"
+      }
+    },
+    "operator/venv": {
+      "import_or_entrypoint_configuration": [],
+      "inspection_mode": "trusted evaluator read-only data inspection",
+      "maude_distribution_metadata": [],
+      "maude_entrypoint": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/venv/bin/maude"
+      },
+      "maude_package_modules": [],
+      "operator_mutable_bytes_executed": false,
+      "python": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/venv/bin/python"
+      },
+      "schema": "maude.synthetic-installation.static-package-probe.v1",
+      "site_packages": [],
+      "venv": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator/venv"
+      }
+    },
+    "work/.venv": {
+      "import_or_entrypoint_configuration": [],
+      "inspection_mode": "trusted evaluator read-only data inspection",
+      "maude_distribution_metadata": [],
+      "maude_entrypoint": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/.venv/bin/maude"
+      },
+      "maude_package_modules": [],
+      "operator_mutable_bytes_executed": false,
+      "python": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/.venv/bin/python"
+      },
+      "schema": "maude.synthetic-installation.static-package-probe.v1",
+      "site_packages": [],
+      "venv": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/.venv"
+      }
+    },
+    "work/venv": {
+      "import_or_entrypoint_configuration": [],
+      "inspection_mode": "trusted evaluator read-only data inspection",
+      "maude_distribution_metadata": [],
+      "maude_entrypoint": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/venv/bin/maude"
+      },
+      "maude_package_modules": [],
+      "operator_mutable_bytes_executed": false,
+      "python": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/venv/bin/python"
+      },
+      "schema": "maude.synthetic-installation.static-package-probe.v1",
+      "site_packages": [],
+      "venv": {
+        "kind": "absent",
+        "path": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work/venv"
+      }
+    }
+  },
+  "docs_tree": {
+    "digest": "206123b74e1107cb1a3aade5fdaaad3296204dfaa46c5df83842a0563f02cd41",
+    "directories": [],
+    "exists": true,
+    "files": [
+      {
+        "bytes": 1938,
+        "media_type": "text/markdown",
+        "mode": "0644",
+        "path": "README.md",
+        "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+      },
+      {
+        "bytes": 4437,
+        "media_type": "text/markdown",
+        "mode": "0644",
+        "path": "commands.md",
+        "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+      },
+      {
+        "bytes": 4203,
+        "media_type": "text/markdown",
+        "mode": "0644",
+        "path": "configuration.md",
+        "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+      }
+    ],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/docs",
+    "sockets": [],
+    "symlinks": []
+  },
+  "home_tree": {
+    "digest": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+    "directories": [],
+    "exists": true,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/home",
+    "sockets": [],
+    "symlinks": []
+  },
+  "installed_environment_tree": {
+    "digest": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "directories": [],
+    "exists": false,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/venv",
+    "sockets": [],
+    "symlinks": []
+  },
+  "label": "before",
+  "media_tree": {
+    "digest": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+    "directories": [],
+    "exists": true,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/media",
+    "sockets": [],
+    "symlinks": []
+  },
+  "operator_tree": {
+    "digest": "cff21eb9c5762083e8a8cfeaf7f29e734fb983c7e0689c922178b4c9fce85799",
+    "directories": [],
+    "exists": true,
+    "files": [
+      {
+        "bytes": 32867,
+        "media_type": "text/plain",
+        "mode": "0755",
+        "path": "operator-pty",
+        "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+      },
+      {
+        "bytes": 2397,
+        "media_type": "text/plain",
+        "mode": "0755",
+        "path": "operator-retrospective",
+        "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+      }
+    ],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/operator",
+    "sockets": [],
+    "symlinks": []
+  },
+  "package_state": {
+    "expected_installed": null,
+    "maude_entrypoint_executable": false,
+    "maude_entrypoint_exists": false,
+    "python_exists": false,
+    "schema": "maude.synthetic-installation.package-probe.v1",
+    "venv": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/venv",
+    "venv_exists": false
+  },
+  "project_tree": {
+    "digest": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+    "directories": [],
+    "exists": true,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/project",
+    "sockets": [],
+    "symlinks": []
+  },
+  "run_id": "install-i01",
+  "run_tree": {
+    "digest": "8a1f8c43decdd25f94817107895a58588f7d2412abba9d342fd8a79054355b28",
+    "directories": [
+      {
+        "mode": "0775",
+        "path": "xdg"
+      }
+    ],
+    "exists": true,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/run",
+    "sockets": [],
+    "symlinks": []
+  },
+  "schema": "maude.synthetic-installation.state-capture.v1",
+  "task_tree": {
+    "digest": "319d7b6782fb115cbb265f4e03ab9b58c87f044312d26f34a5a35d12fba1d98b",
+    "directories": [],
+    "exists": true,
+    "files": [
+      {
+        "bytes": 1419,
+        "media_type": "text/markdown",
+        "mode": "0644",
+        "path": "assignment.md",
+        "sha256": "ea33b9e015f88099a84728d729fa1dd178031b1f97b87e017f659da3e9d76bb0"
+      },
+      {
+        "bytes": 235,
+        "media_type": "application/json",
+        "mode": "0644",
+        "path": "handoff.json",
+        "sha256": "3b9c42e0d19da84f6b316de527144704b88c056904e34171a507004cea76b239"
+      },
+      {
+        "bytes": 1540,
+        "media_type": "application/json",
+        "mode": "0644",
+        "path": "task.json",
+        "sha256": "c28a5559c1f656531657b023b46b87a76b9607070c149e60326f702d46a915d4"
+      }
+    ],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/task",
+    "sockets": [],
+    "symlinks": []
+  },
+  "work_tree": {
+    "digest": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+    "directories": [],
+    "exists": true,
+    "files": [],
+    "root": "/tmp/maude-synth-7a6c6c6e422e/install-i01/installation/work",
+    "sockets": [],
+    "symlinks": []
+  }
+}

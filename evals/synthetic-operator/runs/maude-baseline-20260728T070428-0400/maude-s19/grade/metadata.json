@@ -1,0 +1,374 @@
+{
+  "action_accounting": {
+    "bytes": 518,
+    "media_type": "application/json",
+    "mode": "0664",
+    "path": "action-accounting.json",
+    "sha256": "96cb3bcf92e7a6e9a47411776f0704c1fb70bd74ba13bf7191a642d7d0586bc1"
+  },
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "clean_grader_home": {
+    "after": {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "clean-home-after.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    "before": {
+      "bytes": 251,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "clean-home-before.json",
+      "sha256": "67164b6938705c780636ce11ea2b20434de6f2d134bbae3f89ed732fec0e6191"
+    },
+    "host_home_mounted": false,
+    "mount_path": "/home/operator",
+    "provider_auth_tree_separate": true
+  },
+  "coaching": "none",
+  "completed_at": "2026-07-28T12:13:26Z",
+  "configured_model": "gpt-5.6-sol",
+  "cross_family_grading_supported": false,
+  "cross_family_grading_used": false,
+  "elapsed_seconds": 41.221942,
+  "evaluator_interventions": "none",
+  "expected_disposition_exposed": false,
+  "follow_up_messages": 0,
+  "fresh_context_confirmed": true,
+  "fresh_process": true,
+  "grade_bundle_manifest": {
+    "bytes": 13326,
+    "media_type": "application/json",
+    "mode": "0644",
+    "path": "grade-bundle-inventory.json",
+    "sha256": "921fec5126a2c947359206d6f5a6b7e92d052ce752fac7efbf66aef7b444b24e"
+  },
+  "grade_sha256": "66bf24cad03bf13c2d2dc307fe8d5b769722d18beb536db9ba7dc953289655b3",
+  "grader_model_config": "openai-sol",
+  "grader_model_family": "GPT",
+  "implementation_source_exposed": false,
+  "model_configuration": {
+    "approval_policy": "never",
+    "boundary_limitation": "The trusted direct stdio shim is part of the retained-auth transport boundary and can read provider authentication by construction; the campaign proves task paths and task sockets are absent, not provider-internal noninspection. Availability and cross-family comparison claims belong to the frozen campaign policy and observed capability evidence, not this provider configuration.",
+    "broker_boundary": "The operator command broker receives neither provider credentials nor semantic prompts; each command executes in a fresh per-command no-network mount/PID namespace. The grader evidence tool is read-only.",
+    "built_in_tools": [],
+    "cli": "codex",
+    "exact_provider_tool_allowlist_supported": true,
+    "expected_family": "GPT",
+    "external_operational_effect": false,
+    "freshness": [
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "fresh provider process",
+      "no resume, continuation, or follow-up"
+    ],
+    "grader_boundary": "one read-only evidence MCP tool over the frozen grade bundle; no operator command broker",
+    "grader_invocation_contract": "fresh ephemeral strict-config Codex exec with one read-only evidence MCP tool and exact output schema",
+    "grader_mcp_enabled_tools": [
+      "evidence"
+    ],
+    "grader_tools": [
+      "mcp__grader__evidence"
+    ],
+    "intrinsic_action_features_explicitly_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "live_web_search_enabled": false,
+    "locally_configured_provider_credentials_scope": "permitted only for provider-session transport",
+    "mcp_auto_approval_safety": {
+      "exact_enabled_tool_count_per_role": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": true
+    },
+    "mcp_default_tools_approval_mode": "approve",
+    "mcp_protocol_version": "2025-06-18",
+    "model_argument": "gpt-5.6-sol",
+    "operator_boundary": "one bounded terminal MCP tool backed by a credential-free, prompt-free command broker and source-free no-network command namespace",
+    "operator_invocation_contract": "fresh ephemeral strict-config Codex exec; exact role-specific MCP configuration; all intrinsic and optional action features disabled; combined prompt delivered through closed stdin",
+    "operator_mcp_enabled_tools": [
+      "terminal"
+    ],
+    "operator_tools": [
+      "mcp__operator__terminal"
+    ],
+    "optional_features_explicitly_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "production_task_systems_or_credentials": false,
+    "provider": "OpenAI",
+    "provider_network_scope": "permitted only for the provider transport used by capability probes and fresh operator/grader sessions",
+    "reasoning_effort": "low",
+    "resolved_executable": "/opt/node/bin/codex",
+    "task_level_network": false,
+    "tool_boundary": "Strict per-session direct stdio MCP. The operator receives only mcp__operator__terminal (enabled as terminal); the grader receives only mcp__grader__evidence (enabled as evidence). Codex built-in and intrinsic action features are disabled.",
+    "transport_boundary": "Codex runs in a task-blind retained-auth transport namespace with no task paths or task sockets. A trusted direct stdio MCP shim shares that namespace and can read retained provider authentication until transport exit.",
+    "trusted_transport_component_limitation": "the hash-pinned direct stdio MCP shim shares the retained-auth provider transport and is proved not to read provider authentication",
+    "unexpected_intrinsic_action_policy": "fail-closed",
+    "user_mcp_and_connector_config_loaded": false
+  },
+  "model_provider": "OpenAI",
+  "no_resume_or_continue": true,
+  "operator_model_config": "openai-sol",
+  "operator_model_family": "GPT",
+  "operator_transcripts": {
+    "evaluator_contamination": false,
+    "exact_raw_unedited_included": true,
+    "mode": "transcript.jsonl"
+  },
+  "private_runtime_evidence_exposed": false,
+  "provider_auth_bootstrap": {
+    "gate": {
+      "allowed_mcp_server": "grader",
+      "allowed_mcp_tools": [
+        "evidence"
+      ],
+      "boundary_evidence": {
+        "bytes": 320,
+        "media_type": "application/json",
+        "mode": "0664",
+        "path": "codex-mcp-boundary/cleanup.json",
+        "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+      },
+      "broker_cleanup": {
+        "private_socket_arena": {
+          "all_removed": true,
+          "directories": [],
+          "path_budget_bytes": 100,
+          "root": "/tmp/maude-sock-7a6c6c6e422e"
+        }
+      },
+      "broker_command_count": 0,
+      "codex_approval_argv": [
+        "--config",
+        "approval_policy=\"never\""
+      ],
+      "codex_approval_config_override": "approval_policy=\"never\"",
+      "codex_approval_policy": "never",
+      "codex_mcp_approval_config_override": "mcp_servers.grader.default_tools_approval_mode=\"approve\"",
+      "codex_mcp_default_tools_approval_mode": "approve",
+      "exact_correlation_proved": true,
+      "identity": {
+        "event_number": 1,
+        "provider_thread_id": "019fa8a4-4517-7cf0-b91c-09d76f93d266"
+      },
+      "intrinsic_action_features_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "mcp_config_sha256": "38d3b242f7b3e6970a8ce6cd952a4262bc57d68bf1b1bc77fb7180ec4771b79f",
+      "mcp_protocol_version": "2025-06-18",
+      "mcp_tool_approval_safety_basis": {
+        "exact_enabled_tool_count": 1,
+        "grader_evidence_tool_read_only": true,
+        "mcp_config_hash_pinned": true,
+        "operator_terminal_bounded_by_frozen_broker": false,
+        "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+        "single_enabled_mcp_tool": "evidence"
+      },
+      "noninteractive_approval_safety_basis": {
+        "grader_evidence_tool_read_only": true,
+        "intrinsic_action_features_disabled": [
+          "shell_tool",
+          "unified_exec"
+        ],
+        "operator_terminal_bounded_by_frozen_broker": false,
+        "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+        "single_enabled_mcp_tool": "evidence"
+      },
+      "normalized_result_correlations": [],
+      "optional_features_disabled": [
+        "apps",
+        "plugins",
+        "remote_plugin",
+        "browser_use",
+        "browser_use_external",
+        "browser_use_full_cdp_access",
+        "computer_use",
+        "image_generation",
+        "multi_agent",
+        "multi_agent_v2",
+        "hooks",
+        "skill_mcp_dependency_install",
+        "tool_call_mcp_elicitation"
+      ],
+      "per_session_exact_tool_roster_supported": true,
+      "provider_auth_destroyed": true,
+      "provider_auth_output_scan_hits": [],
+      "provider_auth_retained_until_transport_exit": true,
+      "provider_auth_values_recorded": false,
+      "provider_config": "openai-sol",
+      "provider_private_state_before_destroy": {
+        "file_count": 63,
+        "inventory_sha256": "db3f3ba66723424430dc47917d7af942f9f3b84098a49411758b2dcef9169c55",
+        "total_bytes": 1093461
+      },
+      "provider_processes_remaining": [],
+      "provider_returncode": 0,
+      "provider_task_paths_mounted": [
+        "/evidence (read-only frozen grade bundle)"
+      ],
+      "provider_timed_out": false,
+      "provider_transport_cwd_is_neutral": true,
+      "proxy_tool_call_count": 0,
+      "recorded_at": "2026-07-28T12:13:26Z",
+      "schema": "maude.synthetic-operator.codex-retained-provider-boundary.v1",
+      "semantic_prompt_bytes": 67267,
+      "semantic_prompt_bytes_in_argv": false,
+      "semantic_prompt_delivery": "stdin",
+      "semantic_prompt_sha256": "20b979d7051c5d460f7875045814ea5ccbd5d65ad080f57360921b6d8a3fa557",
+      "status": "complete",
+      "tool_actions": [],
+      "unexpected_intrinsic_action_policy": "fail-closed"
+    },
+    "leak_scans_passed": true,
+    "purpose": "provider transport only; not evaluator evidence",
+    "readable_during_model_context": false
+  },
+  "provider_auth_gate": {
+    "allowed_mcp_server": "grader",
+    "allowed_mcp_tools": [
+      "evidence"
+    ],
+    "boundary_evidence": {
+      "bytes": 320,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "codex-mcp-boundary/cleanup.json",
+      "sha256": "42702f063209e16c4b8eaaa082bc87e905b32d476e7b6015a3e5e9e58480806d"
+    },
+    "broker_cleanup": {
+      "private_socket_arena": {
+        "all_removed": true,
+        "directories": [],
+        "path_budget_bytes": 100,
+        "root": "/tmp/maude-sock-7a6c6c6e422e"
+      }
+    },
+    "broker_command_count": 0,
+    "codex_approval_argv": [
+      "--config",
+      "approval_policy=\"never\""
+    ],
+    "codex_approval_config_override": "approval_policy=\"never\"",
+    "codex_approval_policy": "never",
+    "codex_mcp_approval_config_override": "mcp_servers.grader.default_tools_approval_mode=\"approve\"",
+    "codex_mcp_default_tools_approval_mode": "approve",
+    "exact_correlation_proved": true,
+    "identity": {
+      "event_number": 1,
+      "provider_thread_id": "019fa8a4-4517-7cf0-b91c-09d76f93d266"
+    },
+    "intrinsic_action_features_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "mcp_config_sha256": "38d3b242f7b3e6970a8ce6cd952a4262bc57d68bf1b1bc77fb7180ec4771b79f",
+    "mcp_protocol_version": "2025-06-18",
+    "mcp_tool_approval_safety_basis": {
+      "exact_enabled_tool_count": 1,
+      "grader_evidence_tool_read_only": true,
+      "mcp_config_hash_pinned": true,
+      "operator_terminal_bounded_by_frozen_broker": false,
+      "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+      "single_enabled_mcp_tool": "evidence"
+    },
+    "noninteractive_approval_safety_basis": {
+      "grader_evidence_tool_read_only": true,
+      "intrinsic_action_features_disabled": [
+        "shell_tool",
+        "unified_exec"
+      ],
+      "operator_terminal_bounded_by_frozen_broker": false,
+      "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+      "single_enabled_mcp_tool": "evidence"
+    },
+    "normalized_result_correlations": [],
+    "optional_features_disabled": [
+      "apps",
+      "plugins",
+      "remote_plugin",
+      "browser_use",
+      "browser_use_external",
+      "browser_use_full_cdp_access",
+      "computer_use",
+      "image_generation",
+      "multi_agent",
+      "multi_agent_v2",
+      "hooks",
+      "skill_mcp_dependency_install",
+      "tool_call_mcp_elicitation"
+    ],
+    "per_session_exact_tool_roster_supported": true,
+    "provider_auth_destroyed": true,
+    "provider_auth_output_scan_hits": [],
+    "provider_auth_retained_until_transport_exit": true,
+    "provider_auth_values_recorded": false,
+    "provider_config": "openai-sol",
+    "provider_private_state_before_destroy": {
+      "file_count": 63,
+      "inventory_sha256": "db3f3ba66723424430dc47917d7af942f9f3b84098a49411758b2dcef9169c55",
+      "total_bytes": 1093461
+    },
+    "provider_processes_remaining": [],
+    "provider_returncode": 0,
+    "provider_task_paths_mounted": [
+      "/evidence (read-only frozen grade bundle)"
+    ],
+    "provider_timed_out": false,
+    "provider_transport_cwd_is_neutral": true,
+    "proxy_tool_call_count": 0,
+    "recorded_at": "2026-07-28T12:13:26Z",
+    "schema": "maude.synthetic-operator.codex-retained-provider-boundary.v1",
+    "semantic_prompt_bytes": 67267,
+    "semantic_prompt_bytes_in_argv": false,
+    "semantic_prompt_delivery": "stdin",
+    "semantic_prompt_sha256": "20b979d7051c5d460f7875045814ea5ccbd5d65ad080f57360921b6d8a3fa557",
+    "status": "complete",
+    "tool_actions": [],
+    "unexpected_intrinsic_action_policy": "fail-closed"
+  },
+  "provider_thread_id": "019fa8a4-4517-7cf0-b91c-09d76f93d266",
+  "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_stdout_sha256": "2e3c8bf6059d3ac5d923f6f531dfffd5e8376862afd79c98b7a9c2977be0dbf0",
+  "returncode": 0,
+  "run_id": "maude-s19",
+  "safety_audit": {
+    "auth_read_attempts": [],
+    "environment_read_attempts": [],
+    "host_source_read_attempts": [],
+    "network_attempt_detection": "Includes URL/curl/wget/ssh tools, remote-capable git operations, OS package-manager acquisition, Python networking modules, and pip install/download/wheel unless the command explicitly uses --no-index.",
+    "network_command_attempts": [],
+    "schema": "maude.synthetic-operator.session-safety-audit.v1",
+    "unexpected_provider_action_count": 0,
+    "unexpected_provider_actions": [],
+    "zero_auth_env_network_source_attempts": true
+  },
+  "same_family_grading": true,
+  "same_family_limitation": "Provider eligibility is role-specific. Unsupported provider/role pairs: anthropic-sonnet:ordinary_operator, anthropic-sonnet:installation_operator, anthropic-sonnet:ordinary_grader, anthropic-sonnet:installation_grader. Same-family grading used: true; cross-family grading used: false. No unsupported family comparison is claimed.",
+  "same_model_configuration_grading": true,
+  "schema": "maude.synthetic-operator.independent-grade-metadata.v1",
+  "semantic_prompt_bytes": 67267,
+  "semantic_prompt_sha256": "20b979d7051c5d460f7875045814ea5ccbd5d65ad080f57360921b6d8a3fa557",
+  "separate_fresh_session_required": true,
+  "started_at": "2026-07-28T12:12:45Z",
+  "timed_out": false,
+  "tools": [
+    "mcp__grader__evidence"
+  ]
+}

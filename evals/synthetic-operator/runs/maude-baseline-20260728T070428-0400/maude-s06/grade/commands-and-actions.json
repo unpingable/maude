@@ -1,0 +1,68 @@
+[
+  {
+    "action_id": "item_0",
+    "action_reference": "codex:item_0",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      3,
+      4
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 3,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "offset": 0,
+              "operation": "read",
+              "path": "observable/retrospective/separation.json"
+            },
+            "error": null,
+            "id": "item_0",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "a5f8e9e772609b3e36c7a9d0886805bb3625a855e32713070ba1017da0d8296b"
+        },
+        {
+          "event_number": 4,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "offset": 0,
+              "operation": "read",
+              "path": "observable/retrospective/separation.json"
+            },
+            "error": null,
+            "id": "item_0",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":2349,\"content\":\"{\\n  \\\"authority_effect\\\": \\\"none\\\",\\n  \\\"campaign_id\\\": \\\"maude-baseline-20260728T070428-0400\\\",\\n  \\\"disposition_frozen_before_helper\\\": false,\\n  \\\"disposition_write_action_indices\\\": [],\\n  \\\"early_helper_inspection_action_indices\\\": [],\\n  \\\"embedded_product_segments_in_retrospective_action\\\": [\\n    {\\n      \\\"action_index\\\": 8,\\n      \\\"command_index\\\": 0,\\n      \\\"head\\\": \\\"shell-substitution\\\",\\n      \\\"segment_sha256\\\": \\\"d0ac3bf453097ac6a426891ae34352f7b08b78767ffc6153aa32f4f695da49b3\\\"\\n    },\\n    {\\n      \\\"action_index\\\": 8,\\n      \\\"command_index\\\": 0,\\n      \\\"head\\\": \\\"cp\\\",\\n      \\\"segment_sha256\\\": \\\"f517dc295214ca0042aaf57f466cac64965ee84651198537021fdf686a574d71\\\"\\n    }\\n  ],\\n  \\\"evaluator_contamination\\\": true,\\n  \\\"evaluator_intervention_after_start\\\": \\\"none\\\",\\n  \\\"helper_action_indices\\\": [\\n    9\\n  ],\\n  \\\"helper_inspection_action_indices\\\": [],\\n  \\\"helper_inspection_before_invocation_action_indices\\\": [],\\n  \\\"helper_invocation_occurrences\\\": [\\n    {\\n      \\\"action_index\\\": 9,\\n      \\\"command_index\\\": 0,\\n      \\\"offset\\\": 0\\n    }\\n  ],\\n  \\\"helper_invoked_exactly_once\\\": true,\\n  \\\"helper_output_disposition_sha256\\\": [\\n    \\\"2f42a326f5562cb2cf4be6bc3834202f86e38fed639ea92972ee7b884e76d12e\\\"\\n  ],\\n  \\\"helper_output_initial_disposition_bytes\\\": [\\n    1125\\n  ],\\n  \\\"helper_output_matches_initial_disposition\\\": true,\\n  \\\"helper_output_metadata_valid\\\": true,\\n  \\\"helper_output_validation_errors\\\": [],\\n  \\\"helper_was_final_tool_action\\\": true,\\n  \\\"initial_disposition\\\": {\\n    \\\"bytes\\\": 1125,\\n    \\\"media_type\\\": \\\"text/markdown\\\",\\n    \\\"mode\\\": \\\"0644\\\",\\n    \\\"path\\\": \\\"observable/retrospective/initial-disposition.md\\\",\\n    \\\"sha256\\\": \\\"2f42a326f5562cb2cf4be6bc3834202f86e38fed639ea92972ee7b884e76d12e\\\"\\n  },\\n  \\\"operations_after_helper\\\": 0,\\n  \\\"preloaded_question_phrases\\\": [],\\n  \\\"product_action_indices\\\": [\\n    1,\\n    2,\\n    3,\\n    4,\\n    5,\\n    6,\\n    7,\\n    8\\n  ],\\n  \\\"product_interface_action_count_excluding_evaluator_protocol\\\": 8,\\n  \\\"protocol_action_indices\\\": [\\n    9\\n  ],\\n  \\\"pty_provider_actions_each_count_as_interaction_step\\\": true,\\n  \\\"pty_start_wrapped_executable_not_double_counted\\\": true,\\n  \\\"pty_transport_action_indices\\\": [],\\n  \\\"pty_wrapped_product_start_action_indices\\\": [],\\n  \\\"questionnaire\\\": \\\"maude-synthetic-operator-retrospective-v1\\\",\\n  \\\"retrospective_questions_preloaded\\\": false,\\n  \\\"run_id\\\": \\\"maude-s06\\\",\\n  \\\"schema\\\": \\\"maude.synthetic-operator.retrospective-separation.v1\\\",\\n  \\\"separation_valid\\\": false\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/observable/retrospective/separation.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "cfd436b640ea3dbd1698ef735a94bcbcde2c7c3678f9f7c3d25a26f14adc723a"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  }
+]

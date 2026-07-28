@@ -1,0 +1,5 @@
+{
+  "description": "Add --config /etc/menu-board/config.toml to ExecStart and make no other unit changes.",
+  "playbook_id": "synthetic.ux-task-06",
+  "schema": "synthetic-playbook.v1"
+}

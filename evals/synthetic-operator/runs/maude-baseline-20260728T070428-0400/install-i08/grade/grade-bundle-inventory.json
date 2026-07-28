@@ -1,0 +1,1424 @@
+{
+  "bundle_source_redactions": [
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 6,
+          "fingerprint_sha256": [
+            "2996463dd1d87a7131e469e7b1e064530f4b41dc629d583b79685b69a69f8744",
+            "21dc1a93e0d936e92316c82a2526f519884ad2b9abd15c379756606b9f945014",
+            "8b04db47dde54d79668d8e7a9c1bd67b86d867c392154a790c715493983d1d72",
+            "7414f9a585f836ae1e110b7634d3de7025e6dcb324c242a89c3d08ce856ae01d",
+            "dde9a26a2120c8147dbd1bb9a09e9362aecd271e87e34eda9c11c21ea0be67b4",
+            "07e076bb7c01adbe3894147395239c07f9071968bcb86ae8c157789f5ffc435e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        }
+      ],
+      "original_bytes": 942948,
+      "original_sha256": "7d990c87824b8abb23ea12ca9995be3616abd166bc33030329c07bc39c0296bb",
+      "path": "observable/installation-before/state.json",
+      "redacted_bytes": 943084,
+      "redacted_sha256": "802ccfcea973381228bb76d8564017e0fd064cac5fe7cfbb68a39c95886a5f5e"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/rpc.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/feed.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/envelope.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/ration_containment.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "85e7eac2862f1cbd85bc18769c75172c3fdcd899ab468b9e973d59ec620d9991"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/runner.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/adapters.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/board.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/queue.py"
+        }
+      ],
+      "original_bytes": 12981,
+      "original_sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a",
+      "path": "observable/operator-supplied/files/README.md",
+      "redacted_bytes": 13219,
+      "redacted_sha256": "0d0fe0a683ee6e9b7cf25add70e4131e56be6dad6c3575adbfe05e321678f17d"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "560f162b32f695e1af1a35e72d2e626434a5d81c5b03db1963f6d5a0366e1147"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        }
+      ],
+      "original_bytes": 4203,
+      "original_sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c",
+      "path": "observable/operator-supplied/files/docs/configuration.md",
+      "redacted_bytes": 4245,
+      "redacted_sha256": "8c294426a47031da5eb26fc71146ceaeae33847a0780903bc245429270ba5cd1"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/__main__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 15,
+          "fingerprint_sha256": [
+            "9414746c129e8923c494541f92ccd1032055c9cbd000956d1287cbf7ef2b2282",
+            "d2feb8c09d8d9c15b4dcce289a3ebd854b2c743bff801e96f062447e76b388da",
+            "1f6026e64c1d8324cb051d0ee1ab8c468ab108ff024e3b6072f8c3b696b92a8f",
+            "b599ea8130b1b843b7965231807bcd597e999f08445587b5614b9c5e1747fc26",
+            "5e4f88f54b2cf719af6e06d65658388a10df84b8c598f10b00fbc4178885f917",
+            "3406951cb9bf521c78c7520292420b2bb3a67d8b426ca6e787832d195f7bf6cd",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "d4adb7454f22ced8a4b2517c336729c85bb506b1be2354a7ffc69d370e84eee3",
+            "2837670c35aaa52a7bab6ad27b90efce3bf6af577c1a05a1b2cd9b60abe6b88a",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "3412809c1cf42d7343047cba6a497584fa6c468737e2ef3fc443e11211447ea5",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b",
+            "f68e159421853ef151c2b6a81c645edaa2f665b33a43a8ff763e04208c940642"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "84b57f80fe578788559b86d5580b106233e9ea9356ebf8c17b24161d7ad52921",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/models.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 6,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b",
+            "a4a6cbb060a4992a5e466c2144db13ff173b1856fcd43e4115b4aaddfff79e0a"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/rpc.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "925f87c6fc4fb3d87404a8851bafcc6838616503ed824b7b4418a437cfdc9056"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/base.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "d812213f7b776796855a34ae62f3c36d5b6e5205973c4d45f261c2cbe253aa35",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/desk.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "791627a90c5a2baf130148ee997ab61867ef4ac19831aa2a178a53540e23b503"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/grant.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/legacy.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 6,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "c0318db29a1adf94d1729b2df7b30a1cd77c6d714e3c109cc24f585704ac9326",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/config.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/feed.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/intents.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "c19791331c16f31cc61e34fc93d80cac961bbc5f1c271cbad7842844d799a024",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/labels.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "1be5e6e62a004715fa63cd0b2512f7bfcd775bc4f2a9a79bf2cf00508e105a0a",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "565f76dbbb564a75600209992be98692a3be5727491f86cc48f03417feb9f560",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/envelope.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 6,
+          "fingerprint_sha256": [
+            "d812213f7b776796855a34ae62f3c36d5b6e5205973c4d45f261c2cbe253aa35",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a85ecf6e6f9ad60689e8db4228039bfe9d3151ac03fcc9b968689921cbe242a3",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "063e3d97fbe5c7382df417aae2453be61a01861561f37741b5ce484cfd6551d0"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/execution_request.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "0cf5996926d8d43633af97e526ccc02f5407ce087df7535dd566ce6d4cce4e02",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "c8ffe9f6d27a918efc759f5dcba381cd8a5efec35496b67af442b0ea0841fb09"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/ration_containment.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 10,
+          "fingerprint_sha256": [
+            "85e7eac2862f1cbd85bc18769c75172c3fdcd899ab468b9e973d59ec620d9991",
+            "f79f52fafaec937cb804eb79f8e29ab75ce22d69a3b303fcf555c80f99f3619b",
+            "b224d69ba52ad3d365d6e5113bdd9453dabba5e13071c60035fbb9d5bca65c91",
+            "70158ef942ffc040f311d54f868e4759c0ce96711366667eb036e33241e5d9c9",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "15bddf3df133930ab33d544d8114d7e08a5cb361ee34bea126309ebe6ce98a8c",
+            "9d128143425a72ddda6b865c70e46b7e41ab926d5d438367607490382a5d0156"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/runner.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/witness.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "b2b71045682e5b265431a04c9978862fe6d39a31d8940cf0746f64ea59df6390",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "c3f312908c6a724338437955e3002e385e179b1032a17fd44a5424606afbcc4f",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/adapters.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/base.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/board.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "903dd282f7a83f19f5e4425df055f44c0b1fe231afbc0697957649a856bcdb7d",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/diff.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/manager.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "c19791331c16f31cc61e34fc93d80cac961bbc5f1c271cbad7842844d799a024",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/queue.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "903dd282f7a83f19f5e4425df055f44c0b1fe231afbc0697957649a856bcdb7d",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "0cf5996926d8d43633af97e526ccc02f5407ce087df7535dd566ce6d4cce4e02",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/session.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "063e3d97fbe5c7382df417aae2453be61a01861561f37741b5ce484cfd6551d0"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/session.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "0b6d34a8a1ab4aeadd1501e83539574bd3ca9e3a761ac9d2b98abdc949f1bd2f"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/ui/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "925f87c6fc4fb3d87404a8851bafcc6838616503ed824b7b4418a437cfdc9056"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/ui/widgets.py"
+        }
+      ],
+      "original_bytes": 32867,
+      "original_sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e",
+      "path": "observable/operator-supplied/files/operator/operator-pty",
+      "redacted_bytes": 33843,
+      "redacted_sha256": "0805936be229d2abdedc29d4c4c2a12a91b625e8f77b5b641d72855cf689e7c1"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/__main__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 12,
+          "fingerprint_sha256": [
+            "88fefa84df1a8e6579608d0f895c967d2c95506e84cba10e1101c92e3611a4d3",
+            "85f52cdf6ac9722ddb9efda1d7e94921e6cf988e89e151bfb5f2c436cb9f37f7",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "90c2b8fa539568ce89aba8b664731bd8d4254abc8b50fe16b90009a6a2feb1d7",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "3412809c1cf42d7343047cba6a497584fa6c468737e2ef3fc443e11211447ea5",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b",
+            "bcbc16a7e21b3af80880c6762e7663f6e905ed6ab5a7a9391bf058e1407a4365",
+            "57b3a4482732b4866d44b1af409871ecce14a954eb3f44d232507ac879cbd637",
+            "f68e159421853ef151c2b6a81c645edaa2f665b33a43a8ff763e04208c940642"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "84b57f80fe578788559b86d5580b106233e9ea9356ebf8c17b24161d7ad52921",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/models.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/rpc.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "925f87c6fc4fb3d87404a8851bafcc6838616503ed824b7b4418a437cfdc9056"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/base.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "d812213f7b776796855a34ae62f3c36d5b6e5205973c4d45f261c2cbe253aa35",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/desk.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "791627a90c5a2baf130148ee997ab61867ef4ac19831aa2a178a53540e23b503"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/grant.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/legacy.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 6,
+          "fingerprint_sha256": [
+            "a216c00cee48a3ebb7e693a2e7a5b89953cbfcf25eddc1a061b3f2038d1ed665",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/config.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/feed.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "feb8d1c3d8f0b7696e51638ccf019ffde1160ade63169279b7c62933c907c27b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/intents.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "c19791331c16f31cc61e34fc93d80cac961bbc5f1c271cbad7842844d799a024",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/labels.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "565f76dbbb564a75600209992be98692a3be5727491f86cc48f03417feb9f560",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/envelope.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 7,
+          "fingerprint_sha256": [
+            "d812213f7b776796855a34ae62f3c36d5b6e5205973c4d45f261c2cbe253aa35",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "ba4ffc75be27867d390644efc37291601a5ade5e23cbad170556dbccacd51207",
+            "49515775f180a5730bc7b1e0724b164bac9abaaebb50b1a848b584118f5bfd41",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "92640695b5a622016195c952ff7daa30a48b8e81ebe13abc9542ded26234ce0b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/execution_request.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "0cf5996926d8d43633af97e526ccc02f5407ce087df7535dd566ce6d4cce4e02",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "c8ffe9f6d27a918efc759f5dcba381cd8a5efec35496b67af442b0ea0841fb09"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/ration_containment.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/runner.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 5,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/witness.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "c3f312908c6a724338437955e3002e385e179b1032a17fd44a5424606afbcc4f",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/adapters.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/base.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/board.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "903dd282f7a83f19f5e4425df055f44c0b1fe231afbc0697957649a856bcdb7d",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/diff.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "2df8664b1cbb231eb89e1ea431eb57b7383cd74c1ed5fff474d5cc969e049f1b"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/manager.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "c19791331c16f31cc61e34fc93d80cac961bbc5f1c271cbad7842844d799a024",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/queue.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "903dd282f7a83f19f5e4425df055f44c0b1fe231afbc0697957649a856bcdb7d",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "0cf5996926d8d43633af97e526ccc02f5407ce087df7535dd566ce6d4cce4e02",
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/session.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/session.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 3,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "0b6d34a8a1ab4aeadd1501e83539574bd3ca9e3a761ac9d2b98abdc949f1bd2f"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/ui/__init__.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 4,
+          "fingerprint_sha256": [
+            "7395971b9a292990ee9dd4b340f4fe31e3575072172f2e9d00b060fbebf349f7",
+            "a5fbb89205888c0ddcd94770014c5b85cc4a83a927a9a7818181ff669b66f55e",
+            "a6284e6d3d43bdfbf0da732945adb2b4f31147c92bea47aee100d7f556c22d00",
+            "925f87c6fc4fb3d87404a8851bafcc6838616503ed824b7b4418a437cfdc9056"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/ui/widgets.py"
+        }
+      ],
+      "original_bytes": 2397,
+      "original_sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0",
+      "path": "observable/operator-supplied/files/operator/operator-retrospective",
+      "redacted_bytes": 2659,
+      "redacted_sha256": "1ac0df7e3f38a101b2823bff04406d455e59b156de212b71a74934a7178d288e"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/rpc.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/feed.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/envelope.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/ration_containment.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "85e7eac2862f1cbd85bc18769c75172c3fdcd899ab468b9e973d59ec620d9991"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/runner.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/adapters.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/board.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/queue.py"
+        }
+      ],
+      "original_bytes": 12981,
+      "original_sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a",
+      "path": "operator-docs/README.md",
+      "redacted_bytes": 13219,
+      "redacted_sha256": "0d0fe0a683ee6e9b7cf25add70e4131e56be6dad6c3575adbfe05e321678f17d"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "560f162b32f695e1af1a35e72d2e626434a5d81c5b03db1963f6d5a0366e1147"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        }
+      ],
+      "original_bytes": 4203,
+      "original_sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c",
+      "path": "operator-docs/docs/configuration.md",
+      "redacted_bytes": 4245,
+      "redacted_sha256": "8c294426a47031da5eb26fc71146ceaeae33847a0780903bc245429270ba5cd1"
+    },
+    {
+      "matches": [
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 8,
+          "fingerprint_sha256": [
+            "560f162b32f695e1af1a35e72d2e626434a5d81c5b03db1963f6d5a0366e1147",
+            "2996463dd1d87a7131e469e7b1e064530f4b41dc629d583b79685b69a69f8744",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627",
+            "21dc1a93e0d936e92316c82a2526f519884ad2b9abd15c379756606b9f945014",
+            "8b04db47dde54d79668d8e7a9c1bd67b86d867c392154a790c715493983d1d72",
+            "7414f9a585f836ae1e110b7634d3de7025e6dcb324c242a89c3d08ce856ae01d",
+            "dde9a26a2120c8147dbd1bb9a09e9362aecd271e87e34eda9c11c21ea0be67b4",
+            "07e076bb7c01adbe3894147395239c07f9071968bcb86ae8c157789f5ffc435e"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/app.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/client/rpc.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/commands/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/config.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/feed.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/envelope.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/ration_containment.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 2,
+          "fingerprint_sha256": [
+            "85e7eac2862f1cbd85bc18769c75172c3fdcd899ab468b9e973d59ec620d9991",
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/runner.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "6d69f2ac09017b8a49d050ab336e953b8fa02ae08c24396916ea7ea42418e627"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/plan/witness.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/report.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/adapters.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/board.py"
+        },
+        {
+          "exact_member_digest": false,
+          "fingerprint_count": 1,
+          "fingerprint_sha256": [
+            "5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952"
+          ],
+          "member": "maude-2.4.0-py3-none-any.whl!/maude/screens/queue.py"
+        }
+      ],
+      "original_bytes": 76106,
+      "original_sha256": "30909ad3a4575ff445f66adabc3eb7bc35b3b8720570cbd612c2137d59a6bc3e",
+      "path": "transcript.txt",
+      "redacted_bytes": 78892,
+      "redacted_sha256": "59174f1303423dc4985b6214dcfc1208b2f9f660634c1d2e654cb8cac8ff4fbf"
+    }
+  ],
+  "clean_authority_or_ux_inference_permitted": false,
+  "evaluator_contamination": true,
+  "exact_raw_operator_transcript_included": false,
+  "expected_disposition_included": false,
+  "files": [
+    {
+      "bytes": 513,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "failure-taxonomy.json",
+      "sha256": "4b1d2b291794f053e7766459522246cb30f4604ec96d5d4933c47ce5e23fb635"
+    },
+    {
+      "bytes": 2574,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "grader-assignment.md",
+      "sha256": "87ff21b545e26b0526aa498ba9307c7f189e519b455b2f4f4057ec81f53b5a3b"
+    },
+    {
+      "bytes": 12164,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "grader-output.schema.json",
+      "sha256": "a0c15eef3bd28a4ddcb15b537f27288f417c8392adbfe9fbab4d85dc8008d5d4"
+    },
+    {
+      "bytes": 36834,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "grader-prompt.md",
+      "sha256": "b6d1980d840c87bc1d4e10797cafa18d7c92c0aef8637baf48c433f802e7fcec"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/endpoint-after.json",
+      "sha256": "54d1916b929dc987cc5eee48fdbb2cb06741a9e70485c6586ddd56f91b04a451"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/endpoint-before.json",
+      "sha256": "54d1916b929dc987cc5eee48fdbb2cb06741a9e70485c6586ddd56f91b04a451"
+    },
+    {
+      "bytes": 959885,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/installation-after/state.json",
+      "sha256": "2439ba540ba9a8b10abbb394bce3240581dd6241adf546ef5407bd3bc87fc4eb"
+    },
+    {
+      "bytes": 943084,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/installation-before/state.json",
+      "sha256": "802ccfcea973381228bb76d8564017e0fd064cac5fe7cfbb68a39c95886a5f5e"
+    },
+    {
+      "bytes": 13219,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/README.md",
+      "sha256": "0d0fe0a683ee6e9b7cf25add70e4131e56be6dad6c3575adbfe05e321678f17d"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4245,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/docs/configuration.md",
+      "sha256": "8c294426a47031da5eb26fc71146ceaeae33847a0780903bc245429270ba5cd1"
+    },
+    {
+      "bytes": 33843,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/operator/operator-pty",
+      "sha256": "0805936be229d2abdedc29d4c4c2a12a91b625e8f77b5b641d72855cf689e7c1"
+    },
+    {
+      "bytes": 2659,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/operator/operator-retrospective",
+      "sha256": "1ac0df7e3f38a101b2823bff04406d455e59b156de212b71a74934a7178d288e"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1589,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/assignment.md",
+      "sha256": "9d2932a9de2eadfd4511e8ba19f5c4b8dfc82945ee8f87b817cb92bd056c80eb"
+    },
+    {
+      "bytes": 209,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/endpoint-ownership.json",
+      "sha256": "b845cf3f5ff52273d97f484a2ac653a7ff41c1e717e878a344d31f3e30a858d2"
+    },
+    {
+      "bytes": 376,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/handoff.json",
+      "sha256": "00c3394c27233f7aa70e56ee77575b4d2d00d00d3ab40a4e8bdbbd5586f29f7d"
+    },
+    {
+      "bytes": 1714,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/files/task/task.json",
+      "sha256": "823031adbf769056af8a5f8e8a04adeb568ac704099eaa534beac84b279a624a"
+    },
+    {
+      "bytes": 3009,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/operator-supplied/inventory.json",
+      "sha256": "6b8ce5990ecbad193647570d41c70457979c11b254d2701dfa9e639116040377"
+    },
+    {
+      "bytes": 2152,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable/retrospective/separation.json",
+      "sha256": "6ed0e839175454e8b02cce2963e37928cdf61616c55ed739020066ec46388160"
+    },
+    {
+      "bytes": 5899,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "observable-artifacts.json",
+      "sha256": "61a37d429bd8804f1c6c548568d5a82b888073e35d2d4297188dadee1fd7da4c"
+    },
+    {
+      "bytes": 13219,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/README.md",
+      "sha256": "0d0fe0a683ee6e9b7cf25add70e4131e56be6dad6c3575adbfe05e321678f17d"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4245,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-docs/docs/configuration.md",
+      "sha256": "8c294426a47031da5eb26fc71146ceaeae33847a0780903bc245429270ba5cd1"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0644",
+      "path": "operator-docs/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 3754,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-prompt.md",
+      "sha256": "e4cc53f84151140c752d779f30ef55d65567615eda02c9dd5d46beb836222d15"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-system-prompt.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 2152,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "retrospective-separation.json",
+      "sha256": "6ed0e839175454e8b02cce2963e37928cdf61616c55ed739020066ec46388160"
+    },
+    {
+      "bytes": 8875,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "rubric.md",
+      "sha256": "9cff4b711563411eb65558f46d8902c8ba6fe545381434325ca4ceb74fdf4f3b"
+    },
+    {
+      "bytes": 12090,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "source-grade-boundary.json",
+      "sha256": "171312f1915a08a8c9e5fc8088dd9e03bed4e8498a56ed654df9d6b76eb5b536"
+    },
+    {
+      "bytes": 52348,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "source-redactions.json",
+      "sha256": "e5d23de90bb9902b21b9caa4fb3fcdbc48ba6db427ccb75bc5506f3faea116e7"
+    },
+    {
+      "bytes": 3578,
+      "media_type": "application/json",
+      "mode": "0644",
+      "path": "supplied-inputs.json",
+      "sha256": "8a145f64ef39156fd7570b20021ff4fd40c463fa560cd73672e72da920f3c049"
+    },
+    {
+      "bytes": 4397,
+      "media_type": "application/x-ndjson",
+      "mode": "0644",
+      "path": "transcript.redacted.jsonl",
+      "sha256": "c62e121be5089bef7e16aad3e70a0d4f6c5f09ff27e2e29b5f926f97c57c4210"
+    },
+    {
+      "bytes": 12004,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "transcript.redacted.txt",
+      "sha256": "331bbbd02b9ba9d0e1841b68a4b7ea04b1c384b3926ac96b9b652f047849d5dc"
+    },
+    {
+      "bytes": 78892,
+      "media_type": "text/plain",
+      "mode": "0644",
+      "path": "transcript.txt",
+      "sha256": "59174f1303423dc4985b6214dcfc1208b2f9f660634c1d2e654cb8cac8ff4fbf"
+    }
+  ],
+  "filtered_source_archive_included": false,
+  "implementation_source_included": false,
+  "installed_distribution_bytes_included": false,
+  "mechanically_redacted_operator_transcript_included": true,
+  "numbered_transcript_path": "transcript.redacted.txt",
+  "observable_paths_withheld_after_source_inspection": [
+    "observable/operator-generated/files/home/initial-disposition.md",
+    "observable/operator-generated/inventory.json",
+    "observable/retrospective/initial-disposition.md"
+  ],
+  "operator_transcript_path": "transcript.redacted.jsonl",
+  "private_runtime_state_or_rpc_included": false,
+  "retrospective_evaluator_contamination": true,
+  "run_id": "install-i08",
+  "schema": "maude.synthetic-operator.grade-bundle.v1",
+  "self_exclusion": "bundle-inventory.json is excluded to avoid a recursive digest",
+  "source_evaluator_contamination": true
+}

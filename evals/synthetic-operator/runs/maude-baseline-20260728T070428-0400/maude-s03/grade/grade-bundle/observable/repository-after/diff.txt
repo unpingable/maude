@@ -1,0 +1,10 @@
+diff --git a/deploy/api/deployment.yaml b/deploy/api/deployment.yaml
+index 00bcf18..d43cc5c 100644
+--- a/deploy/api/deployment.yaml
++++ b/deploy/api/deployment.yaml
+@@ -12,4 +12,4 @@ spec:
+               memory: 192Mi
+             limits:
+               cpu: 500m
+-              memory: 256Mi
++              memory: 384Mi

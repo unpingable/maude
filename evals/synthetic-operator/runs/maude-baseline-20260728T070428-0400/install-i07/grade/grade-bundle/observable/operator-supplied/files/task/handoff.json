@@ -1,0 +1,7 @@
+{
+  "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/run/governor.sock",
+  "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/venv",
+  "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/venv/bin/maude",
+  "operator_may_migrate_or_delete_state": false,
+  "retained_state_owner": "synthetic-platform-team"
+}

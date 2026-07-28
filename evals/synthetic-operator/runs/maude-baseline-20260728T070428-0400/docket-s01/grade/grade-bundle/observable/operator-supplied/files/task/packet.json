@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Change only the menu-api container image from 2.7.3 to 2.7.4 in the Store 17 GitOps deployment.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-01",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "kustomize",
+        "build",
+        "clusters/store-17"
+      ],
+      "program": "kustomize"
+    }
+  ]
+}

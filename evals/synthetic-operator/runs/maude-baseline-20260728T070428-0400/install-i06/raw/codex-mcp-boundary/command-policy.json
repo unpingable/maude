@@ -1,0 +1,111 @@
+{
+  "bwrap": "/usr/bin/bwrap",
+  "cleanroom": {
+    "empty": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/empty",
+    "etc": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/etc",
+    "masked": "/tmp/maude-synth-7a6c6c6e422e/_cleanroom-os/masked"
+  },
+  "cwd": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/operator",
+  "environment": {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GOVERNOR_SOCKET": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/governor.sock",
+    "HOME": "/home/operator",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "NO_COLOR": "1",
+    "OPERATOR_PTY_SOCKET": "/run/operator-pty/broker.sock",
+    "PATH": "/usr/bin:/bin",
+    "PIP_CACHE_DIR": "/home/operator/.cache/pip",
+    "PIP_CONFIG_FILE": "/dev/null",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "TERM": "xterm-256color",
+    "TMPDIR": "/home/operator/tmp",
+    "USER": "operator",
+    "XDG_CACHE_HOME": "/home/operator/.cache",
+    "XDG_CONFIG_HOME": "/home/operator/.config",
+    "XDG_DATA_HOME": "/home/operator/.local/share",
+    "XDG_RUNTIME_DIR": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/xdg",
+    "XDG_STATE_HOME": "/home/operator/.local/state"
+  },
+  "forbidden_prefixes": [
+    "/home/jbeck/git/agent_gov_ui",
+    "/tmp/maude-synth-7a6c6c6e422e/install-i06/private-provider-home-operator",
+    "/run/provider-auth"
+  ],
+  "home": "/home/operator",
+  "mounts": [
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/README.md",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/README.md"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/docs",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/docs"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/pyproject.toml",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/pyproject.toml"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/task",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/task"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/media",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/media"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/operator",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/operator"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/work",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/work"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/home",
+      "target": "/home/operator"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/home",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/home"
+    },
+    {
+      "mode": "ro",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/project",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/project"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/venv",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/venv"
+    },
+    {
+      "mode": "rw",
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/xdg",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/xdg"
+    }
+  ],
+  "schema": "maude.synthetic-operator.command-broker-policy.v1",
+  "sockets": [
+    {
+      "source": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/governor.sock",
+      "target": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/governor.sock"
+    },
+    {
+      "source": "/tmp/maude-sock-7a6c6c6e422e/s-c8a82f89962b2bce2b28/broker.sock",
+      "target": "/run/operator-pty/broker.sock"
+    }
+  ]
+}

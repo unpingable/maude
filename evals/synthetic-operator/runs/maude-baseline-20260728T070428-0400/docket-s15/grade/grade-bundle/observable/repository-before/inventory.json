@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "4f5a70e630bb082a946f3efc04ae81e12fae68fc\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "4f5a70e630bb082a946f3efc04ae81e12fae68fc\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "4f5a70e synthetic base fixture\n deploy/worker.yaml | 1 +\n 1 file changed, 1 insertion(+)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 45,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/worker.yaml",
+      "sha256": "fb49847e7f7f28e4c515b80676b7e171f02f1f7564719891e0c84c46bb98b35e"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-7a6c6c6e422e/docket-s15/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

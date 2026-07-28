@@ -1,0 +1,16 @@
+{
+  "base_commit": "",
+  "before_inventory_sha256": "fbca7578f4579eb16a6ad5c5fa4131e72d89f2431c80ec86708fe171d8948c93",
+  "endpoint_mode": "none",
+  "endpoint_socket": null,
+  "installation_root": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation",
+  "installed_distribution_materialized": true,
+  "lab": "/tmp/maude-synth-7a6c6c6e422e/install-i10",
+  "operator": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation/operator",
+  "project_tree_digest_before": "c2ffc29ab04c5dcf672899784139d4582c616ce33529640e430cfb43f76b26a4",
+  "repo": "/tmp/maude-synth-7a6c6c6e422e/install-i10/installation/project",
+  "run_id": "install-i10",
+  "schema": "maude.synthetic-operator.materialization-complete.v1",
+  "setup_transcript_withheld": true,
+  "status": "materialized"
+}

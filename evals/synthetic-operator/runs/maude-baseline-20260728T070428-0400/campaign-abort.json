@@ -1,0 +1,212 @@
+{
+  "schema": "maude.synthetic-operator.campaign-abort.v1",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "recorded_at": "2026-07-28T12:26:12Z",
+  "status": "aborted-independent-grading-incomplete",
+  "frozen_packet": {
+    "commit": "5c0a8652fdfd04ed3dc3c32ab715f4d7d85a88ba",
+    "preparation_base_commit": "631302ff5c690a47eba8c2808044451aecba0bea",
+    "system_under_test_commit": "9d5a54f476a52826379a9ae8d6710551253a6493",
+    "manifest_bytes": 496108,
+    "manifest_sha256": "3899895df52d882e9d573ed8c902b5985ed6a437edada2fa12fed22bad048d8a"
+  },
+  "operator_stage": {
+    "declared_runs": 35,
+    "materialized_runs": 35,
+    "completion_markers": 35,
+    "provider_sessions_started": 35,
+    "unique_provider_session_identities": 35,
+    "completed_unique_provider_session_identities": 35,
+    "fresh_contexts": 35,
+    "coached_sessions": 0,
+    "operator_model_configurations": [
+      {
+        "configuration_id": "openai-sol",
+        "provider": "OpenAI",
+        "model": "gpt-5.6-sol",
+        "reasoning_effort": "low"
+      }
+    ],
+    "coverage": {
+      "maude_scenarios": 20,
+      "direct_runtime_comparators": 5,
+      "installation_scenarios": 10,
+      "all_required_roles_covered": true,
+      "all_required_scenarios_ran": true,
+      "all_required_installation_conditions_covered": true
+    },
+    "retrospective_evaluator_contamination_observed": 10,
+    "source_evaluator_contamination_observed": 8,
+    "runs_with_any_evaluator_contamination_observed": 12,
+    "operator_evidence_structural_verification_errors": []
+  },
+  "grading_stage": {
+    "declared_grades": 35,
+    "provider_sessions_started": 35,
+    "unique_provider_session_identities": 35,
+    "completed_grades": 29,
+    "failed_grades": 6,
+    "all_operator_and_grader_session_identities_unique": true,
+    "operator_grader_session_identity_overlap": false,
+    "grader_model_configurations": [
+      {
+        "configuration_id": "openai-sol",
+        "provider": "OpenAI",
+        "model": "gpt-5.6-sol",
+        "reasoning_effort": "low"
+      }
+    ],
+    "same_model_family_limitation": "Claude was unavailable under the frozen capability probes, so every operator and grader used a distinct fresh Codex session.",
+    "failed_run_ids": [
+      "maude-s11",
+      "install-i01",
+      "install-i04",
+      "install-i05",
+      "install-i07",
+      "install-i10"
+    ],
+    "failed_attempts": [
+      {
+        "run_id": "maude-s11",
+        "provider_thread_id": "019fa8a0-bb9f-7801-a612-8b917d7dd3bb",
+        "failure_stage": "provider-action-roster-validation",
+        "cause": "The grader attempted codex/list_mcp_resources instead of the exact frozen mcp__grader__evidence action roster; the harness failed closed.",
+        "raw_provider_stream": {
+          "path": "maude-s11/grade/raw/grader.stdout.jsonl",
+          "bytes": 281,
+          "sha256": "8a8339d8f596da38a6b73d417a2b6622e1b4425058d72cdeaeafc32ed3ef2d71"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      },
+      {
+        "run_id": "install-i01",
+        "provider_thread_id": "019fa8a7-4959-74f1-9620-d44300d1a6cf",
+        "failure_stage": "provider-action-roster-validation",
+        "cause": "The grader attempted codex/list_mcp_resources instead of the exact frozen mcp__grader__evidence action roster; the harness failed closed.",
+        "raw_provider_stream": {
+          "path": "install-i01/grade/raw/grader.stdout.jsonl",
+          "bytes": 540,
+          "sha256": "32907c4ee7b040ad3ff0d75ad6691a2a3030472d83c495e9c06d0ecf99e09f57"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      },
+      {
+        "run_id": "install-i04",
+        "provider_thread_id": "019fa8a9-bf7b-79f0-bced-67136bba7ac1",
+        "failure_stage": "provider-action-roster-validation",
+        "cause": "The grader attempted codex/list_mcp_resources instead of the exact frozen mcp__grader__evidence action roster; the harness failed closed.",
+        "raw_provider_stream": {
+          "path": "install-i04/grade/raw/grader.stdout.jsonl",
+          "bytes": 540,
+          "sha256": "de0802161886b8e64be0f3b87c398ccc1feac3f615ab35b520d94344da0127cc"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      },
+      {
+        "run_id": "install-i05",
+        "provider_thread_id": "019fa8aa-418f-7ff1-af8c-a698ad9940d1",
+        "failure_stage": "provider-action-roster-validation",
+        "cause": "The grader attempted codex/list_mcp_resources instead of the exact frozen mcp__grader__evidence action roster; the harness failed closed.",
+        "raw_provider_stream": {
+          "path": "install-i05/grade/raw/grader.stdout.jsonl",
+          "bytes": 540,
+          "sha256": "916eb4b3fffd174dd0686012a851488401315af64b67afc2756c0bafba80183d"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      },
+      {
+        "run_id": "install-i07",
+        "provider_thread_id": "019fa8aa-acf5-7633-9850-dc03259aaedd",
+        "failure_stage": "provider-action-roster-validation",
+        "cause": "The grader attempted codex/list_mcp_resources instead of the exact frozen mcp__grader__evidence action roster; the harness failed closed.",
+        "raw_provider_stream": {
+          "path": "install-i07/grade/raw/grader.stdout.jsonl",
+          "bytes": 281,
+          "sha256": "7a87d2b407daafe8f1b557259b9fae8d9df8b586b3f5db7f21223dfa1c4a7e39"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      },
+      {
+        "run_id": "install-i10",
+        "provider_thread_id": "019fa8ac-81f0-7360-9572-db52363de212",
+        "failure_stage": "grade-semantic-safety-validation",
+        "cause": "The source-contaminated grader output supplied a determinate scenario verdict; the frozen validator required the verdict to remain indeterminate and failed closed.",
+        "raw_provider_stream": {
+          "path": "install-i10/grade/raw/grader.stdout.jsonl",
+          "bytes": 120093,
+          "sha256": "3bdf8109af485c7505ac6444cf30d1b87d2ab45b015765f87e2198b6edccf9a0"
+        },
+        "provider_session_started": true,
+        "partial_evidence_preserved": true
+      }
+    ],
+    "retry_policy": {
+      "retry_in_this_campaign_generation_permitted": false,
+      "basis": "The frozen provider policy requires a new campaign generation after any attempted provider session.",
+      "same_generation_retry_performed": false
+    }
+  },
+  "mechanical_verification": {
+    "allow_incomplete_verifier_ok": true,
+    "allow_incomplete_verifier_errors": [],
+    "allow_incomplete_verifier_record": {
+      "path": "evidence-verification.json",
+      "bytes": 14515,
+      "sha256": "635bd742f200663bacda4d7a599109c3f89a9aa25ffb15b171aeea09b1b55c37"
+    },
+    "complete_verifier_ok": false,
+    "complete_verifier_errors": [
+      "maude-s11: independent grade missing",
+      "install-i01: independent grade missing",
+      "install-i04: independent grade missing",
+      "install-i05: independent grade missing",
+      "install-i07: independent grade missing",
+      "install-i10: independent grade missing"
+    ],
+    "complete_verifier_record": {
+      "path": "completeness-verification.json",
+      "bytes": 14791,
+      "sha256": "d81b5233c58a84aa6b48ebcfb58061a4f283349b0de8e52760ab600801561cd2"
+    },
+    "operator_session_identities_observed_by_frozen_verifier": 35,
+    "completed_grade_session_identities_observed_by_frozen_verifier": 29,
+    "raw_failed_grader_session_identities_observed_by_abort_audit": 6,
+    "verifier_failed_attempt_accounting_limitation": "The frozen verifier reports zero preserved failed grader attempts because these raw-only partial grade directories have no accepted grade-complete or attempt-failure marker. Their exact raw streams, invocation metadata, isolation evidence, and provider thread identities remain preserved and are pinned above.",
+    "all_780_frozen_artifact_blobs_match_manifest_byte_counts_and_sha256_in_fresh_checkout": true,
+    "fresh_checkout_repository_checks": {
+      "ruff": "passed",
+      "pytest": "360 passed, 24 skipped"
+    },
+    "packet_checkout_portability_limitation": "The stricter freezer validator reproduced the already recorded Git Unix-mode and original-evidence-path portability limitations; the packet bytes themselves matched exactly."
+  },
+  "disposition": {
+    "counts_toward_campaign_completion": false,
+    "operator_or_ux_verdict_permitted": false,
+    "findings_consolidation_permitted": false,
+    "findings_document_created": false,
+    "successor_generation_required_for_complete_campaign": true,
+    "successor_must_rerun_full_matrix": true,
+    "evidence_splicing_into_a_completion_claim_permitted": false,
+    "raw_completed_operator_evidence_preserved": true,
+    "completed_independent_grades_preserved": true,
+    "partial_failed_grader_evidence_preserved": true,
+    "all_inconvenient_or_contaminated_runs_preserved": true
+  },
+  "scope": {
+    "product_behavior_modified": false,
+    "operator_documentation_repaired": false,
+    "governance_or_oq7_state_changed": false,
+    "roadmap_status_changed": false,
+    "external_operational_side_effects": false,
+    "task_level_network_access": false,
+    "provider_network_used_only_for_fresh_synthetic_sessions": true,
+    "production_credentials_or_systems_used": false,
+    "pushed": false,
+    "authority_effect": "none"
+  }
+}

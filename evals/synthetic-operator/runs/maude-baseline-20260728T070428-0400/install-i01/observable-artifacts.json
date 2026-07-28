@@ -1,0 +1,175 @@
+{
+  "artifacts": [
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/endpoint-after.json",
+      "sha256": "26ef922260ed4817886874d7fb0bb2125fc155da1b7370238858ee1d58faf6b7"
+    },
+    {
+      "bytes": 199,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/endpoint-before.json",
+      "sha256": "26ef922260ed4817886874d7fb0bb2125fc155da1b7370238858ee1d58faf6b7"
+    },
+    {
+      "bytes": 322479,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/installation-after/state.json",
+      "sha256": "aa2cc340661b7416a3aca1fb3df12c5e1766190279b6a72485527a0a62e05be0"
+    },
+    {
+      "bytes": 8144,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/installation-before/state.json",
+      "sha256": "545693500ff2e50d2b2b51cb7a058e043a0cc51ac4c69bcf3ac92a05ae964f32"
+    },
+    {
+      "bytes": 48,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "observable/operator-generated/files/home/.rustup/settings.toml",
+      "sha256": "4a90a5bdb96e92a6e13340af6699933a6d19d8a897fb82c571fc6b2bf1e09411"
+    },
+    {
+      "bytes": 2989,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-generated/files/home/initial-disposition.md",
+      "sha256": "73249292342039509a05f63ab9ee8bcc26c677c08e6c95f0c6e3bf59ed8e23c8"
+    },
+    {
+      "bytes": 679611,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-generated/inventory.json",
+      "sha256": "6000089f52e3eca49ba4fd7f2e38895f7f5f52358d026e6e8860c8eb2028d706"
+    },
+    {
+      "bytes": 12981,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/README.md",
+      "sha256": "bc9ba627b80fc18091fa0a8cb7d710411ff11eacd20598d31565b5915506b71a"
+    },
+    {
+      "bytes": 1938,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/README.md",
+      "sha256": "04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e"
+    },
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 32867,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/operator/operator-pty",
+      "sha256": "ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e"
+    },
+    {
+      "bytes": 2397,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/operator/operator-retrospective",
+      "sha256": "5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0"
+    },
+    {
+      "bytes": 817,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/pyproject.toml",
+      "sha256": "a19c6ebfa7268430d2ca1a5063cd5456f796c93f2a4940584b99e22156df7d59"
+    },
+    {
+      "bytes": 1419,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/assignment.md",
+      "sha256": "ea33b9e015f88099a84728d729fa1dd178031b1f97b87e017f659da3e9d76bb0"
+    },
+    {
+      "bytes": 235,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/handoff.json",
+      "sha256": "3b9c42e0d19da84f6b316de527144704b88c056904e34171a507004cea76b239"
+    },
+    {
+      "bytes": 1540,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/files/task/task.json",
+      "sha256": "c28a5559c1f656531657b023b46b87a76b9607070c149e60326f702d46a915d4"
+    },
+    {
+      "bytes": 2749,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/operator-supplied/inventory.json",
+      "sha256": "24ed16570752dab62e344b4a37c187b4ba02df60b0fc73d8ff86add51d22fdf7"
+    },
+    {
+      "bytes": 2989,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "observable/retrospective/initial-disposition.md",
+      "sha256": "73249292342039509a05f63ab9ee8bcc26c677c08e6c95f0c6e3bf59ed8e23c8"
+    },
+    {
+      "bytes": 2155,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "observable/retrospective/separation.json",
+      "sha256": "a61a33790c09fa9f68284f5ff58129982f7fd76f0c29cb3bf8c592007172d83d"
+    },
+    {
+      "bytes": 3609,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-prompt.md",
+      "sha256": "96f7319130145edb227c477ffa01f63a4ee027f8c43a2a2896274cb7e5e2b309"
+    },
+    {
+      "bytes": 1799,
+      "media_type": "text/markdown",
+      "mode": "0644",
+      "path": "operator-system-prompt.md",
+      "sha256": "a00d443bf5b39ed058c70056c91bc380f0f67b6db3af835ccec8cdfc653f2c0b"
+    },
+    {
+      "bytes": 3354,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "supplied-inputs.json",
+      "sha256": "6b567a87d77823ddde919dcc3c3751fcecf20c32012e6cd1bdaddffde0245b8b"
+    },
+    {
+      "bytes": 61642,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "transcript.txt",
+      "sha256": "42b3b0363ab6b8d678b9a89f35498e5fe853b56549b600c91c14e15dcead5523"
+    }
+  ],
+  "private_runtime_rpc_or_state_included": false,
+  "run_id": "install-i01",
+  "schema": "maude.synthetic-operator.observable-artifact-index.v1"
+}

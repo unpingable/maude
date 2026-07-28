@@ -1,0 +1,9 @@
+{
+  "completed_at": "2026-07-28T11:40:24Z",
+  "observable_artifacts_sha256": "95246d4a273e7284eb44311c06f536a1f6fd8480b27ba6577ac56324cdae5372",
+  "process_returncode": 0,
+  "run_id": "install-i10",
+  "schema": "maude.synthetic-operator.operator-complete.v1",
+  "timed_out": false,
+  "transcript_sha256": "ba4a5968871c73aaa4850d7d6ed9d236fc01b4dc93a413e0398de674ebdfe67f"
+}

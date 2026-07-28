@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/config/payments.env b/config/payments.env\nindex 7df5664..85a1678 100644\n--- a/config/payments.env\n+++ b/config/payments.env\n@@ -1,2 +1,2 @@\n-PAYMENTS_CONFIG_REF=config/payments/v18\n+PAYMENTS_CONFIG_REF=config/payments/v19\n LOG_LEVEL=info\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "23fc28658cc5c9a11ce456ead31a1ae7a7550900\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M config/payments.env\n"
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 55,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "config/payments.env",
+      "sha256": "3a410e63dc259524665901343f18a77f24b0ee03537e44581d52f9ab5d5d34cf"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

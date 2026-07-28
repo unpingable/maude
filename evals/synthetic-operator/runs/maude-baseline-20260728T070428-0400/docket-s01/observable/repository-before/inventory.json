@@ -1,0 +1,94 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "a2d8541360fa7d50dbb3486b8e568b69128ef1b1\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "a2d8541360fa7d50dbb3486b8e568b69128ef1b1\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "a2d8541 synthetic base fixture\n clusters/store-17/apps/menu/deployment.yaml | 10 ++++++++++\n clusters/store-17/kustomization.yaml        |  4 ++++\n 2 files changed, 14 insertions(+)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 192,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "clusters/store-17/apps/menu/deployment.yaml",
+      "sha256": "1aa21ca0fe182f033ca285d08ef5444abc236268f2cbc540ad1c0e6a5ffa4d8b"
+    },
+    {
+      "bytes": 105,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "clusters/store-17/kustomization.yaml",
+      "sha256": "88d350904dd55032b3300991ba393744244f5640f279c194e414b6777556aeab"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-7a6c6c6e422e/docket-s01/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

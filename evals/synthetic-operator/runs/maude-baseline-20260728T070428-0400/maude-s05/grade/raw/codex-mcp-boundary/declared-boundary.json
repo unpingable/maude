@@ -1,0 +1,60 @@
+{
+  "allowed_tools": [
+    "mcp__grader__evidence"
+  ],
+  "bridge_sha256": "bdcd2daa927e382ff3e9a82d9c2feaf384a0d157f255ffa4c9af6688a2e021b2",
+  "built_in_tools": [],
+  "codex_approval_argv": [
+    "--config",
+    "approval_policy=\"never\""
+  ],
+  "codex_approval_config_override": "approval_policy=\"never\"",
+  "codex_approval_policy": "never",
+  "codex_mcp_approval_config_override": "mcp_servers.grader.default_tools_approval_mode=\"approve\"",
+  "codex_mcp_default_tools_approval_mode": "approve",
+  "command_broker": null,
+  "external_network_available_to_command": false,
+  "external_network_available_to_proxy_or_command": true,
+  "host_source_mounted_in_proxy_or_command": false,
+  "label": "maude-s05-grader-f51f031edd",
+  "mcp_config_sha256": "38d3b242f7b3e6970a8ce6cd952a4262bc57d68bf1b1bc77fb7180ec4771b79f",
+  "mcp_protocol_version": "2025-06-18",
+  "mcp_server": "grader",
+  "mcp_tool_approval_safety_basis": {
+    "exact_enabled_tool_count": 1,
+    "grader_evidence_tool_read_only": true,
+    "mcp_config_hash_pinned": true,
+    "operator_terminal_bounded_by_frozen_broker": false,
+    "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+    "single_enabled_mcp_tool": "evidence"
+  },
+  "mode": "grader",
+  "noninteractive_approval_safety_basis": {
+    "grader_evidence_tool_read_only": true,
+    "intrinsic_action_features_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "operator_terminal_bounded_by_frozen_broker": false,
+    "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+    "single_enabled_mcp_tool": "evidence"
+  },
+  "provider_auth_mounted_in_command": false,
+  "provider_auth_mounted_in_proxy_or_command": true,
+  "provider_auth_visible_to_trusted_stdio_shim": true,
+  "provider_config": "openai-sol",
+  "provider_transport_outside_task_sandbox": true,
+  "proxy_bwrap_argv": [],
+  "proxy_ready": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/private-claude-mcp-maude-s05-grader-f51f031edd/codex-proxy-state/proxy-ready.json",
+  "proxy_trace": "/tmp/maude-synth-7a6c6c6e422e/maude-s05/private-claude-mcp-maude-s05-grader-f51f031edd/codex-proxy-state/proxy-trace.jsonl",
+  "pty_broker": null,
+  "schema": "maude.synthetic-operator.codex-strict-mcp-boundary.v1",
+  "trusted_stdio_shim_reads_provider_auth": false,
+  "unix_socket_contract": {
+    "command_socket_host": null,
+    "command_socket_host_bytes": null,
+    "command_socket_proxy": null,
+    "path_budget_bytes": 100,
+    "private_arena_root": "/tmp/maude-sock-7a6c6c6e422e"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "governor_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/run/governor.sock",
+  "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/venv",
+  "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/venv/bin/maude",
+  "service_owner": "synthetic-platform-team",
+  "settings_file": "/tmp/maude-synth-7a6c6c6e422e/install-i06/installation/config/settings.env"
+}

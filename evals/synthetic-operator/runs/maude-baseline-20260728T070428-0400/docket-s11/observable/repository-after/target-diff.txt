@@ -1,0 +1,7 @@
+diff --git a/apps/menu/deployment.yaml b/apps/menu/deployment.yaml
+index b9b6258..7f86196 100644
+--- a/apps/menu/deployment.yaml
++++ b/apps/menu/deployment.yaml
+@@ -1 +1 @@
+-image: registry.example.invalid/menu-api:2.7.3
++image: registry.example.invalid/menu-api:2.7.4

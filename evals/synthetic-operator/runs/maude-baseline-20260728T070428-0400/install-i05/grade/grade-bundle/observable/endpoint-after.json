@@ -1,0 +1,9 @@
+{
+  "exists": true,
+  "gid": 1000,
+  "is_socket": true,
+  "is_symlink": false,
+  "mode": "0000",
+  "path": "/tmp/maude-synth-7a6c6c6e422e/install-i05/installation/run/governor.sock",
+  "uid": 1000
+}

@@ -1,0 +1,19 @@
+{
+  "taxonomy_id": "maude-synthetic-failure-taxonomy-v1",
+  "authority_effect": "none",
+  "classes": [
+    "missing capability",
+    "command discoverability failure",
+    "terminology failure",
+    "state presentation failure",
+    "authority-boundary confusion",
+    "evidence presentation failure",
+    "unsafe affordance",
+    "excessive ceremony",
+    "documentation defect",
+    "protocol/runtime defect",
+    "model-specific operator failure",
+    "scenario ambiguity",
+    "evaluator contamination"
+  ]
+}

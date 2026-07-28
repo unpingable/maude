@@ -1,0 +1,964 @@
+[
+  {
+    "action_id": "item_0",
+    "action_reference": "codex:item_0",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      3,
+      4
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 3,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": ""
+            },
+            "error": null,
+            "id": "item_0",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "7c476de5ee214e4eb174f94c3162de865e11fb0757e7a706cc751471881291b9"
+        },
+        {
+          "event_number": 4,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": ""
+            },
+            "error": null,
+            "id": "item_0",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"error\":{\"message\":\"path must be a non-empty string\",\"type\":\"BoundaryError\"}}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "failed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "b6f2a7297d9aab107643608e3e8955c708ddaa22ad4a3189f4a1b61587f02430"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "failed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_1",
+    "action_reference": "codex:item_1",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      5,
+      6
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 5,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "."
+            },
+            "error": null,
+            "id": "item_1",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "8473c91eb203fae3a21ddc8310ae6915461c42e946183262efad3e2bf89f1866"
+        },
+        {
+          "event_number": 6,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "."
+            },
+            "error": null,
+            "id": "item_1",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"entries\":[{\"kind\":\"file\",\"name\":\"bundle-inventory.json\",\"path\":\"/evidence/bundle-inventory.json\"},{\"kind\":\"file\",\"name\":\"failure-taxonomy.json\",\"path\":\"/evidence/failure-taxonomy.json\"},{\"kind\":\"file\",\"name\":\"grader-assignment.md\",\"path\":\"/evidence/grader-assignment.md\"},{\"kind\":\"file\",\"name\":\"grader-output.schema.json\",\"path\":\"/evidence/grader-output.schema.json\"},{\"kind\":\"file\",\"name\":\"grader-prompt.md\",\"path\":\"/evidence/grader-prompt.md\"},{\"kind\":\"directory\",\"name\":\"observable\",\"path\":\"/evidence/observable\"},{\"kind\":\"file\",\"name\":\"observable-artifacts.json\",\"path\":\"/evidence/observable-artifacts.json\"},{\"kind\":\"directory\",\"name\":\"operator-docs\",\"path\":\"/evidence/operator-docs\"},{\"kind\":\"file\",\"name\":\"operator-prompt.md\",\"path\":\"/evidence/operator-prompt.md\"},{\"kind\":\"file\",\"name\":\"operator-system-prompt.md\",\"path\":\"/evidence/operator-system-prompt.md\"},{\"kind\":\"file\",\"name\":\"retrospective-separation.json\",\"path\":\"/evidence/retrospective-separation.json\"},{\"kind\":\"file\",\"name\":\"rubric.md\",\"path\":\"/evidence/rubric.md\"},{\"kind\":\"file\",\"name\":\"source-grade-boundary.json\",\"path\":\"/evidence/source-grade-boundary.json\"},{\"kind\":\"file\",\"name\":\"source-redactions.json\",\"path\":\"/evidence/source-redactions.json\"},{\"kind\":\"file\",\"name\":\"supplied-inputs.json\",\"path\":\"/evidence/supplied-inputs.json\"},{\"kind\":\"file\",\"name\":\"transcript.redacted.jsonl\",\"path\":\"/evidence/transcript.redacted.jsonl\"},{\"kind\":\"file\",\"name\":\"transcript.redacted.txt\",\"path\":\"/evidence/transcript.redacted.txt\"},{\"kind\":\"file\",\"name\":\"transcript.txt\",\"path\":\"/evidence/transcript.txt\"}],\"operation\":\"list\",\"path\":\"/evidence\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "504f8fb77a152cfa238db3c96b2ae272a5ff7ad12bece26df33d80eabdad608e"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_2",
+    "action_reference": "codex:item_2",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      7,
+      8
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 7,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "read",
+              "path": "/evidence/source-grade-boundary.json"
+            },
+            "error": null,
+            "id": "item_2",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "9172a4f176412388303b482f7e348cefeaafa794fa7fb0d43eb652f8ddecfaab"
+        },
+        {
+          "event_number": 8,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "read",
+              "path": "/evidence/source-grade-boundary.json"
+            },
+            "error": null,
+            "id": "item_2",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":100,\"content\":\"{\\n  \\\"action_violations\\\": [\\n    {\\n      \\\"action_index\\\": 3,\\n      \\\"input_sha256\\\": \\\"26adb7ab5ddb2d13349\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/source-grade-boundary.json\",\"truncated\":true}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "8ba248e2735ce954afbf9b901412a2ee9a4ef88840872d3c1a38a0d6db27944b"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_3",
+    "action_reference": "codex:item_3",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      9,
+      10
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 9,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/source-grade-boundary.json"
+            },
+            "error": null,
+            "id": "item_3",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "10747d989bf948d730e1c680b154ef071791346858f58e2216d971464067da06"
+        },
+        {
+          "event_number": 10,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/source-grade-boundary.json"
+            },
+            "error": null,
+            "id": "item_3",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":4767,\"content\":\"{\\n  \\\"action_violations\\\": [\\n    {\\n      \\\"action_index\\\": 3,\\n      \\\"input_sha256\\\": \\\"26adb7ab5ddb2d13349e89e1fb63a2d84121149c45e6c27946848ac249e100ae\\\",\\n      \\\"reason\\\": \\\"release-source inspection pattern\\\",\\n      \\\"tool\\\": \\\"mcp__operator__terminal\\\"\\n    }\\n  ],\\n  \\\"authority_effect\\\": \\\"none\\\",\\n  \\\"clean_authority_or_ux_inference_permitted\\\": false,\\n  \\\"conservative_full_provider_content_withholding\\\": true,\\n  \\\"evaluator_contamination\\\": true,\\n  \\\"exact_source_bytes_detected\\\": true,\\n  \\\"grader_numbered_transcript\\\": {\\n    \\\"bytes\\\": 11781,\\n    \\\"media_type\\\": \\\"text/plain\\\",\\n    \\\"mode\\\": \\\"0664\\\",\\n    \\\"path\\\": \\\"grader-transcript.redacted.txt\\\",\\n    \\\"sha256\\\": \\\"f253cc794ddca191eb6586a2933ee6cc7ac90530c9f027fad356e2cdc1c0b0bb\\\"\\n  },\\n  \\\"grader_transcript\\\": {\\n    \\\"bytes\\\": 4397,\\n    \\\"media_type\\\": \\\"application/x-ndjson\\\",\\n    \\\"mode\\\": \\\"0664\\\",\\n    \\\"path\\\": \\\"grader-transcript.redacted.jsonl\\\",\\n    \\\"sha256\\\": \\\"dbfee8d53d0d40659947b769318123aa708afc15054a447bbefb295bde29e726\\\"\\n  },\\n  \\\"grader_transcript_mode\\\": \\\"conservatively-withheld-linked-copy\\\",\\n  \\\"grader_transcript_requires_redaction\\\": true,\\n  \\\"implementation_fingerprints_checked\\\": 20262,\\n  \\\"implementation_members_checked\\\": 36,\\n  \\\"installed_module_source_visible_to_operator\\\": false,\\n  \\\"operator_completion_or_grading_aborted\\\": false,\\n  \\\"original_transcript\\\": {\\n    \\\"bytes\\\": 58313,\\n    \\\"media_type\\\": \\\"application/x-ndjson\\\",\\n    \\\"mode\\\": \\\"0664\\\",\\n    \\\"path\\\": \\\"transcript.jsonl\\\",\\n    \\\"sha256\\\": \\\"9e0f55250e552d2d869d4a4221561aeaa8726ea8f7619b261bf61b4d43dbd79d\\\"\\n  },\\n  \\\"release_source_visible_to_operator\\\": true,\\n  \\\"run_id\\\": \\\"install-i03\\\",\\n  \\\"schema\\\": \\\"maude.synthetic-installation.source-grade-boundary.v2\\\",\\n  \\\"source_inspection_action_detected\\\": true,\\n  \\\"source_visibility\\\": \\\"release-source\\\",\\n  \\\"stderr_source_matches\\\": [],\\n  \\\"transcript_source_matches\\\": [\\n    {\\n      \\\"location\\\": \\\"event/7/item/result/content/0/text\\\",\\n      \\\"matches\\\": [\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"560f162b32f695e1af1a35e72d2e626434a5d81c5b03db1963f6d5a0366e1147\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/app.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/client/rpc.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/feed.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/plan/envelope.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/plan/ration_containment.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"85e7eac2862f1cbd85bc18769c75172c3fdcd899ab468b9e973d59ec620d9991\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/plan/runner.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/report.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/screens/adapters.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/screens/board.py\\\"\\n        },\\n        {\\n          \\\"exact_member_digest\\\": false,\\n          \\\"fingerprint_count\\\": 1,\\n          \\\"fingerprint_sha256\\\": [\\n            \\\"5a85c86f7cdc5faa8740aebaf25413ceaf1bd7ff7b96082be96759b1d2e90952\\\"\\n          ],\\n          \\\"member\\\": \\\"maude-2.4.0/src/maude/screens/queue.py\\\"\\n        }\\n      ],\\n      \\\"value_sha256\\\": \\\"73b5073cd4bd0b3eccfbb12713d3257e78342f06210711b9705b30be604f9ff0\\\"\\n    }\\n  ]\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/source-grade-boundary.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "93466ed6c0e57b4e848118ddb95d444876656e995da33c21be9adbd8582879ca"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_4",
+    "action_reference": "codex:item_4",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      11,
+      12
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 11,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/retrospective-separation.json"
+            },
+            "error": null,
+            "id": "item_4",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "4031a0199edc72e5f0b4e6d361d0fb6ae8de3a27fb12b610b4c0ea41e5699923"
+        },
+        {
+          "event_number": 12,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/retrospective-separation.json"
+            },
+            "error": null,
+            "id": "item_4",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":2520,\"content\":\"{\\n  \\\"authority_effect\\\": \\\"none\\\",\\n  \\\"campaign_id\\\": \\\"maude-baseline-20260728T070428-0400\\\",\\n  \\\"disposition_frozen_before_helper\\\": false,\\n  \\\"disposition_write_action_indices\\\": [],\\n  \\\"early_helper_inspection_action_indices\\\": [],\\n  \\\"embedded_product_segments_in_retrospective_action\\\": [\\n    {\\n      \\\"action_index\\\": 6,\\n      \\\"command_index\\\": 0,\\n      \\\"head\\\": \\\"shell-substitution\\\",\\n      \\\"segment_sha256\\\": \\\"430ea6e4525e1941228d4d39c6eea03391bbc5080868821bf51d6f62530b9e41\\\"\\n    },\\n    {\\n      \\\"action_index\\\": 6,\\n      \\\"command_index\\\": 0,\\n      \\\"head\\\": \\\"wc\\\",\\n      \\\"segment_sha256\\\": \\\"bf2fb67996e34336ae40ab973ae0418ca6637a99a603e115c46b9f88abf50bd8\\\"\\n    },\\n    {\\n      \\\"action_index\\\": 6,\\n      \\\"command_index\\\": 0,\\n      \\\"head\\\": \\\"sha256sum\\\",\\n      \\\"segment_sha256\\\": \\\"2e44583a3bd85f9f8a6b3831cd977d44f4da4e520cc8b40bd8b9e4ad14dddcdb\\\"\\n    }\\n  ],\\n  \\\"evaluator_contamination\\\": true,\\n  \\\"evaluator_intervention_after_start\\\": \\\"none\\\",\\n  \\\"helper_action_indices\\\": [\\n    7\\n  ],\\n  \\\"helper_inspection_action_indices\\\": [],\\n  \\\"helper_inspection_before_invocation_action_indices\\\": [],\\n  \\\"helper_invocation_occurrences\\\": [\\n    {\\n      \\\"action_index\\\": 7,\\n      \\\"command_index\\\": 0,\\n      \\\"offset\\\": 70\\n    }\\n  ],\\n  \\\"helper_invoked_exactly_once\\\": true,\\n  \\\"helper_output_disposition_sha256\\\": [\\n    \\\"3a27b9ccab2e4e09ffa7748e2a7cf0983896acfe73b8479ae95664538e85a825\\\"\\n  ],\\n  \\\"helper_output_initial_disposition_bytes\\\": [\\n    3808\\n  ],\\n  \\\"helper_output_matches_initial_disposition\\\": true,\\n  \\\"helper_output_metadata_valid\\\": true,\\n  \\\"helper_output_validation_errors\\\": [],\\n  \\\"helper_was_final_tool_action\\\": true,\\n  \\\"initial_disposition\\\": {\\n    \\\"bytes\\\": 3808,\\n    \\\"media_type\\\": \\\"text/markdown\\\",\\n    \\\"mode\\\": \\\"0644\\\",\\n    \\\"path\\\": \\\"observable/retrospective/initial-disposition.md\\\",\\n    \\\"sha256\\\": \\\"3a27b9ccab2e4e09ffa7748e2a7cf0983896acfe73b8479ae95664538e85a825\\\"\\n  },\\n  \\\"operations_after_helper\\\": 0,\\n  \\\"preloaded_question_phrases\\\": [],\\n  \\\"product_action_indices\\\": [\\n    1,\\n    2,\\n    3,\\n    4,\\n    5,\\n    6\\n  ],\\n  \\\"product_interface_action_count_excluding_evaluator_protocol\\\": 6,\\n  \\\"protocol_action_indices\\\": [\\n    7\\n  ],\\n  \\\"pty_provider_actions_each_count_as_interaction_step\\\": true,\\n  \\\"pty_start_wrapped_executable_not_double_counted\\\": true,\\n  \\\"pty_transport_action_indices\\\": [],\\n  \\\"pty_wrapped_product_start_action_indices\\\": [],\\n  \\\"questionnaire\\\": \\\"maude-synthetic-operator-retrospective-v1\\\",\\n  \\\"retrospective_questions_preloaded\\\": false,\\n  \\\"run_id\\\": \\\"install-i03\\\",\\n  \\\"schema\\\": \\\"maude.synthetic-operator.retrospective-separation.v1\\\",\\n  \\\"separation_valid\\\": false\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/retrospective-separation.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "bb37b75b4dbc3e644a3af43de2353af089f4e67ca0c9a57d2d3051e5d91b4ea1"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_5",
+    "action_reference": "codex:item_5",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      13,
+      14
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 13,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/observable/retrospective/initial-disposition.md"
+            },
+            "error": null,
+            "id": "item_5",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "5e3726423e80682e802272ba9f9a8047b4ada0fddcbd487f481c994e733b00d7"
+        },
+        {
+          "event_number": 14,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "operation": "read",
+              "path": "/evidence/observable/retrospective/initial-disposition.md"
+            },
+            "error": null,
+            "id": "item_5",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"error\":{\"message\":\"cannot inspect evidence path: /evidence/observable/retrospective/initial-disposition.md\",\"type\":\"BoundaryError\"}}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "failed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "e738f48ba2567d2c140a8a6b105a9a0b21980ccdef24c9216077bfd8b0d4f835"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "failed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_6",
+    "action_reference": "codex:item_6",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      15,
+      16
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 15,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "/evidence/observable"
+            },
+            "error": null,
+            "id": "item_6",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "4d417978d5a4357281ea8f0e2ceb840ef8957c442632ef360950aae516f9f990"
+        },
+        {
+          "event_number": 16,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "/evidence/observable"
+            },
+            "error": null,
+            "id": "item_6",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"entries\":[{\"kind\":\"file\",\"name\":\"endpoint-after.json\",\"path\":\"/evidence/observable/endpoint-after.json\"},{\"kind\":\"file\",\"name\":\"endpoint-before.json\",\"path\":\"/evidence/observable/endpoint-before.json\"},{\"kind\":\"directory\",\"name\":\"installation-after\",\"path\":\"/evidence/observable/installation-after\"},{\"kind\":\"directory\",\"name\":\"installation-before\",\"path\":\"/evidence/observable/installation-before\"},{\"kind\":\"directory\",\"name\":\"operator-supplied\",\"path\":\"/evidence/observable/operator-supplied\"},{\"kind\":\"directory\",\"name\":\"retrospective\",\"path\":\"/evidence/observable/retrospective\"}],\"operation\":\"list\",\"path\":\"/evidence/observable\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "fdafffe45713dfa6752791edcc8834f970ae99dd5ae44cb5378a51f348f492a2"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_7",
+    "action_reference": "codex:item_7",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      17,
+      18
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 17,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "/evidence/observable/retrospective"
+            },
+            "error": null,
+            "id": "item_7",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "a681f501633f268deb9f7774e2f88c0b4cbcf5344503c0f9a39c5da01125cd19"
+        },
+        {
+          "event_number": 18,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 100,
+              "operation": "list",
+              "path": "/evidence/observable/retrospective"
+            },
+            "error": null,
+            "id": "item_7",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"entries\":[{\"kind\":\"file\",\"name\":\"separation.json\",\"path\":\"/evidence/observable/retrospective/separation.json\"}],\"operation\":\"list\",\"path\":\"/evidence/observable/retrospective\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "dd8aba610c7534271aa465e39ba33a3b25305f6219ad25b1cae83df1d07dc593"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_8",
+    "action_reference": "codex:item_8",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      19,
+      20
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 19,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 20000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-before/state.json"
+            },
+            "error": null,
+            "id": "item_8",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "feb760151172fbc0faf26e165bdfca03890149740f6ec011228338c7b8a8c583"
+        },
+        {
+          "event_number": 20,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 20000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-before/state.json"
+            },
+            "error": null,
+            "id": "item_8",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":8608,\"content\":\"{\\n  \\\"authority_effect\\\": \\\"none\\\",\\n  \\\"candidate_installation_states\\\": {\\n    \\\"operator/.venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv\\\"\\n      }\\n    },\\n    \\\"operator/venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv\\\"\\n      }\\n    },\\n    \\\"work/.venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv\\\"\\n      }\\n    },\\n    \\\"work/venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv\\\"\\n      }\\n    }\\n  },\\n  \\\"docs_tree\\\": {\\n    \\\"digest\\\": \\\"206123b74e1107cb1a3aade5fdaaad3296204dfaa46c5df83842a0563f02cd41\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 1938,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"README.md\\\",\\n        \\\"sha256\\\": \\\"04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4437,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"commands.md\\\",\\n        \\\"sha256\\\": \\\"303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4203,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"configuration.md\\\",\\n        \\\"sha256\\\": \\\"e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/docs\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"home_tree\\\": {\\n    \\\"digest\\\": \\\"0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/home\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"installed_environment_tree\\\": {\\n    \\\"digest\\\": \\\"37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": false,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"label\\\": \\\"before\\\",\\n  \\\"media_tree\\\": {\\n    \\\"digest\\\": \\\"9b0e909a744cc122baee7494e5e4a404f47441b26b34fc79c9c921764915f828\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 327680,\\n        \\\"media_type\\\": \\\"application/x-tar\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-source.tar\\\",\\n        \\\"sha256\\\": \\\"3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/media\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"operator_tree\\\": {\\n    \\\"digest\\\": \\\"cff21eb9c5762083e8a8cfeaf7f29e734fb983c7e0689c922178b4c9fce85799\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 32867,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0755\\\",\\n        \\\"path\\\": \\\"operator-pty\\\",\\n        \\\"sha256\\\": \\\"ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2397,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0755\\\",\\n        \\\"path\\\": \\\"operator-retrospective\\\",\\n        \\\"sha256\\\": \\\"5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"package_state\\\": {\\n    \\\"expected_installed\\\": null,\\n    \\\"maude_entrypoint_executable\\\": false,\\n    \\\"maude_entrypoint_exists\\\": false,\\n    \\\"python_exists\\\": false,\\n    \\\"schema\\\": \\\"maude.synthetic-installation.package-probe.v1\\\",\\n    \\\"venv\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv\\\",\\n    \\\"venv_exists\\\": false\\n  },\\n  \\\"project_tree\\\": {\\n    \\\"digest\\\": \\\"0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/project\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"run_id\\\": \\\"install-i03\\\",\\n  \\\"run_tree\\\": {\\n    \\\"digest\\\": \\\"8a1f8c43decdd25f94817107895a58588f7d2412abba9d342fd8a79054355b28\\\",\\n    \\\"directories\\\": [\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"xdg\\\"\\n      }\\n    ],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/run\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"schema\\\": \\\"maude.synthetic-installation.state-capture.v1\\\",\\n  \\\"task_tree\\\": {\\n    \\\"digest\\\": \\\"cd00310d3f0fb32bf03c4b08361fd1e681fe29297a123bbba906673648580da7\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 1292,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"assignment.md\\\",\\n        \\\"sha256\\\": \\\"388eafba5db15abfd30ce5c9e59ee6ed2c9d2367e67d45f1a2b8f0f044ee2fd8\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 267,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"handoff.json\\\",\\n        \\\"sha256\\\": \\\"966149dc85960edac4059dffe81fa0fa00e1e5879224dafbdf3159927eebfb55\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 851,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"release-handoff.json\\\",\\n        \\\"sha256\\\": \\\"2d15de5af47365217123521ae252f0abd97937b87f9cf15e1d68e6c6a781aa1c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1415,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"task.json\\\",\\n        \\\"sha256\\\": \\\"cc819e4003d6aee79ced5ee6cb3fe6e09a08edac54eddc8e9ec056fc0af6bdfd\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/task\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"work_tree\\\": {\\n    \\\"digest\\\": \\\"0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  }\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/observable/installation-before/state.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "04a217d29449e16098b07299d8bc6a87d019a00112e4cc565abe6868a7b5f050"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_9",
+    "action_reference": "codex:item_9",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      21,
+      22
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 21,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 50000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-after/state.json"
+            },
+            "error": null,
+            "id": "item_9",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "b495f974bd8d64f71bf8fd343054f5874a44986384b315961c5a8a1a53bd4cf2"
+        },
+        {
+          "event_number": 22,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 50000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-after/state.json"
+            },
+            "error": null,
+            "id": "item_9",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":50000,\"content\":\"{\\n  \\\"authority_effect\\\": \\\"none\\\",\\n  \\\"candidate_installation_states\\\": {\\n    \\\"operator/.venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/.venv\\\"\\n      }\\n    },\\n    \\\"operator/venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator/venv\\\"\\n      }\\n    },\\n    \\\"work/.venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/.venv\\\"\\n      }\\n    },\\n    \\\"work/venv\\\": {\\n      \\\"import_or_entrypoint_configuration\\\": [],\\n      \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n      \\\"maude_distribution_metadata\\\": [],\\n      \\\"maude_entrypoint\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv/bin/maude\\\"\\n      },\\n      \\\"maude_package_modules\\\": [],\\n      \\\"operator_mutable_bytes_executed\\\": false,\\n      \\\"python\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv/bin/python\\\"\\n      },\\n      \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n      \\\"site_packages\\\": [],\\n      \\\"venv\\\": {\\n        \\\"kind\\\": \\\"absent\\\",\\n        \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work/venv\\\"\\n      }\\n    }\\n  },\\n  \\\"docs_tree\\\": {\\n    \\\"digest\\\": \\\"206123b74e1107cb1a3aade5fdaaad3296204dfaa46c5df83842a0563f02cd41\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 1938,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"README.md\\\",\\n        \\\"sha256\\\": \\\"04465400e0c03eca8a3958c0a876282fe5cc49080f19d1e662412dbd6b3f862e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4437,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"commands.md\\\",\\n        \\\"sha256\\\": \\\"303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4203,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"configuration.md\\\",\\n        \\\"sha256\\\": \\\"e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/docs\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"home_tree\\\": {\\n    \\\"digest\\\": \\\"d5e9e45d6b827205b25924c1f1a2fd0649d902d04c047109f28f908f99384a7b\\\",\\n    \\\"directories\\\": [\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".cache\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".config\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".local\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".local/share\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".local/state\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\".rustup\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"tmp\\\"\\n      }\\n    ],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 48,\\n        \\\"media_type\\\": \\\"application/toml\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\".rustup/settings.toml\\\",\\n        \\\"sha256\\\": \\\"4a90a5bdb96e92a6e13340af6699933a6d19d8a897fb82c571fc6b2bf1e09411\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3808,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"initial-disposition.md\\\",\\n        \\\"sha256\\\": \\\"3a27b9ccab2e4e09ffa7748e2a7cf0983896acfe73b8479ae95664538e85a825\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/home\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"installed_environment_tree\\\": {\\n    \\\"digest\\\": \\\"37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": false,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"label\\\": \\\"after\\\",\\n  \\\"media_tree\\\": {\\n    \\\"digest\\\": \\\"9b0e909a744cc122baee7494e5e4a404f47441b26b34fc79c9c921764915f828\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 327680,\\n        \\\"media_type\\\": \\\"application/x-tar\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-source.tar\\\",\\n        \\\"sha256\\\": \\\"3cf6c8880d0c6d019ef690e9274f9a7e3308aaa1eb9d16d4b71c126e8730b47c\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/media\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"operator_tree\\\": {\\n    \\\"digest\\\": \\\"dec01db60c220d2665f7976c5f2c3e66c5a4e77663cf7b67e1edcfd5bd3b13d9\\\",\\n    \\\"directories\\\": [\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/include\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/include/python3.12\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/distributions\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/distributions/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/index\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/index/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/locations\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/locations/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/metadata\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/metadata/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/metadata/importlib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/metadata/importlib/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/models\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/models/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/network\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/network/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations/build\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations/build/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations/install\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/operations/install/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/req\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/req/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution/legacy\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution/legacy/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution/resolvelib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/resolution/resolvelib/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/utils\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/utils/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/vcs\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/vcs/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/cachecontrol\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/cachecontrol/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/cachecontrol/caches\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/cachecontrol/caches/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/certifi\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/certifi/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet/cli\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet/cli/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet/metadata\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/chardet/metadata/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/colorama\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/colorama/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/colorama/tests\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/colorama/tests/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/distlib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/distlib/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/distro\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/distro/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/idna\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/idna/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/msgpack\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/msgpack/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/packaging\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/packaging/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pkg_resources\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pkg_resources/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/platformdirs\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/platformdirs/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/filters\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/filters/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/formatters\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/formatters/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/lexers\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/lexers/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/styles\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pygments/styles/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyparsing\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyparsing/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyparsing/diagram\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyparsing/diagram/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/requests\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/requests/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/resolvelib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/resolvelib/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/resolvelib/compat\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/resolvelib/compat/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/rich\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/rich/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/tenacity\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/tenacity/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/tomli\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/tomli/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/truststore\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/truststore/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/_securetransport\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/_securetransport/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/util\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/urllib3/util/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/webencodings\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_vendor/webencodings/__pycache__\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip-24.0.dist-info\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/client\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/commands\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/plan\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens\\\"\\n      },\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/ui\\\"\\n      }\\n    ],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 9033,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/Activate.ps1\\\",\\n        \\\"sha256\\\": \\\"3795a060dea7d621320d6d841deb37591fadf7f5592c5cb2286f9867af0e91df\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2152,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/activate\\\",\\n        \\\"sha256\\\": \\\"d154cf57236e266b6026852dda5bd1a94fd193639d23886570ac5e33825bcd7e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 979,\\n        \\\"media_type\\\": \\\"text/x-csh\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/activate.csh\\\",\\n        \\\"sha256\\\": \\\"83ac082411ea0a238155fa59d60bd34e48e6764e9b00465474a9065a3be4d3a3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2254,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/activate.fish\\\",\\n        \\\"sha256\\\": \\\"d89851046a08c2be13d229745f8d40f1557b3e8ab4bc487ad14f97bab35245a2\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 298,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/pip\\\",\\n        \\\"sha256\\\": \\\"4787fea808af363ae72a8daee643c05abc04e5024bdc878481e41d1a1ac77907\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 298,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/pip3\\\",\\n        \\\"sha256\\\": \\\"4787fea808af363ae72a8daee643c05abc04e5024bdc878481e41d1a1ac77907\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 298,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/pip3.12\\\",\\n        \\\"sha256\\\": \\\"4787fea808af363ae72a8daee643c05abc04e5024bdc878481e41d1a1ac77907\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 355,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__init__.py\\\",\\n        \\\"sha256\\\": \\\"a009359c5a4b994552e4b9fb371bcda06527e55927e851908cf68d0dff10f299\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 854,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__main__.py\\\",\\n        \\\"sha256\\\": \\\"5b36e11d74db484ea0058d7d98d37d9b8b39a3fdfae4b3af4d84a0aa06dd0611\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1444,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__pip-runner__.py\\\",\\n        \\\"sha256\\\": \\\"127adf2a628ccd601daa0fc989c2c238ff58f79531ef31e1e0e6efa8bb50723a\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 732,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__pycache__/__init__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"cee8b771b10a8c1925713e484e08dd18057828eb374e773118881530c4e564f2\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 888,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__pycache__/__main__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"21ea7b2b0d13520abc0046561deb808ef8ff6a41068b4a2460905aa1f0f58bec\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2251,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/__pycache__/__pip-runner__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"c6d84ded58592112952c79f0b7415f4f9492e2870ab13642edaa270ca78a47f9\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 515,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__init__.py\\\",\\n        \\\"sha256\\\": \\\"8aa679f9842c415d3cb6451cecbf34e917a8a7ab60b8b1567fbd32485e9b7b46\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 834,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/__init__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"830ef7a9cd1a8d18c0c6752d8bf339ececef81fcc5bc6636e9f5544220c8e08c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 14341,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/build_env.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"12240c140bcda5f50fd2ee8c118beaee5e53c4574a20c4a441fcea2b3d566fdb\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 12712,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/cache.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"0c8970b67842dae68ee42b57d64d86d501be22e0267d690a9d86da3995ce77d2\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 17713,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/configuration.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"9f64a7e9148529119edb63201e295dd07dbd98132f751770bef4299d34c2bd87\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 33331,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/exceptions.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"fb0a06e9251fabe3335d433a55a5abadf8dfb88e0771b413d53d43ffcf21dbf4\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 717,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/main.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"67d2f467b1a5faa6c7fbaf7a1c5a34e11a79a6699d947d89f9eae4e05791047b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5018,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/pyproject.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"b385f6aaa460b5d1dcb37b9df09e5049d303ad1fa89548117effa450af6515c3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10599,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/self_outdated_check.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"302deda6592036348d075c9441120f2d956e3cec43d2aaa2acaf81d66c894978\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 13696,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/__pycache__/wheel_builder.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"678ab3b11fa8d0771e647d24f289b18d79cbed53b7f7480354af1746f27e00df\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10243,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/build_env.py\\\",\\n        \\\"sha256\\\": \\\"d444a9ab0d22ba94bf2bba6164ae73b21544e42cf2f41b462c55385ba127bdaf\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10370,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cache.py\\\",\\n        \\\"sha256\\\": \\\"ba2603fbd17406fd42f19c9613ce65a730e641fee17149202fdf46988f08e354\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 132,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__init__.py\\\",\\n        \\\"sha256\\\": \\\"1641c1829c716fefe077aaf51639cd85f30ecc0518c97a17289e9a6e28df7055\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 325,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/__init__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"2c1e8b7bb5337cc54309b52867f1b76ecf57340ab35679054b36175b2ce1f091\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 8512,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/autocompletion.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"b4d867dee2a0fee14a9088183919ac394356bab2f7a0af3b9a11f0f5b4325472\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10502,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/base_command.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"b81fb3d8ceb425321df1195ea26482c57f1b24e96468de4740b44612466aac57\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 30421,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/cmdoptions.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"260cbdce3c70a108113304cd8d84f9b33e179d30982d914a1f3a5750fba7ffee\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1828,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/command_context.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"36e81fe8353b0a558b356221e1d4f6c9f8a5d6edab3479d44604d23e7a7bb941\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2345,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/main.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"eb82f25ef0fa7a1672ba22a03043cb67cc03dc512622b04ef616cc1b58b55359\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4952,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/main_parser.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"9bd0f6e1b1fb8e86025c66f55c195b538591a37bb7e4714abfe07a67e4b30222\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 15069,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/parser.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"3c5826ce1b4086c1ffc567b86329b6e6db7a64f01d77445eeffbfc0410ddc2f5\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2667,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/progress_bars.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"14613cf39590aafc4bd918c9525991a7121a2361e790d28b66471fca1c258b9f\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 18899,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/req_command.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"7690f44e3e1bfd27cf5cda2882b48a5a2bbd2e9e3ccd156653d1029952d1f20c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 7887,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/spinners.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"8395d6347d807c85ed48dc8da31b4d45e2927e61a216dd5cfbaec6d3707bf9c2\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 422,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/__pycache__/status_codes.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"06407daa8e61aa95324904f5c55512ffcff4d91c71b87aae93817a93d6c4ea6e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6690,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/autocompletion.py\\\",\\n        \\\"sha256\\\": \\\"fdbaffe4d812c52baf3e3305d0c2c7cd2e6ce81a529100101caacb2bcf556ae3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 8733,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/base_command.py\\\",\\n        \\\"sha256\\\": \\\"8ae55619ada84eaee00517a8d1eaf7674b57276a2a0480ba4230c77270e12976\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 30063,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/cmdoptions.py\\\",\\n        \\\"sha256\\\": \\\"57c8201ba02d1e91ca907ffab515349a125a6537aab6b169bbbe6086f3175c99\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 774,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/command_context.py\\\",\\n        \\\"sha256\\\": \\\"4478083f0b4e6e1e4a84cadddd8653925f336d51bee8e92697b61b157e04860d\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2816,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/main.py\\\",\\n        \\\"sha256\\\": \\\"533c6dfd80f5848bc1d405b99b1b7a215721b791bbd7602d32a768e7550c8664\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4338,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/main_parser.py\\\",\\n        \\\"sha256\\\": \\\"95a0e9b2e04397a9327f2c29f5e30c03db3ce237c7d932499febe62f4186f74c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10781,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/parser.py\\\",\\n        \\\"sha256\\\": \\\"296e82dfeefee04ad3341d137cb4cac0e74771dfaa79f09e1a7acea04dabd114\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1968,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/progress_bars.py\\\",\\n        \\\"sha256\\\": \\\"4a8e263e84a35e45e2487893cf3aae1f7555c950ff9e35e51c9484c583d7028c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 18369,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/req_command.py\\\",\\n        \\\"sha256\\\": \\\"73bfd71c00675e60f7fea94af7eaf7ecaa9d28101c82654abd0d96713acd2df7\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5118,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/spinners.py\\\",\\n        \\\"sha256\\\": \\\"84827cdc67ab74580509da1b200db726081eb5e825fee0b84a9e7cea7cc56cf1\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 116,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/cli/status_codes.py\\\",\\n        \\\"sha256\\\": \\\"b0414751a5096eabfc880acbdc702d733b5666618e157d358537ac4b2b43121d\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3882,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__init__.py\\\",\\n        \\\"sha256\\\": \\\"e6844ef4eddd336bc6ba1d1b170e0739595eb6bcabcf91c732698f5b026b1fd5\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4049,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/__init__.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"f946a63cef66efd850e0845ceb2514c5f6c6ed563ed05cc0deeb252ea252b3c5\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 9758,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/cache.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"f9edbc1183eef78707b8baec3b7c5bd42b6287b5e762c31971a6aa2723ae9b37\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2137,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/check.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"2af9c0896ec1b17f8ae829d209712456fee7272e4c2a9432ca1e8408bce3b5cb\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5239,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/completion.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"82fa6219950876a4404e4d18c4176d2706deb6f257ebb5968a77ffc17adc74a3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 13259,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/configuration.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"b3c72c8ffd21ed8e005bb0ce3d2f908afe2ceaf01ab24729c5132cf0ee578327\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 10208,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/debug.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"1265c53efee4136d5a5bed281501e02c5135c8ce05f3e96b4d9437fdb5078f0b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 7636,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/download.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"4906f82aca30e7ffcf3d7556a73f4a9553aec1a481e919031ce817d71bfec2e2\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4463,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/freeze.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"9bbb4529644f76d824c490dcdc1f145542cbcd33f471957aa48549f48ccc91e1\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3030,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/hash.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"5e3a9087cc08357281bfd17b5cbef6b166c1931032197d19635f6908b893d6cd\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1720,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/help.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"8d948688ec04578a4f92674848c795fea27b2e7473c0c5806570cae48392f77d\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6767,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/index.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"12b0e3b1b06f4dd95f4c4c5a2c53561a2a9fd0a58259e68ed805bf77703d4fec\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4022,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/inspect.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"45ed1442a2dde6d0e140bcef4f2284382f25734b8b000cfc4f43585315273b47\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 28960,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/install.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"dc9532cd38863ac1a668bc84fc8c98d9fd823fd99890fe49deea8edf1e44de81\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 15703,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/list.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"73ddb61bf3dc0b79c68251b917a96003221ea80278ec37fee8eba1be5dd6a9f4\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 7668,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/search.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"f574d92190b2f0f157a92d8bd1384b0865d302f7eba7d6a205c19914f790b5d1\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 9775,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/show.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"e0e3cd0f184a30e0b97093112fd326c33eaa11ffa70826cfa58e2a0ea3788353\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4773,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/uninstall.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"f169cd45de2e1b805110e422d410a700505b97fdea85363b9a50bb8d921d313f\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 9003,\\n        \\\"media_type\\\": \\\"application/x-python-code\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/__pycache__/wheel.cpython-312.pyc\\\",\\n        \\\"sha256\\\": \\\"839d235d5ea7704d83be95d9fb159bc01bd4dbd3e33c1873fa112157e4148ecd\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 7944,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/cache.py\\\",\\n        \\\"sha256\\\": \\\"c60efafd9144042eb3a10de05cb45f31925fb78cf66b44701f81841590ba9e75\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1782,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/check.py\\\",\\n        \\\"sha256\\\": \\\"45bd77436f32a0b8748f5829c79494d239517ac35cb76d5e40246c9da3bdc4a0\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4287,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/completion.py\\\",\\n        \\\"sha256\\\": \\\"1d3e250f46e0b1f947ab62038187e211da7b2061ad13bb3a320237c67d15404c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 9766,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/configuration.py\\\",\\n        \\\"sha256\\\": \\\"9fdf1e9f0a7acb46f91ba7e24508da668e3716524a62f7bf75a32137ee0144d7\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6777,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/debug.py\\\",\\n        \\\"sha256\\\": \\\"eb7f7bdae50278c20639d30c55e2141ab3a34cea93556a65142f366be85c2b20\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5335,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/download.py\\\",\\n        \\\"sha256\\\": \\\"7b8870d3cf331a8dba5a625a30846f0a788b94b9a83a3aa8946c9f1e3b029024\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3243,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/freeze.py\\\",\\n        \\\"sha256\\\": \\\"aab2074bff9ce893eb43dda132102ff64925d1b1e016944bc1824375b718af5a\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1703,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/hash.py\\\",\\n        \\\"sha256\\\": \\\"11554ebaf1ada0f11d162f1236799daa5090ae10b157e909b1dc2d75c0a75c64\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1132,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/help.py\\\",\\n        \\\"sha256\\\": \\\"81c73a40391c80730eb809f9531699c004adb1106b9c64a7ff2c634b9ec92283\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 4775,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/index.py\\\",\\n        \\\"sha256\\\": \\\"08d5d07abfcf799292268a1445c08508110a19fc3236851660ffcc59ccc070e3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3188,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/inspect.py\\\",\\n        \\\"sha256\\\": \\\"db048fb7dc9faf7afa83eb364b92fa3ef46d687355c9be13ba874c4ad277f5cc\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 28782,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/install.py\\\",\\n        \\\"sha256\\\": \\\"5710ddf810f76b6ec0a5e13638adf8adf0574ba668db0b5e98af7e1c2c0fab13\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 12547,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/list.py\\\",\\n        \\\"sha256\\\": \\\"f906e93ee18388637549d4e1b24da697c6de0677a996279f6c684c00df2d9335\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5697,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/search.py\\\",\\n        \\\"sha256\\\": \\\"b1b059880451734e7442ab8e29c0af3abd8add72eca1879b2ca646462fff8942\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6419,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/show.py\\\",\\n        \\\"sha256\\\": \\\"b798e26b8cdc609449672e14fd5a27ef3325d378499a67287e3ea80cd4e78fb6\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 3886,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/uninstall.py\\\",\\n        \\\"sha256\\\": \\\"388a8ef6da9a758f243381f08457f543ad9f508a7bbfc283ad3468f3258ccfb6\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6476,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/commands/wheel.py\\\",\\n        \\\"sha256\\\": \\\"0929d7f0f99fd683c29ddee3edb9f5fdfe7c1bd28736201b96f549e73ca437e0\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 14006,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/configuration.py\\\",\\n        \\\"sha256\\\": \\\"5e4022052d21a73b0cf8b17442ee61bcf58efc1b3aefea1029160506e31b112b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 858,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib/python3.12/site-packages/pip/_internal/distributions/__init__.py\\\",\\n        \\\"sha256\\\": \\\"1eaea4b7a8170608cd8ade614d358b03378234e2a807e374a46612a9e\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/observable/installation-after/state.json\",\"truncated\":true}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "7850c5e46176ba15b85f008b7064f1ce07faf63fddc46f7980ff0727e1234d4d"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_10",
+    "action_reference": "codex:item_10",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      23,
+      24
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 23,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "offset": 340000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-after/state.json"
+            },
+            "error": null,
+            "id": "item_10",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "0480fea89b21213f92c0ff45cf9b02ed0129eda6703f9c34de7491de0a1b4127"
+        },
+        {
+          "event_number": 24,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 10000,
+              "offset": 340000,
+              "operation": "read",
+              "path": "/evidence/observable/installation-after/state.json"
+            },
+            "error": null,
+            "id": "item_10",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":6578,\"content\":\"b51fb0e298\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2457,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/base.py\\\",\\n        \\\"sha256\\\": \\\"7f83dcbfcb3b937630fde347afbd3ba94272aafb9c2c17ab73b2f5c5d9c6e7e6\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 5338,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/board.py\\\",\\n        \\\"sha256\\\": \\\"905cdaf6be3580982f3b4f1f44a5d03773944c7335306a7571ffb472cef734dd\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 540,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/diff.py\\\",\\n        \\\"sha256\\\": \\\"8f3fcd52c4806880f74c1591acc139b8e161f9326c52960cb503bac59ee23989\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2927,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/manager.py\\\",\\n        \\\"sha256\\\": \\\"b866d630470a8ab27b14195abe810154b09f5af3f0fece5ff57647846cb30c10\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 7731,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/queue.py\\\",\\n        \\\"sha256\\\": \\\"00a8f86768a1c3095129989cb919c01c58c66e55eac57c4419f6d2828ed93ad8\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1714,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/report.py\\\",\\n        \\\"sha256\\\": \\\"2b04c35d71a64258560a8d732d511c73302c4f1ccef76b3e821a4377bc43792b\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 565,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/screens/session.py\\\",\\n        \\\"sha256\\\": \\\"671fb56c4b62afd3ced09e0aab1397d375904cc989a799405d6202aa5778d15d\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 6094,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/session.py\\\",\\n        \\\"sha256\\\": \\\"de790bd2d50c0cb6391f104dd665316508b38eecd97fd0a32b02983f6bfb2159\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 38,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/ui/__init__.py\\\",\\n        \\\"sha256\\\": \\\"6c6ec57de9f82ef42d82760f144a4571cb16b3cd6de33aaa7aa9fd65e8ab1fa1\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 548,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/ui/theme.tcss\\\",\\n        \\\"sha256\\\": \\\"6332ee4b8efdec24ece23aa9ed55c10abc49ca9453f9174525bdb1b0ef9ba010\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 770,\\n        \\\"media_type\\\": \\\"text/x-python\\\",\\n        \\\"mode\\\": \\\"0664\\\",\\n        \\\"path\\\": \\\"maude-2.4.0/src/maude/ui/widgets.py\\\",\\n        \\\"sha256\\\": \\\"40b2be77fbf1961d12339758a7783f582b8bfca5c77f2e6d4f613a2c8a062ca3\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 32867,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0755\\\",\\n        \\\"path\\\": \\\"operator-pty\\\",\\n        \\\"sha256\\\": \\\"ea41701e54cc101aa44dba9b2d24382a6859847685051409defad6d414d0b46e\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 2397,\\n        \\\"media_type\\\": \\\"text/plain\\\",\\n        \\\"mode\\\": \\\"0755\\\",\\n        \\\"path\\\": \\\"operator-retrospective\\\",\\n        \\\"sha256\\\": \\\"5ca0a179db5b955071b1ada3bcf95903789e02671e38a94a9c4178eb478ccbc0\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/operator\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": [\\n      {\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/python\\\",\\n        \\\"target\\\": \\\"python3\\\"\\n      },\\n      {\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/python3\\\",\\n        \\\"target\\\": \\\"/usr/bin/python3\\\"\\n      },\\n      {\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/bin/python3.12\\\",\\n        \\\"target\\\": \\\"python3\\\"\\n      },\\n      {\\n        \\\"path\\\": \\\"maude-2.4.0/.venv/lib64\\\",\\n        \\\"target\\\": \\\"lib\\\"\\n      }\\n    ]\\n  },\\n  \\\"package_state\\\": {\\n    \\\"import_or_entrypoint_configuration\\\": [],\\n    \\\"inspection_mode\\\": \\\"trusted evaluator read-only data inspection\\\",\\n    \\\"maude_distribution_metadata\\\": [],\\n    \\\"maude_entrypoint\\\": {\\n      \\\"kind\\\": \\\"absent\\\",\\n      \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv/bin/maude\\\"\\n    },\\n    \\\"maude_package_modules\\\": [],\\n    \\\"operator_mutable_bytes_executed\\\": false,\\n    \\\"python\\\": {\\n      \\\"kind\\\": \\\"absent\\\",\\n      \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv/bin/python\\\"\\n    },\\n    \\\"schema\\\": \\\"maude.synthetic-installation.static-package-probe.v1\\\",\\n    \\\"site_packages\\\": [],\\n    \\\"venv\\\": {\\n      \\\"kind\\\": \\\"absent\\\",\\n      \\\"path\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/venv\\\"\\n    }\\n  },\\n  \\\"project_tree\\\": {\\n    \\\"digest\\\": \\\"0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/project\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"run_id\\\": \\\"install-i03\\\",\\n  \\\"run_tree\\\": {\\n    \\\"digest\\\": \\\"8a1f8c43decdd25f94817107895a58588f7d2412abba9d342fd8a79054355b28\\\",\\n    \\\"directories\\\": [\\n      {\\n        \\\"mode\\\": \\\"0775\\\",\\n        \\\"path\\\": \\\"xdg\\\"\\n      }\\n    ],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/run\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"schema\\\": \\\"maude.synthetic-installation.state-capture.v1\\\",\\n  \\\"task_tree\\\": {\\n    \\\"digest\\\": \\\"cd00310d3f0fb32bf03c4b08361fd1e681fe29297a123bbba906673648580da7\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [\\n      {\\n        \\\"bytes\\\": 1292,\\n        \\\"media_type\\\": \\\"text/markdown\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"assignment.md\\\",\\n        \\\"sha256\\\": \\\"388eafba5db15abfd30ce5c9e59ee6ed2c9d2367e67d45f1a2b8f0f044ee2fd8\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 267,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"handoff.json\\\",\\n        \\\"sha256\\\": \\\"966149dc85960edac4059dffe81fa0fa00e1e5879224dafbdf3159927eebfb55\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 851,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"release-handoff.json\\\",\\n        \\\"sha256\\\": \\\"2d15de5af47365217123521ae252f0abd97937b87f9cf15e1d68e6c6a781aa1c\\\"\\n      },\\n      {\\n        \\\"bytes\\\": 1415,\\n        \\\"media_type\\\": \\\"application/json\\\",\\n        \\\"mode\\\": \\\"0644\\\",\\n        \\\"path\\\": \\\"task.json\\\",\\n        \\\"sha256\\\": \\\"cc819e4003d6aee79ced5ee6cb3fe6e09a08edac54eddc8e9ec056fc0af6bdfd\\\"\\n      }\\n    ],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/task\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  },\\n  \\\"work_tree\\\": {\\n    \\\"digest\\\": \\\"0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82\\\",\\n    \\\"directories\\\": [],\\n    \\\"exists\\\": true,\\n    \\\"files\\\": [],\\n    \\\"root\\\": \\\"/tmp/maude-synth-7a6c6c6e422e/install-i03/installation/work\\\",\\n    \\\"sockets\\\": [],\\n    \\\"symlinks\\\": []\\n  }\\n}\\n\",\"offset\":340000,\"operation\":\"read\",\"path\":\"/evidence/observable/installation-after/state.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "bbc547436434d7a80185381d2b1e57d2dae698f4cf7a9969b30c090ceb9df08a"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_11",
+    "action_reference": "codex:item_11",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      25,
+      26
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 25,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 20000,
+              "operation": "read",
+              "path": "/evidence/operator-docs/README.md"
+            },
+            "error": null,
+            "id": "item_11",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "550534205e2851c1c3cc2a217c7114c5d0df5ef9612e32b57ec197ef79f7d3d0"
+        },
+        {
+          "event_number": 26,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 20000,
+              "operation": "read",
+              "path": "/evidence/operator-docs/README.md"
+            },
+            "error": null,
+            "id": "item_11",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":13219,\"content\":\"# Maude\\n\\n**Executor desk for governed agent runs. Every mutation goes through the gate.**\\n\\nPlans are written outside Maude — by ChatGPT, Fable, Codex, or the operator. Maude runs them: launch a harness as a supervised process, watch every tool call go through the [Agent Governor](https://github.com/unpingable/agent_governor) gate, approve or deny, review the diff, promote or reject, keep the receipts.\\n\\nThe plan arrives. Maude runs it. The governor gates. You decide.\\n\\n---\\n\\n## Supervised Agent Sessions\\n\\nMaude launches and supervises a coding harness (Claude Code today) as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.\\n\\n```\\nsupervised launch Add error handling to users.py and write tests\\n\\n  [ 14s] Approved: Edit — users.py\\n  [ 16s] Approved: Write — test_users.py\\n  [ 18s] Approved: Edit — README.md\\n  [ 22s] Approved: Bash — pytest (adapted python → python3)\\n\\n  Session exited (exit=0), 5 tools approved\\n\\nsupervised promotion sess_cfa8ab1ebb75\\n\\n  Promotion: prom_e72576d3798f\\n  Files: users.py, test_users.py, README.md\\n  Diff stat:\\n    README.md | 15 +++++++++++++\\n    users.py  |  5 +++-\\n    test_users.py (new file)\\n\\nsupervised promote sess_cfa8ab1ebb75\\n\\n  Promoted — changes accepted\\n  5 tests pass\\n```\\n\\n**The full loop:** launch → tool interception → approve/deny → session exit → review diff → promote or reject.\\n\\nRead-only tools (Read, Glob, Grep) are auto-approved. Write tools (Bash, Write, Edit) require operator approval. Unanswered approvals time out and deny by default. Rejected promotions revert the workspace.\\n\\nPlanned (see [ROADMAP.md](ROADMAP.md)): harness selection (M-3), obstruction notes (M-5), and headless one-shot execution (M-6). Shipped: bounded-plan ingestion (`run <plan.md>`, M-2) and run-report bundles (`report <id>`, M-4).\\n\\n### Supervised Commands\\n\\n| Command | What It Does |\\n|---------|-------------|\\n| `supervised launch [task]` | Launch a governed harness session |\\n| `supervised list` | List active/completed sessions |\\n| `supervised events <id>` | Show canonical event stream |\\n| `supervised interventions <id>` | Show pending tool approvals |\\n| `supervised approve <id> <tcid>` | Approve a tool call |\\n| `supervised deny <id> <tcid>` | Deny a tool call |\\n| `supervised promotion <id>` | Show pending workspace changes |\\n| `supervised diff <id>` | Show unified diff of changes |\\n| `supervised promote <id>` | Accept workspace changes |\\n| `supervised reject <id>` | Revert workspace changes |\\n| `supervised fork <id> [task]` | Fork from promoted session |\\n| `supervised kill <id>` | Terminate session |\\n\\n---\\n\\n## Where planning happens\\n\\nNot here. Maude is the execution side of the loop: it consumes bounded plans, supervises the run, and returns a reviewable result. Spec authoring, hypothesis exploration, and \\\"lock understanding before acting\\\" live elsewhere — planning tools upstream, and the governor's admissibility gate at launch time (see the [Agent Governor](https://github.com/unpingable/agent_governor) governed-shell design). AG is one authority substrate Maude calls over RPC; Maude itself mints no authority and refuses nothing on its own behalf.\\n\\n---\\n\\n## Legacy: governed chat (unsupported)\\n\\nEarlier versions framed Maude as a governed-chat client. That framing is retired (ratified decision D-GS-2 in the Agent Governor governed-shell campaign). The chat path — streaming model responses through the daemon's `chat.stream`, plus the PLAN/BUILD spec-lock workflow — still exists in the code but is **unsupported legacy**, scheduled for removal at the v3.0 release (GS-15). Do not build on it. If a chat lane is ever missed, it returns as its own recorded decision, not as a leftover.\\n\\nMaude never imports governor code. Two repos, one RPC boundary.\\n\\n---\\n\\n## Quick Start\\n\\n```bash\\n# Install\\ngit clone https://github.com/unpingable/maude\\ncd maude\\npython3 -m venv .venv\\n.venv/bin/pip install -e .\\n\\n# Start governor daemon (in another terminal)\\ncd ../agent_gov\\npip install -e .\\ngovernor serve\\n\\n# Launch maude (auto-discovers daemon socket)\\nmaude --governor-dir /path/to/project/.governor\\n```\\n\\nType `help` to see available commands. `supervised launch <task>` (or `go <task>`) starts a governed run.\\n\\n---\\n\\n## Architecture\\n\\n```\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n| Header (maude — project | backend)   |\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n| Status bar: project  backend  MODE=  |\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n|[MECHANICALLY REDACTED: exact mounted implementation-source bytes]      |\\n| Log pane (events, streaming,         |\\n|           scrollable)                |\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n| Input box                            |\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n| Footer (keybindings)                 |\\n+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]------+\\n```\\n\\n```\\n┌──────────┐   Unix socket (JSON-RPC)   ┌──────────────┐\\n│  Maude   │ ──────────────────────────▶ │  Governor    │\\n│  (desk)  │  Content-Length framing     │  Daemon      │\\n│          │                             │              │\\n│ Governor │  governor.now               │  ┌─────────┐ │\\n│  Client  │  runtime.session.*          │  │ Harness │ │\\n│          │  runtime.intervention.*     │  │ adapter │ │\\n│          │  runtime.promotion.*        │  │(Claude/ │ │\\n│          │  receipts.*, commit.*       │  │ Codex/…)│ │\\n└──────────┘ ◀──────────────────────────┘──────────────┘\\n```\\n\\nMaude talks to the daemon. The daemon owns the harness adapters and the interception point. Maude never talks to the model directly, and adapter selection is introspection-informed, never adapter ownership.\\n\\n**Transport**: JSON-RPC 2.0 with Content-Length framing over Unix socket. Same protocol as MCP servers and VS Code language servers. Pluggable `Transport` interface for future TCP support.\\n\\n---\\n\\n## RPC Methods Wired\\n\\nMaude wires 44 of the daemon's RPC methods:\\n\\n| Namespace | Methods | What It Does |\\n|-----------|---------|-------------|\\n| `governor.*` | hello, now, status | Health check, live status polling |\\n| `runtime.session.*` | create, launch, get, list, events, pause, resume, kill | Supervised sessions |\\n| `runtime.intervention.*` | list, resolve | Tool approval/denial |\\n| `runtime.promotion.*` | get, diff, resolve | Workspace change review |\\n| `receipts.*` | list, detail | Gate receipt browsing |\\n| `scars.*` | list, history | Failure history and active scars |\\n| `commit.*` | pending, fix, revise, proceed, exceptions | Violation resolution |\\n| `sessions.*` | list, create, get, delete | Session management |\\n| `chat.*` (legacy) | send, stream, models, backend | Governed generation (unsupported, removal at GS-15) |\\n| `intent.*` (legacy) | templates, schema, validate, compile, policy | Structured intent compilation |\\n\\n---\\n\\n## Commands\\n\\n| Command | What It Does |\\n|---------|-------------|\\n| `supervised launch [task]` / `go [task]` | Launch governed harness session |\\n| `supervised list` | List supervised sessions |\\n| `supervised events <id>` | Show event stream |\\n| `supervised interventions <id>` | Show pending approvals |\\n| `supervised approve <id> <tcid>` / `y` | Approve tool call |\\n| `supervised deny <id> <tcid>` / `n` | Deny tool call |\\n| `supervised promotion <id>` | Show workspace changes |\\n| `supervised diff <id>` | Show unified diff |\\n| `supervised promote <id>` | Accept changes |\\n| `supervised reject <id>` | Revert changes |\\n| `supervised fork <id> [task]` | Fork from promoted session |\\n| `supervised kill <id>` | Kill session |\\n| `report <id> [plan.md]` | Run report — three-layer disclosure (surface / detail / law) |\\n| `snapshot` / `wtf` | Operator overview |\\n| `lineage` / `lineage tree` / `history` | Session lineage navigation |\\n| `status` | Governor status |\\n| `why` | Show why something is blocked |\\n| `context` / `clear` | Context usage / reset |\\n| `help` | Show commands |\\n\\nLegacy (unsupported, removal at GS-15): `plan <text>`, `lock spec`, `build`, `show spec`, and free-text chat via the governor.\\n\\n### Keybindings\\n\\n| Key | Action |\\n|-----|--------|\\n| `Ctrl+Y` | Approve pending tool call |\\n| `Ctrl+D` | Deny pending tool call |\\n| `Ctrl+T` | Lineage tree |\\n| `Ctrl+N` | New session |\\n| `Ctrl+Q` | Quit |\\n\\n---\\n\\n## Configuration\\n\\n| Setting | Env Var | CLI Flag | Default |\\n|---------|---------|----------|---------|\\n| Governor dir | `GOVERNOR_DIR` | `--governor-dir` | Current directory |\\n| Socket path | `GOVERNOR_SOCKET` | `--socket` | Auto-derived from governor dir |\\n| Context ID | `GOVERNOR_CONTEXT_ID` | `--context-id` | `default` |\\n| Governor mode | `GOVERNOR_MODE` | — | `code` |\\n| Session label | `MAUDE_LABEL` | `--label` | (none) |\\n\\nCLI flags override environment variables. Socket path is auto-derived from governor dir using the same algorithm as `governor serve`.\\n\\n---\\n\\n## Project Structure\\n\\n```\\nsrc/maude/\\n  app.py              # Textual TUI application (monolith; decomposition planned at GS-10)\\n  config.py           # Settings (env + CLI)\\n  intents.py          # Regex intent parser\\n  session.py          # Local state machine\\n  client/\\n    __init__.py       # Public exports (GovernorClient, Transport, models)\\n    rpc.py            # JSON-RPC 2.0 client over pluggable transport\\n    transport.py      # Transport protocol + UnixSocketTransport\\n    models.py         # Pydantic models matching daemon response shapes\\n  ui/\\n    widgets.py        # GovernorStatusBar\\ntests/\\n  test_intents.py     # Intent parsing\\n  test_session.py     # State machine + project name\\n  test_client.py      # Model deserialization\\n  test_integration.py # Live daemon integration (skip without daemon)\\n  test_transport.py   # Transport protocol + mock transport\\n  conftest.py         # Shared fixtures\\n```\\n\\n---\\n\\n## Development\\n\\n```bash\\n# Setup\\npython3 -m venv .venv\\n.venv/bin/pip install -e \\\".[dev]\\\"\\n\\n# Tests\\n.venv/bin/python -m pytest tests/ -v\\n\\n# Integration tests (requires running governor daemon)\\nbash test-with-governor.sh\\n\\n# Lint\\n.venv/bin/ruff check src/ tests/\\n```\\n\\n---\\n\\n## What's Built\\n\\n- [x] Supervised harness sessions (launch, tool interception, approve/deny, kill)\\n- [x] Promotion review (diff, promote, reject; rejected promotions revert)\\n- [x] Session fork from promoted baseline\\n- [x] Session lineage navigation (`lineage`, `lineage tree`, `history`)\\n- [x] Inline event streaming (tool proposals, completions, denials)\\n- [x] Tight supervised loop (`go` / `y` / `n` / `p` + auto-poll)\\n- [x] COMMUNICATE-class loud warning (external sends)\\n- [x] Run reports (`report <session_id> [plan.md]`) — composes from daemon reads (no new RPC); three-layer disclosure: plain surface (outcome, files, tool counts), expandable detail (authority block, acceptance criteria), raw law one `why` away (ReviewPacket verbatim). Honest-absence discipline: reads that fail surface as notes, nothing inferred. Testimony-not-admission: exit 0 is \\\"the run reports it ended,\\\" never upgraded to a verdict; `used ≤ granted` is operator-visible, overruns flagged.\\n- [x] Gate receipt browsing, scar history, violation resolution (fix/revise/proceed)\\n- [x] Live governor status polling; context usage gauge\\n- [x] Pluggable transport (Unix socket now, TCP later)\\n- [x] Legacy: streaming chat + PLAN/BUILD spec workflow (unsupported, removal at GS-15)\\n\\n## What's Next\\n\\nSee [ROADMAP.md](ROADMAP.md) — the repositioning roadmap: foundation refactor (GS-9/GS-10), the decision-queue desk (GS-11..GS-14), the plan-executor spine (M-1..M-5: plan envelope, plan ingestion, harness selection, run reports, obstruction notes), the v3.0 chat cut (GS-15), and headless one-shot execution (M-6).\\n\\n---\\n\\n## Documentation\\n\\n| Document | Contents |\\n|----------|----------|\\n| [docs/REPOSITIONING.md](docs/REPOSITIONING.md) | The executor thesis, boundary, do-not-build list |\\n| [docs/architecture.md](docs/architecture.md) | System design, transport, data flow, RPC mapping |\\n| [docs/commands.md](docs/commands.md) | Full command and intent reference |\\n| [docs/configuration.md](docs/configuration.md) | Environment, CLI, and runtime settings |\\n\\n---\\n\\n## Related Projects\\n\\n| Project | What It Is |\\n|---------|-----------|\\n| [Agent Governor](https://github.com/unpingable/agent_governor) | The constraint system (Python, 11k+ tests) |\\n| [Guvnah](https://github.com/unpingable/guvnah) | Electron desktop cockpit (Svelte 5, same daemon RPC) |\\n| [Governor WebUI](https://github.com/unpingable/governor_webui) | Web-based governance dashboard (FastAPI) |\\n| [VS Code Extension](https://github.com/unpingable/vscode-governor) | IDE integration — preflight, correlator, file checking |\\n\\n---\\n\\n## License\\n\\nApache-2.0\\n\\n---\\n\\n*The plan arrives. Maude runs it. The governor gates. You review the diff.*\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/operator-docs/README.md\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d78ad228da56d7d0b045f5d287d7eb10d6ea3fa1acde81bf597d3dacb68340ed"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_12",
+    "action_reference": "codex:item_12",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      27,
+      28
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 27,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 5000,
+              "operation": "read",
+              "path": "/evidence/operator-docs/pyproject.toml"
+            },
+            "error": null,
+            "id": "item_12",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "91df9f23dbde6890a147a3ff0944874fb2976f70930b7b5c0646be5eae6caa0f"
+        },
+        {
+          "event_number": 28,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 5000,
+              "operation": "read",
+              "path": "/evidence/operator-docs/pyproject.toml"
+            },
+            "error": null,
+            "id": "item_12",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":817,\"content\":\"[build-system]\\nrequires = [\\\"hatchling\\\"]\\nbuild-backend = \\\"hatchling.build\\\"\\n\\n[project]\\nname = \\\"maude\\\"\\nversion = \\\"2.4.0\\\"\\ndescription = \\\"Terminal executor for supervised agent harness runs (Agent Governor client)\\\"\\nlicense = \\\"Apache-2.0\\\"\\nrequires-python = \\\">=3.11\\\"\\nauthors = [\\n    { name = \\\"James Beck\\\" },\\n]\\n\\ndependencies = [\\n    \\\"textual>=1.0.0\\\",\\n    \\\"pydantic>=2.6.0\\\",\\n    \\\"ag-shell-client>=0.1.0\\\",\\n    \\\"pyyaml>=6.0\\\",\\n]\\n\\n[project.urls]\\nHomepage = \\\"https://github.com/unpingable/maude\\\"\\nIssues = \\\"https://github.com/unpingable/maude/issues\\\"\\n\\n[project.scripts]\\nmaude = \\\"maude.app:main\\\"\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"pytest\\\",\\n    \\\"pytest-asyncio\\\",\\n    \\\"ruff\\\",\\n]\\n\\n[tool.hatch.build.targets.wheel]\\npackages = [\\\"src/maude\\\"]\\n\\n[tool.pytest.ini_options]\\nasyncio_mode = \\\"auto\\\"\\n\\n[tool.ruff]\\ntarget-version = \\\"py311\\\"\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/operator-docs/pyproject.toml\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "e007920f46ca3dc98f4ed9b97925be43542fd659b469cea2766c2bb2d762fc67"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_13",
+    "action_reference": "codex:item_13",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      29,
+      30
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 29,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 1000,
+              "operation": "read",
+              "path": "/evidence/observable/endpoint-before.json"
+            },
+            "error": null,
+            "id": "item_13",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "0dfb8b067719cc0414f106153c47f33be34123f34075976e7bbddc56b2f0f77f"
+        },
+        {
+          "event_number": 30,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 1000,
+              "operation": "read",
+              "path": "/evidence/observable/endpoint-before.json"
+            },
+            "error": null,
+            "id": "item_13",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":38,\"content\":\"{\\n  \\\"exists\\\": false,\\n  \\\"path\\\": null\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/observable/endpoint-before.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "9409de76eba7826e349dd4d2cdb02af43b11d9fe97f9036e571a868423009a03"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  },
+  {
+    "action_id": "item_14",
+    "action_reference": "codex:item_14",
+    "classification": "declared_mcp_tool_action",
+    "event_numbers": [
+      31,
+      32
+    ],
+    "exit_code": null,
+    "input": {
+      "observations": [
+        {
+          "event_number": 31,
+          "event_type": "item.started",
+          "item": {
+            "arguments": {
+              "limit": 1000,
+              "operation": "read",
+              "path": "/evidence/observable/endpoint-after.json"
+            },
+            "error": null,
+            "id": "item_14",
+            "result": null,
+            "server": "grader",
+            "status": "in_progress",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "d556bee71a42f29d0b04b9d4846c4b1d726fc11044d65733b374819f73f8a467"
+        },
+        {
+          "event_number": 32,
+          "event_type": "item.completed",
+          "item": {
+            "arguments": {
+              "limit": 1000,
+              "operation": "read",
+              "path": "/evidence/observable/endpoint-after.json"
+            },
+            "error": null,
+            "id": "item_14",
+            "result": {
+              "content": [
+                {
+                  "text": "{\"bytes_returned\":38,\"content\":\"{\\n  \\\"exists\\\": false,\\n  \\\"path\\\": null\\n}\\n\",\"offset\":0,\"operation\":\"read\",\"path\":\"/evidence/observable/endpoint-after.json\",\"truncated\":false}",
+                  "type": "text"
+                }
+              ],
+              "structured_content": null
+            },
+            "server": "grader",
+            "status": "completed",
+            "tool": "evidence",
+            "type": "mcp_tool_call"
+          },
+          "item_sha256": "e296a1c7e69f7bad188ec8de88bfa2a36822caea8067231c079f047701e4c72a"
+        }
+      ]
+    },
+    "provider": "codex",
+    "provider_item_type": "mcp_tool_call",
+    "status": "completed",
+    "tool": "mcp__grader__evidence"
+  }
+]

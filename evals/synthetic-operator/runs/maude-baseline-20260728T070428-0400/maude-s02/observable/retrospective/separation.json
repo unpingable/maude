@@ -1,0 +1,69 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "disposition_frozen_before_helper": true,
+  "disposition_write_action_indices": [
+    10
+  ],
+  "early_helper_inspection_action_indices": [],
+  "embedded_product_segments_in_retrospective_action": [],
+  "evaluator_contamination": false,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    11
+  ],
+  "helper_inspection_action_indices": [],
+  "helper_inspection_before_invocation_action_indices": [],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 11,
+      "command_index": 0,
+      "offset": 55
+    }
+  ],
+  "helper_invoked_exactly_once": true,
+  "helper_output_disposition_sha256": [
+    "e315e5d7443161d6c97b1b96e21e84287e242c2e487df53c24957f3aefc6ad7b"
+  ],
+  "helper_output_initial_disposition_bytes": [
+    869
+  ],
+  "helper_output_matches_initial_disposition": true,
+  "helper_output_metadata_valid": true,
+  "helper_output_validation_errors": [],
+  "helper_was_final_tool_action": true,
+  "initial_disposition": {
+    "bytes": 869,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "e315e5d7443161d6c97b1b96e21e84287e242c2e487df53c24957f3aefc6ad7b"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 9,
+  "protocol_action_indices": [
+    10,
+    11
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s02",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": true
+}

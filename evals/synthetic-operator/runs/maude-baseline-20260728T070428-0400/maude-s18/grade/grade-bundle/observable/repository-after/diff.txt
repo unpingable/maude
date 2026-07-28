@@ -1,0 +1,7 @@
+diff --git a/config/scheduler.yaml b/config/scheduler.yaml
+index 0a7e940..99aba06 100644
+--- a/config/scheduler.yaml
++++ b/config/scheduler.yaml
+@@ -1 +1 @@
+-batch_size: 20
++batch_size: 25

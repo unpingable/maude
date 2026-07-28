@@ -1,0 +1,5 @@
+--- a/deploy/worker.yaml
++++ b/deploy/worker.yaml
+@@ -1 +1 @@
+-image: registry.example.invalid/worker:4.2.0
++image: registry.example.invalid/worker:4.2.1

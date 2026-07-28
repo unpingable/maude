@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "promtool check rules alerts/menu-latency.yaml"
+  ],
+  "allowed_write_paths": [
+    "alerts/menu-latency.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

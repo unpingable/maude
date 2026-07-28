@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "32476eb9f3a297c39e2c6a9b5c45a5cc30cd75d5\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/deploy/api.yaml b/deploy/api.yaml\nindex cb964ab..ad1cefc 100644\n--- a/deploy/api.yaml\n+++ b/deploy/api.yaml\n@@ -1 +1 @@\n-image: registry.example.invalid/api:9.0.0\n+image: registry.example.invalid/api:9.0.1\n"
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "782c433cbbae3779631b657b8bd3ecc5b0fbd8a2\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "782c433 gwr governed effect 0b957ed540e5bcd14ff61ed947a928b0\n deploy/api.yaml | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 42,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/api.yaml",
+      "sha256": "dfcdb33633e676c3333e9b481223b478f4dc996a4649719057758f3befe0e41e"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-7a6c6c6e422e/docket-s20/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

@@ -1,0 +1,30 @@
+{
+  "campaign_id": "maude-baseline-20260728T070428-0400",
+  "component": "Maude",
+  "constraints": {
+    "authority_effect": "none",
+    "external_side_effects": "denied",
+    "network": "denied",
+    "production": "denied",
+    "sibling_checkout_install_or_mutation": "denied",
+    "sudo": "denied"
+  },
+  "evidence_requested": [
+    "commands attempted and exact observable responses",
+    "package and executable state before and after",
+    "configuration source and resolved endpoint",
+    "first public Maude result or exact blocking error",
+    "ownership boundary and final disposition"
+  ],
+  "goal": "Start Maude from the initial working directory, diagnose any connection problem using only public documentation and observable paths, then reach a useful status if the correction is justified.",
+  "handoff": {
+    "installed_environment": "/tmp/maude-synth-7a6c6c6e422e/install-i02/installation/venv",
+    "maude_entrypoint": "/tmp/maude-synth-7a6c6c6e422e/install-i02/installation/venv/bin/maude",
+    "project_directory": "/tmp/maude-synth-7a6c6c6e422e/install-i02/installation/project",
+    "service_owner": "synthetic-platform-team"
+  },
+  "review_condition": "Do not claim the client or service is ready without an observable public response.",
+  "schema": "maude.synthetic-install-task.v1",
+  "situation": "Maude is installed in the clean-room environment. A platform handoff names the project directory associated with the service. Determine the endpoint from the public configuration rules.",
+  "task_id": "install-task-02"
+}

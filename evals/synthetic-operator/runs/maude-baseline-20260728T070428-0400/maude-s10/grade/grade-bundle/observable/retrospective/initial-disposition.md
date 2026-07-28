@@ -1,0 +1,7 @@
+Disposition: completed and settled.
+
+Maude verified the approved bounded plan and enforced its ration-card limits. The supervised run exited after one allowed/completed Edit and one allowed/completed Bash action. Review showed exactly one pending file and a one-line diff removing only telnetd from ansible/roles/edge/tasks/packages.yml; direct inspection confirmed chrony and jq remained. I kept the promotion. Maude then reported no pending changes and recorded promotion_resolved; final inspection confirmed the intended package list.
+
+Lifecycle interpretation: created means the governed session record exists; running means execution began; tool_call_proposed is a requested action; allowed means the gate found it within granted scope; completed means the runtime action finished, but does not by itself prove acceptance criteria; exited means the harness stopped, not that changes were accepted; pending promotion means edits await operator settlement; promotion_resolved plus Changes kept means the reviewed workspace changes were retained. Acceptance remained an operator judgment because Maude explicitly rendered criteria unchecked.
+
+Evidence limitation: the public event view showed the bounded Bash action completed but did not expose its command stdout or exit status. I therefore do not claim more than successful lifecycle completion of the runtime-exposed validation action; the exact final content and diff independently establish the requested configuration effect.

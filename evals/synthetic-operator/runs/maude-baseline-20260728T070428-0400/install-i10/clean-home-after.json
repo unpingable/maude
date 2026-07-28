@@ -1,0 +1,30 @@
+{
+  "directories": [
+    ".cache",
+    ".config",
+    ".local",
+    ".local/share",
+    ".local/state",
+    ".rustup",
+    "tmp"
+  ],
+  "files": [
+    {
+      "bytes": 48,
+      "media_type": "application/toml",
+      "mode": "0664",
+      "path": ".rustup/settings.toml",
+      "sha256": "4a90a5bdb96e92a6e13340af6699933a6d19d8a897fb82c571fc6b2bf1e09411"
+    },
+    {
+      "bytes": 1847,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "initial-disposition.md",
+      "sha256": "08cabaa3e25f4a41739f497ae7b33f952b5310bf07592f7e84f2bf8c70924d17"
+    }
+  ],
+  "mount_path": "/home/operator",
+  "schema": "maude.synthetic-operator.clean-home-inventory.v1",
+  "symlinks": []
+}

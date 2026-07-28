@@ -1,0 +1,16 @@
+{
+  "base_commit": "",
+  "before_inventory_sha256": "0df5c299e600ade8244df54cfa7734a5848ed30f0539379190878d08c56d6119",
+  "endpoint_mode": "incompatible-schema",
+  "endpoint_socket": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/run/governor.sock",
+  "installation_root": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation",
+  "installed_distribution_materialized": true,
+  "lab": "/tmp/maude-synth-7a6c6c6e422e/install-i07",
+  "operator": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/operator",
+  "project_tree_digest_before": "0ed002a86e2c2ff73a6df4948baea894cc295de6d0fe8947bfa96a8594d65c82",
+  "repo": "/tmp/maude-synth-7a6c6c6e422e/install-i07/installation/project",
+  "run_id": "install-i07",
+  "schema": "maude.synthetic-operator.materialization-complete.v1",
+  "setup_transcript_withheld": true,
+  "status": "materialized"
+}

@@ -1,0 +1,82 @@
+{
+  "allowed_mcp_server": "grader",
+  "allowed_mcp_tools": [
+    "evidence"
+  ],
+  "codex_approval_argv": [
+    "--config",
+    "approval_policy=\"never\""
+  ],
+  "codex_approval_config_override": "approval_policy=\"never\"",
+  "codex_approval_policy": "never",
+  "codex_mcp_approval_config_override": "mcp_servers.grader.default_tools_approval_mode=\"approve\"",
+  "codex_mcp_default_tools_approval_mode": "approve",
+  "error": "Codex MCP action differs from the exact roster",
+  "exception_type": "CampaignError",
+  "identity": {
+    "event_number": 1,
+    "provider_thread_id": "019fa8aa-acf5-7633-9850-dc03259aaedd"
+  },
+  "intrinsic_action_features_disabled": [
+    "shell_tool",
+    "unified_exec"
+  ],
+  "mcp_config_sha256": "38d3b242f7b3e6970a8ce6cd952a4262bc57d68bf1b1bc77fb7180ec4771b79f",
+  "mcp_protocol_version": "2025-06-18",
+  "mcp_tool_approval_safety_basis": {
+    "exact_enabled_tool_count": 1,
+    "grader_evidence_tool_read_only": true,
+    "mcp_config_hash_pinned": true,
+    "operator_terminal_bounded_by_frozen_broker": false,
+    "rationale": "MCP tool auto-approval is safe here only because the hash-pinned server exposes exactly one tool: the operator terminal is bounded by the frozen broker, while the grader evidence tool is read-only.",
+    "single_enabled_mcp_tool": "evidence"
+  },
+  "noninteractive_approval_safety_basis": {
+    "grader_evidence_tool_read_only": true,
+    "intrinsic_action_features_disabled": [
+      "shell_tool",
+      "unified_exec"
+    ],
+    "operator_terminal_bounded_by_frozen_broker": false,
+    "rationale": "Non-interactive approval is safe here only because Codex intrinsic action features are disabled and operator sessions expose exactly one MCP terminal bounded by the frozen broker; grader sessions expose exactly one read-only evidence tool.",
+    "single_enabled_mcp_tool": "evidence"
+  },
+  "optional_features_disabled": [
+    "apps",
+    "plugins",
+    "remote_plugin",
+    "browser_use",
+    "browser_use_external",
+    "browser_use_full_cdp_access",
+    "computer_use",
+    "image_generation",
+    "multi_agent",
+    "multi_agent_v2",
+    "hooks",
+    "skill_mcp_dependency_install",
+    "tool_call_mcp_elicitation"
+  ],
+  "per_session_exact_tool_roster_supported": true,
+  "provider_auth_destroyed": true,
+  "provider_auth_output_scan_hits": [],
+  "provider_auth_retained_until_transport_exit": true,
+  "provider_auth_values_recorded": false,
+  "provider_config": "openai-sol",
+  "provider_processes_remaining": [
+    606887,
+    606895
+  ],
+  "provider_task_paths_mounted": [
+    "/evidence (read-only frozen grade bundle)"
+  ],
+  "provider_transport_cwd_is_neutral": true,
+  "recorded_at": "2026-07-28T12:19:51Z",
+  "schema": "maude.synthetic-operator.codex-retained-provider-boundary.v1",
+  "semantic_prompt_bytes": 67435,
+  "semantic_prompt_bytes_in_argv": false,
+  "semantic_prompt_delivery": "stdin",
+  "semantic_prompt_sha256": "4fb4bde8938007cc149d213c258b22405ea5d3d17e60a52723ea131edf478a90",
+  "status": "failed-closed",
+  "tool_actions": [],
+  "unexpected_intrinsic_action_policy": "fail-closed"
+}

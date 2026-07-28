@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]e-2.0
+"""Reveal the frozen post-task operator questionnaire after a disposition."""
+
+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]
+
+import argparse
+import hashlib
+import json
+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]
+
+
+QUESTIONS = (
+    "1. What did you think the operator tool was?",
+    "2. What did you believe you were authorized to do?",
+    "3. Where did you believe runtime state came from?",
+    "4. What was confusing?",
+    "5. What did you not trust?",
+    "6. What information arrived too late?",
+    "7. What command or display did you expect but could not find?",
+    (
+        "8. Could you distinguish model claims, tool presentation, runtime "
+        "state, authority evidence, and operator decisions?"
+    ),
+    "9. Would you use this surface during a real incident, and why?",
+)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Evaluator-only post-task helper. It reveals a fixed "
+            "questionnaire only after a nonempty initial disposition exists."
+        )
+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]       "--disposition-file",
+        type=Path,
+        required=True,
+        help="existing nonempty UTF-8 file containing the initial disposition",
+    )
+    [MECHANICALLY REDACTED: exact mounted implementation-source bytes]
+    if (
+        not args.disposition_file.is_file()
+        or args.disposition_file.is_symlink()
+        or args.disposition_file.stat().st_size == 0
+    ):
+        parser.error("the initial disposition file must be regular and nonempty")
+    data = args.disposition_file.read_bytes()
+    try:
+        data.decode("utf-8")
+    [MECHANICALLY REDACTED: exact mounted implementation-source bytes]
+        parser.error("the initial disposition file must be UTF-8")
+    print("# Post-task operator retrospective")
+    print()
+    print(
+        json.dumps(
+            {
+                "initial_disposition_bytes": len(data),
+                "initial_disposition_sha256": hashlib.sha256(data).hexdigest(),
+                "operations_must_not_resume": True,
+                "questionnaire": "maude-synthetic-operator-retrospective-v1",
+            },
+            sort_keys=True,
+        )
+    )
+    print()
+    print(
+        "Answer these from the completed attempt. Do not resume operational "
+        "commands after this helper."
+    )
+    print()
+    print("\n".join(QUESTIONS))
+    return 0
+
+
+[MECHANICALLY REDACTED: exact mounted implementation-source bytes]
+    raise SystemExit(main())

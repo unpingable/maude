@@ -1,0 +1,5 @@
+{
+  "description": "Remove only telnetd from the package list; retain chrony and jq.",
+  "playbook_id": "synthetic.ux-task-10",
+  "schema": "synthetic-playbook.v1"
+}

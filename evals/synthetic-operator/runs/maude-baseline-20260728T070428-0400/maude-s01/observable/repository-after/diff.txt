@@ -1,0 +1,10 @@
+diff --git a/clusters/store-17/apps/menu/deployment.yaml b/clusters/store-17/apps/menu/deployment.yaml
+index 3b6eb8e..e36286e 100644
+--- a/clusters/store-17/apps/menu/deployment.yaml
++++ b/clusters/store-17/apps/menu/deployment.yaml
+@@ -7,4 +7,4 @@ spec:
+     spec:
+       containers:
+         - name: menu-api
+-          image: registry.example.invalid/menu-api:2.7.3
++          image: registry.example.invalid/menu-api:2.7.4

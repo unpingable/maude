@@ -1,0 +1,13 @@
+diff --git a/systemd/menu-board.service b/systemd/menu-board.service
+index 3642709..6d6c71a 100644
+--- a/systemd/menu-board.service
++++ b/systemd/menu-board.service
+@@ -2,7 +2,7 @@
+ Description=Menu board renderer
+ 
+ [Service]
+-ExecStart=/usr/bin/env menu-board --foreground
++ExecStart=/usr/bin/env menu-board --foreground --config /etc/menu-board/config.toml
+ Restart=on-failure
+ 
+ [Install]
