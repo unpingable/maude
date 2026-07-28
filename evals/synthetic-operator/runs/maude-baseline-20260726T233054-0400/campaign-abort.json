@@ -1,0 +1,123 @@
+{
+  "schema": "maude.synthetic-operator.campaign-abort.v1",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "recorded_at": "2026-07-28T07:25:03Z",
+  "status": "aborted-evaluator-infrastructure",
+  "frozen_packet": {
+    "commit": "f9e8caadf194c38384e981baa7cd0b6a5dcac9b1",
+    "manifest_bytes": 425984,
+    "manifest_sha256": "58622e506773edb1a767dfc260fdfc0ff6a82e106550dc96d9d5893729f3e17d"
+  },
+  "operator_stage": {
+    "declared_runs": 35,
+    "completion_markers": 25,
+    "completed_run_ids": [
+      "maude-s01",
+      "maude-s02",
+      "maude-s03",
+      "maude-s04",
+      "maude-s05",
+      "maude-s06",
+      "maude-s07",
+      "maude-s08",
+      "maude-s09",
+      "maude-s10",
+      "maude-s11",
+      "maude-s12",
+      "maude-s13",
+      "maude-s14",
+      "maude-s15",
+      "maude-s16",
+      "maude-s17",
+      "maude-s18",
+      "maude-s19",
+      "maude-s20",
+      "docket-s01",
+      "docket-s11",
+      "docket-s15",
+      "docket-s17",
+      "docket-s20"
+    ],
+    "unique_provider_session_identities": 25,
+    "fresh_context_markers": 25,
+    "coached_sessions": 0,
+    "pre_provider_materialization_failures": 10,
+    "pre_provider_failure_run_ids": [
+      "install-i01",
+      "install-i02",
+      "install-i03",
+      "install-i04",
+      "install-i05",
+      "install-i06",
+      "install-i07",
+      "install-i08",
+      "install-i09",
+      "install-i10"
+    ],
+    "installation_provider_sessions_started": 0
+  },
+  "grading_stage": {
+    "completed_grades": 0,
+    "attempted_runs": 25,
+    "provider_sessions_started": 24,
+    "provider_sessions_rejected_for_frozen_schema": 24,
+    "pre_provider_argument_size_failures": 1,
+    "pre_provider_argument_size_failure_run_ids": [
+      "docket-s01"
+    ],
+    "retry_planned_for_this_generation": false
+  },
+  "mechanical_verification": {
+    "allow_incomplete_verifier_ok": false,
+    "operator_session_identities_observed": 25,
+    "completed_grade_session_identities_observed": 0,
+    "failed_grader_attempt_session_identities_observed": 24,
+    "errors": {
+      "installation_static_set_contradiction": {
+        "affected_runs": 10,
+        "missing_paths_in_each_run": [
+          "operator/operator-pty",
+          "operator/operator-retrospective"
+        ],
+        "extra_paths_in_each_run": []
+      },
+      "retrospective_analysis_false_contamination": {
+        "affected_completion_markers": 25,
+        "cause": "started and completed observations duplicated command analysis and command-result text was treated as command input"
+      },
+      "supplied_input_media_type_mismatch": {
+        "affected_completion_markers": 25,
+        "path": "operator-retrospective",
+        "bytes_and_sha256_matched": true
+      },
+      "codex_public_boundary_verifier_shape_mismatch": {
+        "affected_completion_markers": 20,
+        "surface": "maude"
+      },
+      "unsupported_grader_response_schema": {
+        "affected_provider_sessions": 24,
+        "provider_error": "uniqueItems is not permitted"
+      },
+      "grader_prompt_argument_size": {
+        "affected_pre_provider_attempts": 1,
+        "error": "[Errno 7] Argument list too long: '/usr/bin/bwrap'"
+      }
+    }
+  },
+  "disposition": {
+    "counts_toward_campaign_completion": false,
+    "operator_or_ux_verdict_permitted": false,
+    "successor_generation_required": true,
+    "successor_must_rerun_full_matrix": true,
+    "raw_evidence_preserved": true,
+    "failed_grade_attempts_preserved": true
+  },
+  "scope": {
+    "product_behavior_modified": false,
+    "operator_documentation_repaired": false,
+    "governance_or_oq7_state_changed": false,
+    "external_operational_side_effects": false,
+    "pushed": false,
+    "authority_effect": "none"
+  }
+}

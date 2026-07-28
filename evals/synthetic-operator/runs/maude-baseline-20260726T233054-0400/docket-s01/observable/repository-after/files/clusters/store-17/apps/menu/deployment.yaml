@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menu-api
+spec:
+  template:
+    spec:
+      containers:
+        - name: menu-api
+          image: registry.example.invalid/menu-api:2.7.3

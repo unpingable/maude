@@ -1,0 +1,82 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "disposition_write_action_indices": [
+    7
+  ],
+  "early_helper_inspection_action_indices": [
+    1
+  ],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "cd",
+      "segment_sha256": "2676190ff888a322a3251f4046230a39f46b1f8ea4e27b75aa683f2177f534ba"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "cd",
+      "segment_sha256": "2676190ff888a322a3251f4046230a39f46b1f8ea4e27b75aa683f2177f534ba"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    8
+  ],
+  "helper_inspection_action_indices": [
+    1
+  ],
+  "helper_inspection_before_invocation_action_indices": [
+    1
+  ],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "offset": 77
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "offset": 77
+    }
+  ],
+  "helper_invoked_exactly_once": false,
+  "helper_output_disposition_sha256": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_was_final_tool_action": false,
+  "initial_disposition": {
+    "bytes": 1029,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "8fc10f8e433d3dbbabb65d6f1721798ae79b2198473af9674a84231437462d49"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    8
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 6,
+  "protocol_action_indices": [
+    1,
+    7
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s05",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

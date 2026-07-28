@@ -1,0 +1,63 @@
+{
+  "files": [
+    {
+      "bytes": 4437,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/commands.md",
+      "sha256": "303e1e755721b390a9db41768a2d07820b1894b8afc31bfa7afd7cac9f87414b"
+    },
+    {
+      "bytes": 4203,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/configuration.md",
+      "sha256": "e759fff25a370e828725c416346f9d38e38328dd0cca6173bc3a925242e3307c"
+    },
+    {
+      "bytes": 834,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "task/README.md",
+      "sha256": "f5e78c44ea537ede4202437a51251ad2d484ea6ba8bc46cb3e96508d0435a0a9"
+    },
+    {
+      "bytes": 147,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "task/lab_approval_ux-task-19",
+      "sha256": "89398190ec68b28871d8d7fa9fe337c15ce4bd7d74881d383dead9056d7ad0a8"
+    },
+    {
+      "bytes": 641,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/packet.json",
+      "sha256": "68e2712d6dbd8c94d98bdb85564a55f137c0ba77d0eb640e97c0c25585180e86"
+    },
+    {
+      "bytes": 1785,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "task/plan.md",
+      "sha256": "b6faf38ac07acff2d0f93ebda4d68d270d0ccf671143a3f2acd2f8cac9d6a63f"
+    },
+    {
+      "bytes": 217,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/playbook.json",
+      "sha256": "e583b98f8ee0e8e0a98a1cf8299caf25352ea095cc234aabd460a0ce3129963d"
+    },
+    {
+      "bytes": 209,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/ration-card.json",
+      "sha256": "3aa4ad30af8b17a585b79a688f232e6b5cf0a8a26439aaf3b85a6a223a2ff6da"
+    }
+  ],
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s19/operator",
+  "public_cli_binaries_copied": false,
+  "schema": "maude.synthetic-operator.operator-supplied-snapshot.v1"
+}

@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "124e650e57a1ab5ce543246bcf269dee0aa39a77\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/deploy/worker.yaml b/deploy/worker.yaml\nindex cf63bd6..8d5ba98 100644\n--- a/deploy/worker.yaml\n+++ b/deploy/worker.yaml\n@@ -1 +1 @@\n-image: registry.example.invalid/worker:4.2.0\n+image: registry.example.invalid/worker:4.2.1\n"
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "7c875a4394cf2b6f7293994817debc1f37c98986\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "7c875a4 gwr governed effect 2051a157aacc489e7a39817dc30d32f4\n deploy/worker.yaml | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 45,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "deploy/worker.yaml",
+      "sha256": "fb49847e7f7f28e4c515b80676b7e171f02f1f7564719891e0c84c46bb98b35e"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

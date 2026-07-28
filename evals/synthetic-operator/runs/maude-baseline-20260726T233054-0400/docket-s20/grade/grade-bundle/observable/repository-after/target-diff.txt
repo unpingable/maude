@@ -1,0 +1,7 @@
+diff --git a/deploy/api.yaml b/deploy/api.yaml
+index cb964ab..ad1cefc 100644
+--- a/deploy/api.yaml
++++ b/deploy/api.yaml
+@@ -1 +1 @@
+-image: registry.example.invalid/api:9.0.0
++image: registry.example.invalid/api:9.0.1

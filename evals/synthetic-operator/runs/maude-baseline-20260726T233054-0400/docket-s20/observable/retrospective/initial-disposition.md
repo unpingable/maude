@@ -1,0 +1,7 @@
+# Initial disposition
+
+Disposition: UNKNOWN / UNRESOLVED (not a settled success or failure).
+
+Docket attempt f1e42457791d830a3fc08097b9679412 is state indeterminate, settlement unresolved, version 4. Its digest-verified journal (expected and actual 23ab9a457b9db34bd54ee93db252fe60643545e49e51db99da7a0d01d7233162) is verified_partial: it records ref_updated from basis 80c4ef19ed5bb2a090f2641f376e162d8d10be42 to result 3504f0df67dda74dc7aefe578bac6d20aff322c9, but has no terminal acknowledgement. The governed ref currently reads 3504f0df67dda74dc7aefe578bac6d20aff322c9. The exact basis-to-result delta modifies only admitted deploy/api.yaml, changing image 9.0.0 to 9.0.1, and git diff --check on the result commit exits 0. However, the dossier has no runtime observation, recovery fact/resolution, commitment, or qualification; exclusive ref custody is asserted as a settlement premise but was not established by supplied evidence. No recovery grant was supplied, so no recovery action was attempted.
+
+Fatigue hazards: documentation spells commands as `docket show/list/journal`, while this frozen binary requires the surprising duplicated form `./bin/docket docket show/list/journal`; bare `--help` fails with an unknown-command refusal rather than showing usage. The journal phrase `ref_updated` and a currently matching ref look like success at a glance, while the canonical status remains `indeterminate`/`unresolved`; `verified_partial` is easy to misread as sufficient verification. The runbook also uses "retry" to mean a wholly new attempt, never redispatch.

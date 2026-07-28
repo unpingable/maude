@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "ansible-playbook --syntax-check site.yml"
+  ],
+  "allowed_write_paths": [
+    "ansible/roles/edge/tasks/packages.yml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

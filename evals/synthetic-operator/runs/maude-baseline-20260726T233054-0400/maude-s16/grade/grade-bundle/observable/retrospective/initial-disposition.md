@@ -1,0 +1,3 @@
+Disposition: RETAIN UNKNOWN / DO NOT RESOLVE.
+
+Within the incident window, the bounded approved plan did not reach a terminal runtime result. Maude recorded session_created, session_running, and an allowed Edit event, but exposed no pending promotion, exact diff, or test result. The repository-visible queue configuration remains max_inflight: 100, so the requested value 80 is not established. A timed-out retry also left a duplicate session entry (one running, one created) under the same displayed session ID. No external effect was authorized or performed. Safest disposition: do not promote or proceed to incident resolution; escalate the nonterminal/duplicate session state and rerun only under fresh explicit authority.

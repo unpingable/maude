@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "kustomize build deploy/api"
+  ],
+  "allowed_write_paths": [
+    "deploy/api/deployment.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

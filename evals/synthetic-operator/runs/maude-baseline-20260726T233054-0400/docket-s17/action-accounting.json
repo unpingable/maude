@@ -1,0 +1,39 @@
+{
+  "all_provider_actions_represented_once": true,
+  "classification_rule": "Every Claude tool_use and every Codex item.* other than agent_message/reasoning is an action; unknown Codex item types are preserved as unexpected_action.",
+  "duplicate_action_references": [],
+  "observed_action_references": [
+    "codex:item_1",
+    "codex:item_10",
+    "codex:item_11",
+    "codex:item_12",
+    "codex:item_14",
+    "codex:item_15",
+    "codex:item_17",
+    "codex:item_2",
+    "codex:item_4",
+    "codex:item_5",
+    "codex:item_6",
+    "codex:item_7",
+    "codex:item_8"
+  ],
+  "represented_action_references": [
+    "codex:item_1",
+    "codex:item_10",
+    "codex:item_11",
+    "codex:item_12",
+    "codex:item_14",
+    "codex:item_15",
+    "codex:item_17",
+    "codex:item_2",
+    "codex:item_4",
+    "codex:item_5",
+    "codex:item_6",
+    "codex:item_7",
+    "codex:item_8"
+  ],
+  "schema": "maude.synthetic-operator.action-accounting.v1",
+  "unexpected_action_types": [],
+  "unexpected_representations": [],
+  "unrepresented_action_references": []
+}

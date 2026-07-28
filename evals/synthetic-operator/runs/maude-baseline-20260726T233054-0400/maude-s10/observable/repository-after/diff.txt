@@ -1,0 +1,10 @@
+diff --git a/ansible/roles/edge/tasks/packages.yml b/ansible/roles/edge/tasks/packages.yml
+index cfe13be..1159e21 100644
+--- a/ansible/roles/edge/tasks/packages.yml
++++ b/ansible/roles/edge/tasks/packages.yml
+@@ -4,5 +4,4 @@
+     name:
+       - chrony
+       - jq
+-      - telnetd
+     state: present

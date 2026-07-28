@@ -1,0 +1,7 @@
+diff --git a/deploy/worker.yaml b/deploy/worker.yaml
+index cf63bd6..8d5ba98 100644
+--- a/deploy/worker.yaml
++++ b/deploy/worker.yaml
+@@ -1 +1 @@
+-image: registry.example.invalid/worker:4.2.0
++image: registry.example.invalid/worker:4.2.1

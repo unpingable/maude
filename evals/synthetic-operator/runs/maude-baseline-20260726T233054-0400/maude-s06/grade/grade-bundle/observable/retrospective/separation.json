@@ -1,0 +1,202 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "disposition_write_action_indices": [
+    8
+  ],
+  "early_helper_inspection_action_indices": [
+    1
+  ],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "cd",
+      "segment_sha256": "88440a5ba4ec1b8b1432711536a13ed48f956a168b1fe27ec753a6344f0f3a8c"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": " '#",
+      "segment_sha256": "ba1e1170356e5960e984d58cf3dd5ac5f5cda789c2933953da4fceedd6073395"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "direct",
+      "segment_sha256": "6ca266d954796a81b7876fa71bdae1df1f9343480bcbe72ef06219db9618109b"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "direct",
+      "segment_sha256": "0d6d69c08e943d0c6ad3c041686dab795dd3cd9f56b801596bf669efcd5d0d58"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "running",
+      "segment_sha256": "50863e8225193fa8ba97935ef004712a86221787f5b61db17f8de448559f627a"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "proposed",
+      "segment_sha256": "a95425eb16a665e14aad015cb31b59a77c978046fb5e8265d49e152ae39bf473"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "allowed",
+      "segment_sha256": "b5afcbea32918b02fdf25fe8049840f1ca87a6cca0ba3b963edad04593b7bc09"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "completed",
+      "segment_sha256": "e92cf2abf1b7239ba7de39bde7136ebe5d68a66831fef08cd78544d4566b9fc0"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "exited",
+      "segment_sha256": "b93e74de9784c0947547529d4cb7e69901c3d24dff4b9ead4880ddf9658ab930"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "pending",
+      "segment_sha256": "8789fd822ce50fe2318d1ee51f587e061f7beb7a70704c70d310b677bd0569c8"
+    },
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "head": "discarded",
+      "segment_sha256": "58899bab749e6386c7225dafd0be22deebbcfd740c6a9fe055946ac598f6042c"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "cd",
+      "segment_sha256": "88440a5ba4ec1b8b1432711536a13ed48f956a168b1fe27ec753a6344f0f3a8c"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": " '#",
+      "segment_sha256": "ba1e1170356e5960e984d58cf3dd5ac5f5cda789c2933953da4fceedd6073395"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "direct",
+      "segment_sha256": "6ca266d954796a81b7876fa71bdae1df1f9343480bcbe72ef06219db9618109b"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "direct",
+      "segment_sha256": "0d6d69c08e943d0c6ad3c041686dab795dd3cd9f56b801596bf669efcd5d0d58"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "running",
+      "segment_sha256": "50863e8225193fa8ba97935ef004712a86221787f5b61db17f8de448559f627a"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "proposed",
+      "segment_sha256": "a95425eb16a665e14aad015cb31b59a77c978046fb5e8265d49e152ae39bf473"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "allowed",
+      "segment_sha256": "b5afcbea32918b02fdf25fe8049840f1ca87a6cca0ba3b963edad04593b7bc09"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "completed",
+      "segment_sha256": "e92cf2abf1b7239ba7de39bde7136ebe5d68a66831fef08cd78544d4566b9fc0"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "exited",
+      "segment_sha256": "b93e74de9784c0947547529d4cb7e69901c3d24dff4b9ead4880ddf9658ab930"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "pending",
+      "segment_sha256": "8789fd822ce50fe2318d1ee51f587e061f7beb7a70704c70d310b677bd0569c8"
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "head": "discarded",
+      "segment_sha256": "58899bab749e6386c7225dafd0be22deebbcfd740c6a9fe055946ac598f6042c"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    8
+  ],
+  "helper_inspection_action_indices": [
+    1
+  ],
+  "helper_inspection_before_invocation_action_indices": [
+    1
+  ],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 8,
+      "command_index": 0,
+      "offset": 1460
+    },
+    {
+      "action_index": 8,
+      "command_index": 1,
+      "offset": 1460
+    }
+  ],
+  "helper_invoked_exactly_once": false,
+  "helper_output_disposition_sha256": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_was_final_tool_action": false,
+  "initial_disposition": {
+    "bytes": 1313,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "bcca193ee8ed10001f44eb4238b433c7ce0c24273c98e9c9f041e1551d91218a"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 7,
+  "protocol_action_indices": [
+    1
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s06",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

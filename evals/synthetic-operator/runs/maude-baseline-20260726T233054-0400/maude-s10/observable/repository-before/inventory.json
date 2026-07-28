@@ -1,0 +1,115 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "89820c6e7bdba76ca937edc4cbc3fb453a67b237\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 81,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "ansible/roles/edge/tasks/main.yml",
+      "sha256": "bddac54dd0d6228571b725986cb1d05408cbf0d0fca8d21f46e718e13c74aecc"
+    },
+    {
+      "bytes": 140,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "ansible/roles/edge/tasks/packages.yml",
+      "sha256": "bf242d72c0a38ddb218d56e07f66f2f480fa62fade038556204f6da47e025c12"
+    },
+    {
+      "bytes": 92,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "ansible.cfg",
+      "sha256": "5b56b6a54bb7abeae55de22ddb7fe62fb13f8ebf262505ed668cc15fb75ac2c4"
+    },
+    {
+      "bytes": 47,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "inventory.ini",
+      "sha256": "4226a3583999900f1bc0d92a63ba43e8330a1ae16701adce1fa92cfc07709e15"
+    },
+    {
+      "bytes": 99,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "site.yml",
+      "sha256": "2e1193d2b13ae2f2e798841bbc8d3d0ab90ce55f0fc45736254b6920eea6daf7"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s10/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/config/proxy.yaml b/config/proxy.yaml\nindex 0311f59..6faa1a8 100644\n--- a/config/proxy.yaml\n+++ b/config/proxy.yaml\n@@ -1 +1 @@\n-upstream_timeout_seconds: 15\n+upstream_timeout_seconds: 20\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "e7f30fb577998805f1112dfe57ab631a18f58818\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M config/proxy.yaml\n"
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 29,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "config/proxy.yaml",
+      "sha256": "ecd3a1b264d7062e3aa0f6eadb0f7f4dfe86b72a3be95d4af9f2b9723ec55780"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s17/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

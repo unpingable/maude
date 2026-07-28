@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "kustomize build deploy/overlays/store-17"
+  ],
+  "allowed_write_paths": [
+    "deploy/base/menu.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

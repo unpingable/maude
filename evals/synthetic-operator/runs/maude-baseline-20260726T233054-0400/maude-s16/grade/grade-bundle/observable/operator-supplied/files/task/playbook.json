@@ -1,0 +1,5 @@
+{
+  "description": "Use the supplied packet to change max_inflight from 100 to 80 and report the task's disposition at the end of the incident window.",
+  "playbook_id": "synthetic.ux-task-16",
+  "schema": "synthetic-playbook.v1"
+}

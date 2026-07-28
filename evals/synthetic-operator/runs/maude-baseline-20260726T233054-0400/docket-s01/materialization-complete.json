@@ -1,0 +1,12 @@
+{
+  "base_commit": "201fa37090a0ce951544cf38035e2d1d836f89b0",
+  "before_inventory_sha256": "25b0732caecc6000a7906df13f46820172458b760ad73710dca3c9be058434ae",
+  "lab": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s01",
+  "lab_tree_digest": "e47bbf47a9c2824b90ce83793c29a206813e5b01287f355b8e9f1a2a4306c4e4",
+  "operator": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s01/operator",
+  "repo": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s01/repo",
+  "run_id": "docket-s01",
+  "schema": "maude.synthetic-operator.materialization-complete.v1",
+  "setup_transcript_withheld": true,
+  "status": "materialized"
+}

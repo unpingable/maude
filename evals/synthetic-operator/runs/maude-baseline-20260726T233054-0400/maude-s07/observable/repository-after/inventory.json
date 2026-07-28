@@ -1,0 +1,94 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/nginx/routes.conf b/nginx/routes.conf\nindex 0074240..2aa3601 100644\n--- a/nginx/routes.conf\n+++ b/nginx/routes.conf\n@@ -1,4 +1,4 @@\n location /order-history/ {\n     proxy_set_header X-Request-ID $request_id;\n-    proxy_pass http://order-history-v1:8080;\n+    proxy_pass http://order-history-v2:8080;\n }\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "a5387c05acaffcf344ebe6d9545bb0c4c2f02339\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M nginx/routes.conf\n"
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 301,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "nginx/nginx.conf",
+      "sha256": "8af18ba8e6769529ffd3e77da6472ae15f881ac0a4a2e988c0952d4c2e037db4"
+    },
+    {
+      "bytes": 121,
+      "media_type": "text/plain",
+      "mode": "0664",
+      "path": "nginx/routes.conf",
+      "sha256": "dda06a9a10c8cb89b66d89cdcd665d440ece63e19b5b0d8d0c568b3d579c315b"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s07/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

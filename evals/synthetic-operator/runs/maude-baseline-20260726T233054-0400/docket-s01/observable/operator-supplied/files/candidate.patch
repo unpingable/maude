@@ -1,0 +1,6 @@
+--- a/clusters/store-17/apps/menu/deployment.yaml
++++ b/clusters/store-17/apps/menu/deployment.yaml
+@@ -9,2 +9,2 @@
+         - name: menu-api
+-          image: registry.example.invalid/menu-api:2.7.3
++          image: registry.example.invalid/menu-api:2.7.4

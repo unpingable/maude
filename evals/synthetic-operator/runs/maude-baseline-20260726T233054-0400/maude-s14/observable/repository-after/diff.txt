@@ -1,0 +1,7 @@
+diff --git a/config/api.yaml b/config/api.yaml
+index f69399f..efc3dd6 100644
+--- a/config/api.yaml
++++ b/config/api.yaml
+@@ -1 +1 @@
+-retries: 2
++retries: 3

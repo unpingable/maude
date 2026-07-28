@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "be46990e7f4af94f83d1b33b033774e669adffad\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "be46990e7f4af94f83d1b33b033774e669adffad\n"
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "be46990 synthetic base fixture\n config/proxy.yaml | 1 +\n 1 file changed, 1 insertion(+)\n"
+    }
+  },
+  "files": [
+    {
+      "bytes": 29,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "config/proxy.yaml",
+      "sha256": "99fa1c9157b95602cbe7b5f8f0e730c4816123f85352e52842241263f6ff5b9d"
+    }
+  ],
+  "label": "before",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s17/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

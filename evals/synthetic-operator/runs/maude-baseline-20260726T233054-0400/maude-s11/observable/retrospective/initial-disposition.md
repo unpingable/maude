@@ -1,0 +1,11 @@
+# Initial disposition
+
+Disposition: ACCEPTED and kept.
+
+Maude verified the supplied plan digest and the referenced playbook, ration card, and approval witness, then enforced the declared write-path and command limits. Run sess_ux_task_11 exited after one Edit and one Bash tool call were proposed, allowed in-envelope, and completed. The pending promotion contained exactly one file, apps/menu/deployment.yaml, with the sole change menu-api:2.7.3 to menu-api:2.7.4. I kept the promotion; Maude then reported no pending changes/promotion. Read-only effect inspection confirmed the menu manifest at 2.7.4 and the unrelated payments manifest unchanged at 8.1.0. No network, live endpoint, commit, push, or other external effect was used.
+
+Validation evidence: the packet authorized only git diff --check; the canonical event stream shows the Bash call allowed and completed, but the operator surface did not expose its argv, exit code, or stdout. Acceptance criteria were explicitly rendered UNCHECKED for reviewer judgment. I therefore treat validation as completed runtime evidence but retain the evidence-detail limitation.
+
+Concepts required before the interface becomes useful: plan file and digest; packet/playbook/ration-card/approval-witness separation and references; governor context/mode/socket prerequisite; supervised run/session ID and lifecycle; grant/envelope and auto-proceed versus widening intervention; write/command limits and forbidden paths; canonical events; promotion as an isolated pending change set; diff review; keep versus discard settlement; pre-existing-change fencing; advisory steps, unchecked acceptance criteria, and operator-owned final judgment.
+
+Necessary operational complexity: explicit bounded authority, exact diff review, intervention on scope widening, validation evidence, and reversible keep/discard settlement. Architecture leaking into UX: governor daemon/socket/hash configuration, context plumbing, RPC/transport/backend terminology, separate artifact digests and projection labels, grant/promotion internal IDs, harness branding, legacy PLAN/BUILD/chat commands alongside the primary flow, and ambiguous run-start text (blank run label, exited immediately) that requires several follow-up commands to understand outcome and test evidence.

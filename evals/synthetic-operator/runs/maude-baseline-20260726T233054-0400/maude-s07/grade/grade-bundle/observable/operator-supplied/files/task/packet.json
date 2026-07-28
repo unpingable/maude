@@ -1,0 +1,24 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Point /order-history/ at order-history-v2:8080 while preserving path and headers.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-07",
+  "plan": "plan.md",
+  "review_requirement": "operator may settle after inspecting exact effects and evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "nginx",
+        "-p",
+        ".",
+        "-t",
+        "-c",
+        "nginx/nginx.conf"
+      ],
+      "program": "nginx"
+    }
+  ]
+}

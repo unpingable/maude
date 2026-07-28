@@ -1,0 +1,13 @@
+diff --git a/deploy/menu-board/deployment.yaml b/deploy/menu-board/deployment.yaml
+index eb4f493..a72834a 100644
+--- a/deploy/menu-board/deployment.yaml
++++ b/deploy/menu-board/deployment.yaml
+@@ -10,3 +10,8 @@ spec:
+           image: registry.example.invalid/menu-board:5.4.1
+           ports:
+             - containerPort: 8080
++          readinessProbe:
++            httpGet:
++              path: /ready
++              port: 8080
++            initialDelaySeconds: 5

@@ -1,0 +1,5 @@
+{
+  "description": "Point /order-history/ at order-history-v2:8080 while preserving path and headers.",
+  "playbook_id": "synthetic.ux-task-07",
+  "schema": "synthetic-playbook.v1"
+}

@@ -1,0 +1,70 @@
+{
+  "files": [
+    {
+      "bytes": 154,
+      "media_type": "text/x-diff",
+      "mode": "0664",
+      "path": "candidate.patch",
+      "sha256": "0ea84032ab1903f60a5c91d86303d813e509ad14dcdc70ceb6274720091e23c1"
+    },
+    {
+      "bytes": 1623,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "control.json",
+      "sha256": "6c370bb85d23b2dc6ac67b1ac230977b9e06d31cda40279385a940476835f4c2"
+    },
+    {
+      "bytes": 6268,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/attempt-dossier.md",
+      "sha256": "aff983fb66b73c3b568de9fe45a9ffdce216c723248465f193c53fb9a50e9422"
+    },
+    {
+      "bytes": 4007,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/effect-classes.md",
+      "sha256": "b74e46488820508e9307d138c31e642293d347375ab4b522b89bd88d0b512d11"
+    },
+    {
+      "bytes": 11055,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/operator-runbook.md",
+      "sha256": "cd56313afb01aecb6beab088d0e897277207765f47a7933b49e8f2c27259bcf9"
+    },
+    {
+      "bytes": 8253,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/repository-identity-and-ref-continuity.md",
+      "sha256": "a64f0f02a58b878575cad42ce597bba12824531af3c25556d9b7c9544319a3e4"
+    },
+    {
+      "bytes": 6221,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "docs/trust-model.md",
+      "sha256": "b39a4585800e45911c784c6e626bbfa589e98c3f696f5d77e77f5b45298fc13b"
+    },
+    {
+      "bytes": 961,
+      "media_type": "text/markdown",
+      "mode": "0664",
+      "path": "task/README.md",
+      "sha256": "448a20e416c766eb4b53811f5bdf551d142c0f4fb5d854c669a67e1b9a314eff"
+    },
+    {
+      "bytes": 634,
+      "media_type": "application/json",
+      "mode": "0664",
+      "path": "task/packet.json",
+      "sha256": "e0247c5457020e2d41383affcdb5031a94d6cc30b56313b79b1555e62aa7895e"
+    }
+  ],
+  "operator_root": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/docket-s15/operator",
+  "public_cli_binaries_copied": false,
+  "schema": "maude.synthetic-operator.operator-supplied-snapshot.v1"
+}

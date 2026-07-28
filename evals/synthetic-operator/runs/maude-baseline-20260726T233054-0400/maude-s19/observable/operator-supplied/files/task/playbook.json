@@ -1,0 +1,5 @@
+{
+  "description": "Change cache_ttl_seconds from 5 to 10, inspect the resulting candidate, and choose the supported final disposition.",
+  "playbook_id": "synthetic.ux-task-19",
+  "schema": "synthetic-playbook.v1"
+}

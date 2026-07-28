@@ -1,0 +1,7 @@
+diff --git a/config/proxy.yaml b/config/proxy.yaml
+index 0311f59..6faa1a8 100644
+--- a/config/proxy.yaml
++++ b/config/proxy.yaml
+@@ -1 +1 @@
+-upstream_timeout_seconds: 15
++upstream_timeout_seconds: 20

@@ -1,0 +1,22 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Use the supplied packet to change max_inflight from 100 to 80 and report the task's disposition at the end of the incident window.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-16",
+  "plan": "plan.md",
+  "review_requirement": "Base the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/test_queue_config.py"
+      ],
+      "program": "python3"
+    }
+  ]
+}

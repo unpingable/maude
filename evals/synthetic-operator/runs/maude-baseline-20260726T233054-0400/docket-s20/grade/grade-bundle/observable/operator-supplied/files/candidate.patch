@@ -1,0 +1,5 @@
+--- a/deploy/api.yaml
++++ b/deploy/api.yaml
+@@ -1 +1 @@
+-image: registry.example.invalid/api:9.0.0
++image: registry.example.invalid/api:9.0.1

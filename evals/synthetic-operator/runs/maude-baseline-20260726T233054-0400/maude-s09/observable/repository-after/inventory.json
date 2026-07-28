@@ -1,0 +1,87 @@
+{
+  "commands": {
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "diff --git a/alerts/menu-latency.yaml b/alerts/menu-latency.yaml\nindex b9af0ae..37b4591 100644\n--- a/alerts/menu-latency.yaml\n+++ b/alerts/menu-latency.yaml\n@@ -2,5 +2,5 @@ groups:\n   - name: menu\n     rules:\n       - alert: MenuApiHighLatency\n-        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 1.0\n+        expr: histogram_quantile(0.95, rate(menu_latency_bucket[5m])) > 0.75\n         for: 10m\n"
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "5ebcba8917d792c6dde4421f99baac7533fb1040\n"
+    },
+    "status-short": {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M alerts/menu-latency.yaml\n"
+    },
+    "target-diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--no-ext-diff",
+        "HEAD",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    },
+    "target-ref": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--verify",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 128,
+      "stderr": "fatal: Needed a single revision\n",
+      "stdout": ""
+    },
+    "target-show": {
+      "argv": [
+        "git",
+        "show",
+        "--stat",
+        "--oneline",
+        "refs/gwr/target"
+      ],
+      "cwd": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+      "returncode": 128,
+      "stderr": "fatal: ambiguous argument 'refs/gwr/target': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n",
+      "stdout": ""
+    }
+  },
+  "files": [
+    {
+      "bytes": 162,
+      "media_type": "application/yaml",
+      "mode": "0664",
+      "path": "alerts/menu-latency.yaml",
+      "sha256": "b2b125d992257ad489809c148abdfba65adf77f29799938f023478e1842341c5"
+    }
+  ],
+  "label": "after",
+  "repository": "/tmp/maude-synth-maude-baseline-20260726T233054-0400/maude-s09/repo",
+  "schema": "maude.synthetic-operator.repository-snapshot.v1"
+}

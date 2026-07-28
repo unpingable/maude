@@ -1,0 +1,8 @@
+---
+- name: Install edge support packages
+  ansible.builtin.package:
+    name:
+      - chrony
+      - jq
+      - telnetd
+    state: present

@@ -1,0 +1,21 @@
+{
+  "authority_effect": "synthetic_fixture_only",
+  "description": "Set the Store 17 menu API replica count from 3 to 4 using the supplied packet.",
+  "external_effects": "denied",
+  "fixture_root": "fixture",
+  "network": "denied",
+  "packet_id": "packet-ux-task-13",
+  "plan": "plan.md",
+  "review_requirement": "Base the final disposition on the operator-visible packet, runtime state, exact effects, and test evidence",
+  "schema": "synthetic-change-packet.v1",
+  "validation_plan": [
+    {
+      "argv": [
+        "kustomize",
+        "build",
+        "deploy/overlays/store-17"
+      ],
+      "program": "kustomize"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "git diff --check"
+  ],
+  "allowed_write_paths": [
+    "config/proxy.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}

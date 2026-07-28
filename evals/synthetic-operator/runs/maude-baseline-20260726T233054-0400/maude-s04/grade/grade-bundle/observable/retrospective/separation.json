@@ -1,0 +1,132 @@
+{
+  "authority_effect": "none",
+  "campaign_id": "maude-baseline-20260726T233054-0400",
+  "disposition_write_action_indices": [
+    10
+  ],
+  "early_helper_inspection_action_indices": [
+    1
+  ],
+  "embedded_product_segments_in_retrospective_action": [
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "shell-substitution",
+      "segment_sha256": "dba008ee5d8a32a18516716634d618cdd73e58fd65127464e0ecace546efa186"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "scope",
+      "segment_sha256": "ba16afcc002769d94c654949472637b7bacf9ee434452862deaccdc4f5011edb"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "image",
+      "segment_sha256": "308e618a119c07efbd800889630d6aba7f1ba0f5413ae56250b6ec894212c1c6"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "exact",
+      "segment_sha256": "ba4a9f523f69be21c01c16df77acf562ad4f91aba38659deece409d55edfcb3e"
+    },
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "head": "subsequent",
+      "segment_sha256": "30cbb3bf35f4e3e95890b0c2392bbeadeafbb50fbc9747494c7550166077a14b"
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "head": "shell-substitution",
+      "segment_sha256": "dba008ee5d8a32a18516716634d618cdd73e58fd65127464e0ecace546efa186"
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "head": "scope",
+      "segment_sha256": "ba16afcc002769d94c654949472637b7bacf9ee434452862deaccdc4f5011edb"
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "head": "image",
+      "segment_sha256": "308e618a119c07efbd800889630d6aba7f1ba0f5413ae56250b6ec894212c1c6"
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "head": "exact",
+      "segment_sha256": "ba4a9f523f69be21c01c16df77acf562ad4f91aba38659deece409d55edfcb3e"
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "head": "subsequent",
+      "segment_sha256": "30cbb3bf35f4e3e95890b0c2392bbeadeafbb50fbc9747494c7550166077a14b"
+    }
+  ],
+  "evaluator_contamination": true,
+  "evaluator_intervention_after_start": "none",
+  "helper_action_indices": [
+    10
+  ],
+  "helper_inspection_action_indices": [
+    1
+  ],
+  "helper_inspection_before_invocation_action_indices": [
+    1
+  ],
+  "helper_invocation_occurrences": [
+    {
+      "action_index": 10,
+      "command_index": 0,
+      "offset": 948
+    },
+    {
+      "action_index": 10,
+      "command_index": 1,
+      "offset": 948
+    }
+  ],
+  "helper_invoked_exactly_once": false,
+  "helper_output_disposition_sha256": [],
+  "helper_output_matches_initial_disposition": false,
+  "helper_was_final_tool_action": false,
+  "initial_disposition": {
+    "bytes": 874,
+    "media_type": "text/markdown",
+    "mode": "0644",
+    "path": "observable/retrospective/initial-disposition.md",
+    "sha256": "2a574198c2149300a418dd404c0a16cbe7d37c25ee1e48d3481e134d7aa98a78"
+  },
+  "operations_after_helper": 0,
+  "preloaded_question_phrases": [],
+  "product_action_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "product_interface_action_count_excluding_evaluator_protocol": 9,
+  "protocol_action_indices": [
+    1
+  ],
+  "pty_provider_actions_each_count_as_interaction_step": true,
+  "pty_start_wrapped_executable_not_double_counted": true,
+  "pty_transport_action_indices": [],
+  "pty_wrapped_product_start_action_indices": [],
+  "questionnaire": "maude-synthetic-operator-retrospective-v1",
+  "retrospective_questions_preloaded": false,
+  "run_id": "maude-s04",
+  "schema": "maude.synthetic-operator.retrospective-separation.v1",
+  "separation_valid": false
+}

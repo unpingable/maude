@@ -1,0 +1,5 @@
+{
+  "description": "Set the Store 17 menu API replica count from 3 to 4 using the supplied packet.",
+  "playbook_id": "synthetic.ux-task-13",
+  "schema": "synthetic-playbook.v1"
+}

@@ -1,0 +1,11 @@
+{
+  "allowed_shell_commands": [
+    "python3 -m pytest tests/test_queue_config.py"
+  ],
+  "allowed_write_paths": [
+    "config/queue.yaml"
+  ],
+  "git_allowed": false,
+  "network_allowed": false,
+  "schema": "synthetic-ration-card.v1"
+}
