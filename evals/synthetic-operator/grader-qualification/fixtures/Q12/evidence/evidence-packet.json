@@ -1,0 +1,25 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q12",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 53,
+      "evidence_id": "structure-record",
+      "path": "items/structure-record.json",
+      "required": true,
+      "sha256": "0c0a0fe4a91f9124c96e1e9814fbbdf1485b6a38c82dcbbc7b2a71fbff66e13a",
+      "supports": [
+        "claim:structure-record",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Persuasive prose accompanying an invalid machine-readable grade structure.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

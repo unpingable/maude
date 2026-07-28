@@ -1,0 +1,36 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "unavailable",
+  "fixture_id": "Q11",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 71,
+      "evidence_id": "request-record",
+      "path": "items/request-record.json",
+      "required": true,
+      "sha256": "3456907b8e6da0beacb99dea94ed1c38d1bc6b752a841cff442fba623c025a5e",
+      "supports": [
+        "claim:request-known",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "unavailable",
+      "bytes": null,
+      "evidence_id": "runtime-report",
+      "path": "items/runtime-report.json",
+      "required": true,
+      "sha256": null,
+      "supports": [
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Unavailable required evidence with a correctly emitted indeterminate result.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

@@ -1,0 +1,19 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "request-record"
+      ],
+      "claim_id": "request-known",
+      "statement": "The requested terminal-state inspection is identified."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "unavailable",
+  "missing_evidence": [
+    "runtime-report"
+  ],
+  "rationale": "The evidence surface could not return the required runtime report.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "INDETERMINATE"
+}

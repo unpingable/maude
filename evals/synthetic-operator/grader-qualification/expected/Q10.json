@@ -1,0 +1,19 @@
+{
+  "admission": "ACCEPTED",
+  "authority_effect": "none",
+  "counts_as_accepted_independent_grade": true,
+  "counts_as_product_pass_or_fail": true,
+  "evidence_contamination_sticky": false,
+  "evidence_state": "complete",
+  "exact_falsifier": "Any discovery action, missing installation read, unsupported claim, non-PASS verdict, or rejected admission falsifies Q10.",
+  "expected_action_count": 4,
+  "expected_rostered_action_count": 4,
+  "expected_unrostered_action_count": 0,
+  "fixture_id": "Q10",
+  "missing_or_unavailable_evidence": [],
+  "procedure": "COMPLIANT",
+  "procedure_contamination_sticky": false,
+  "schema": "maude.synthetic-operator.grader-qualification-expected.v1",
+  "verdict": "PASS",
+  "violations": []
+}

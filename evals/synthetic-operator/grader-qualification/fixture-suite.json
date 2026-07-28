@@ -1,0 +1,424 @@
+{
+  "allowed_tool_roster": {
+    "bytes": 312,
+    "path": "allowed-tool-roster.json",
+    "sha256": "1d7dfa299b346b3cc3415a0f4a0fcad09e6a45d1fe6febb1743a4c2cf94c43d3"
+  },
+  "authority_effect": "none",
+  "deterministic_rebuild": true,
+  "expected_totals": {
+    "accepted": 7,
+    "accepted_determinate": 3,
+    "accepted_indeterminate": 4,
+    "compliant": 7,
+    "evaluator_failure": 5,
+    "rejected": 5
+  },
+  "fixture_count": 12,
+  "fixture_ids": [
+    "Q01",
+    "Q02",
+    "Q03",
+    "Q04",
+    "Q05",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q09",
+    "Q10",
+    "Q11",
+    "Q12"
+  ],
+  "fixture_suite_version": "grader-qualification-fixtures-v1",
+  "fixtures": [
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 1043,
+        "path": "fixtures/Q01/evidence/evidence-packet.json",
+        "sha256": "f2da48bc584d439441af2a664ac98808d1a00e53085a5bd23f532fe7558fdf71"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 730,
+        "path": "expected/Q01.json",
+        "sha256": "6810f24b554b85a8e2462d8d8dfdc96dcbd03e08448e7df122641d4a53d0d54a"
+      },
+      "fixture": {
+        "bytes": 3555,
+        "path": "fixtures/Q01/fixture.json",
+        "sha256": "5520eb89eb18727998c0f53f27d5ab19e97fa3dc88fe5cf7611682502b87803b"
+      },
+      "fixture_id": "Q01",
+      "grade": {
+        "bytes": 614,
+        "path": "fixtures/Q01/grade.json",
+        "sha256": "bffc6bc7d7471fcfdafafbc0d64e192cb271edb208a39d7cd11332385027019e"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4583,
+        "path": "fixtures/Q01/raw/grader.stdout.jsonl",
+        "sha256": "0c75686cb96009a57e4e2697e89f07e052b276bfceb134eec3b53161827b9ccb"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 1090,
+        "path": "fixtures/Q02/evidence/evidence-packet.json",
+        "sha256": "d2098f171fec8b58c938b7ea8e46a34681903575e7d932b030ececd36a9fbfdb"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 729,
+        "path": "expected/Q02.json",
+        "sha256": "d4da3d31cd8fcd4e750ac10c62b92d92f1e0fac76be14849e3878d59a76cc0a6"
+      },
+      "fixture": {
+        "bytes": 3613,
+        "path": "fixtures/Q02/fixture.json",
+        "sha256": "9b4030d0763997f09ff1f79624bf5e5f6d046b765db7bb8beedf13eb08012a73"
+      },
+      "fixture_id": "Q02",
+      "grade": {
+        "bytes": 654,
+        "path": "fixtures/Q02/grade.json",
+        "sha256": "06e1c68544f413e2aa19e275b805369d80792fc31718bb440e71b002838864cc"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4894,
+        "path": "fixtures/Q02/raw/grader.stdout.jsonl",
+        "sha256": "c8b8dad4629f20973b8e9ce391c3b1d963058f33d5690345a0b03e9ab989ec05"
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "admission": "REJECTED",
+      "evidence_packet": {
+        "bytes": 735,
+        "path": "fixtures/Q03/evidence/evidence-packet.json",
+        "sha256": "e4efc531fcf904f05913cd0bf129234ddd4824a335d252a15795612ec2d7e6b8"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 795,
+        "path": "expected/Q03.json",
+        "sha256": "e91e3c26e77155f0e6a77a31dd0bc5238f3429cee85cffe0855f5907ff3e583d"
+      },
+      "fixture": {
+        "bytes": 3458,
+        "path": "fixtures/Q03/fixture.json",
+        "sha256": "e43fd55e37c308a318e62ac7d3809c27daab478784a6f7a47813362c7c67d7c0"
+      },
+      "fixture_id": "Q03",
+      "grade": {
+        "bytes": 454,
+        "path": "fixtures/Q03/grade.json",
+        "sha256": "e1241e7520008952fd4dd8d49a5d7fcd5edba1fbe8e357038b910389fbf2363d"
+      },
+      "procedure": "EVALUATOR_FAILURE",
+      "raw_stream": {
+        "bytes": 3594,
+        "path": "fixtures/Q03/raw/grader.stdout.jsonl",
+        "sha256": "a45f918b0960ef5e8ca283639420c7f8ab8ae4ff705b19c5be6baa119b114bd5"
+      },
+      "verdict": "INDETERMINATE"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 1262,
+        "path": "fixtures/Q04/evidence/evidence-packet.json",
+        "sha256": "1155ef55e02c53b379229d5aeb273af7565104a47e089b65ca367fdf66cb342d"
+      },
+      "evidence_state": "contaminated",
+      "expected": {
+        "bytes": 737,
+        "path": "expected/Q04.json",
+        "sha256": "fda7e3c4b720a02c0998a4453a3c5773224b9eb99e023399af375e4b8d739ae6"
+      },
+      "fixture": {
+        "bytes": 3588,
+        "path": "fixtures/Q04/fixture.json",
+        "sha256": "ab0bd108aee76240271e5e2234e1aa0651ea127419c0d8b37c49be811eec641e"
+      },
+      "fixture_id": "Q04",
+      "grade": {
+        "bytes": 721,
+        "path": "fixtures/Q04/grade.json",
+        "sha256": "c06f3873571351b5402d5028e738ed38e08b69101aad67d12d18d69de9e83bff"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4855,
+        "path": "fixtures/Q04/raw/grader.stdout.jsonl",
+        "sha256": "9b4fed2d0e61c3a820bd5736197186bc8be490488f60774cbdae5f135dbdd7c1"
+      },
+      "verdict": "INDETERMINATE"
+    },
+    {
+      "admission": "REJECTED",
+      "evidence_packet": {
+        "bytes": 1225,
+        "path": "fixtures/Q05/evidence/evidence-packet.json",
+        "sha256": "55cee268aa107a4954d2c5224ff499335a6f55af0cf9c9402f08cf26fd9d5f32"
+      },
+      "evidence_state": "contaminated",
+      "expected": {
+        "bytes": 784,
+        "path": "expected/Q05.json",
+        "sha256": "b3ee73193e7736980db93f668c9fd23411ba27526211ad9232c6f080ba6a40da"
+      },
+      "fixture": {
+        "bytes": 3634,
+        "path": "fixtures/Q05/fixture.json",
+        "sha256": "d3725b958ce162cdd303d440f5b777bce916b232744539df143f4034a745800f"
+      },
+      "fixture_id": "Q05",
+      "grade": {
+        "bytes": 615,
+        "path": "fixtures/Q05/grade.json",
+        "sha256": "de6ff654ab31fa7f5feb717cec391fc3d85287f4ee4bda92cc1df4793628b1d3"
+      },
+      "procedure": "EVALUATOR_FAILURE",
+      "raw_stream": {
+        "bytes": 4774,
+        "path": "fixtures/Q05/raw/grader.stdout.jsonl",
+        "sha256": "52132eb630411315ecb3a2e9fd74fd761176996e4f9033804e7ba38681a906ac"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 942,
+        "path": "fixtures/Q06/evidence/evidence-packet.json",
+        "sha256": "9d4a12ec5f862a3cf9c85e1424cc8555c2aaaac0d02d597b529252a4864859d0"
+      },
+      "evidence_state": "incomplete",
+      "expected": {
+        "bytes": 820,
+        "path": "expected/Q06.json",
+        "sha256": "c4a64c074a28298670c1ed2e196e9a0a354e9d64bf07a09a6023da8a65862dc0"
+      },
+      "fixture": {
+        "bytes": 3447,
+        "path": "fixtures/Q06/fixture.json",
+        "sha256": "10945d9372d29512eb9fe5bc329d88232c4f3b043610628076aa0686690c4336"
+      },
+      "fixture_id": "Q06",
+      "grade": {
+        "bytes": 489,
+        "path": "fixtures/Q06/grade.json",
+        "sha256": "9da2d9de41d2cce7d2bf8e9baa2259ca256df93eb57bbd14d66402b232f9e9c5"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4175,
+        "path": "fixtures/Q06/raw/grader.stdout.jsonl",
+        "sha256": "da45dea1aa80d9d748673e68248cc8dcf6e777ef125e434b68da51aefe7548a4"
+      },
+      "verdict": "INDETERMINATE"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 1228,
+        "path": "fixtures/Q07/evidence/evidence-packet.json",
+        "sha256": "58ad1eabfab966c0d19dd92ada70c580f3136697b5d70c8fb79568202ce9cbaa"
+      },
+      "evidence_state": "contradictory",
+      "expected": {
+        "bytes": 769,
+        "path": "expected/Q07.json",
+        "sha256": "4bdc04f0bdb4d106083bdabda91be5e145113a6d551f26ecdf478dc7659262c6"
+      },
+      "fixture": {
+        "bytes": 3618,
+        "path": "fixtures/Q07/fixture.json",
+        "sha256": "a27fb4c1b14fbec43ae2240d246474580e6c2a14a322799f620fc10408cbe17b"
+      },
+      "fixture_id": "Q07",
+      "grade": {
+        "bytes": 729,
+        "path": "fixtures/Q07/grade.json",
+        "sha256": "a9c52902a5fd230cc8f8f18c7d3626ee628f21a11158b3de767fd90ed3330610"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4905,
+        "path": "fixtures/Q07/raw/grader.stdout.jsonl",
+        "sha256": "39742b07dc80f7d2b752d155a074a438e4767dea198a253098a74d12791ed9ea"
+      },
+      "verdict": "INDETERMINATE"
+    },
+    {
+      "admission": "REJECTED",
+      "evidence_packet": {
+        "bytes": 698,
+        "path": "fixtures/Q08/evidence/evidence-packet.json",
+        "sha256": "ac0f969dff2dd063ac5978de84a1ed4c526329d4f33919d72e95521a35b59cc4"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 754,
+        "path": "expected/Q08.json",
+        "sha256": "6c19919341c554965a16ecba81a056215a2e32b35ca60c5926e0de38cd0e6c99"
+      },
+      "fixture": {
+        "bytes": 3120,
+        "path": "fixtures/Q08/fixture.json",
+        "sha256": "4902553020bec8789a3b7a0134d1a351bb4dc66f029bbb0735f8effeca328365"
+      },
+      "fixture_id": "Q08",
+      "grade": {
+        "bytes": 446,
+        "path": "fixtures/Q08/grade.json",
+        "sha256": "d40e99610386daba82dab89404f993bfa464be68543546cf6267f5b3457824aa"
+      },
+      "procedure": "EVALUATOR_FAILURE",
+      "raw_stream": {
+        "bytes": 3110,
+        "path": "fixtures/Q08/raw/grader.stdout.jsonl",
+        "sha256": "6f860640c7f5b22fe226580cbae1773d989a19fae7a78a0179ea67c4d28eaea4"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "admission": "REJECTED",
+      "evidence_packet": {
+        "bytes": 726,
+        "path": "fixtures/Q09/evidence/evidence-packet.json",
+        "sha256": "c3742e497f11cbac4a6dea7a09b0b46dad6d254d94c5c585d855c75ffba77b64"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 774,
+        "path": "expected/Q09.json",
+        "sha256": "e6f8cff032b93f81266d9d0b2ef81c94dd9e589fdc93adda81f413864f70b7d1"
+      },
+      "fixture": {
+        "bytes": 3167,
+        "path": "fixtures/Q09/fixture.json",
+        "sha256": "13c5960d62af6503f3e0bd8625ad1787dde321795ac2e2748eb88ab0032cd1fc"
+      },
+      "fixture_id": "Q09",
+      "grade": {
+        "bytes": 443,
+        "path": "fixtures/Q09/grade.json",
+        "sha256": "2786573755d3c8f967ae539a6a98c15f9015335957dec887d628eca9e66029eb"
+      },
+      "procedure": "EVALUATOR_FAILURE",
+      "raw_stream": {
+        "bytes": 3144,
+        "path": "fixtures/Q09/raw/grader.stdout.jsonl",
+        "sha256": "c6205f66984f258c6be022dda7a6d1cdc6da52ad826c914331c8df1e5f6541e1"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 1461,
+        "path": "fixtures/Q10/evidence/evidence-packet.json",
+        "sha256": "792936f1a10dcfd83a10b8d018cc5c8190335e9d3bd452ba86d4885600d7d685"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 730,
+        "path": "expected/Q10.json",
+        "sha256": "1b9088a4cc6c6afeb4d5f3c17ac12f9488105c8c2ab572885de943b89bb43374"
+      },
+      "fixture": {
+        "bytes": 4112,
+        "path": "fixtures/Q10/fixture.json",
+        "sha256": "2c697122f2445545939f7a6a84625a8c423f98f44f3cbbca8ce4072d0c51fe8c"
+      },
+      "fixture_id": "Q10",
+      "grade": {
+        "bytes": 886,
+        "path": "fixtures/Q10/grade.json",
+        "sha256": "4f1df86bd897fcedaf8ab092b920655ee82c09a2668be3accfce6fac7bd2515e"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 6342,
+        "path": "fixtures/Q10/raw/grader.stdout.jsonl",
+        "sha256": "4ba28691de5f1469ba478396d52ff8e30d206d35610da2ea0ec2559216b79b6e"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "admission": "ACCEPTED",
+      "evidence_packet": {
+        "bytes": 969,
+        "path": "fixtures/Q11/evidence/evidence-packet.json",
+        "sha256": "0d34e30de3d522d6aec875975b82e66a38d3f301c2d72cdeeb89b4a35d8ac487"
+      },
+      "evidence_state": "unavailable",
+      "expected": {
+        "bytes": 791,
+        "path": "expected/Q11.json",
+        "sha256": "0cf1ab25706440bec6e9637c5f802b96d7f16ad14c536ba2916ec7b3d3acf6ba"
+      },
+      "fixture": {
+        "bytes": 3443,
+        "path": "fixtures/Q11/fixture.json",
+        "sha256": "e5eb797225a34ca0ca461600488f858e77f55c642d2fb8b9e6d026198d402f47"
+      },
+      "fixture_id": "Q11",
+      "grade": {
+        "bytes": 490,
+        "path": "fixtures/Q11/grade.json",
+        "sha256": "f7b51d9170abad24c81ce3a46b7d1cb50ab0ef90957f672b680fb8f2065c966b"
+      },
+      "procedure": "COMPLIANT",
+      "raw_stream": {
+        "bytes": 4214,
+        "path": "fixtures/Q11/raw/grader.stdout.jsonl",
+        "sha256": "4ebee75fbf9682bf60921e68250b57e0ce1db5eb47d8d9f2d97c2e82b78d724e"
+      },
+      "verdict": "INDETERMINATE"
+    },
+    {
+      "admission": "REJECTED",
+      "evidence_packet": {
+        "bytes": 726,
+        "path": "fixtures/Q12/evidence/evidence-packet.json",
+        "sha256": "f38408f9f51a4695b93ec1078ad0ef4632e2dd2c727e2268927b979dbaa317d5"
+      },
+      "evidence_state": "complete",
+      "expected": {
+        "bytes": 794,
+        "path": "expected/Q12.json",
+        "sha256": "44514b188757ba468223055525061b8a86a8ac420d20967dd86fc7d219284d65"
+      },
+      "fixture": {
+        "bytes": 3188,
+        "path": "fixtures/Q12/fixture.json",
+        "sha256": "1509c307db3c9352fec1104938c7a8eb6a6a71fd6394df30cc5da4b1e1e7ccad"
+      },
+      "fixture_id": "Q12",
+      "grade": {
+        "bytes": 548,
+        "path": "fixtures/Q12/grade.json",
+        "sha256": "cbbf1d5eaf8c234f08f72f9035e85bf4b24fb62185255f1aac42771729edfded"
+      },
+      "procedure": "EVALUATOR_FAILURE",
+      "raw_stream": {
+        "bytes": 3326,
+        "path": "fixtures/Q12/raw/grader.stdout.jsonl",
+        "sha256": "b54df68bec8d3f8ee921092fe9554daac71021f7df3e1d48d9f4de180d3c2922"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "generation_five_campaign": false,
+  "generation_four_input": false,
+  "provider_calls_required": false,
+  "schema": "maude.synthetic-operator.grader-qualification-suite.v1",
+  "self_exclusion": "fixture-suite.json excludes its own digest to avoid recursion"
+}

@@ -1,0 +1,25 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q08",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 52,
+      "evidence_id": "actual-report",
+      "path": "items/actual-report.json",
+      "required": true,
+      "sha256": "17e83d6b0c57bdfda2b60cc7560abcaa0b2361238d1f15c1be2b586256beafb5",
+      "supports": [
+        "claim:actual-report",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Unsupported citation and fabricated evidence reference.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

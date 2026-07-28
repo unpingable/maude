@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "authority_effect": {
+      "const": "none"
+    },
+    "qualification_schema_version": {
+      "const": "maude.synthetic-operator.grader-qualification-result.v1"
+    },
+    "qualification_verdict": {
+      "enum": [
+        "QUALIFIED-FOR-SUCCESSOR-CAMPAIGN",
+        "DETERMINISTICALLY-QUALIFIED-LIVE-PROBE-PENDING",
+        "NOT-QUALIFIED-TOOL-BOUNDARY",
+        "NOT-QUALIFIED-CONTAMINATION-HANDLING",
+        "NOT-QUALIFIED-EVIDENCE-DISCIPLINE",
+        "NOT-QUALIFIED-VERDICT-VALIDATION",
+        "NOT-QUALIFIED-PROVIDER-LIMITATION"
+      ]
+    }
+  },
+  "required": [
+    "qualification_schema_version",
+    "qualification_verdict",
+    "authority_effect"
+  ],
+  "type": "object"
+}

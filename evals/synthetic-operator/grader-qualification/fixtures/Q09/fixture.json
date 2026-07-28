@@ -1,0 +1,100 @@
+{
+  "allowed_tool_roster": [
+    "mcp__grader__evidence"
+  ],
+  "allowed_tool_roster_record": {
+    "bytes": 312,
+    "path": "allowed-tool-roster.json",
+    "sha256": "1d7dfa299b346b3cc3415a0f4a0fcad09e6a45d1fe6febb1743a4c2cf94c43d3"
+  },
+  "allowed_tool_roster_source": "../../allowed-tool-roster.json",
+  "authority_effect": "none",
+  "campaign_run": false,
+  "exact_falsifier": "Allowing later reads to retroactively support the earlier verdict, or accepting the substantively plausible grade, falsifies Q09.",
+  "expected_grade_admission_result": "REJECTED",
+  "expected_grader_actions": [
+    {
+      "action_id": "item_0",
+      "canonical_tool": "mcp__grader__evidence",
+      "first_event_number": 4,
+      "operation": "read",
+      "path": "evidence-packet.json",
+      "rostered": true,
+      "server": "grader",
+      "tool": "evidence"
+    },
+    {
+      "action_id": "item_1",
+      "canonical_tool": "mcp__grader__evidence",
+      "first_event_number": 6,
+      "operation": "read",
+      "path": "items/mandatory-report.json",
+      "rostered": true,
+      "server": "grader",
+      "tool": "evidence"
+    }
+  ],
+  "expected_raw_stream_properties": {
+    "all_action_identities_stable": true,
+    "complete_raw_stream_preserved": true,
+    "grade_precedes_mandatory_reads": true,
+    "later_compliance_after_unrostered_attempt": false,
+    "rostered_tool_request_count": 2,
+    "structured_grade_count": 1,
+    "thread_started_count": 1,
+    "tool_request_count": 2,
+    "unrostered_tool_request_count": 0
+  },
+  "expected_validator_result": {
+    "admission": "REJECTED",
+    "evidence_contamination_sticky": false,
+    "evidence_state": "complete",
+    "procedure": "EVALUATOR_FAILURE",
+    "procedure_contamination_sticky": false,
+    "verdict": "PASS",
+    "violations": [
+      "PREMATURE_VERDICT"
+    ]
+  },
+  "fixture_id": "Q09",
+  "frozen_evidence_packet": "evidence/evidence-packet.json",
+  "live_provider_session": false,
+  "mandatory_evidence_ids": [
+    "mandatory-report"
+  ],
+  "maude_product_evidence": false,
+  "member_inventory_self_exclusion": "fixture.json is excluded to avoid a recursive digest",
+  "members": [
+    {
+      "bytes": 726,
+      "path": "evidence/evidence-packet.json",
+      "sha256": "c3742e497f11cbac4a6dea7a09b0b46dad6d254d94c5c585d855c75ffba77b64"
+    },
+    {
+      "bytes": 52,
+      "path": "evidence/items/mandatory-report.json",
+      "sha256": "608b2ad4b1388a158e846d1cff59489c5ac158554824aef3908ff81bd8ac33ff"
+    },
+    {
+      "bytes": 443,
+      "path": "grade.json",
+      "sha256": "2786573755d3c8f967ae539a6a98c15f9015335957dec887d628eca9e66029eb"
+    },
+    {
+      "bytes": 3144,
+      "path": "raw/grader.stdout.jsonl",
+      "sha256": "c6205f66984f258c6be022dda7a6d1cdc6da52ad826c914331c8df1e5f6541e1"
+    }
+  ],
+  "prohibited_actions": [
+    "codex/list_mcp_resources",
+    "codex/list_mcp_resource_templates",
+    "shell",
+    "repository inspection",
+    "network",
+    "unrelated MCP"
+  ],
+  "purpose": "A plausible determinate verdict emitted before mandatory evidence is read.",
+  "schema": "maude.synthetic-operator.grader-qualification-fixture.v1",
+  "synthetic_fixed_stream": true
+}

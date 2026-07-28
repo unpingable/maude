@@ -1,0 +1,7 @@
+{
+  "command": "python -m pip install maude.whl",
+  "minimum_configuration": [
+    "GOVERNOR_SOCKET"
+  ],
+  "package": "maude"
+}

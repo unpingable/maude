@@ -1,0 +1,19 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "task-record"
+      ],
+      "claim_id": "task-known",
+      "statement": "The requested validation task is known."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "incomplete",
+  "missing_evidence": [
+    "validation-result"
+  ],
+  "rationale": "The required validation result is absent, so no determinate conclusion is available.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "INDETERMINATE"
+}

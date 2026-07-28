@@ -1,0 +1,49 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q10",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 129,
+      "evidence_id": "install-documentation",
+      "path": "items/install-documentation.json",
+      "required": true,
+      "sha256": "f5e81bcce738face7bfef56caa4c21aa2a0d3f252407dedbc6203476c533645d",
+      "supports": [
+        "claim:install-documented",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "available",
+      "bytes": 160,
+      "evidence_id": "install-transcript",
+      "path": "items/install-transcript.json",
+      "required": true,
+      "sha256": "87801648669adcf617683352904b19400d06ddfbd9c0aa7eb122ec7a569cdbff",
+      "supports": [
+        "claim:install-executed",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "available",
+      "bytes": 93,
+      "evidence_id": "first-run-result",
+      "path": "items/first-run-result.json",
+      "required": true,
+      "sha256": "0fe64b0acc7afe149abc93181d522be0e63111d492aae4c2d3195bdd44f668d3",
+      "supports": [
+        "claim:first-run",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Valid complete installation and first-run packet using the same evidence shape that tempted generation-four graders.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

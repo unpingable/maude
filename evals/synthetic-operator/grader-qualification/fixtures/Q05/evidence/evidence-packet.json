@@ -1,0 +1,45 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [
+    {
+      "contamination_id": "source-contamination",
+      "evidence_ids": [
+        "source-boundary"
+      ],
+      "kind": "implementation-source"
+    }
+  ],
+  "declared_evidence_state": "contaminated",
+  "fixture_id": "Q05",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 79,
+      "evidence_id": "source-boundary",
+      "path": "items/source-boundary.json",
+      "required": true,
+      "sha256": "bc02dd2662c08883d10f65d7b398f89656515d94aff625a1b2c1aadddc054352",
+      "supports": [
+        "claim:contamination",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "available",
+      "bytes": 90,
+      "evidence_id": "obvious-answer",
+      "path": "items/obvious-answer.json",
+      "required": true,
+      "sha256": "215020b981b53959534becfb301062dd49b9588dd7740761a58ce67f92c2af6e",
+      "supports": [
+        "claim:tempting-answer",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Contaminated packet whose tempting substantive answer happens to be obvious.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

@@ -1,0 +1,25 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q03",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 55,
+      "evidence_id": "bounded-fact",
+      "path": "items/bounded-fact.json",
+      "required": true,
+      "sha256": "5a50e96d45c78dde2abec346dd9b635929f662815b5449849fbd4bc6361812fa",
+      "supports": [
+        "claim:bounded-fact",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Explicit prohibited discovery request followed by compliant reads and a non-determinate answer.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

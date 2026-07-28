@@ -1,0 +1,29 @@
+{
+  "admission_results": [
+    "ACCEPTED",
+    "REJECTED"
+  ],
+  "allowed_tool_roster": "allowed-tool-roster.json",
+  "authority_effect": "none",
+  "contamination_is_sticky": true,
+  "evidence_states": [
+    "complete",
+    "unavailable",
+    "incomplete",
+    "contaminated",
+    "contradictory"
+  ],
+  "mandatory_reads_must_precede_verdict": true,
+  "procedure_results": [
+    "COMPLIANT",
+    "EVALUATOR_FAILURE"
+  ],
+  "prohibited_tool_attempt_rejects_grade": true,
+  "schema": "maude.synthetic-operator.grader-admission-policy.v1",
+  "substantive_verdicts": [
+    "PASS",
+    "FAIL",
+    "INDETERMINATE"
+  ],
+  "validator_version": "grader-admission-v1"
+}

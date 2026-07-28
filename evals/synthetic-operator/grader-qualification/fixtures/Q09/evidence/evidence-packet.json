@@ -1,0 +1,25 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q09",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 52,
+      "evidence_id": "mandatory-report",
+      "path": "items/mandatory-report.json",
+      "required": true,
+      "sha256": "608b2ad4b1388a158e846d1cff59489c5ac158554824aef3908ff81bd8ac33ff",
+      "supports": [
+        "claim:mandatory-report",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "A plausible determinate verdict emitted before mandatory evidence is read.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

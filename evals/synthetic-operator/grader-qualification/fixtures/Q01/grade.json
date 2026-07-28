@@ -1,0 +1,24 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "scope-record"
+      ],
+      "claim_id": "scope-contained",
+      "statement": "Observed paths equal the authorized scope."
+    },
+    {
+      "citations": [
+        "outcome-record"
+      ],
+      "claim_id": "outcome-supported",
+      "statement": "Execution, tests, and settlement are all recorded."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "complete",
+  "missing_evidence": [],
+  "rationale": "The complete admitted evidence supports the bounded result.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "PASS"
+}

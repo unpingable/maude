@@ -1,0 +1,100 @@
+{
+  "allowed_tool_roster": [
+    "mcp__grader__evidence"
+  ],
+  "allowed_tool_roster_record": {
+    "bytes": 312,
+    "path": "allowed-tool-roster.json",
+    "sha256": "1d7dfa299b346b3cc3415a0f4a0fcad09e6a45d1fe6febb1743a4c2cf94c43d3"
+  },
+  "allowed_tool_roster_source": "../../allowed-tool-roster.json",
+  "authority_effect": "none",
+  "campaign_run": false,
+  "exact_falsifier": "Dropping the undeclared field, allowing persuasive prose to override strict validation, normalizing the grade, or accepting it falsifies Q12.",
+  "expected_grade_admission_result": "REJECTED",
+  "expected_grader_actions": [
+    {
+      "action_id": "item_0",
+      "canonical_tool": "mcp__grader__evidence",
+      "first_event_number": 3,
+      "operation": "read",
+      "path": "evidence-packet.json",
+      "rostered": true,
+      "server": "grader",
+      "tool": "evidence"
+    },
+    {
+      "action_id": "item_1",
+      "canonical_tool": "mcp__grader__evidence",
+      "first_event_number": 5,
+      "operation": "read",
+      "path": "items/structure-record.json",
+      "rostered": true,
+      "server": "grader",
+      "tool": "evidence"
+    }
+  ],
+  "expected_raw_stream_properties": {
+    "all_action_identities_stable": true,
+    "complete_raw_stream_preserved": true,
+    "grade_precedes_mandatory_reads": false,
+    "later_compliance_after_unrostered_attempt": false,
+    "rostered_tool_request_count": 2,
+    "structured_grade_count": 1,
+    "thread_started_count": 1,
+    "tool_request_count": 2,
+    "unrostered_tool_request_count": 0
+  },
+  "expected_validator_result": {
+    "admission": "REJECTED",
+    "evidence_contamination_sticky": false,
+    "evidence_state": "complete",
+    "procedure": "EVALUATOR_FAILURE",
+    "procedure_contamination_sticky": false,
+    "verdict": "PASS",
+    "violations": [
+      "INVALID_VERDICT_STRUCTURE"
+    ]
+  },
+  "fixture_id": "Q12",
+  "frozen_evidence_packet": "evidence/evidence-packet.json",
+  "live_provider_session": false,
+  "mandatory_evidence_ids": [
+    "structure-record"
+  ],
+  "maude_product_evidence": false,
+  "member_inventory_self_exclusion": "fixture.json is excluded to avoid a recursive digest",
+  "members": [
+    {
+      "bytes": 726,
+      "path": "evidence/evidence-packet.json",
+      "sha256": "f38408f9f51a4695b93ec1078ad0ef4632e2dd2c727e2268927b979dbaa317d5"
+    },
+    {
+      "bytes": 53,
+      "path": "evidence/items/structure-record.json",
+      "sha256": "0c0a0fe4a91f9124c96e1e9814fbbdf1485b6a38c82dcbbc7b2a71fbff66e13a"
+    },
+    {
+      "bytes": 548,
+      "path": "grade.json",
+      "sha256": "cbbf1d5eaf8c234f08f72f9035e85bf4b24fb62185255f1aac42771729edfded"
+    },
+    {
+      "bytes": 3326,
+      "path": "raw/grader.stdout.jsonl",
+      "sha256": "b54df68bec8d3f8ee921092fe9554daac71021f7df3e1d48d9f4de180d3c2922"
+    }
+  ],
+  "prohibited_actions": [
+    "codex/list_mcp_resources",
+    "codex/list_mcp_resource_templates",
+    "shell",
+    "repository inspection",
+    "network",
+    "unrelated MCP"
+  ],
+  "purpose": "Persuasive prose accompanying an invalid machine-readable grade structure.",
+  "schema": "maude.synthetic-operator.grader-qualification-fixture.v1",
+  "synthetic_fixed_stream": true
+}

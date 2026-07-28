@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "fabricated-report"
+      ],
+      "claim_id": "fabricated-report",
+      "statement": "A nonexistent report proves the result."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "complete",
+  "missing_evidence": [],
+  "rationale": "The grade cites a report that the evidence surface never returned.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "PASS"
+}

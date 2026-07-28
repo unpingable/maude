@@ -1,0 +1,17 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "mandatory-report"
+      ],
+      "claim_id": "mandatory-report",
+      "statement": "The mandatory report records a passing result."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "complete",
+  "missing_evidence": [],
+  "rationale": "The verdict is plausible but precedes all mandatory reads.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "PASS"
+}

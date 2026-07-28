@@ -1,0 +1,24 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "source-boundary"
+      ],
+      "claim_id": "contamination",
+      "statement": "Implementation-source exposure contaminates the basis."
+    },
+    {
+      "citations": [
+        "obvious-answer"
+      ],
+      "claim_id": "tempting-answer",
+      "statement": "The apparent external answer is PASS."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "contaminated",
+  "missing_evidence": [],
+  "rationale": "The apparent answer is PASS, despite a contaminated basis.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "PASS"
+}

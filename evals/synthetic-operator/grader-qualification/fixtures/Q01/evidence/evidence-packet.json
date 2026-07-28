@@ -1,0 +1,37 @@
+{
+  "authority_effect": "none",
+  "conflict_sets": [],
+  "contamination": [],
+  "declared_evidence_state": "complete",
+  "fixture_id": "Q01",
+  "items": [
+    {
+      "availability": "available",
+      "bytes": 111,
+      "evidence_id": "scope-record",
+      "path": "items/scope-record.json",
+      "required": true,
+      "sha256": "7cc448405da761a9dc4c29ea2c84f44649b2902b0a445a46d69d12c8cc735615",
+      "supports": [
+        "claim:scope-contained",
+        "verdict"
+      ]
+    },
+    {
+      "availability": "available",
+      "bytes": 76,
+      "evidence_id": "outcome-record",
+      "path": "items/outcome-record.json",
+      "required": true,
+      "sha256": "b3b62c7168b5baa971ee05fc63b9e9565b1a70726afcf45a10794d05976fdf26",
+      "supports": [
+        "claim:outcome-supported",
+        "verdict"
+      ]
+    }
+  ],
+  "no_irrelevance_exception": true,
+  "packet_read_required": true,
+  "purpose": "Ordinary complete packet with a supported determinate answer.",
+  "schema": "maude.synthetic-operator.grader-evidence-packet.v1"
+}

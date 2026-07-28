@@ -1,0 +1,31 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "install-documentation"
+      ],
+      "claim_id": "install-documented",
+      "statement": "The install path and minimum configuration are documented."
+    },
+    {
+      "citations": [
+        "install-transcript"
+      ],
+      "claim_id": "install-executed",
+      "statement": "The documented commands completed without ambient repository inspection."
+    },
+    {
+      "citations": [
+        "first-run-result"
+      ],
+      "claim_id": "first-run",
+      "statement": "A meaningful synthetic first result was produced."
+    }
+  ],
+  "conflicts": [],
+  "evidence_state": "complete",
+  "missing_evidence": [],
+  "rationale": "The complete installation evidence supports a successful synthetic first result without ambient discovery.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "PASS"
+}

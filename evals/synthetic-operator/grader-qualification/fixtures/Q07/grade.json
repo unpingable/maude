@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "citations": [
+        "settlement-record-a"
+      ],
+      "claim_id": "record-a",
+      "statement": "One admitted record says the result was kept."
+    },
+    {
+      "citations": [
+        "settlement-record-b"
+      ],
+      "claim_id": "record-b",
+      "statement": "Another admitted record says it was discarded."
+    }
+  ],
+  "conflicts": [
+    {
+      "left": "settlement-record-a",
+      "right": "settlement-record-b"
+    }
+  ],
+  "evidence_state": "contradictory",
+  "missing_evidence": [],
+  "rationale": "Equal-sequence admissible records conflict and no precedence rule is frozen.",
+  "schema": "maude.synthetic-operator.qualification-grader-output.v1",
+  "verdict": "INDETERMINATE"
+}

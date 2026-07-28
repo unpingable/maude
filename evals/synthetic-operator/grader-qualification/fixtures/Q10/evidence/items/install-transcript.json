@@ -1,0 +1,11 @@
+{
+  "ambient_repository_inspection": false,
+  "commands": [
+    "python -m pip install maude.whl",
+    "maude status"
+  ],
+  "exit_codes": [
+    0,
+    0
+  ]
+}
