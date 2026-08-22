@@ -5,6 +5,39 @@ classify input. Recognized commands are handled locally or relayed to the
 governor daemon over RPC. The primary surface is the supervised-run loop;
 the chat-era commands are legacy (see the last section).
 
+## Plan Core drafts
+
+`draft new <goal>`, `draft list`, `draft inspect <id>`, `draft edit <id>`,
+`draft check <id>`, `draft diff <id>`, `draft lock <id>`, and
+`draft handoff <id> <workflow>` are thin TUI commands over the durable Plan
+Core. `draft edit` invokes `$EDITOR` and creates a successor revision; it never
+modifies a locked artifact. Checks are structural/design checks, and locks bind
+exact bytes. Neither is AG authority.
+
+The equivalent structured interface is:
+
+```bash
+maude-plan --store .maude/plans.sqlite new --goal "..." --workspace /path
+maude-plan --store .maude/plans.sqlite inspect <draft-id>
+maude-plan --store .maude/plans.sqlite check <draft-id>
+maude-plan --store .maude/plans.sqlite diff <draft-id>
+maude-plan --store .maude/plans.sqlite lock <draft-id>
+```
+
+`save --origin human|agent` proves both producer kinds use one revision
+boundary. Handoff requires a registered exact workflow compiler. Generic prose
+returns `compiler_unavailable` rather than becoming guessed operations.
+
+The same core has a separate loopback browser client:
+
+```bash
+scripts/run-phosphor-design-demo.sh
+```
+
+It provides closed add/update/remove/reorder/document operations with semantic
+preview and expected-revision CAS. It does not expose handoff while no exact
+workflow compiler exists. See `docs/PHOSPHOR-DESIGN.md`.
+
 ## Supervised runs (primary)
 
 ### `supervised launch <task>` / `go <task>`
@@ -90,9 +123,19 @@ Switch by ID or `#N` index.
 
 Delete by ID or index; deleting the active session creates a new one.
 
-### `help` / `?`
+### `help [topic]` / `?`
 
-List available commands.
+`help` is a one-screen orientation view. Detailed command groups are available
+without sending a free-text prompt to the model:
+
+- `help plan` — bounded-plan ingress and reports
+- `help draft` — Plan Core artifacts, receipts, diff, and lock
+- `help run` — supervised execution, tool decisions, and review
+- `help sessions` — session inspection and lineage
+- `help all` — complete reference, including clearly marked unsupported legacy
+
+The log pane already supports Page Up/Down; both the welcome text and compact
+help disclose that scroll behavior.
 
 ## Keybindings
 

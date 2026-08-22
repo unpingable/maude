@@ -13,11 +13,13 @@ from maude.commands.report import ReportCommand
 from maude.commands.grant import GrantStatusCommand
 from maude.intents import IntentKind as K
 from maude.plan.runner import RunPlanCommand
+from maude.commands.draft import DraftCommand
 
 
 def desk_commands() -> list[Command]:
     return [
-        AppCommand((K.HELP,), "_handle_help", help="list commands"),
+        DraftCommand(),
+        AppCommand((K.HELP,), "_handle_help", takes_payload=True, help="list commands"),
         AppCommand((K.STATUS,), "_handle_status", help="governor status"),
         AppCommand((K.WHY,), "_handle_why", help="why something is blocked"),
         AppCommand((K.SESSIONS,), "_handle_sessions", help="list sessions"),

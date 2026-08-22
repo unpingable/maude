@@ -12,10 +12,12 @@ surface; a desk screen is only ever pushed on top and popped back off.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 from textual.widgets import Input, RichLog
 
-from maude.app import MaudeApp
+from maude.app import MaudeApp, _governor_startup_guidance
 from maude.client.rpc import GovernorClient
 from maude.config import Settings
 from maude.screens import AdaptersScreen, BoardScreen, QueueScreen, ScreenManager
@@ -36,6 +38,32 @@ def test_app_owns_a_screen_manager_and_no_global_state():
     # Each app owns its own manager — no shared/ambient singleton.
     assert a._screen_manager is not b._screen_manager
     assert a._active_desk_screen is None
+
+
+def test_governor_startup_guidance_pins_both_processes_to_same_project(tmp_path):
+    project = tmp_path / "project with spaces"
+    settings = Settings(governor_dir=str(project / ".governor"))
+    lines = _governor_startup_guidance(
+        settings,
+        Path("/run/user/1000/governor-example.sock"),
+    )
+    text = "\n".join(lines)
+
+    assert "governor --root" in text
+    assert "init" in text
+    assert "serve" in text
+    assert f"maude --governor-dir '{project / '.governor'}'" in text
+    assert "same initialized project" in text
+    assert "--stdio" not in text
+
+
+def test_explicit_socket_guidance_does_not_suggest_stdio():
+    settings = Settings(socket_path="/run/governor.sock")
+    lines = _governor_startup_guidance(settings, Path(settings.socket_path))
+    text = "\n".join(lines)
+
+    assert "Expected socket: /run/governor.sock" in text
+    assert "stdio daemon mode cannot accept" in text
 
 
 @pytest.mark.asyncio

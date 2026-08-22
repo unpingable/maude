@@ -42,9 +42,9 @@ async def test_help_dispatches_through_registry():
     async with app.run_test() as pilot:
         await pilot.pause()
         called = {}
-        app._handle_help = lambda log: called.setdefault("help", True)
-        await _submit(pilot, app, "help")
-        assert called.get("help") is True
+        app._handle_help = lambda log, topic: called.setdefault("help", topic)
+        await _submit(pilot, app, "help run")
+        assert called.get("help") == "run"
 
 
 @pytest.mark.asyncio
@@ -60,6 +60,20 @@ async def test_payload_intent_passes_payload():
         app._handle_supervised_events = fake_events
         await _submit(pilot, app, "supervised events sess_42")
         assert seen.get("payload") == "sess_42"
+
+
+@pytest.mark.asyncio
+async def test_draft_command_dispatches_locally_without_chat_or_governor(tmp_path):
+    app = _offline_app()
+    app.settings.plan_store = str(tmp_path / "plans.sqlite")
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        await _submit(pilot, app, "draft new Inspect exact work")
+        from maude.plan.store import DraftStore
+
+        drafts = DraftStore(app.settings.plan_store).list_drafts()
+        assert len(drafts) == 1
+        assert drafts[0].document.goal == "Inspect exact work"
 
 
 @pytest.mark.asyncio

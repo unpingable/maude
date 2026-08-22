@@ -17,6 +17,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from maude.authoring_context import (
+    AuthoringContextLookupV1,
+    AuthoringContextReadError,
+    NightshiftAuthoringContextReaderV1,
+)
 from maude.commands.base import Command, CommandContext
 from maude.intents import IntentKind
 from maude.plan.envelope import PlanEnvelope, PlanRefusal, parse_plan_envelope
@@ -55,6 +60,7 @@ class ReportCommand(Command):
         promotion = await self._read(ctx, "promotion", notes, session_id)
 
         plan, review_packet, rp_path = self._load_from_disk(plan_path, notes)
+        authoring_context = await self._read_authoring_context(ctx, plan, session_id)
 
         report = compose_run_report(
             session_id,
@@ -64,6 +70,7 @@ class ReportCommand(Command):
             plan=plan,
             review_packet=review_packet,
             review_packet_path=rp_path,
+            authoring_context=authoring_context,
             notes=notes,
         )
         self._render(ctx, report)
@@ -83,6 +90,34 @@ class ReportCommand(Command):
             notes.append(f"{which} read unavailable: {exc}")
         return None
 
+    async def _read_authoring_context(
+        self,
+        ctx: CommandContext,
+        plan: PlanEnvelope | None,
+        session_id: str,
+    ) -> AuthoringContextLookupV1 | None:
+        """Read the owner-minted relation only when exact source IDs exist."""
+        if plan is None:
+            return None
+        settings = getattr(ctx.app, "settings", None)
+        program = getattr(settings, "nightshift_read_program", "")
+        store = getattr(settings, "nightshift_store", "")
+        base_url = getattr(settings, "phosphor_ng_base_url", "")
+        if not program or not store:
+            return AuthoringContextLookupV1(
+                available=False,
+                detail="Nightshift authoring-context reader is not configured",
+            )
+        try:
+            reader = NightshiftAuthoringContextReaderV1(
+                program,
+                store,
+                phosphor_base_url=base_url or None,
+            )
+        except AuthoringContextReadError as exc:
+            return AuthoringContextLookupV1(available=False, detail=str(exc))
+        return await reader.lookup(plan.plan_ref, session_id)
+
     def _load_from_disk(
         self, plan_path: Path | None, notes: list[str]
     ) -> tuple[PlanEnvelope | None, dict | None, str | None]:
@@ -95,10 +130,15 @@ class ReportCommand(Command):
             return None, None, None
         plan: PlanEnvelope | None = None
         try:
-            plan = parse_plan_envelope(plan_path.read_text(encoding="utf-8"))
+            # Preserve PlanRunner's exact-byte identity law. A text-mode read
+            # can normalize CRLF and produce a different plan_ref from the
+            # supervised execution path.
+            plan = parse_plan_envelope(plan_path.read_bytes().decode("utf-8"))
         except PlanRefusal as refusal:
-            notes.append(f"plan did not parse ({refusal.refusal_class}); provenance omitted")
-        except OSError as exc:
+            notes.append(
+                f"plan did not parse ({refusal.refusal_class}); provenance omitted"
+            )
+        except (OSError, UnicodeDecodeError) as exc:
             notes.append(f"cannot read plan: {exc}")
         review_packet, rp_path = self._find_review_packet(plan_path.parent, notes)
         return plan, review_packet, rp_path
@@ -124,7 +164,9 @@ class ReportCommand(Command):
             notes.append(f"review packet unreadable ({candidate.name}): {exc}")
             return None, None
         if not isinstance(data, dict):
-            notes.append(f"review packet {candidate.name} is not a JSON object; ignored")
+            notes.append(
+                f"review packet {candidate.name} is not a JSON object; ignored"
+            )
             return None, None
         return data, str(candidate)
 
@@ -143,7 +185,9 @@ class ReportCommand(Command):
         ctx.app._last_plan_block = None
         ctx.app._last_run_report = report
         log.write("")
-        log.write("[dim]type 'why' for the underlying record (the review packet, verbatim)[/dim]")
+        log.write(
+            "[dim]type 'why' for the underlying record (the review packet, verbatim)[/dim]"
+        )
 
 
 def render_report_law(report: RunReport) -> list[str]:

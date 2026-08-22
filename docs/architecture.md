@@ -14,6 +14,7 @@ and all authority decisions.
   ─────────────────              ────────────────────────
   Renders the desk               Runs policy pipeline
   Parses operator commands       Manages constraints
+  Stores pre-governed drafts     Owns post-handoff judgments
   Drives session lifecycle       Owns supervisor FSM + interception
   Tracks local view state        Stores sessions, event ledger
   Displays receipts + status     Produces receipts (sole writer)
@@ -24,6 +25,19 @@ daemon's RPC interface, not its Python packages. Maude mints no authority:
 every approve/deny/promote is relayed to the daemon, which decides.
 
 ## Components
+
+### Plan Core (`plan/document.py`, `plan/store.py`)
+
+Plan Core is the local pre-governed artifact layer. Its closed
+`maude.plan-document/v1` schema stores semantic design content with stable node
+identity; SQLite retains immutable revisions, check receipts, and lock
+snapshots. Human `$EDITOR` and agent/file edits share one compare-and-swap
+revision constructor. The structural checker imports no AG, Nightshift, or
+Docket implementation and makes no runtime-authority judgment.
+
+Pure future editor layout belongs in a separate presentation sidecar. The
+workflow compiler seam is closed and deterministic; no generic prose compiler
+is registered. See [PLAN-CORE.md](PLAN-CORE.md).
 
 ### Client Layer (`client/`)
 
@@ -61,7 +75,8 @@ shell contract version and is CI-tested against the daemon.
 
 ### Intent Parser (`intents.py`)
 
-Lightweight regex matching that classifies operator input: the supervised
+Lightweight regex matching that classifies operator input: Plan Core `draft`
+commands, the supervised
 command set (`supervised launch/list/events/approve/deny/kill/…`), the
 tight-loop aliases (`y`/`n`/`p`/`go`), review verbs (`diff`/`apply`/
 `rollback`), lineage (`lineage`/`history`), overview (`snapshot`/`context`/

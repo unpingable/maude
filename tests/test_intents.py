@@ -5,6 +5,11 @@ from maude.intents import IntentKind, parse_intent
 
 
 class TestParseIntent:
+    def test_draft_is_artifact_command_not_retired_conversational_plan(self):
+        result = parse_intent("draft check draft_123")
+        assert result.kind == IntentKind.DRAFT
+        assert result.payload == "check draft_123"
+
     def test_plan(self):
         result = parse_intent("plan build a REST API")
         assert result.kind == IntentKind.PLAN
@@ -89,6 +94,11 @@ class TestParseIntent:
     def test_help(self):
         result = parse_intent("help")
         assert result.kind == IntentKind.HELP
+
+    def test_help_topic_is_payload_not_chat(self):
+        result = parse_intent("help sessions")
+        assert result.kind == IntentKind.HELP
+        assert result.payload == "sessions"
 
     def test_question_mark(self):
         result = parse_intent("?")

@@ -11,6 +11,7 @@ issues zero write-RPCs (fake-client call-log pin).
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 from pathlib import Path
 
@@ -26,6 +27,7 @@ from maude.report import (
     render_law,
     render_surface,
 )
+from maude.authoring_context import AuthoringContextLookupV1, GovernedHandoffV1
 
 # --------------------------------------------------------------------------- #
 # Fixtures — CD-4B-shaped (docs/campaigns/conveyor-dogfood/specimens/cd4-*)
@@ -34,15 +36,42 @@ from maude.report import (
 # The all-false authority block from the CD-4B specimen (no change, nothing
 # requested/granted/used). No overrun.
 _CD4B_AUTHORITY = {
-    "requested": {k: False for k in (
-        "commit", "push", "network", "subprocess",
-        "live_origin", "doctrine_write", "constellation_write")},
-    "granted": {k: False for k in (
-        "commit", "push", "network", "subprocess",
-        "live_origin", "doctrine_write", "constellation_write")},
-    "used": {k: False for k in (
-        "commit", "push", "network", "subprocess",
-        "live_origin", "doctrine_write", "constellation_write")},
+    "requested": {
+        k: False
+        for k in (
+            "commit",
+            "push",
+            "network",
+            "subprocess",
+            "live_origin",
+            "doctrine_write",
+            "constellation_write",
+        )
+    },
+    "granted": {
+        k: False
+        for k in (
+            "commit",
+            "push",
+            "network",
+            "subprocess",
+            "live_origin",
+            "doctrine_write",
+            "constellation_write",
+        )
+    },
+    "used": {
+        k: False
+        for k in (
+            "commit",
+            "push",
+            "network",
+            "subprocess",
+            "live_origin",
+            "doctrine_write",
+            "constellation_write",
+        )
+    },
 }
 
 CD4B_REVIEW_PACKET = {
@@ -94,11 +123,31 @@ def _session(**over):
 
 def _events():
     return [
-        {"seq": 1, "kind": "tool_call_proposed", "receipt_ids": ["rcpt_a"], "payload": {}},
-        {"seq": 2, "kind": "tool_call_allowed", "receipt_ids": ["rcpt_a"], "payload": {}},
+        {
+            "seq": 1,
+            "kind": "tool_call_proposed",
+            "receipt_ids": ["rcpt_a"],
+            "payload": {},
+        },
+        {
+            "seq": 2,
+            "kind": "tool_call_allowed",
+            "receipt_ids": ["rcpt_a"],
+            "payload": {},
+        },
         {"seq": 3, "kind": "tool_call_completed", "receipt_ids": [], "payload": {}},
-        {"seq": 4, "kind": "tool_call_denied", "receipt_ids": ["rcpt_b"], "payload": {}},
-        {"seq": 5, "kind": "session_exited", "receipt_ids": [], "payload": {"exit_code": 0}},
+        {
+            "seq": 4,
+            "kind": "tool_call_denied",
+            "receipt_ids": ["rcpt_b"],
+            "payload": {},
+        },
+        {
+            "seq": 5,
+            "kind": "session_exited",
+            "receipt_ids": [],
+            "payload": {"exit_code": 0},
+        },
     ]
 
 
@@ -152,7 +201,8 @@ class TestComposeFromFixture:
 
     def test_law_layer_is_verbatim(self):
         report = compose_run_report(
-            "sess-1", review_packet=CD4B_REVIEW_PACKET,
+            "sess-1",
+            review_packet=CD4B_REVIEW_PACKET,
             review_packet_path="/x/rp.json",
         )
         text = "\n".join(render_law(report))
@@ -185,7 +235,8 @@ class TestHonestAbsence:
     def test_partial_duration_is_absent_not_halfspan(self):
         # only a start recorded → duration is honest-absence, never a one-ended span
         report = compose_run_report(
-            "s", session=_session(updated_at=None),
+            "s",
+            session=_session(updated_at=None),
         )
         surface = "\n".join(render_surface(report))
         assert f"ran: [dim]{ABSENT}" in surface
@@ -239,6 +290,16 @@ class TestTestimonyNotAdmission:
         discarded = compose_run_report("s", promotion=_promotion(status="rejected"))
         assert "you discarded the changes" in "\n".join(render_surface(discarded))
 
+    def test_authored_plan_does_not_derive_ag_ng_runtime_identity_or_status(self):
+        plan = parse_plan_envelope(PLAN_WITH_CRITERIA)
+        report = compose_run_report("s", plan=plan)
+        # Maude retains its own plan/session identity family. No campaign,
+        # occurrence, or governed-runtime status is guessed from authored bytes.
+        assert report.plan_ref == plan.plan_ref
+        assert not hasattr(report, "campaign_id")
+        assert not hasattr(report, "occurrence_id")
+        assert not hasattr(report, "governed_runtime_status")
+
 
 # --------------------------------------------------------------------------- #
 # Acceptance criteria — rendered unchecked, count matches
@@ -276,6 +337,29 @@ class TestAuthorityRow:
         assert AuthorityRow("x", None, False, False).overrun is False
         # absent used never counts as an overrun (honest absence)
         assert AuthorityRow("x", None, False, None).overrun is False
+
+
+def test_report_renders_handoff_as_lineage_not_permission():
+    handoff = GovernedHandoffV1(
+        provenance_id="sha256:" + "1" * 64,
+        plan_ref="sha256:" + "2" * 64,
+        session_id="sess_0123456789ab",
+        campaign_id="sha256:" + "3" * 64,
+        occurrence_id="00000000-0000-0000-0000-000000000001",
+        proposal_id="sha256:" + "4" * 64,
+        exact_work_id="sha256:" + "5" * 64,
+        source_intent_id="sha256:" + "6" * 64,
+        recorded_at="2026-08-21T12:00:00Z",
+        phosphor_ng_url="http://127.0.0.1:8417/phosphor-ng/exact",
+    )
+    report = compose_run_report(
+        "sess_0123456789ab",
+        authoring_context=AuthoringContextLookupV1(available=True, matches=(handoff,)),
+    )
+    rendered = "\n".join(render_surface(report) + render_detail(report))
+    assert "lineage, not permission" in rendered
+    assert handoff.proposal_id in rendered
+    assert handoff.phosphor_ng_url in rendered
 
 
 # --------------------------------------------------------------------------- #
@@ -397,3 +481,15 @@ class TestReportCommand:
         _run(ReportCommand(), app, log, f"sess-1 {plan}")
         assert "did not parse" in log.text()
         assert app._last_run_report is not None
+
+    def test_plan_ref_preserves_exact_crlf_bytes(self, tmp_path: Path):
+        plan_path = tmp_path / "crlf-plan.md"
+        exact_bytes = PLAN_WITH_CRITERIA.replace("\n", "\r\n").encode("utf-8")
+        plan_path.write_bytes(exact_bytes)
+        notes: list[str] = []
+
+        plan, _, _ = ReportCommand()._load_from_disk(plan_path, notes)
+
+        assert plan is not None
+        assert plan.plan_ref == "sha256:" + hashlib.sha256(exact_bytes).hexdigest()
+        assert notes == []

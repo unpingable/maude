@@ -7,6 +7,7 @@ from enum import Enum, auto
 
 
 class IntentKind(Enum):
+    DRAFT = auto()
     PLAN = auto()
     PLAN_TEMPLATE = auto()
     CLEAR_TEMPLATE = auto()
@@ -63,6 +64,8 @@ class Intent:
 
 
 _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
+    # Artifact-oriented Plan Core. Kept ahead of retired conversational plan.
+    (re.compile(r"^draft(?:\s+(.*))?$", re.IGNORECASE), IntentKind.DRAFT),
     # Template-specific plan commands (must come before generic ^plan\b)
     (re.compile(r"^plan\s+(architecture|arch)$", re.IGNORECASE), IntentKind.PLAN_TEMPLATE),
     (re.compile(r"^plan\s+(product design|product)$", re.IGNORECASE), IntentKind.PLAN_TEMPLATE),
@@ -150,7 +153,7 @@ _PATTERNS: list[tuple[re.Pattern[str], IntentKind]] = [
     (re.compile(r"^pending$", re.IGNORECASE), IntentKind.QUICK_PENDING),
     (re.compile(r"^p$"), IntentKind.QUICK_PENDING),
     (re.compile(r"^go\s+(.*)", re.IGNORECASE), IntentKind.QUICK_LAUNCH),
-    (re.compile(r"^help$", re.IGNORECASE), IntentKind.HELP),
+    (re.compile(r"^help(?:\s+(.*))?$", re.IGNORECASE), IntentKind.HELP),
     (re.compile(r"^\?$"), IntentKind.HELP),
 ]
 

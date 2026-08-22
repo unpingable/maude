@@ -29,6 +29,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 
+from maude.authoring_context import AuthoringContextLookupV1
 from maude.plan.envelope import PlanEnvelope
 
 #: Rendered stand-in for any value the reads did not carry. Never a guess.
@@ -115,6 +116,8 @@ class RunReport:
     acceptance_criteria: tuple[str, ...] = ()
     authority: tuple[AuthorityRow, ...] = ()
     receipt_ids: tuple[str, ...] = ()
+    # -- owner-side authoring-to-governed lineage (read only, never authority) --
+    authoring_context: AuthoringContextLookupV1 | None = None
     # -- law (verbatim, one `why` away) --
     review_packet: Mapping[str, object] | None = None
     review_packet_path: str | None = None
@@ -131,7 +134,9 @@ class RunReport:
 # --------------------------------------------------------------------------- #
 
 
-def _count_tools(events: Sequence[Mapping[str, object]]) -> tuple[ToolCounts, tuple[str, ...]]:
+def _count_tools(
+    events: Sequence[Mapping[str, object]],
+) -> tuple[ToolCounts, tuple[str, ...]]:
     tally = {
         _TOOL_PROPOSED: 0,
         _TOOL_ALLOWED: 0,
@@ -157,13 +162,17 @@ def _count_tools(events: Sequence[Mapping[str, object]]) -> tuple[ToolCounts, tu
     return counts, tuple(receipts)
 
 
-def _authority_rows(review_packet: Mapping[str, object] | None) -> tuple[AuthorityRow, ...]:
+def _authority_rows(
+    review_packet: Mapping[str, object] | None,
+) -> tuple[AuthorityRow, ...]:
     if not review_packet:
         return ()
     auth = review_packet.get("authority")
     if not isinstance(auth, Mapping):
         return ()
-    requested = auth.get("requested") if isinstance(auth.get("requested"), Mapping) else {}
+    requested = (
+        auth.get("requested") if isinstance(auth.get("requested"), Mapping) else {}
+    )
     granted = auth.get("granted") if isinstance(auth.get("granted"), Mapping) else {}
     used = auth.get("used") if isinstance(auth.get("used"), Mapping) else {}
 
@@ -196,6 +205,7 @@ def compose_run_report(
     plan: PlanEnvelope | None = None,
     review_packet: Mapping[str, object] | None = None,
     review_packet_path: str | None = None,
+    authoring_context: AuthoringContextLookupV1 | None = None,
     notes: Sequence[str] = (),
 ) -> RunReport:
     """Compose a :class:`RunReport` from already-fetched reads. Pure: no IO, no
@@ -262,6 +272,7 @@ def compose_run_report(
         acceptance_criteria=acceptance,
         authority=_authority_rows(review_packet),
         receipt_ids=receipts,
+        authoring_context=authoring_context,
         review_packet=review_packet,
         review_packet_path=review_packet_path,
         notes=tuple(notes),
@@ -301,7 +312,9 @@ def render_surface(report: RunReport) -> list[str]:
 
     # Outcome is TESTIMONY: the run's own status/exit, not a verdict.
     if report.status or report.exit_code is not None:
-        exit_part = "" if report.exit_code is None else f", exit code {report.exit_code}"
+        exit_part = (
+            "" if report.exit_code is None else f", exit code {report.exit_code}"
+        )
         status_part = report.status or ABSENT
         lines.append(
             f"  the run reports it ended: {status_part}{exit_part}  "
@@ -325,6 +338,22 @@ def render_surface(report: RunReport) -> list[str]:
         )
     for note in report.notes:
         lines.append(f"  [yellow]note:[/yellow] {note}")
+    if report.authoring_context is None:
+        lines.append(
+            "  governed handoff: [dim]not queried (exact plan context absent)[/dim]"
+        )
+    elif not report.authoring_context.available:
+        lines.append(
+            "  governed handoff: [yellow]unavailable[/yellow] "
+            f"[dim]{report.authoring_context.detail or ABSENT}[/dim]"
+        )
+    elif not report.authoring_context.matches:
+        lines.append("  governed handoff: [dim]not recorded[/dim]")
+    else:
+        lines.append(
+            f"  governed handoff: {len(report.authoring_context.matches)} "
+            "exact canonical relation(s) [dim](lineage, not permission)[/dim]"
+        )
     return lines
 
 
@@ -350,15 +379,15 @@ def render_detail(report: RunReport) -> list[str]:
     UNCHECKED for the reviewer to judge."""
     lines: list[str] = []
 
-    lines.append("[bold]tool activity[/bold] [dim](the run's own trace — testimony)[/dim]")
+    lines.append(
+        "[bold]tool activity[/bold] [dim](the run's own trace — testimony)[/dim]"
+    )
     c = report.tool_counts
     lines.append(
         f"  proposed {c.proposed} · allowed {c.allowed} · "
         f"completed {c.completed} · failed {c.failed}"
     )
-    lines.append(
-        f"[bold]gate refusals[/bold] [dim](governor acts)[/dim]: {c.denied}"
-    )
+    lines.append(f"[bold]gate refusals[/bold] [dim](governor acts)[/dim]: {c.denied}")
 
     lines.append("[bold]files touched[/bold]")
     if report.files_changed:
@@ -376,7 +405,9 @@ def render_detail(report: RunReport) -> list[str]:
 
     lines.extend(_render_authority(report))
 
-    lines.append("[bold]acceptance criteria[/bold] [dim](unchecked — the reviewer judges)[/dim]")
+    lines.append(
+        "[bold]acceptance criteria[/bold] [dim](unchecked — the reviewer judges)[/dim]"
+    )
     if report.acceptance_criteria:
         for crit in report.acceptance_criteria:
             lines.append(f"  [ ] {crit}")
@@ -387,6 +418,29 @@ def render_detail(report: RunReport) -> list[str]:
         lines.append("[bold]receipt refs[/bold] [dim](cited, not minted here)[/dim]")
         for rid in report.receipt_ids:
             lines.append(f"  {rid}")
+    lines.append(
+        "[bold]governed handoff[/bold] [dim](Nightshift lineage, not permission)[/dim]"
+    )
+    lookup = report.authoring_context
+    if lookup is None:
+        lines.append(
+            f"  [dim]{ABSENT}[/dim] [dim](exact plan context not supplied)[/dim]"
+        )
+    elif not lookup.available:
+        lines.append(f"  [yellow]unavailable:[/yellow] {lookup.detail or ABSENT}")
+    elif not lookup.matches:
+        lines.append("  authored context has no recorded governed handoff")
+    else:
+        for match in lookup.matches:
+            lines.append(f"  campaign:   {match.campaign_id}")
+            lines.append(f"  occurrence: {match.occurrence_id}")
+            lines.append(f"  proposal:   {match.proposal_id}")
+            lines.append(f"  exact work: {match.exact_work_id}")
+            lines.append(f"  provenance: {match.provenance_id}")
+            if match.phosphor_ng_url:
+                lines.append(
+                    f"  [link={match.phosphor_ng_url}]inspect exact governed occurrence in Phosphor-ng[/link]"
+                )
     return lines
 
 

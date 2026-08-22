@@ -2,7 +2,11 @@
 
 **Executor desk for governed agent runs. Every mutation goes through the gate.**
 
-Plans are written outside Maude — by ChatGPT, Fable, Codex, or the operator. Maude runs them: launch a harness as a supervised process, watch every tool call go through the [Agent Governor](https://github.com/unpingable/agent_governor) gate, approve or deny, review the diff, promote or reject, keep the receipts.
+Plans may be created as explicit Maude Plan Core artifacts or supplied by
+external tools. Maude checks, diffs, locks, and supervises those artifacts; the
+governed runtime—not the draft toolchain—decides what may happen. Every harness
+tool call still goes through the [Agent Governor](https://github.com/unpingable/agent_governor)
+gate for the local supervised-run path.
 
 The plan arrives. Maude runs it. The governor gates. You decide.
 
@@ -62,15 +66,65 @@ Planned (see [ROADMAP.md](ROADMAP.md)): harness selection (M-3), obstruction not
 
 ---
 
-## Where planning happens
+## Plan Core and where planning happens
 
-Not here. Maude is the execution side of the loop: it consumes bounded plans, supervises the run, and returns a reviewable result. Spec authoring, hypothesis exploration, and "lock understanding before acting" live elsewhere — planning tools upstream, and the governor's admissibility gate at launch time (see the [Agent Governor](https://github.com/unpingable/agent_governor) governed-shell design). AG is one authority substrate Maude calls over RPC; Maude itself mints no authority and refuses nothing on its own behalf.
+Maude now owns the explicit pre-governed PlanDocument artifact toolchain. The
+headless `maude-plan` CLI and TUI `draft` commands create durable revisions,
+structural check receipts, semantic diffs, and immutable lock receipts. Rich
+authoring and hypothesis exploration may still live in external tools; human
+and agent changes enter through the same revision boundary. The retired
+conversational PLAN/BUILD state remains retired.
+
+Draft validity is not governed admissibility, and locking exact bytes does not
+authorize them. See [Plan Core](docs/PLAN-CORE.md). Maude remains the execution
+side of supervised runs; AG/runtime owners retain all post-handoff judgments.
+
+## Relationship to Phosphor-ng
+
+Maude is the bounded-plan and supervised-session desk. Phosphor-ng (the
+operator-facing identity of `ag_ng`'s `ag-operator-ui`) is the separate,
+read-only Nightshift → AG-NG → Docket campaign inspector. The two surfaces
+share canonical language, exact identity presentation, honest absence, and a
+navigation-only deep-link contract; they do not share authority or state
+machines. Nightshift now owns an optional immutable plan/session → exact
+proposal/occurrence/work relation at proposal preparation. Maude queries it
+read-only before emitting a Phosphor-ng link; an absent or unavailable owner
+record remains visibly unlinked. See
+[`docs/PHOSPHOR-NG-CONVERGENCE.md`](docs/PHOSPHOR-NG-CONVERGENCE.md).
+Optional authenticated custody for a new plan/session handoff is documented in
+[`docs/AUTHORING-CUSTODY.md`](docs/AUTHORING-CUSTODY.md). It uses distinct
+session-issuer and handoff-producer credentials and does not submit or
+authorize work.
+
+Phosphor-ng now also has a separate Maude-owned `/design` process for mutable
+pre-governed PlanDocuments. It shares product navigation with the inspector,
+not its trust domain: `ag-operator-ui` remains read-only and imports no Plan
+Core machinery. See [Phosphor-ng Design](docs/PHOSPHOR-DESIGN.md).
+
+The Design process also supports immutable, scope-bounded agent edit proposals.
+Provider output is hostile structured input containing only ordinary Plan Core
+operations; nothing is saved without explicit review and the same revision CAS
+used for human edits. There is no auto-accept, generic compiler, or browser
+handoff path. One closed local-Compose compiler exists solely for the
+disposable synthetic cache qualification and remains outside `/design`. See
+[Plan Edit Proposals](docs/PLAN-EDIT-PROPOSALS.md).
+
+The [synthetic cache qualification](qualification/synthetic_cache/README.md)
+is the first exact PlanNode → compiler → Nightshift/AG/Docket execution witness.
+It supplies `/design` a read-only cross-probe projection; it does not make the
+browser a runtime owner.
 
 ---
 
 ## Legacy: governed chat (unsupported)
 
 Earlier versions framed Maude as a governed-chat client. That framing is retired (ratified decision D-GS-2 in the Agent Governor governed-shell campaign). The chat path — streaming model responses through the daemon's `chat.stream`, plus the PLAN/BUILD spec-lock workflow — still exists in the code but is **unsupported legacy**, scheduled for removal at the v3.0 release (GS-15). Do not build on it. If a chat lane is ever missed, it returns as its own recorded decision, not as a leftover.
+
+Terminology note: Maude's current `runtime.intervention.*` calls are local
+supervised tool-approval records. They are not AG-NG governed-intervention
+requests and confer no AG standing or authorization. The exact cross-surface
+namespace and future authoring boundary are documented in
+[`docs/PHOSPHOR-NG-CONVERGENCE.md`](docs/PHOSPHOR-NG-CONVERGENCE.md).
 
 Maude never imports governor code. Two repos, one RPC boundary.
 
@@ -85,16 +139,38 @@ cd maude
 python3 -m venv .venv
 .venv/bin/pip install -e .
 
-# Start governor daemon (in another terminal)
-cd ../agent_gov
-pip install -e .
-governor serve
+# Initialize the project Maude will supervise (once)
+governor --root /path/to/project init
 
-# Launch maude (auto-discovers daemon socket)
+# Terminal 1: keep this project-scoped daemon running
+governor --root /path/to/project serve
+
+# Terminal 2: target the same initialized project
 maude --governor-dir /path/to/project/.governor
 ```
 
-Type `help` to see available commands. `supervised launch <task>` (or `go <task>`) starts a governed run.
+Governor and Maude must name the same project: the Unix socket identity is
+derived from the exact `.governor` path. Starting `governor serve` from the
+Governor source checkout while Maude targets another project starts a healthy
+daemon on the wrong socket. `governor serve --stdio` is for other clients and
+cannot accept Maude's Unix-socket connection.
+
+This local Governor daemon supervises Maude sessions. It is not AG-NG, and
+Maude does not maintain a direct interactive socket to AG-NG. Governed work
+reaches AG-NG only through the separately documented exact Nightshift handoff
+and authenticated intervention ingress.
+
+Type `help` for a one-screen orientation or `help all` for the complete
+reference. `supervised launch <task>` (or `go <task>`) starts a governed run.
+`draft new <goal>` starts an artifact draft; `help draft` shows its compact
+workflow. The equivalent headless surface is `maude-plan --help`.
+
+To evaluate the browser board-file workspace against its deterministic corpus:
+
+```bash
+scripts/run-phosphor-design-demo.sh
+# open http://127.0.0.1:8427/phosphor/design
+```
 
 ---
 
@@ -158,6 +234,7 @@ Maude wires 44 of the daemon's RPC methods:
 
 | Command | What It Does |
 |---------|-------------|
+| `draft new/list/inspect/edit/check/diff/lock/handoff` | Plan Core artifact workflow |
 | `supervised launch [task]` / `go [task]` | Launch governed harness session |
 | `supervised list` | List supervised sessions |
 | `supervised events <id>` | Show event stream |
@@ -201,6 +278,13 @@ Legacy (unsupported, removal at GS-15): `plan <text>`, `lock spec`, `build`, `sh
 | Context ID | `GOVERNOR_CONTEXT_ID` | `--context-id` | `default` |
 | Governor mode | `GOVERNOR_MODE` | — | `code` |
 | Session label | `MAUDE_LABEL` | `--label` | (none) |
+| Nightshift read binary | `NIGHTSHIFT_READ_PROGRAM` | — | (not configured) |
+| Nightshift canonical store | `NIGHTSHIFT_STORE` | — | (not configured) |
+| Phosphor-ng loopback URL | `PHOSPHOR_NG_BASE_URL` | — | (links omitted) |
+| Maude custody store | `MAUDE_CUSTODY_STORE` | — | (custody disabled) |
+| Session issuer key file | `MAUDE_SESSION_CUSTODY_KEY_FILE` | — | (custody disabled) |
+| Session issuer principal | `MAUDE_SESSION_ISSUER_PRINCIPAL_ID` | — | (custody disabled) |
+| Session issuer key identity | `MAUDE_SESSION_ISSUER_KEY_ID` | — | (custody disabled) |
 
 CLI flags override environment variables. Socket path is auto-derived from governor dir using the same algorithm as `governor serve`.
 

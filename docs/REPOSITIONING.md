@@ -1,6 +1,7 @@
 # Repositioning — Maude as plan-only executor
 
-**Status:** Operator-ruled 2026-07-03. Composes with the RATIFIED boundary in
+**Status:** Operator-ruled 2026-07-03; artifact-toolchain amendment 2026-08-21.
+Composes with the RATIFIED boundary in
 `agent_gov/docs/design/governed-shell/maude-boundary.md` (2026-07-02) and the
 governed-shell campaign (`agent_gov/docs/campaigns/governed-shell/`). This
 document records the ruling, the boundary, and the do-not-build list; the
@@ -28,6 +29,12 @@ Chat and the PLAN/BUILD spec-lock paradigm are cut (ratified D-GS-2): "lock
 understanding before acting" relocates to AG's admissibility moment; "plan
 first" becomes an autopilot-profile property. The chat code is quarantined
 legacy until its removal slice (GS-15); do not build on it.
+
+The later [Plan Core](PLAN-CORE.md) amendment does not revive that paradigm.
+Maude now owns a closed, durable, pre-governed artifact toolchain (`draft ...`)
+whose revisions/checks/diffs/locks are explicit. It has no conversational
+hidden state, and locking remains unrelated to AG authority. Plans may still be
+authored by external tools through the same artifact/revision boundary.
 
 ## Two ingress workflows, one core (operator ruling, 2026-07-03)
 
@@ -104,9 +111,10 @@ interception** are AG's.
    batching.
 2. **No adapters in Maude** — settled (D-GS-5); introspection + honest
    degradation only.
-3. **No planning surface** — no plan authoring, editing, or chat
-   resurrection (D-GS-2). If chat returns, it returns as its own recorded
-   decision.
+3. **No conversational planning state** — no chat/spec-lock resurrection
+   (D-GS-2). Artifact-oriented PlanDocument authoring is the narrow, recorded
+   successor and is governed by `PLAN-CORE.md`. If chat returns, it returns as
+   its own recorded decision and produces ordinary reviewable revisions.
 4. **No multi-substrate authority abstraction** — "AG is one substrate" is a
    boundary statement, not a license to build a pluggable
    authority-provider layer. Named here; not built.

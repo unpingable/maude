@@ -33,7 +33,9 @@ def compose_task_text(env: PlanEnvelope) -> str:
     invents steps (M-1 §2)."""
     parts = [env.goal]
     if env.steps:
-        parts.append("Steps (advisory, ordered):\n" + "\n".join(f"- {s}" for s in env.steps))
+        parts.append(
+            "Steps (advisory, ordered):\n" + "\n".join(f"- {s}" for s in env.steps)
+        )
     body = env.body.strip()
     if body:
         parts.append(body)
@@ -66,7 +68,9 @@ class RunPlanCommand(Command):
         if "--model" in tokens:
             i = tokens.index("--model")
             if i + 1 >= len(tokens):
-                log.write("[red]--model needs a value[/red] (e.g. --model claude-haiku-4-5)")
+                log.write(
+                    "[red]--model needs a value[/red] (e.g. --model claude-haiku-4-5)"
+                )
                 return
             model = tokens[i + 1]
             del tokens[i : i + 2]
@@ -149,7 +153,9 @@ class RunPlanCommand(Command):
         try:
             harness_args = ["--model", model] if model else []
             if model:
-                log.write(f"  model pinned: {model} (operator's choice, not the plan's)")
+                log.write(
+                    f"  model pinned: {model} (operator's choice, not the plan's)"
+                )
             result = await ctx.app.client.runtime_session_create(
                 backend_kind=backend_kind,
                 cwd=env.workspace,
@@ -160,6 +166,23 @@ class RunPlanCommand(Command):
             )
             session_id = result["session_id"]
             log.write(f"[green]Run started:[/green] {session_id}")
+
+            # Authority-neutral custody cut: when a complete deployment
+            # profile is configured, bind this exact canonical session-create
+            # result to the exact plan bytes before launch. A custody failure
+            # leaves the created session unlaunched and cannot fall through to
+            # an unauthenticated handoff.
+            from maude.custody import record_supervised_session_if_configured
+
+            custody = record_supervised_session_if_configured(
+                ctx.app.settings, session_id, text.encode("utf-8")
+            )
+            if custody is not None:
+                log.write(
+                    "  authoring custody: "
+                    + custody["session_record_id"][:21]
+                    + "… [dim](lineage transport only; not authorization)[/dim]"
+                )
 
             # S4 — attach an execution grant so in-envelope actions don't
             # re-prompt ("a use of standing is not a request for new standing").
@@ -172,13 +195,15 @@ class RunPlanCommand(Command):
                 # S7 — hand projection the ration bytes admission already
                 # verified, so both consume the same bytes (no second read).
                 call = project_execution_request(
-                    env, resolver,
+                    env,
+                    resolver,
                     verified_ration_bytes=admission.verified_ration_bytes,
                 )
                 if call is not None:
                     try:
                         granted = await ctx.app.client.runtime_grant_activate(
-                            session_id, call.execution_request,
+                            session_id,
+                            call.execution_request,
                             witness_bytes=call.witness_bytes,
                             plan_bytes=call.plan_bytes,
                         )

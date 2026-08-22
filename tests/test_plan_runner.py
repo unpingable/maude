@@ -42,20 +42,30 @@ class FakeClient:
         return {"status": "running", "pid": 4242}
 
     async def runtime_grant_activate(
-        self, session_id, execution_request, witness_bytes=None, plan_bytes=None,
+        self,
+        session_id,
+        execution_request,
+        witness_bytes=None,
+        plan_bytes=None,
     ):
-        self.grant_calls.append({
-            "session_id": session_id,
-            "execution_request": execution_request,
-            "witness_bytes": witness_bytes,
-            "plan_bytes": plan_bytes,
-        })
+        self.grant_calls.append(
+            {
+                "session_id": session_id,
+                "execution_request": execution_request,
+                "witness_bytes": witness_bytes,
+                "plan_bytes": plan_bytes,
+            }
+        )
         return {"grant_id": "sgr_test000000", "enforcement": "declared-effects-only"}
 
 
 class FakeApp:
-    def __init__(self) -> None:
+    def __init__(self, settings=None) -> None:
         self.client = FakeClient()
+        self.settings = (
+            settings
+            or type("TestSettings", (), {"custody_configuration": lambda self: None})()
+        )
 
 
 def _ctx(app: FakeApp, log: FakeLog, text: str = "") -> CommandContext:
@@ -88,7 +98,10 @@ Background prose.
 # cargo commands, plus the projected citation binding the request to it. A
 # governed v1 plan is admitted only if its request is cited AND contained.
 S7_RATION_SRC = json.dumps(
-    {"allowed_write_paths": ["src/**"], "allowed_shell_commands": ["cargo test", "cargo build"]}
+    {
+        "allowed_write_paths": ["src/**"],
+        "allowed_shell_commands": ["cargo test", "cargo build"],
+    }
 ).encode()
 _S7_PROJECTED_WRITE = (
     '  projected:\n    execution_request.write_paths: "ration_card:{d2}"\n'
@@ -145,6 +158,53 @@ class TestRunPlanCommand:
         assert app.client.launch_calls == ["sess-1"]
         env = parse_plan_envelope(HUMAN_PLAN)
         assert env.plan_ref in log.text()
+
+    def test_configured_custody_binds_exact_session_before_launch(self, tmp_path: Path):
+        from maude.config import Settings
+        from maude.custody import MaudeCustodyStoreV1, SessionCustodyProfileV1
+
+        plan = tmp_path / "plan.md"
+        exact = HUMAN_PLAN.replace("\n", "\r\n").encode()
+        plan.write_bytes(exact)
+        key = tmp_path / "session-issuer.key"
+        key.write_bytes(b"k" * 32)
+        key.chmod(0o600)
+        settings = Settings(
+            custody_store=str(tmp_path / "custody.sqlite"),
+            session_custody_key_file=str(key),
+            session_issuer_principal_id="maude:supervisor",
+            session_issuer_key_id="maude-session-key:primary",
+        )
+        app, log = FakeApp(settings), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))
+
+        with MaudeCustodyStoreV1(
+            SessionCustodyProfileV1(
+                Path(settings.custody_store),
+                key,
+                settings.session_issuer_principal_id,
+                settings.session_issuer_key_id,
+            )
+        ) as store:
+            record = store.get_session("sess-1")
+        assert record is not None
+        assert record["maude_plan_ref"] == "sha256:" + hashlib.sha256(exact).hexdigest()
+        assert record["source_plan_bytes"] == len(exact)
+        assert app.client.launch_calls == ["sess-1"]
+        assert "not authorization" in log.text()
+
+    def test_partial_custody_profile_refuses_before_launch(self, tmp_path: Path):
+        from maude.config import Settings
+
+        plan = tmp_path / "plan.md"
+        plan.write_text(HUMAN_PLAN)
+        settings = Settings(custody_store=str(tmp_path / "custody.sqlite"))
+        app, log = FakeApp(settings), FakeLog()
+        _run(RunPlanCommand(), _ctx(app, log), str(plan))
+        assert len(app.client.create_calls) == 1
+        assert app.client.launch_calls == []
+        assert "Launch error" in log.text()
+        assert "custody requires" in log.text()
 
     def test_model_flag_pins_harness_args(self, tmp_path: Path):
         """NS-0: `run <plan> --model X` threads the operator's model choice as
@@ -204,9 +264,9 @@ class TestRunPlanCommand:
         # LF specimen hashes differently and refuses as retired v0 — it does not
         # alias to the frozen LF hash. Approval attaches to bytes.
         lf = (
-            "---\nplan_version: 0\ngoal: \"x\"\nworkspace: \"/tmp/p\"\n"
+            '---\nplan_version: 0\ngoal: "x"\nworkspace: "/tmp/p"\n'
             "submitter_kind: human\nplan_origin: human_written\n"
-            "provenance:\n  author: \"op\"\nscope_allowlist: [\"src/**\"]\n---\n\nbody\n"
+            'provenance:\n  author: "op"\nscope_allowlist: ["src/**"]\n---\n\nbody\n'
         )
         lf_ref = "sha256:" + hashlib.sha256(lf.encode()).hexdigest()
         monkeypatch.setattr(
@@ -230,9 +290,9 @@ class TestRunPlanCommand:
                 "---\n\nBackground prose.",
                 "governance:\n"
                 "  authority_system: ag\n"
-                "  playbook_id: \"chore.x\"\n"
-                f"  playbook_digest: \"{d}\"\n"
-                f"  ration_card_digest: \"{d}\"\n"
+                '  playbook_id: "chore.x"\n'
+                f'  playbook_digest: "{d}"\n'
+                f'  ration_card_digest: "{d}"\n'
                 "  governance_status: candidate\n"
                 "---\n\nBackground prose.",
             )
@@ -254,10 +314,10 @@ class TestRunPlanCommand:
                 "---\n\nBackground prose.",
                 "governance:\n"
                 "  authority_system: ag\n"
-                "  playbook_id: \"chore.x\"\n"
-                f"  playbook_digest: \"{d1}\"\n"
-                f"  ration_card_digest: \"{d2}\"\n"
-                "  approval_ref: \"operator:act\"\n"
+                '  playbook_id: "chore.x"\n'
+                f'  playbook_digest: "{d1}"\n'
+                f'  ration_card_digest: "{d2}"\n'
+                '  approval_ref: "operator:act"\n'
                 "  governance_status: approved\n"
                 + _S7_PROJECTED_WRITE.format(d2=d2)
                 + "---\n\nBackground prose.",
@@ -347,10 +407,10 @@ class TestRunPlanCommand:
                 "---\n\nBackground prose.",
                 "governance:\n"
                 "  authority_system: ag\n"
-                "  playbook_id: \"chore.x\"\n"
-                f"  playbook_digest: \"{d}\"\n"
-                f"  ration_card_digest: \"{d}\"\n"
-                "  approval_ref: \"operator:act\"\n"
+                '  playbook_id: "chore.x"\n'
+                f'  playbook_digest: "{d}"\n'
+                f'  ration_card_digest: "{d}"\n'
+                '  approval_ref: "operator:act"\n'
                 "  governance_status: approved\n"
                 "---\n\nBackground prose.",
             )
@@ -411,10 +471,10 @@ class TestFileWitnessResolver:
                 "---\n\nBackground prose.",
                 "governance:\n"
                 "  authority_system: ag\n"
-                "  playbook_id: \"chore.x\"\n"
-                f"  playbook_digest: \"{d1}\"\n"
-                f"  ration_card_digest: \"{d2}\"\n"
-                "  approval_ref: \"operator:act\"\n"
+                '  playbook_id: "chore.x"\n'
+                f'  playbook_digest: "{d1}"\n'
+                f'  ration_card_digest: "{d2}"\n'
+                '  approval_ref: "operator:act"\n'
                 "  governance_status: approved\n"
                 + _S7_PROJECTED_WRITE.format(d2=d2)
                 + "---\n\nBackground prose.",

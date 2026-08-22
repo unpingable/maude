@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import shlex
 from pathlib import Path
 
 from textual.app import App, ComposeResult
@@ -33,8 +34,44 @@ _TEMPLATE_MAP = {
     "reqs": "REQUIREMENTS_TEMPLATE.md",
 }
 
-_HELP_TEXT = """\
-[bold]Available commands:[/bold]
+
+def _governor_startup_guidance(
+    settings: Settings, socket_path: Path, *, cwd: Path | None = None
+) -> tuple[str, ...]:
+    """Return project-scoped recovery steps for Maude's Unix-socket client.
+
+    Governor's default socket is derived from the exact ``.governor`` path.
+    Starting the daemon from its source checkout while Maude targets another
+    project therefore creates a healthy daemon on the wrong socket.
+    """
+    if settings.socket_path:
+        return (
+            f"Expected socket: {socket_path}",
+            "Start the configured Governor Unix-socket service for that exact path.",
+            "The stdio daemon mode cannot accept Maude's socket connection.",
+        )
+
+    configured = (
+        Path(settings.governor_dir).expanduser()
+        if settings.governor_dir
+        else (cwd or Path.cwd())
+    )
+    project_root = configured.parent if configured.name == ".governor" else configured
+    governor_dir = project_root / ".governor"
+    quoted_root = shlex.quote(str(project_root))
+    quoted_governor_dir = shlex.quote(str(governor_dir))
+    return (
+        f"Expected socket: {socket_path}",
+        f"One-time setup: governor --root {quoted_root} init",
+        f"Terminal 1:    governor --root {quoted_root} serve",
+        f"Terminal 2:    maude --governor-dir {quoted_governor_dir}",
+        "Governor and Maude must target the same initialized project.",
+    )
+
+_HELP_ALL_TEXT = """\
+[bold]Complete command reference[/bold]
+[dim]This view is intentionally long. Page Up/Down scrolls it.[/dim]
+[bold yellow]Unsupported legacy planning/chat is listed first for compatibility.[/bold yellow]
   plan <text>   - Start planning (freeform)
   plan architecture / arch - Load architecture template
   plan product / product design - Load product design template
@@ -81,9 +118,100 @@ _HELP_TEXT = """\
   p / pending   - Show pending interventions
   [dim](interventions auto-appear when a supervised session is active)[/dim]
 
-  help / ?      - Show this help
+  help [topic] / ? - Show compact or categorical help
   [dim]anything else → sent to model via governor[/dim]
 """
+
+_WELCOME_TEXT = """\
+[bold]Start here[/bold]
+  draft new <goal>  Create an artifact-oriented working draft
+  run <plan.md>  Validate and run an existing bounded plan
+  go <task>      Launch a supervised run
+  sessions       Inspect existing sessions
+[dim]Type help for a one-screen guide. Page Up/Down scrolls prior output.[/dim]"""
+
+_HELP_TEXT = """\
+[bold]Maude — supervised operations workspace[/bold]
+[bold]Start[/bold]
+  draft new <goal>  Create a Plan Core draft
+  run <plan.md>  Validate and run an existing bounded plan
+  go <task>      Launch a supervised run
+  sessions       Inspect existing sessions
+[bold]During a supervised run[/bold]
+  p              Show pending tool decisions
+  y / n          Allow or deny the next pending local tool call
+  diff           Review workspace changes
+  why            Explain a block or refusal
+[dim]Tool decisions are local Governor controls, not AG-NG authorization.[/dim]
+
+[bold]Learn more[/bold]
+  help draft     Artifact drafts, checks, diffs, and locks
+  help plan      Bounded-plan ingress and reports
+  help run       Supervision, decisions, and review
+  help sessions  Session inspection and lineage
+  help all       Complete command reference
+[dim]Page Up/Down scrolls prior output. ? opens this guide.[/dim]"""
+
+_HELP_PLAN_TEXT = """\
+[bold]Bounded run envelopes[/bold]
+PlanEnvelope is the exact supervised-run ingress; Plan Core drafts are separate (help draft).
+  run <plan.md>                     Validate and start a supervised run
+  report <session-id> [plan.md]     Compose the review/provenance report
+  grant [session-id]                Inspect grant-lease status (read only)
+[dim]Freeform plan/lock/build commands are unsupported legacy; see help all.[/dim]"""
+
+_HELP_DRAFT_TEXT = """\
+[bold]Plan Core drafts[/bold]
+  draft new <goal>                  Create a mutable design artifact
+  draft list                        List current working revisions
+  draft inspect <id>                Show exact identity and receipt applicability
+  draft edit <id>                   Edit JSON with $EDITOR; save a successor revision
+  draft check <id>                  Run structural/design checks
+  draft diff <id>                   Compare the last two revisions by stable node ID
+  draft lock <id>                   Snapshot exact bytes (does not authorize)
+  draft handoff <id> <workflow>     Use an exact workflow compiler or refuse
+[dim]Human and agent edits use the same revision boundary. Draft validity is not governed admissibility.[/dim]"""
+
+_HELP_RUN_TEXT = """\
+[bold]Supervised runs[/bold]
+  go <task>                          Launch a supervised run
+  p                                 Show pending tool decisions
+  y / n                             Approve or deny the next tool call
+  supervised events <session-id>    Show the canonical event stream
+  diff                              Review workspace changes
+  keep / discard                    Accept or revert reviewed changes
+  why                               Explain a block or refusal
+[dim]These are local Governor tool decisions, not AG-NG authorization.[/dim]"""
+
+_HELP_SESSIONS_TEXT = """\
+[bold]Sessions and orientation[/bold]
+  sessions                          List sessions
+  switch <id-or-#N>                 Select one exact session
+  snapshot                          Show the operator overview
+  lineage / lineage tree            Show predecessor/successor context
+  history                           Show recent message history
+  context                           Show context-window use
+  clear                             Start a fresh local session"""
+
+
+def _help_text(topic: str) -> str:
+    normalized = topic.strip().casefold()
+    if normalized in ("", "help", "?"):
+        return _HELP_TEXT
+    if normalized in ("plan", "plans", "envelope", "envelopes"):
+        return _HELP_PLAN_TEXT
+    if normalized in ("draft", "drafts", "planning"):
+        return _HELP_DRAFT_TEXT
+    if normalized in ("run", "supervised", "supervision"):
+        return _HELP_RUN_TEXT
+    if normalized in ("session", "sessions"):
+        return _HELP_SESSIONS_TEXT
+    if normalized == "all":
+        return _HELP_ALL_TEXT
+    return (
+        f"[yellow]Unknown help topic:[/yellow] {topic.strip()}\n"
+        "Available topics: draft, plan, run, sessions, all"
+    )
 
 
 class MaudeApp(App):
@@ -174,15 +302,19 @@ class MaudeApp(App):
         except ConnectionRefusedError:
             log.write("[red]Governor daemon is not running.[/red]")
             log.write("")
-            log.write("  Start it with:  [bold]governor serve[/bold]")
-            log.write("  Or with stdio:  [bold]governor serve --stdio[/bold]")
+            for line in _governor_startup_guidance(
+                self.settings, self.client.socket_path
+            ):
+                log.write(f"  {line}")
             log.write("")
             log.write("[dim]Most commands need the daemon. Local commands (help, history, clear) still work.[/dim]")
         except FileNotFoundError:
             log.write("[red]Governor socket not found.[/red]")
             log.write("")
-            log.write("  Is governor initialized?  [bold]governor init[/bold]")
-            log.write("  Then start the daemon:    [bold]governor serve[/bold]")
+            for line in _governor_startup_guidance(
+                self.settings, self.client.socket_path
+            ):
+                log.write(f"  {line}")
         except Exception as e:
             log.write(f"[red]Governor unreachable:[/red] {e}")
             log.write("[dim]Start the daemon with: governor serve[/dim]")
@@ -205,7 +337,7 @@ class MaudeApp(App):
             log.write(f"[yellow]Session init failed:[/yellow] {e}")
 
         log.write("")
-        log.write('[dim]Type "help" for available commands.[/dim]')
+        log.write(_WELCOME_TEXT)
 
         self._update_status_bar()
 
@@ -428,8 +560,8 @@ class MaudeApp(App):
         if command is not None:
             await command.execute(CommandContext(self, log, text), intent.payload)
 
-    def _handle_help(self, log: RichLog) -> None:
-        log.write(_HELP_TEXT)
+    def _handle_help(self, log: RichLog, topic: str) -> None:
+        log.write(_help_text(topic))
 
     def _require_daemon(self, log: RichLog) -> bool:
         """Check daemon connection. Returns True if connected, False if not.
