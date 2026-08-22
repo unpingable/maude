@@ -94,5 +94,37 @@ The run used the existing test NQ admission port and integration standing
 issuer. It does not qualify production principals, physical power loss, live
 backup/restore, Docker host compromise, or the equivalence between the local
 synthetic service and an external production workload. The executor evidence
-is a Docket result; it has not become a general Nightshift world-observation
-contract.
+remains a Docket result rather than currentness. A follow-on bounded adapter
+now produces the workflow-specific `maude.local-compose-world-observation/v1`,
+authenticates it to Nightshift, and persists it in a custody projection
+separate from canonical observation cycles. This is deliberately not a
+general world-observation language and is not consumed as Nightshift
+currentness.
+
+## Follow-on observation-custody qualification
+
+The retained executor records were subsequently passed through the closed
+local-Compose observation adapter and authenticated into the same Nightshift
+store. The exact candidates are:
+
+- qualify observation
+  `sha256:881c68eea6a9bce86cf9d4f022099f4e1a3c4bba5e2e645c621046c350ad081b`,
+  custody
+  `sha256:9740f6775e0b6e922d80de211485ee3e66d49ed59adf9c7e4f26afa478f4d92f`;
+- teardown observation
+  `sha256:ff01f8c2de40993be822adc273a8a3c3a4ef856c8e7723300d26fbfbc864d1e2`,
+  custody
+  `sha256:accf1275ac04b4d1dfd55eb3db40acac913d1270727a1289939c060724eb3fa9`.
+
+The qualify candidate cross-probes four evidence claims to `pn_health`,
+`pn_cache_behavior`, `pn_continued`, and `pn_restore`. The retained teardown
+record predates the executor's direct network-inventory field, so its candidate
+claims only the exact recorded zero-container fact at `pn_teardown`; the
+separate qualification evidence still records the zero-network check. A future
+execution under the hardened adapter will bind both fields.
+
+Two imports left the canonical cycle count and cycle snapshots unchanged.
+Exact resend after process restart returned the first custody receipt and
+receipt time. Read-side age projection distinguished fresh, stale, and
+not-yet-observed evidence without adding a `currentness` field or creating an
+observation cycle.

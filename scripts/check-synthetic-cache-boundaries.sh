@@ -5,6 +5,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 compiler="$root/src/maude/plan/local_compose.py"
 executor="$root/qualification/synthetic_cache/local_compose_executor.py"
 qualification="$root/qualification/synthetic_cache"
+observation="$root/src/maude/plan/world_observation.py"
 
 if rg -n '^(from|import) (ag_|nightshift|docket)' "$compiler" "$qualification"; then
   echo "synthetic compiler/executor must use serialized owner boundaries" >&2
@@ -30,6 +31,24 @@ fi
 if rg -n '(subprocess|docker|compose|Nightshift|Docket|AG)' \
   "$root/src/maude/design/providers.py"; then
   echo "agent proposal providers must not reach workflow or governed mechanics" >&2
+  exit 1
+fi
+
+if rg -n 'subprocess|os\.system|Popen|urlopen|socket|submit.intervention|AGSpend' \
+  "$observation"; then
+  echo "world-observation adapter must only transform exact retained artifacts" >&2
+  exit 1
+fi
+
+if ! rg -q 'build_observation\(' "$observation" || \
+   ! rg -q 'seal_handoff\(' "$observation"; then
+  echo "world-observation source validation and custody sealing must remain explicit" >&2
+  exit 1
+fi
+
+if rg -n '"(currentness|standing|authorization|spend|capability)"[[:space:]]*:' \
+  "$observation"; then
+  echo "world-observation candidate must contain no governed authority fields" >&2
   exit 1
 fi
 

@@ -27,6 +27,7 @@ Issues = "https://github.com/unpingable/maude/issues"
 maude = "maude.app:main"
 maude-authoring-handoff = "maude.custody:main"
 maude-plan = "maude.plan.cli:main"
+maude-local-compose-observation = "maude.plan.world_observation:main"
 phosphor-design = "maude.design.server:main"
 phosphor-design-demo = "maude.design.demo:main"
 

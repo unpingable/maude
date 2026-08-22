@@ -86,6 +86,13 @@ Qualification and teardown intentionally compile identical locked plan bytes
 under different explicit inputs into different handoffs and work identities.
 Artifact digest is not occurrence identity.
 
+After Docket settlement, `maude-local-compose-observation` can validate the
+immutable executor record, exact compiler/PlanNode bindings, and exact governed
+result to produce `maude.local-compose-world-observation/v1`. Its authenticated
+Nightshift handoff is source-evidence custody only: it neither makes the
+evidence current nor changes the existing observation-required state. See
+Nightshift's `docs/EXTERNAL_OBSERVATION_CUSTODY_V1.md`.
+
 ## Closed executor
 
 `local_compose_executor.py` implements the existing Docket executor protocol:
