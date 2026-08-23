@@ -7,6 +7,7 @@
 | [PLAN-CORE.md](PLAN-CORE.md) | Canonical mutable plan artifact, revisions, checks, locks, compiler boundary |
 | [PHOSPHOR-DESIGN.md](PHOSPHOR-DESIGN.md) | Loopback browser board-file workspace, typed edits, presentation sidecar |
 | [PLAN-EDIT-PROPOSALS.md](PLAN-EDIT-PROPOSALS.md) | Scoped immutable agent edit proposals and ordinary CAS acceptance |
+| [OBSERVATION-ACQUISITION-ORCHESTRATION.md](OBSERVATION-ACQUISITION-ORCHESTRATION.md) | Exact one-shot post-settlement application-evidence acquisition and custody recovery |
 | [Synthetic cache qualification](../qualification/synthetic_cache/README.md) | First exact PlanDocument → compiler → governed local deployment witness |
 | [REPOSITIONING.md](REPOSITIONING.md) | The executor thesis, ingress contracts, boundary, do-not-build list |
 | [specs/plan-envelope-v0.md](specs/plan-envelope-v0.md) | Plan envelope + submitter contracts (M-1, CANDIDATE) |

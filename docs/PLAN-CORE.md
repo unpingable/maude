@@ -222,6 +222,9 @@ node bindings; a separately supplied, owner-verified
 `maude.plan-governed-cross-probe/v1` projection lets `/design` navigate from
 those nodes to exact governed occurrences without prose/timestamp matching.
 The projection is read-only and cannot establish or alter authority.
+When one node ID survives across design generations, each binding retains its
+own PlanDocument and compilation identity; stable node identity is never
+treated as artifact equivalence or qualification carry-forward.
 
 ## Explicit nonclaims
 

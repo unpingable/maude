@@ -305,7 +305,7 @@ def _node_editor(
         for item in required_by
     )
     governed = "".join(
-        f'<li class="receipt"><strong>{escape(item.outcome)} settlement</strong> · occurrence {escape(item.occurrence_id)}<br><span class="node-id">work {escape(item.exact_work_identity)} · attempt {escape(item.docket_attempt_id)}</span><br><a href="{escape(_inspect_href(inspect_url, item.inspector_path), quote=True)}">Inspect exact governed occurrence in Phosphor-ng</a>{raw_block("Exact governed cross-probe binding", item.to_data())}</li>'
+        f'<li class="receipt"><strong>{escape(item.outcome)} settlement</strong> · {("current PlanDocument binding" if item.plan_digest == revision.plan_digest else "historical PlanDocument binding")} · occurrence {escape(item.occurrence_id)}<br><span class="node-id">plan {escape(item.plan_digest)} · work {escape(item.exact_work_identity)} · attempt {escape(item.docket_attempt_id)}</span><br><a href="{escape(_inspect_href(inspect_url, item.inspector_path), quote=True)}">Inspect exact governed occurrence in Phosphor-ng</a>{raw_block("Exact governed cross-probe binding", item.to_data())}</li>'
         for item in governed_bindings
         if item.node_id == node.node_id
     )

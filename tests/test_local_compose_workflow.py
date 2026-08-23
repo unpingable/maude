@@ -166,6 +166,33 @@ def inputs(tmp_path: Path, *, action: str = "qualify") -> LocalComposeWorkflowIn
     )
 
 
+def c2_document() -> PlanDocumentV1:
+    c1 = document()
+    return dataclasses.replace(
+        c1,
+        workspace="synthetic-cache-c2",
+        constraints=dataclasses.replace(
+            c1.constraints,
+            declared_write_paths=("synthetic-cache-workspace-c2",),
+        ),
+        acceptance_criteria=c1.acceptance_criteria
+        + ("C2 is confined to its distinct exact Compose project",),
+        nodes=tuple(
+            dataclasses.replace(
+                item,
+                work=(
+                    None
+                    if item.work is None
+                    else dataclasses.replace(
+                        item.work, write_paths=("synthetic-cache-workspace-c2",)
+                    )
+                ),
+            )
+            for item in c1.nodes
+        ),
+    )
+
+
 def test_exact_compiler_emits_nightshift_handoff_and_node_bindings(tmp_path: Path):
     registry = CompilerRegistryV1()
     registry.register("local-compose", LocalComposeWorkflowCompilerV1())
@@ -223,6 +250,35 @@ def test_identical_locked_bytes_can_produce_distinct_intentional_handoffs(
     assert ag_executor_plan_identity(
         executor_plan_from_handoff(qualify.handoff_bytes)
     ) != ag_executor_plan_identity(executor_plan_from_handoff(teardown.handoff_bytes))
+
+
+def test_c2_scope_change_preserves_nodes_and_changes_exact_compiled_artifact(
+    tmp_path: Path,
+):
+    c1 = document()
+    c2 = c2_document()
+    c1_inputs = inputs(tmp_path)
+    c2_inputs = dataclasses.replace(
+        c1_inputs,
+        workspace=str(tmp_path / "maude-cache-test-c2"),
+        project_name="maude-cache-test-c2",
+        occurrence_id="00000000-0000-4000-8000-000000000002",
+        observation_id="sha256:" + "9" * 64,
+        proposal_class="successor",
+    )
+    compiler = LocalComposeWorkflowCompilerV1()
+    compiled_c1 = compiler.compile(c1, c1_inputs)
+    compiled_c2 = compiler.compile(c2, c2_inputs)
+    assert [node.node_id for node in c2.nodes] == [node.node_id for node in c1.nodes]
+    assert c2.digest != c1.digest
+    assert compiled_c2 != compiled_c1
+    assert compiled_c2 == compiler.compile(c2, c2_inputs)
+    c2_plan = executor_plan_from_handoff(compiled_c2.handoff_bytes)
+    assert c2_plan["project_name"] == "maude-cache-test-c2"
+    assert c2_plan["plan_document_digest"] == c2.digest
+    assert ag_executor_plan_identity(c2_plan) != ag_executor_plan_identity(
+        executor_plan_from_handoff(compiled_c1.handoff_bytes)
+    )
 
 
 def test_compilation_receipt_persists_exact_inputs_output_and_lock(tmp_path: Path):

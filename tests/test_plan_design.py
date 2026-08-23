@@ -53,11 +53,13 @@ def digest(character: str) -> str:
     return "sha256:" + character * 64
 
 
-def governed_binding(draft_id: str = "draft_test") -> GovernedNodeBindingV1:
+def governed_binding(
+    draft_id: str = "draft_test", *, plan_digest: str | None = None
+) -> GovernedNodeBindingV1:
     return GovernedNodeBindingV1.create(
         draft_id=draft_id,
         node_id="pn_a",
-        plan_digest=digest("1"),
+        plan_digest=plan_digest or digest("1"),
         compilation_id=digest("2"),
         compiled_output_identity=digest("3"),
         exact_work_identity=digest("4"),
@@ -1139,24 +1141,56 @@ def test_simultaneous_presentation_updates_have_one_winner(tmp_path):
 
 def test_governed_cross_probe_is_exact_read_only_node_navigation(tmp_path):
     application, store, revision = app(tmp_path)
-    binding = governed_binding()
+    binding = governed_binding(plan_digest=revision.plan_digest)
     application.governed_cross_probe = {revision.draft_id: (binding,)}
     before = store.current(revision.draft_id)
 
-    page = application.get(
-        f"/phosphor/design/drafts/{revision.draft_id}?node=pn_a"
-    )
+    page = application.get(f"/phosphor/design/drafts/{revision.draft_id}?node=pn_a")
     assert page.status == 200
     assert b"Governed history \xc2\xb7 owner-produced exact joins" in page.body
     assert b"Inspect exact governed occurrence in Phosphor-ng" in page.body
+    assert b"current PlanDocument binding" in page.body
+    assert binding.plan_digest.encode() in page.body
     assert binding.inspector_path.encode() in page.body
     assert binding.docket_attempt_id.encode() in page.body
-    api = application.get(
-        f"/phosphor/design/drafts/{revision.draft_id}/api/v1"
-    )
+    api = application.get(f"/phosphor/design/drafts/{revision.draft_id}/api/v1")
     assert api.status == 200
     assert json.loads(api.body)["governed_node_bindings"] == [binding.to_data()]
     assert store.current(revision.draft_id) == before
+
+
+def test_governed_cross_probe_keeps_stable_node_generation_context(tmp_path):
+    application, store, revision = app(tmp_path)
+    current = governed_binding(plan_digest=revision.plan_digest)
+    historical_facts = current.to_data()
+    historical_facts.pop("binding_id")
+    historical_facts["plan_digest"] = digest("c")
+    historical_facts["compilation_id"] = digest("d")
+    historical_facts["compiled_output_identity"] = digest("e")
+    historical_facts["exact_work_identity"] = digest("f")
+    historical_facts["occurrence_id"] = "00000000-0000-4000-8000-000000000000"
+    historical_facts["proposal_id"] = digest("0")
+    historical_facts["issuance_id"] = digest("2")
+    historical_facts["docket_attempt_id"] = digest("3")
+    historical_facts["settlement_id"] = digest("4")
+    historical_facts["inspector_path"] = (
+        "/phosphor-ng/campaigns/"
+        + quote(historical_facts["campaign_id"], safe="")
+        + "/occurrences/"
+        + historical_facts["occurrence_id"]
+        + "/proposals/"
+        + quote(historical_facts["proposal_id"], safe="")
+    )
+    historical = GovernedNodeBindingV1.create(**historical_facts)
+    application.governed_cross_probe = {revision.draft_id: (historical, current)}
+
+    page = application.get(f"/phosphor/design/drafts/{revision.draft_id}?node=pn_a")
+    assert page.status == 200
+    assert b"historical PlanDocument binding" in page.body
+    assert b"current PlanDocument binding" in page.body
+    assert historical.plan_digest.encode() in page.body
+    assert current.plan_digest.encode() in page.body
+    assert store.current(revision.draft_id) == revision
 
 
 def test_governed_cross_probe_substitution_and_path_retarget_refuse(tmp_path):
@@ -1185,11 +1219,7 @@ def test_governed_cross_probe_substitution_and_path_retarget_refuse(tmp_path):
     )
     retargeted["binding_id"] = content_digest(
         canonical_json_bytes(
-            {
-                key: value
-                for key, value in retargeted.items()
-                if key != "binding_id"
-            }
+            {key: value for key, value in retargeted.items() if key != "binding_id"}
         )
     )
     path.write_bytes(

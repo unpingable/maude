@@ -28,6 +28,8 @@ maude = "maude.app:main"
 maude-authoring-handoff = "maude.custody:main"
 maude-plan = "maude.plan.cli:main"
 maude-local-compose-observation = "maude.plan.world_observation:main"
+maude-local-compose-steady-state-observation = "maude.plan.steady_state_observation:main"
+maude-observation-acquisition = "maude.plan.observation_acquisition:main"
 phosphor-design = "maude.design.server:main"
 phosphor-design-demo = "maude.design.demo:main"
 

@@ -243,6 +243,8 @@ def compiler_inputs(
     *,
     action: str,
     workspace: Path,
+    project_name: str = PROJECT_NAME,
+    proposal_class: str | None = None,
     front_port: int,
     image: str,
     docker_program: Path,
@@ -265,7 +267,7 @@ def compiler_inputs(
     return LocalComposeWorkflowInputsV1(
         action=action,
         workspace=str(workspace),
-        project_name=PROJECT_NAME,
+        project_name=project_name,
         front_port=front_port,
         image=image,
         docker_program=str(docker_program),
@@ -279,7 +281,11 @@ def compiler_inputs(
         observation_id=observation_id,
         subject_digest=subject_digest,
         scope_digest=scope_digest,
-        proposal_class="initial" if action == "qualify" else "successor",
+        proposal_class=(
+            proposal_class
+            if proposal_class is not None
+            else ("initial" if action == "qualify" else "successor")
+        ),
         node_actions=tuple(
             NodeActionV1(item.node_id, item.work.commands[0].argv_prefix[0])
             for item in selected

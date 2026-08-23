@@ -164,6 +164,13 @@ Configure the optional projection with `--governed-cross-probe PATH`. It is a
 read-only locator/audit projection and contains no spend, signature, credential,
 capability, or authorization material.
 
+A stable PlanNode may have exact bindings in more than one PlanDocument
+generation. `/design` therefore labels each relation as a current or historical
+PlanDocument binding and displays its exact plan digest alongside work and
+attempt identity. The shared node ID supports navigation; it does not carry a
+qualification from the historical artifact to the current one. Applicability
+and currentness remain Nightshift owner facts.
+
 ## Local security
 
 The service binds only an IP address classified as loopback. It enforces:
