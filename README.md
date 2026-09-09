@@ -456,3 +456,9 @@ Apache-2.0
 ---
 
 *The plan arrives. Maude runs it. The governor gates. You review the diff.*
+
+## Operational ECAD composition
+
+Maude owns plan design and compiles one exact service-investigation handoff.
+It does not grant the mandate, acquire evidence, or settle an effect. See the
+local [Operational ECAD journey](/data/git/operational-ecad/README.md).
