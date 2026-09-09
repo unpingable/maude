@@ -1,0 +1,33 @@
+{
+  "schema": "maude.service-investigation-profile/v1",
+  "profile_id": "classic-retirement-history",
+  "audience": "nightshift.service-investigation/v1",
+  "subject_label": "archived fixed HTTP service (classic-retirement-composition-vm-001)",
+  "subject": "sha256:88914f20291360ec153518fc590fa5922074419a831234ab74f2a9a536ed9cfe",
+  "diagnostics": [
+    {
+      "node_id": "pn_systemd",
+      "profile": "nq.systemd_unit/v1",
+      "scope": "sha256:5dc506e155c039475543c1b296d3fa95fd0d1b5d6bad8bfe6d85f871e4621634",
+      "config_digest": "sha256:9d6d7d71dcac360c6c42885c8246695c8f6a519cac80cf1620a4f99291cd055b",
+      "profile_digest": "sha256:85beec374d8c3a19dca3aafe892792237c7ed2a886a3ecbd6fce6245578c0d8d",
+      "question_digest": "sha256:b3f34fc485a8d3db4e05282f5b1c0d11f96b439f538e2079bce2ca1242140b4c",
+      "threshold_policy_digest": "sha256:10d73de75c5e3057ab8b365285e119ed58c44aafe3fe6ff61fc099ee86da869c",
+      "instance": "systemd-pre",
+      "vantage": "target",
+      "vantage_digest": "sha256:188d8e766275ae212ab7c7ee64c04216e177929cf9aeac4333f6c9ae137dcbb7"
+    },
+    {
+      "node_id": "pn_http",
+      "profile": "nq.http_endpoint/v1",
+      "scope": "sha256:7f659d285559aa4b3f2c83dd867358aec7cbce5607f300eb11590235e96fb365",
+      "config_digest": "sha256:12e3f651835a8f264acb4bcf82c3ec54c806f63accc9e96612de20bfc4e1b0e3",
+      "profile_digest": "sha256:d277728a076d75d8bf5a5294635905b74f6b15b7a9d7a5274ea42a888eb68fae",
+      "question_digest": "sha256:e35597a98cf37be6310766c783f7f9aeb22192e520a69916bec5b758f3a175d1",
+      "threshold_policy_digest": "sha256:239dfe70f9f7d8a816e850acb50852ed5283646276e47dc61f65d2b89f060504",
+      "instance": "http-pre",
+      "vantage": "controller",
+      "vantage_digest": "sha256:cdfc89e81f64ced4da8f29da265355c6e7e406fe09a46ff6cfab8558804e4038"
+    }
+  ]
+}

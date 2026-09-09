@@ -68,6 +68,12 @@ from maude.plan.store import (
     ARTIFACT_REFERENCE_SCHEMA,
 )
 from maude.plan.switchyard_provider import SwitchyardProposalProfileV1, SwitchyardProposalProvider
+from maude.plan.service_investigation import (
+    ServiceInvestigationError,
+    ServiceInvestigationLedger,
+    ServiceInvestigationProfileV1,
+    compile_service_investigation,
+)
 
 MAX_REQUEST_BYTES = 128 * 1024
 PREVIEW_SCHEMA = "maude.plan-operation-preview-token/v1"
@@ -385,6 +391,9 @@ class DesignApplication:
             str, tuple[GovernedNodeBindingV1, ...]
         ]
         | None = None,
+        service_investigation_profile: ServiceInvestigationProfileV1 | None = None,
+        service_investigation_ledger: ServiceInvestigationLedger | None = None,
+        nightshift_submission_command: tuple[str, ...] = (),
         secret: bytes | None = None,
         enrolled_provider: SwitchyardProposalProvider | None = None,
     ) -> None:
@@ -397,6 +406,9 @@ class DesignApplication:
         self.inspect_url = inspect_url
         self.owner_facts = owner_facts or {}
         self.governed_cross_probe = governed_cross_probe or {}
+        self.service_investigation_profile = service_investigation_profile
+        self.service_investigation_ledger = service_investigation_ledger
+        self.nightshift_submission_command = nightshift_submission_command
         self.secret = secret or secrets.token_bytes(32)
         self.csrf_token = _b64(
             hmac.digest(self.secret, b"csrf:/phosphor/design", "sha256")
@@ -566,6 +578,37 @@ class DesignApplication:
                         "schema": "maude.plan-design-workspace/v2",
                     },
                 )
+            if suffix in {"/investigation", "/investigation/api/v1"}:
+                if (
+                    self.service_investigation_profile is None
+                    or self.service_investigation_ledger is None
+                ):
+                    raise DraftNotFound("service investigation is not configured")
+                compiled = compile_service_investigation(
+                    revision, self.service_investigation_profile
+                )
+                investigation = self.service_investigation_ledger.projection(
+                    compiled.investigation_id
+                )
+                if suffix.endswith("/api/v1"):
+                    return Response.json(
+                        200,
+                        {
+                            "compiled": compiled.to_data(),
+                            "projection": investigation,
+                            "schema": "maude.service-investigation-workspace/v1",
+                        },
+                    )
+                return Response.html(
+                    200,
+                    render.service_investigation_page(
+                        revision,
+                        compiled,
+                        investigation,
+                        self.csrf_token,
+                        self.inspect_url,
+                    ),
+                )
             if suffix:
                 return Response.html(
                     404, render.error_page("Not found", path, self.inspect_url)
@@ -600,6 +643,10 @@ class DesignApplication:
                         draft_id, ()
                     ),
                     active_generation_count=len(self.active_generations(draft_id)),
+                    service_investigation_available=(
+                        self.service_investigation_profile is not None
+                        and self.service_investigation_ledger is not None
+                    ),
                 ),
             )
         except (PresentationError, sqlite3.Error) as exc:
@@ -646,6 +693,37 @@ class DesignApplication:
                     active.cancellation.set()
                 return Response.redirect(
                     f"/phosphor/design/drafts/{quote(draft_id)}/proposal-generations/active"
+            investigation_action = _investigation_action(path)
+            if investigation_action is not None:
+                investigation_draft, owner_action = investigation_action
+                if (
+                    self.service_investigation_profile is None
+                    or self.service_investigation_ledger is None
+                ):
+                    raise ServiceInvestigationError(
+                        "service investigation is not configured"
+                    )
+                revision = self.store.current(investigation_draft)
+                if (
+                    form.one("expected_revision_id") != revision.revision_id
+                    or form.one("expected_plan_digest") != revision.plan_digest
+                ):
+                    raise DraftConflict(
+                        "the PlanDocument revision changed; review the investigation again"
+                    )
+                compiled = compile_service_investigation(
+                    revision, self.service_investigation_profile
+                )
+                if owner_action == "submit":
+                    self.service_investigation_ledger.submit(
+                        compiled, self.nightshift_submission_command
+                    )
+                else:
+                    self.service_investigation_ledger.reconcile(
+                        compiled, self.nightshift_submission_command
+                    )
+                return Response.redirect(
+                    f"/phosphor/design/drafts/{quote(investigation_draft)}/investigation"
                 )
             if path == "/phosphor/design/drafts/new":
                 document = PlanDocumentV1(
@@ -936,6 +1014,7 @@ class DesignApplication:
             ProposalError,
             ProposalStoreError,
             PresentationError,
+            ServiceInvestigationError,
             ValueError,
         ) as exc:
             return Response.html(
@@ -948,11 +1027,31 @@ def _draft_path(path: str) -> tuple[str, str] | None:
     if not path.startswith(prefix):
         return None
     rest = path[len(prefix) :]
+    if rest.endswith("/investigation/api/v1"):
+        return unquote(rest[: -len("/investigation/api/v1")]), "/investigation/api/v1"
+    if rest.endswith("/investigation"):
+        return unquote(rest[: -len("/investigation")]), "/investigation"
     if rest.endswith("/api/v1"):
         return rest[: -len("/api/v1")], "/api/v1"
     if "/" in rest or not rest:
         return None
     return rest, ""
+
+
+def _investigation_action(path: str) -> tuple[str, str] | None:
+    prefix = "/phosphor/design/drafts/"
+    if not path.startswith(prefix):
+        return None
+    rest = path[len(prefix) :]
+    if rest.endswith("/investigation/submit"):
+        draft_id, action = rest[: -len("/investigation/submit")], "submit"
+    elif rest.endswith("/investigation/reconcile"):
+        draft_id, action = rest[: -len("/investigation/reconcile")], "reconcile"
+    else:
+        return None
+    if not draft_id or "/" in draft_id:
+        return None
+    return unquote(draft_id), action
 
 
 def _proposal_path(path: str) -> tuple[str, str, bool] | None:
@@ -1217,6 +1316,12 @@ def parser() -> argparse.ArgumentParser:
     )
     result.add_argument("--owner-facts", type=Path)
     result.add_argument("--governed-cross-probe", type=Path)
+    result.add_argument("--service-investigation-profile", type=Path)
+    result.add_argument("--service-investigation-ledger", type=Path)
+    result.add_argument("--nightshift-submission-program", type=Path)
+    result.add_argument(
+        "--nightshift-submission-arg", action="append", default=[]
+    )
     result.add_argument("--inspect-url", default="http://127.0.0.1:8417/phosphor-ng")
     result.add_argument("--bind", default="127.0.0.1")
     result.add_argument("--port", type=int, default=8427)
@@ -1239,6 +1344,35 @@ def main() -> None:
         profile = SwitchyardProposalProfileV1(**profile_data)
         enrolled = SwitchyardProposalProvider.from_switchyard_state(profile, args.switchyard_state,
                                                                       credential_source=dedicated_credential_loader(args.switchyard_credential_file))
+    configured = (
+        args.service_investigation_profile,
+        args.service_investigation_ledger,
+        args.nightshift_submission_program,
+    )
+    if any(item is not None for item in configured) and not all(
+        item is not None for item in configured
+    ):
+        raise SystemExit(
+            "service investigation profile, ledger, and Nightshift submission program must be configured together"
+        )
+    profile = (
+        None
+        if args.service_investigation_profile is None
+        else ServiceInvestigationProfileV1.load(args.service_investigation_profile)
+    )
+    investigation_ledger = (
+        None
+        if args.service_investigation_ledger is None
+        else ServiceInvestigationLedger(args.service_investigation_ledger)
+    )
+    submission_command = (
+        ()
+        if args.nightshift_submission_program is None
+        else (
+            str(args.nightshift_submission_program.resolve(strict=True)),
+            *args.nightshift_submission_arg,
+        )
+    )
     application = DesignApplication(
         DraftStore(args.store),
         PresentationStore(args.presentation_store),
@@ -1249,6 +1383,9 @@ def main() -> None:
             args.governed_cross_probe
         ),
         enrolled_provider=enrolled,
+        service_investigation_profile=profile,
+        service_investigation_ledger=investigation_ledger,
+        nightshift_submission_command=submission_command,
     )
     try:
         serve((args.bind, args.port), application)

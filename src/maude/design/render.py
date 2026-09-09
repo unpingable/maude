@@ -16,6 +16,7 @@ from maude.plan.proposal_service import ProposalProjectionV1
 from maude.plan.proposal_store import GenerationRefusalV1
 from maude.plan.proposals import PlanEditProposalRequestV1
 from maude.plan.store import DraftProjectionV1, DraftRevisionV1
+from maude.plan.service_investigation import CompiledServiceInvestigationV1
 
 STYLE = r"""
 :root{color-scheme:dark;--bg:#090d12;--surface:#0e141b;--panel:#121a23;--raised:#18222d;--line:#2a3745;--text:#e7edf4;--muted:#95a5b6;--fact:#86d4c8;--projection:#9abdf5;--unknown:#f1c76f;--bad:#ff9b9b;--accent:#c8a7f6;--focus:#72b7ff;--edit:#8bd5ff;--lock:#edc777}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#9dccff;text-underline-offset:.18em}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}.skip{position:absolute;left:-10000px}.skip:focus{left:.75rem;top:.75rem;z-index:30;background:var(--raised);padding:.5rem}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1rem;padding:.7rem 1.1rem;background:#0b1017f4;border-bottom:1px solid var(--line)}.brand{color:var(--text);font:700 .95rem/1 ui-sans-serif,system-ui;text-decoration:none}.nav{display:flex;gap:.25rem}.nav a{padding:.3rem .5rem;border-radius:4px;text-decoration:none;color:var(--muted)}.nav a[aria-current=true]{background:#241b32;color:var(--text)}.trust{margin-left:auto;color:var(--muted);font-size:.73rem}.trust strong{color:var(--edit)}main{max-width:1640px;margin:auto;padding:1rem 1.1rem 4rem}h1,h2,h3{font-family:Inter,ui-sans-serif,system-ui;margin-top:0}h1{font-size:1.35rem;margin-bottom:.25rem;overflow-wrap:anywhere}h2{font-size:.98rem;margin-bottom:.6rem}h3{font-size:.83rem;margin:.9rem 0 .45rem}.lede,.muted{color:var(--muted)}.eyebrow{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:750}.identity-strip{display:grid;grid-template-columns:minmax(18rem,2fr) repeat(3,minmax(11rem,1fr));gap:.6rem;margin:.8rem 0}.identity-cell,.panel{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:.78rem;min-width:0}.identity-cell strong{display:block;font:650 .94rem/1.35 ui-sans-serif,system-ui;overflow-wrap:anywhere}.label{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.18rem}.mono{overflow-wrap:anywhere}.compact{font-size:.74rem}.workspace{display:grid;grid-template-columns:minmax(19rem,var(--outline,36%)) minmax(26rem,1fr);grid-template-areas:'outline detail' 'lower lower';gap:.7rem;align-items:start}.outline{grid-area:outline;padding:0;overflow:hidden}.detail{grid-area:detail}.lower{grid-area:lower}.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;padding:.72rem .78rem;border-bottom:1px solid var(--line)}.panel-head h2{margin:0}.node-list{list-style:none;padding:0;margin:0;max-height:56rem;overflow:auto}.node{border-top:1px solid #202c38}.node:first-child{border-top:0}.node-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.45rem;align-items:start;padding:.58rem .62rem}.node.selected{background:#211b2d;box-shadow:inset 3px 0 0 var(--accent)}.select-form,.inline-form{display:inline;margin:0}.link-button{appearance:none;border:0;background:none;color:#9dccff;padding:0;text-align:left;font:inherit;text-decoration:underline;text-underline-offset:.18em;cursor:pointer}.node-label{font:650 .86rem/1.3 ui-sans-serif,system-ui;overflow-wrap:anywhere}.node-id{color:var(--muted);font-size:.68rem;overflow-wrap:anywhere}.node-meta{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.28rem}.node-deps{padding:.1rem .62rem .58rem 2.3rem;color:var(--muted);font-size:.72rem;overflow-wrap:anywhere}.badge{display:inline-block;padding:.08rem .38rem;border:1px solid #465766;border-radius:999px;color:#b8c5d2;font-size:.62rem;text-transform:uppercase;letter-spacing:.045em}.badge.finding{border-color:#7a5331;color:var(--unknown)}.badge.work{border-color:#356b64;color:var(--fact)}.badge.lock{border-color:#6e6036;color:var(--lock)}.badge.stale{border-color:#715d31;color:var(--unknown)}.badge.pass{border-color:#356b64;color:var(--fact)}.toolbar{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}.toolbar form{margin:0}button,.button{border:1px solid #405365;border-radius:5px;background:#18232e;color:var(--text);padding:.38rem .62rem;font:650 .75rem/1.2 ui-sans-serif,system-ui;cursor:pointer;text-decoration:none}button:hover,.button:hover{background:#22313f}button.danger{border-color:#744443;color:#ffb0ac;background:#251718}button.lock-action{border-color:#6e6036;color:#f1d48a;background:#241f14}form.editor{display:grid;gap:.55rem}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}.field-grid .wide{grid-column:1/-1}label{display:grid;gap:.22rem;color:var(--muted);font-size:.72rem}input,textarea,select{width:100%;border:1px solid #364858;border-radius:4px;background:#0b1118;color:var(--text);padding:.45rem .5rem;font:12px/1.45 ui-monospace,SFMono-Regular,monospace}textarea{min-height:5rem;resize:vertical}.deps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.25rem .6rem;border:1px solid #2d3b49;border-radius:4px;padding:.5rem;max-height:11rem;overflow:auto}.deps label{display:flex;gap:.4rem;align-items:flex-start;color:var(--text);overflow-wrap:anywhere}.deps input{width:auto;margin:.2rem 0 0}.hint,.nonclaim{color:var(--muted);font-size:.72rem}.nonclaim{border-left:3px solid var(--projection);background:#111a24;padding:.5rem .6rem}.warning{border:1px solid #715d31;background:#211a10;color:#efd08c;border-radius:5px;padding:.58rem;margin:.55rem 0}.error{border:1px solid #804949;background:#251516;color:#ffb1b1;border-radius:5px;padding:.58rem;margin:.55rem 0}.success{border:1px solid #356b64;background:#10201d;color:#a8e1d8;border-radius:5px;padding:.58rem;margin:.55rem 0}.lower-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}.lower-grid>section{min-width:0}.receipt-list,.finding-list,.diff-list{list-style:none;padding:0;margin:.2rem 0}.receipt,.finding-row,.diff-row{border-top:1px dotted #344250;padding:.48rem 0;overflow-wrap:anywhere}.receipt:first-child,.finding-row:first-child,.diff-row:first-child{border-top:0}.finding-row.selected{background:#261f13}.finding-row .message{font-family:ui-sans-serif,system-ui}.finding-link{display:block}.drift{display:grid;grid-template-columns:minmax(9rem,12rem) minmax(0,1fr);gap:.3rem .65rem}.drift dt{color:var(--muted)}.drift dd{margin:0;overflow-wrap:anywhere}.raw{margin-top:.55rem;border:1px solid #26313c;border-radius:5px;overflow:hidden}.raw summary{cursor:pointer;padding:.5rem .6rem;background:#101720;color:#b5d4f7}.raw pre{margin:0;max-height:32rem;overflow:auto;padding:.68rem;background:#080b0f;color:#d0dae4;font:11px/1.45 ui-monospace,SFMono-Regular,monospace}.index{display:grid;gap:.55rem}.draft-card{display:grid;grid-template-columns:minmax(18rem,2fr) repeat(3,minmax(10rem,1fr));gap:.65rem;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:.72rem}.draft-card:hover{background:var(--raised)}.draft-card strong{font-family:ui-sans-serif,system-ui}.preview{max-width:1100px}.preview pre{white-space:pre-wrap;border:1px solid var(--line);background:#080b0f;padding:.75rem;overflow:auto}.actions{display:flex;gap:.5rem;align-items:center;margin-top:.8rem}.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:980px){.identity-strip{grid-template-columns:1fr 1fr}.workspace{grid-template-columns:minmax(17rem,36%) minmax(20rem,1fr)}.lower-grid{grid-template-columns:1fr 1fr}.lower-grid>section:last-child{grid-column:1/-1}.draft-card{grid-template-columns:1fr 1fr}}@media(max-width:760px){.topbar{position:static;flex-wrap:wrap}.trust{width:100%;margin:0}.identity-strip,.workspace,.lower-grid,.field-grid,.draft-card{grid-template-columns:1fr}.workspace{grid-template-areas:'outline' 'detail' 'lower'}.lower-grid>section:last-child{grid-column:auto}main{padding:.75rem}.node-list{max-height:30rem}.deps{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
@@ -27,6 +28,10 @@ STYLE += r"""
 
 STYLE += r"""
 .nav a[aria-current=page]{background:#241b32;color:var(--text)}.identity-strip{grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr))}.identity-cell .exact{display:block;margin-top:.2rem;color:var(--muted);font-size:.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.case-context{border-left:3px solid var(--accent);background:#151a24;margin-bottom:.75rem;padding:.68rem}.case-context h2{margin:.1rem 0 .25rem}.context-moves{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;margin:.6rem 0}.context-moves .label{margin:0 .25rem 0 0}.casework{padding:0;min-height:15rem}.case-tabs{display:flex;gap:.12rem;overflow-x:auto;padding:.45rem .55rem 0;border-bottom:1px solid var(--line)}.case-tabs form{margin:0}.case-tab{border-color:transparent;border-bottom:2px solid transparent;border-radius:4px 4px 0 0;background:transparent;color:var(--muted);white-space:nowrap}.case-tab[aria-pressed=true]{border-bottom-color:var(--accent);background:#211b2d;color:var(--text)}.case-content{padding:.75rem}.case-summary{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;margin-bottom:.65rem}.case-summary strong{font-family:ui-sans-serif,system-ui}.finding-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}.finding-group{min-width:0}.history-row{display:grid;grid-template-columns:minmax(7rem,.5fr) minmax(8rem,.6fr) minmax(0,1.5fr);gap:.6rem;align-items:start}.dependency-map{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin:.7rem 0}.dependency-map ul{margin:.15rem 0;padding-left:1.2rem}.object-link{font-family:ui-sans-serif,system-ui;font-weight:650}.onboarding{display:grid;grid-template-columns:repeat(5,minmax(8rem,1fr));gap:.5rem;margin:.8rem 0}.onboarding div{border-left:2px solid var(--line);padding:.45rem .6rem}.onboarding strong{display:block;font-family:ui-sans-serif,system-ui}.proposal-affected{display:flex;gap:.35rem;flex-wrap:wrap}.proposal-affected a,.proposal-affected span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:.25rem .4rem;text-decoration:none}.case-focus{scroll-margin-top:4rem}.case-focus:focus-visible,#casework:focus-visible{outline:2px solid var(--focus);outline-offset:3px}.selected-marker{color:var(--accent)}@media(max-width:980px){.finding-groups,.dependency-map{grid-template-columns:1fr}.onboarding{grid-template-columns:1fr 1fr}.history-row{grid-template-columns:minmax(7rem,.5fr) minmax(0,1fr)}.history-row>:last-child{grid-column:1/-1}}@media(max-width:760px){.onboarding{grid-template-columns:1fr}.case-tabs{padding-bottom:.2rem}.case-content{padding:.6rem}}
+"""
+
+STYLE += r"""
+.investigation-path{display:grid;grid-template-columns:repeat(5,minmax(9rem,1fr));gap:0;margin:1rem 0}.investigation-step{position:relative;border-top:2px solid var(--line);padding:.65rem .55rem}.investigation-step:before{content:"";position:absolute;width:.65rem;height:.65rem;border:2px solid var(--line);background:var(--bg);top:-.45rem;left:.55rem}.investigation-step strong{display:block;font-family:ui-sans-serif,system-ui}.diagnostic-rail{border-left:2px solid var(--fact);margin:.5rem 0;padding:.2rem 0 .8rem 1rem}.boundary-stop{border-left:4px double var(--unknown);background:#211a10;padding:.65rem;margin:.7rem 0}.boundary-stop strong{color:var(--unknown)}@media(max-width:760px){.investigation-path{grid-template-columns:1fr}.investigation-step{border-top:0;border-left:2px solid var(--line);padding-left:1rem}.investigation-step:before{top:.8rem;left:-.45rem}}
 """
 
 
@@ -182,6 +187,63 @@ def check_label(value: str) -> str:
 def raw_block(label: str, value: Any) -> str:
     rendered = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
     return f'<details class="raw"><summary>{escape(label)}</summary><pre>{escape(rendered)}</pre></details>'
+
+
+def service_investigation_page(
+    revision: DraftRevisionV1,
+    compiled: CompiledServiceInvestigationV1,
+    projection: dict[str, Any] | None,
+    csrf: str,
+    inspect_url: str,
+) -> str:
+    diagnostics = "".join(
+        f'<div class="diagnostic-rail"><span class="badge work">{escape(item.profile)}</span>'
+        f'<h3>{escape(item.node_id)}</h3><div class="drift"><dt>scope</dt><dd class="mono">{escape(item.scope)}</dd>'
+        f'<dt>vantage</dt><dd>{escape(item.vantage)}</dd><dt>instance</dt><dd>{escape(item.instance)}</dd>'
+        f'<dt>config</dt><dd class="mono">{escape(item.config_digest)}</dd></div></div>'
+        for item in compiled.profile.diagnostics
+    )
+    if projection is None:
+        action = (
+            f'<form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation/submit">'
+            + hidden("csrf", csrf)
+            + hidden("expected_revision_id", revision.revision_id)
+            + hidden("expected_plan_digest", revision.plan_digest)
+            + '<button class="lock-action" type="submit">Submit exact investigation</button></form>'
+        )
+        status = '<span class="badge">not submitted</span>'
+    else:
+        state = projection["state"]
+        status = f'<span class="badge {"pass" if state == "accepted" else "stale"}">{escape(state)}</span>'
+        receipt = projection.get("receipt")
+        action = (
+            '<p class="nonclaim">Refresh reads owner projections. It never reacquires evidence or retries the handoff.</p>'
+            + (
+                f'<form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation/reconcile">'
+                + hidden("csrf", csrf)
+                + hidden("expected_revision_id", revision.revision_id)
+                + hidden("expected_plan_digest", revision.plan_digest)
+                + '<button type="submit">Reconcile original Nightshift occurrence</button></form>'
+                if state == "indeterminate"
+                else ""
+            )
+            + ("" if not receipt else f'<a class="button" href="{escape(_inspect_href(inspect_url, receipt["inspector_path"]), quote=True)}">Inspect durable work</a>')
+        )
+    body = f"""
+    <div class="eyebrow">Service investigation / exact bounded diagnostic</div>
+    <h1>{escape(compiled.profile.subject_label)}</h1>
+    <p class="lede">Maude compiles this exact PlanDocument revision. Standing must consume the enrolled mandate before either NQ acquisition; Nightshift owns durable execution and findings.</p>
+    <div class="identity-strip"><div class="identity-cell"><span class="label">posture</span>{status}</div>
+    <div class="identity-cell"><span class="label">revision</span><strong>{escape(revision.revision_id)}</strong><span class="exact">{escape(revision.plan_digest)}</span></div>
+    <div class="identity-cell"><span class="label">subject</span><strong>{escape(compiled.profile.subject_label)}</strong><span class="exact">{escape(compiled.profile.subject)}</span></div>
+    <div class="identity-cell"><span class="label">handoff</span><strong>{escape(short(compiled.handoff_digest))}</strong><span class="exact">{escape(compiled.handoff_digest)}</span></div></div>
+    <div class="investigation-path" aria-label="investigation path"><div class="investigation-step"><strong>1 Plan</strong>current revision</div><div class="investigation-step"><strong>2 Mandate</strong>Standing, exact and single-use</div><div class="investigation-step"><strong>3 Acquire</strong>NQ systemd + HTTP</div><div class="investigation-step"><strong>4 Settle</strong>Nightshift lifecycle</div><div class="investigation-step"><strong>5 Inspect</strong>findings and receipts</div></div>
+    <div class="grid"><section class="panel"><h2>Diagnostic structure</h2>{diagnostics}</section>
+    <section class="panel"><h2>Authority boundary</h2><div class="boundary-stop"><strong>acquisition ───⊣ until admitted</strong><p>The configured workload must prove its operator-enrolled key and consume the exact active Standing grant. Refusal is terminal for this submission.</p></div>{action}</section></div>
+    {raw_block("Exact compiled handoff", compiled.to_data())}
+    {"" if projection is None else raw_block("Maude handoff projection", projection)}
+    """
+    return page("Service investigation", body, inspect_url=inspect_url)
 
 
 def _inspect_href(inspect_url: str, inspector_path: str) -> str:
@@ -1116,6 +1178,7 @@ def workspace_page(
     proposal_generation_id: str = "generation-render-only",
     governed_node_bindings: tuple[GovernedNodeBindingV1, ...] = (),
     active_generation_count: int = 0,
+    service_investigation_available: bool = False,
     *,
     selected_override: str | None = None,
     selected_finding: str | None = None,
@@ -1239,6 +1302,9 @@ def workspace_page(
         + ". Inspect the lifecycle identities above; no lineage was rebound.</div>"
     )
     compiler_boundary = (
+        f'<p class="nonclaim"><strong>Bounded service investigation compiler available.</strong> Review the exact systemd and HTTP bindings before submission. <a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation">Review service investigation</a></p>'
+        if service_investigation_available
+        else
         '<p class="nonclaim"><strong>Exact workflow compilation is recorded for a historical lock; browser handoff remains unavailable.</strong> /design displays representation and governed lineage read-only. It cannot submit or recompile the working draft.</p>'
         if projection.compilations
         else '<p class="nonclaim"><strong>No exact workflow compiler, no governed handoff.</strong> Plan Core cannot derive governed operational work from prose or ambient context.</p>'
