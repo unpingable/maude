@@ -34,9 +34,24 @@ STYLE += r"""
 .investigation-path{display:grid;grid-template-columns:repeat(5,minmax(9rem,1fr));gap:0;margin:1rem 0}.investigation-step{position:relative;border-top:2px solid var(--line);padding:.65rem .55rem}.investigation-step:before{content:"";position:absolute;width:.65rem;height:.65rem;border:2px solid var(--line);background:var(--bg);top:-.45rem;left:.55rem}.investigation-step strong{display:block;font-family:ui-sans-serif,system-ui}.diagnostic-rail{border-left:2px solid var(--fact);margin:.5rem 0;padding:.2rem 0 .8rem 1rem}.boundary-stop{border-left:4px double var(--unknown);background:#211a10;padding:.65rem;margin:.7rem 0}.boundary-stop strong{color:var(--unknown)}@media(max-width:760px){.investigation-path{grid-template-columns:1fr}.investigation-step{border-top:0;border-left:2px solid var(--line);padding-left:1rem}.investigation-step:before{top:.8rem;left:-.45rem}}
 """
 
+# Shared Operational ECAD browser token contract. The inspector carries the
+# same closed token names; ownership and write authority remain separate.
+STYLE += r"""
+:root{--bg:#0d0d0b;--surface:#141410;--panel:#1a1a15;--raised:#22221b;--line:#555247;--line-soft:#35332c;--text:#e7e0ce;--muted:#aaa28f;--amber:#d3a445;--blue:#8299ad;--green:#849b72;--oxide:#b36d55;--focus:#f0c66d;--fact:var(--green);--projection:var(--blue);--unknown:var(--amber);--bad:var(--oxide);--accent:var(--amber);--edit:var(--blue);--lock:var(--amber)}body{font:16px/1.55 system-ui,sans-serif}.topbar{padding:.8rem 1.2rem;background:#10100def;border-bottom:3px double var(--line)}.brand{font-weight:800;letter-spacing:.04em;flex:none}.nav{flex:none}.nav a{border-radius:0}.nav a[aria-current=true],.nav a[aria-current=page]{background:transparent;border-bottom:2px solid var(--amber)}.trust{font:12px/1.4 ui-monospace,monospace;overflow-wrap:anywhere}.trust strong{color:var(--blue)}main{max-width:1240px;padding:2rem 1.2rem 5rem}h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.08;max-width:24ch;margin-bottom:.65rem}h2{font-size:1.05rem}.lede{font-size:1.13rem;max-width:72ch;color:#d4ccba}.eyebrow,.label{font:700 11px/1.4 ui-monospace,monospace;letter-spacing:.1em}.panel,.identity-cell,.draft-card{border-radius:0}.service-hero{border-left:5px solid var(--amber);background:var(--surface);padding:1.2rem;margin:1.4rem 0}.service-hero h2{font-size:1.55rem;margin:.15rem 0}.service-meta{display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted)}.primary-action{display:inline-block;border:1px solid var(--amber);background:#2b2415;color:#f1d28c;padding:.6rem .85rem;text-decoration:none;font-weight:750}.question-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(17rem,1fr);gap:1rem;align-items:start}.observation-card{border-top:1px solid var(--line);padding:1rem 0}.observation-card:first-of-type{border-top:0}.observation-card h3{font-size:1.15rem}.fact-list{display:grid;grid-template-columns:minmax(9rem,12rem) minmax(0,1fr);gap:.35rem .8rem}.fact-list dt{color:var(--muted)}.fact-list dd{margin:0;overflow-wrap:anywhere}.notice{border-left:4px dashed var(--blue);background:var(--surface);padding:.8rem}.advanced-zone{margin-top:2rem;border-top:3px double var(--line);padding-top:1rem}.advanced-zone>summary{cursor:pointer;font-weight:750;color:var(--muted)}button,.button{border-radius:0;background:var(--raised);font-size:.84rem}button.lock-action,.button.primary{border-color:var(--amber);color:#f1d28c;background:#2b2415}.diagnostic-rail{border-left-color:var(--blue)}.boundary-stop{border-left-color:var(--oxide);background:#211713}.boundary-stop strong{color:#e5a18a}.raw{border-radius:0}.raw summary{color:#c4bda9;background:var(--raised)}@media(max-width:760px){.question-grid,.fact-list,.identity-strip{grid-template-columns:1fr}main{padding:1.25rem .8rem 4rem}.trust{font-size:.72rem}}
+"""
 
-def page(title: str, body: str, *, inspect_url: str) -> str:
-    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Maude · Plan editor</title><link rel="stylesheet" href="/phosphor/design/style.css"></head><body><a class="skip" href="#main">Skip to workspace</a><header class="topbar"><a class="brand" href="/phosphor/design">Maude</a><nav class="nav" aria-label="Product family"><a aria-current="page" href="/phosphor/design">Plans</a><a href="{escape(inspect_url, quote=True)}">Inspect runs</a></nav><span class="trust"><strong>Plan editor · pre-alpha</strong> · inspecting runs is read-only</span></header><main id="main">{body}</main></body></html>"""
+
+def page(
+    title: str,
+    body: str,
+    *,
+    inspect_url: str,
+    active: str = "advanced",
+    context: str = "investigation workspace",
+) -> str:
+    service_current = ' aria-current="page"' if active == "service" else ""
+    advanced_current = ' aria-current="page"' if active == "advanced" else ""
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Operational ECAD</title><link rel="stylesheet" href="/phosphor/design/style.css"></head><body><a class="skip" href="#main">Skip to workspace</a><header class="topbar"><a class="brand" href="/phosphor/design">OPERATIONAL ECAD</a><nav class="nav" aria-label="Workspace"><a{service_current} href="/phosphor/design">Service</a><a href="{escape(inspect_url, quote=True)}">Findings</a><a{advanced_current} href="/phosphor/design#advanced-plan-editing">Advanced</a></nav><span class="trust">{escape(context)} · <strong>design writes / findings read only</strong></span></header><main id="main">{body}</main></body></html>"""
 
 
 def hidden(name: str, value: str) -> str:
@@ -182,6 +197,10 @@ def check_label(value: str) -> str:
         "historical_digest": "Plan changed — check again",
         "retired_checker_or_rules": "Check rules changed — check again",
     }.get(value, f"Unrecognized check state: {value}")
+def actor_label(value: Any) -> str:
+    text = str(value)
+    parts = text.split(":")
+    return parts[1].replace("-", " ") if len(parts) >= 2 else short(text, 28)
 
 
 def raw_block(label: str, value: Any) -> str:
@@ -195,26 +214,77 @@ def service_investigation_page(
     projection: dict[str, Any] | None,
     csrf: str,
     inspect_url: str,
+    authority_view: dict[str, dict[str, Any]] | None = None,
 ) -> str:
-    diagnostics = "".join(
-        f'<div class="diagnostic-rail"><span class="badge work">{escape(item.profile)}</span>'
-        f'<h3>{escape(item.node_id)}</h3><div class="drift"><dt>scope</dt><dd class="mono">{escape(item.scope)}</dd>'
-        f'<dt>vantage</dt><dd>{escape(item.vantage)}</dd><dt>instance</dt><dd>{escape(item.instance)}</dd>'
-        f'<dt>config</dt><dd class="mono">{escape(item.config_digest)}</dd></div></div>'
-        for item in compiled.profile.diagnostics
-    )
+    labels = {
+        "nq.systemd_unit/v1": (
+            "Service-manager observation",
+            "Compare one target-local service-manager snapshot with the admitted policy.",
+            "It cannot establish HTTP reachability or the cause of a mismatch.",
+        ),
+        "nq.http_endpoint/v1": (
+            "HTTP observation",
+            "Ask whether complete current HTTP testimony is available from the controller vantage.",
+            "It cannot establish target-local service-manager state or a cause when testimony is missing.",
+        ),
+    }
+    diagnostics = ""
+    authority_rows = ""
+    for item in compiled.profile.diagnostics:
+        title, question, limit = labels[item.profile]
+        diagnostics += (
+            f'<article class="observation-card"><span class="eyebrow">{escape(item.vantage)} vantage</span>'
+            f'<h3>{escape(title)}</h3><p>{escape(question)}</p><dl class="fact-list">'
+            f"<dt>Observation target</dt><dd>{escape(item.instance)}</dd>"
+            f"<dt>Limit</dt><dd>{escape(limit)}</dd></dl>"
+            f"{raw_block('Exact diagnostic binding', item.to_data())}</article>"
+        )
+        enrollment = (
+            None if authority_view is None else authority_view.get(item.node_id)
+        )
+        if enrollment is None:
+            authority_rows += (
+                f'<div class="observation-card"><strong>{escape(title)}</strong>'
+                '<p class="muted">Requester and workload details are verified by Standing at submission; '
+                "no enrollment presentation was configured for this screen.</p></div>"
+            )
+        else:
+            scope_label = (
+                "Service-manager observation for the selected service"
+                if item.profile == "nq.systemd_unit/v1"
+                else "HTTP observation for the selected service"
+            )
+            authority_rows += (
+                f'<div class="observation-card"><strong>{escape(title)}</strong><dl class="fact-list">'
+                f"<dt>Requester</dt><dd>{escape(actor_label(enrollment['operator']))}</dd>"
+                f"<dt>Workload</dt><dd>{escape(actor_label(enrollment['workload']))}</dd>"
+                f"<dt>Permission scope</dt><dd>{escape(scope_label)}</dd>"
+                f"<dt>Valid until</dt><dd>{escape(str(enrollment['valid_until']))}</dd></dl>"
+                '<p class="hint">Configured signed enrollment input. Standing still verifies identity, scope, '
+                "validity, revocation, and single use when this check is acquired.</p>"
+                + raw_block(
+                    "Exact signed enrollment input",
+                    enrollment.get("_exact_enrollment", enrollment),
+                )
+                + "</div>"
+            )
     if projection is None:
         action = (
             f'<form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation/submit">'
             + hidden("csrf", csrf)
             + hidden("expected_revision_id", revision.revision_id)
             + hidden("expected_plan_digest", revision.plan_digest)
-            + '<button class="lock-action" type="submit">Submit exact investigation</button></form>'
+            + '<button class="lock-action" type="submit">Run supported diagnostic</button></form>'
         )
-        status = '<span class="badge">not submitted</span>'
+        status = '<span class="badge">ready for review</span>'
     else:
         state = projection["state"]
-        status = f'<span class="badge {"pass" if state == "accepted" else "stale"}">{escape(state)}</span>'
+        status_copy = {
+            "accepted": "submitted — findings available",
+            "dispatching": "submission in progress",
+            "indeterminate": "submission outcome unknown",
+        }.get(state, state)
+        status = f'<span class="badge {"pass" if state == "accepted" else "stale"}">{escape(status_copy)}</span>'
         receipt = projection.get("receipt")
         action = (
             '<p class="nonclaim">Refresh reads owner projections. It never reacquires evidence or retries the handoff.</p>'
@@ -223,27 +293,36 @@ def service_investigation_page(
                 + hidden("csrf", csrf)
                 + hidden("expected_revision_id", revision.revision_id)
                 + hidden("expected_plan_digest", revision.plan_digest)
-                + '<button type="submit">Reconcile original Nightshift occurrence</button></form>'
+                + '<button type="submit">Check original submission</button></form>'
                 if state == "indeterminate"
                 else ""
             )
-            + ("" if not receipt else f'<a class="button" href="{escape(_inspect_href(inspect_url, receipt["inspector_path"]), quote=True)}">Inspect durable work</a>')
+            + (
+                ""
+                if not receipt
+                else f'<a class="button primary" href="{escape(_inspect_href(inspect_url, receipt["inspector_path"]), quote=True)}">Review findings</a>'
+            )
         )
     body = f"""
-    <div class="eyebrow">Service investigation / exact bounded diagnostic</div>
+    <div class="eyebrow">Service / prepare investigation</div>
     <h1>{escape(compiled.profile.subject_label)}</h1>
-    <p class="lede">Maude compiles this exact PlanDocument revision. Standing must consume the enrolled mandate before either NQ acquisition; Nightshift owns durable execution and findings.</p>
-    <div class="identity-strip"><div class="identity-cell"><span class="label">posture</span>{status}</div>
-    <div class="identity-cell"><span class="label">revision</span><strong>{escape(revision.revision_id)}</strong><span class="exact">{escape(revision.plan_digest)}</span></div>
-    <div class="identity-cell"><span class="label">subject</span><strong>{escape(compiled.profile.subject_label)}</strong><span class="exact">{escape(compiled.profile.subject)}</span></div>
-    <div class="identity-cell"><span class="label">handoff</span><strong>{escape(short(compiled.handoff_digest))}</strong><span class="exact">{escape(compiled.handoff_digest)}</span></div></div>
-    <div class="investigation-path" aria-label="investigation path"><div class="investigation-step"><strong>1 Plan</strong>current revision</div><div class="investigation-step"><strong>2 Mandate</strong>Standing, exact and single-use</div><div class="investigation-step"><strong>3 Acquire</strong>NQ systemd + HTTP</div><div class="investigation-step"><strong>4 Settle</strong>Nightshift lifecycle</div><div class="investigation-step"><strong>5 Inspect</strong>findings and receipts</div></div>
-    <div class="grid"><section class="panel"><h2>Diagnostic structure</h2>{diagnostics}</section>
-    <section class="panel"><h2>Authority boundary</h2><div class="boundary-stop"><strong>acquisition ───⊣ until admitted</strong><p>The configured workload must prove its operator-enrolled key and consume the exact active Standing grant. Refusal is terminal for this submission.</p></div>{action}</section></div>
-    {raw_block("Exact compiled handoff", compiled.to_data())}
-    {"" if projection is None else raw_block("Maude handoff projection", projection)}
+    <p class="lede">Review the two bounded observations before submitting. The service-manager and HTTP questions remain independent; this diagnostic does not produce a service-health verdict.</p>
+    <section class="identity-strip"><div class="identity-cell"><span class="label">Preparation state</span>{status}</div>
+    <div class="identity-cell"><span class="label">Service target</span><strong>{escape(compiled.profile.subject_label)}</strong><span class="exact">owner subject available in details</span></div>
+    <div class="identity-cell"><span class="label">Observations</span><strong>2 bounded checks</strong><span class="exact">target + controller vantage</span></div></section>
+    <div class="question-grid"><div><section class="panel"><span class="eyebrow">What will run</span><h2>Diagnostic steps</h2>{diagnostics}</section></div>
+    <aside><section class="panel"><span class="eyebrow">Permission to run these checks</span><h2>Requester and limits</h2>{authority_rows}<div class="boundary-stop"><strong>Checks stop here if permission is refused</strong><p>No observation starts unless Standing admits the matching active grant. Each observation has its own single-use grant; reopening this investigation does not consume again or reacquire.</p></div>{action}</section></aside></div>
+    <details class="advanced-zone"><summary>Advanced: exact plan, bindings, and owner projection</summary>
+    <div class="investigation-path" aria-label="investigation owner path"><div class="investigation-step"><strong>1 Compile</strong>exact revision</div><div class="investigation-step"><strong>2 Verify permission</strong>Standing owner</div><div class="investigation-step"><strong>3 Acquire</strong>NQ owner</div><div class="investigation-step"><strong>4 Retain work</strong>Nightshift owner</div><div class="investigation-step"><strong>5 Inspect</strong>read-only evidence</div></div>
+    {raw_block("Exact compiled handoff", compiled.to_data())}{"" if projection is None else raw_block("Maude handoff projection", projection)}</details>
     """
-    return page("Service investigation", body, inspect_url=inspect_url)
+    return page(
+        "Prepare service investigation",
+        body,
+        inspect_url=inspect_url,
+        active="service",
+        context=compiled.profile.subject_label,
+    )
 
 
 def _inspect_href(inspect_url: str, inspector_path: str) -> str:
@@ -258,6 +337,12 @@ def index_page(
     projections: dict[str, dict[str, Any]],
     csrf: str,
     inspect_url: str,
+    service: tuple[
+        DraftRevisionV1,
+        CompiledServiceInvestigationV1,
+        dict[str, Any] | None,
+    ]
+    | None = None,
 ) -> str:
     cards = []
     for revision in revisions:
@@ -270,8 +355,32 @@ def index_page(
         if cards
         else """<section class="panel"><h2>Build and review a plan</h2><div class="onboarding"><div><strong>1 · Create or open</strong><span class="muted">Describe the work you want to do.</span></div><div><strong>2 · Edit steps</strong><span class="muted">Add steps and their dependencies.</span></div><div><strong>3 · Check the plan</strong><span class="muted">Find missing information and dependency errors.</span></div><div><strong>4 · Review changes</strong><span class="muted">Compare what changed between revisions.</span></div><div><strong>5 · Save a fixed snapshot</strong><span class="muted">Keep a specific version; this does not start a run.</span></div></div><p class="nonclaim"><strong>Editing a plan does not run it.</strong> You can edit it yourself or review a proposed edit. Sending it for execution requires a separately supported workflow compiler.</p></section>"""
     )
-    body = f"""<div class="eyebrow">Maude · Plan editor · pre-alpha</div><h1>Plans</h1><p class="lede">Describe the work, organize its steps, and check your draft. Passing these checks is not permission to run it.</p>{empty}<section class="panel"><h2>Create a draft</h2><form class="editor" method="post" action="/phosphor/design/drafts/new">{hidden("csrf", csrf)}<div class="field-grid"><label>Goal<input name="goal" required maxlength="4000"></label><label>Workspace<input name="workspace" maxlength="4000"></label></div><button type="submit">Create draft</button></form></section><section class="index" aria-label="Plan Core drafts">{"".join(cards) or '<p class="muted">No plans yet. Create a draft to start editing; nothing will run.</p>'}</section>"""
-    return page("Plans", body, inspect_url=inspect_url)
+    if service is None:
+        hero = '<section class="notice"><h2>No supported service investigation is configured</h2><p>Advanced plan editing remains available below. No service or activity has been invented to fill this workspace.</p></section>'
+    else:
+        revision, compiled, investigation = service
+        receipt = None if investigation is None else investigation.get("receipt")
+        if receipt:
+            action = f'<a class="primary-action" href="{escape(_inspect_href(inspect_url, receipt["inspector_path"]), quote=True)}">Review findings</a>'
+            investigation_copy = "An investigation was accepted for this exact plan revision. Open its retained findings; this does not state the present service condition."
+        else:
+            action = f'<a class="primary-action" href="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation">Prepare diagnostic</a>'
+            investigation_copy = (
+                "No investigation has been submitted for this exact plan revision."
+            )
+        hero = f"""<section class="service-hero"><span class="eyebrow">Available service</span><h2>{escape(compiled.profile.subject_label)}</h2><p>{escape(investigation_copy)}</p><div class="service-meta"><span>Reported symptom: not supplied by retained owner records</span><span>Observation time: available after acquisition</span></div><p>{action} <a href="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation">Review diagnostic</a></p></section>"""
+    body = f"""<div class="eyebrow">Service investigation workspace</div><h1>Investigate a service</h1><p class="lede">Open the supported diagnostic, follow existing work, and leave with an accountable record. Service condition and investigation state are kept distinct.</p>{hero}<details class="advanced-zone" id="advanced-plan-editing"><summary>Advanced plan editing</summary><p class="muted">Create and manage generic mutable investigation plans. These tools do not authorize or start work.</p>{empty}<section class="panel"><h2>Create an investigation plan</h2><form class="editor" method="post" action="/phosphor/design/drafts/new">{hidden("csrf", csrf)}<div class="field-grid"><label>Goal<input name="goal" required maxlength="4000"></label><label>Workspace<input name="workspace" maxlength="4000"></label></div><button type="submit">Create plan draft</button></form></section><section class="index" aria-label="Investigation plan drafts">{"".join(cards) or '<p class="muted">No plan drafts exist.</p>'}</section></details>"""
+    return page(
+        "Service investigation workspace",
+        body,
+        inspect_url=inspect_url,
+        active="service",
+        context=(
+            "service not configured"
+            if service is None
+            else service[1].profile.subject_label
+        ),
+    )
 
 
 def _node_findings(projection: DraftProjectionV1, node_id: str) -> list[Any]:
@@ -351,7 +460,7 @@ def _outline(
         rows.append(
             f"""<li class="node {"selected" if selected == node.node_id else ""}"><div class="node-row"><span>{toggle_form}<span class="node-id">{index + 1:02d}</span></span><div><div class="node-label">{select_form}</div><div class="node-id">{escape(node.node_id)}</div><div class="node-meta">{('<span class="badge work">structured work</span>' if node.work else "")}{(f'<span class="badge finding">{len(findings)} finding(s)</span>' if findings else "")}{(f'<span class="badge proposed">{proposal_target_counts[node.node_id]} proposal(s)</span>' if proposal_target_counts.get(node.node_id) else "")}{(f'<span class="badge">{len(node.depends_on)} dep</span>' if node.depends_on else "")}</div></div><div class="toolbar">{"".join(controls)}</div></div>{("" if node.node_id in collapsed else f'<div class="node-deps">depends on: {escape(", ".join(node.depends_on) or "none")}</div>')}</li>"""
         )
-    add = f"""<form class="editor" method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/preview"><h3>Add a step</h3>{hidden("csrf", csrf)}{hidden("expected_revision_id", revision.revision_id)}{hidden("operation_type", "add_node")}<label>Description<input name="description" required maxlength="10000"></label><button type="submit">Review new step</button></form>"""
+    add = f"""<form class="editor" method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/preview"><h3>Add diagnostic step</h3>{hidden("csrf", csrf)}{hidden("expected_revision_id", revision.revision_id)}{hidden("operation_type", "add_node")}<label>Description<input name="description" required maxlength="10000"></label><button type="submit">Preview add</button></form>"""
     return f'<section class="panel outline"><div class="panel-head"><h2>Plan outline</h2><span class="compact muted">ordered · stable IDs</span></div><ol class="node-list">{"".join(rows)}</ol><div class="panel-head">{add}</div></section>'
 
 
@@ -1302,14 +1411,13 @@ def workspace_page(
         + ". Inspect the lifecycle identities above; no lineage was rebound.</div>"
     )
     compiler_boundary = (
-        f'<p class="nonclaim"><strong>Bounded service investigation compiler available.</strong> Review the exact systemd and HTTP bindings before submission. <a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation">Review service investigation</a></p>'
+        f'<p class="nonclaim"><strong>Supported service diagnostic available.</strong> Review what the service-manager and HTTP observations can establish before submission. <a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}/investigation">Review diagnostic</a></p>'
         if service_investigation_available
-        else
-        '<p class="nonclaim"><strong>Exact workflow compilation is recorded for a historical lock; browser handoff remains unavailable.</strong> /design displays representation and governed lineage read-only. It cannot submit or recompile the working draft.</p>'
+        else '<p class="nonclaim"><strong>Exact workflow compilation is recorded for a historical lock; browser handoff remains unavailable.</strong> /design displays representation and governed lineage read-only. It cannot submit or recompile the working draft.</p>'
         if projection.compilations
         else '<p class="nonclaim"><strong>No exact workflow compiler, no governed handoff.</strong> Plan Core cannot derive governed operational work from prose or ambient context.</p>'
     )
-    body = f"""<div class="eyebrow">Maude · Plan editor</div><h1>{escape(revision.document.goal or "(goal not declared)")}</h1><p class="lede">Edit the plan, check its dependencies, and review changes before locking a revision. Design flow is pre-alpha; a checked or locked plan is not permission to execute.</p>{"".join(messages)}{_identity_strip(revision, revisions, projection)}{drift_banner}{compiler_boundary}{workspace_tools}<div class="workspace" style="--outline:{presentation.presentation.outline_percent}%">{_outline(revision, projection, selected, presentation, csrf, proposal_target_counts)}<section class="panel detail">{detail}{raw_block("Exact canonical PlanDocument", revision.document.to_data())}</section><section id="casework" class="panel lower casework" tabindex="-1" aria-label="Persistent casework pane">{_case_tabs(revision, presentation, csrf, active_tab)}<div class="case-content">{case_content}</div></section></div>"""
+    body = f"""<div class="eyebrow">Advanced / investigation plan editing</div><h1>{escape(revision.document.goal or "(goal not declared)")}</h1><p class="lede">Edit diagnostic steps, dependencies, lifecycle records, and exact structured work. Stable internal identities remain visible here for technical review.</p>{"".join(messages)}{_identity_strip(revision, revisions, projection)}{drift_banner}{compiler_boundary}{workspace_tools}<div class="workspace" style="--outline:{presentation.presentation.outline_percent}%">{_outline(revision, projection, selected, presentation, csrf, proposal_target_counts)}<section class="panel detail">{detail}{raw_block("Exact canonical investigation plan", revision.document.to_data())}</section><section id="casework" class="panel lower casework" tabindex="-1" aria-label="Persistent casework pane">{_case_tabs(revision, presentation, csrf, active_tab)}<div class="case-content">{case_content}</div></section></div>"""
     return page(
         revision.document.goal or revision.draft_id, body, inspect_url=inspect_url
     )

@@ -119,7 +119,10 @@ def test_closed_profile_and_exact_revision_compilation(tmp_path: Path) -> None:
         replace(revision.document, goal="Changed plan"),
         edit_origin=EditOrigin.HUMAN,
     )
-    assert compile_service_investigation(changed, profile()).investigation_id != compiled.investigation_id
+    assert (
+        compile_service_investigation(changed, profile()).investigation_id
+        != compiled.investigation_id
+    )
 
 
 def test_missing_node_and_mutating_diagnostic_refuse(tmp_path: Path) -> None:
@@ -148,7 +151,9 @@ def test_handoff_is_single_dispatch_and_replay_is_read_only(tmp_path: Path) -> N
     assert ledger.projection(compiled.investigation_id)["state"] == "accepted"
 
 
-def test_indeterminate_handoff_reconciles_original_owner_occurrence(tmp_path: Path) -> None:
+def test_indeterminate_handoff_reconciles_original_owner_occurrence(
+    tmp_path: Path,
+) -> None:
     store = DraftStore(tmp_path / "plans.sqlite")
     compiled = compile_service_investigation(
         store.create(document(), draft_id="draft_service"), profile()
@@ -188,7 +193,8 @@ def test_browser_review_submit_and_stale_revision_refusal(tmp_path: Path) -> Non
     )
     reviewed = app.get("/phosphor/design/drafts/draft_service/investigation")
     assert reviewed.status == 200
-    assert b"Standing must consume" in reviewed.body
+    assert b"Permission to run these checks" in reviewed.body
+    assert b"Run supported diagnostic" in reviewed.body
     assert b"nq.systemd_unit/v1" in reviewed.body
     submitted = app.post(
         "/phosphor/design/drafts/draft_service/investigation/submit",
@@ -200,9 +206,7 @@ def test_browser_review_submit_and_stale_revision_refusal(tmp_path: Path) -> Non
     )
     assert submitted.status == 303
     api = json.loads(
-        app.get(
-            "/phosphor/design/drafts/draft_service/investigation/api/v1"
-        ).body
+        app.get("/phosphor/design/drafts/draft_service/investigation/api/v1").body
     )
     assert api["projection"]["state"] == "accepted"
     stale = store.save_successor(
@@ -222,3 +226,44 @@ def test_browser_review_submit_and_stale_revision_refusal(tmp_path: Path) -> Non
     assert refused.status == 409
     assert stale.revision_id != revision.revision_id
     assert (tmp_path / "count").read_text() == "x"
+
+
+def test_service_entry_and_preparation_lead_with_operator_task(tmp_path: Path) -> None:
+    store = DraftStore(tmp_path / "plans.sqlite")
+    store.create(document(), draft_id="draft_service")
+    app = DesignApplication(
+        store,
+        PresentationStore(tmp_path / "presentations.sqlite"),
+        service_investigation_profile=profile(),
+        service_investigation_ledger=ServiceInvestigationLedger(
+            tmp_path / "investigations.sqlite"
+        ),
+        service_authority_view={
+            node_id: {
+                "operator": f"operator for {node_id}",
+                "workload": f"workload for {node_id}",
+                "scope": digest("b" if node_id == "pn_systemd" else "d"),
+                "valid_until": "2026-09-10T20:00:00Z",
+            }
+            for node_id in ("pn_systemd", "pn_http")
+        },
+        nightshift_submission_command=owner_program(tmp_path),
+        secret=b"i" * 32,
+    )
+
+    entry = app.get("/phosphor/design").body.decode()
+    assert "Investigate a service" in entry
+    assert "sushi-k / fixed HTTP service" in entry
+    assert "Prepare diagnostic" in entry
+    assert "Reported symptom: not supplied by retained owner records" in entry
+    assert "Advanced plan editing" in entry
+    assert "<h1>PlanDocuments</h1>" not in entry
+
+    preparation = app.get(
+        "/phosphor/design/drafts/draft_service/investigation"
+    ).body.decode()
+    assert "Service-manager observation" in preparation
+    assert "HTTP observation" in preparation
+    assert "operator for pn_systemd" in preparation
+    assert "Each observation has its own single-use grant" in preparation
+    assert "does not produce a service-health verdict" in preparation

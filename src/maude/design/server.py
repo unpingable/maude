@@ -78,6 +78,7 @@ from maude.plan.service_investigation import (
 MAX_REQUEST_BYTES = 128 * 1024
 PREVIEW_SCHEMA = "maude.plan-operation-preview-token/v1"
 OWNER_FACTS_SCHEMA = "maude.plan-design-owner-facts/v1"
+STANDING_ENROLLMENT_SCHEMA = "standing.service-diagnostic-enrollment/v1"
 
 
 @dataclass
@@ -378,6 +379,46 @@ def load_governed_cross_probe(
     return parse_cross_probe(json.loads(raw))
 
 
+def load_service_authority_view(path: Path | None) -> dict[str, dict[str, Any]]:
+    """Load signed Standing enrollment inputs for read-only presentation.
+
+    This does not validate or admit authority. Standing performs those checks at
+    acquisition; the design surface only explains the configured boundary.
+    """
+    if path is None:
+        return {}
+    result: dict[str, dict[str, Any]] = {}
+    for node_id in ("pn_systemd", "pn_http"):
+        enrollment_path = path / node_id / "enrollment.json"
+        raw_bytes = enrollment_path.read_bytes()
+        if len(raw_bytes) > MAX_REQUEST_BYTES:
+            raise ValueError(f"{node_id} Standing enrollment is oversized")
+        raw = json.loads(raw_bytes)
+        if not isinstance(raw, dict) or set(raw) != {"body", "signature"}:
+            raise ValueError(f"{node_id} Standing enrollment wrapper is malformed")
+        body = raw.get("body")
+        required = {
+            "schema",
+            "operator",
+            "genesis_digest",
+            "grant_id",
+            "workload",
+            "workload_public_key",
+            "audience",
+            "subject",
+            "scope",
+            "profile",
+            "config_digest",
+            "valid_until",
+        }
+        if not isinstance(body, dict) or set(body) != required:
+            raise ValueError(f"{node_id} Standing enrollment body is malformed")
+        if body.get("schema") != STANDING_ENROLLMENT_SCHEMA:
+            raise ValueError(f"{node_id} Standing enrollment schema is unsupported")
+        result[node_id] = {**body, "_exact_enrollment": raw}
+    return result
+
+
 class DesignApplication:
     def __init__(
         self,
@@ -387,12 +428,11 @@ class DesignApplication:
         *,
         inspect_url: str = "http://127.0.0.1:8417/phosphor-ng",
         owner_facts: dict[str, tuple[ExternalArtifactReferenceV1, ...]] | None = None,
-        governed_cross_probe: dict[
-            str, tuple[GovernedNodeBindingV1, ...]
-        ]
+        governed_cross_probe: dict[str, tuple[GovernedNodeBindingV1, ...]]
         | None = None,
         service_investigation_profile: ServiceInvestigationProfileV1 | None = None,
         service_investigation_ledger: ServiceInvestigationLedger | None = None,
+        service_authority_view: dict[str, dict[str, Any]] | None = None,
         nightshift_submission_command: tuple[str, ...] = (),
         secret: bytes | None = None,
         enrolled_provider: SwitchyardProposalProvider | None = None,
@@ -408,6 +448,7 @@ class DesignApplication:
         self.governed_cross_probe = governed_cross_probe or {}
         self.service_investigation_profile = service_investigation_profile
         self.service_investigation_ledger = service_investigation_ledger
+        self.service_authority_view = service_authority_view or {}
         self.nightshift_submission_command = nightshift_submission_command
         self.secret = secret or secrets.token_bytes(32)
         self.csrf_token = _b64(
@@ -471,10 +512,36 @@ class DesignApplication:
                 item.draft_id: self._projection(item.draft_id).to_data()
                 for item in revisions
             }
+            service_candidates = []
+            if (
+                self.service_investigation_profile is not None
+                and self.service_investigation_ledger is not None
+            ):
+                for revision in revisions:
+                    try:
+                        compiled = compile_service_investigation(
+                            revision, self.service_investigation_profile
+                        )
+                    except ServiceInvestigationError:
+                        continue
+                    service_candidates.append(
+                        (
+                            revision,
+                            compiled,
+                            self.service_investigation_ledger.projection(
+                                compiled.investigation_id
+                            ),
+                        )
+                    )
+            service = service_candidates[0] if len(service_candidates) == 1 else None
             return Response.html(
                 200,
                 render.index_page(
-                    revisions, projections, self.csrf_token, self.inspect_url
+                    revisions,
+                    projections,
+                    self.csrf_token,
+                    self.inspect_url,
+                    service,
                 ),
             )
         if path == "/phosphor/design/api/v1/drafts":
@@ -594,6 +661,7 @@ class DesignApplication:
                     return Response.json(
                         200,
                         {
+                            "authority": self.service_authority_view,
                             "compiled": compiled.to_data(),
                             "projection": investigation,
                             "schema": "maude.service-investigation-workspace/v1",
@@ -607,6 +675,7 @@ class DesignApplication:
                         investigation,
                         self.csrf_token,
                         self.inspect_url,
+                        self.service_authority_view,
                     ),
                 )
             if suffix:
@@ -1318,10 +1387,9 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--governed-cross-probe", type=Path)
     result.add_argument("--service-investigation-profile", type=Path)
     result.add_argument("--service-investigation-ledger", type=Path)
+    result.add_argument("--service-investigation-authority-root", type=Path)
     result.add_argument("--nightshift-submission-program", type=Path)
-    result.add_argument(
-        "--nightshift-submission-arg", action="append", default=[]
-    )
+    result.add_argument("--nightshift-submission-arg", action="append", default=[])
     result.add_argument("--inspect-url", default="http://127.0.0.1:8417/phosphor-ng")
     result.add_argument("--bind", default="127.0.0.1")
     result.add_argument("--port", type=int, default=8427)
@@ -1385,6 +1453,9 @@ def main() -> None:
         enrolled_provider=enrolled,
         service_investigation_profile=profile,
         service_investigation_ledger=investigation_ledger,
+        service_authority_view=load_service_authority_view(
+            args.service_investigation_authority_root
+        ),
         nightshift_submission_command=submission_command,
     )
     try:
