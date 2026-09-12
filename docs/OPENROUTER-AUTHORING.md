@@ -50,7 +50,7 @@ same import name:
 
 ```sh
 git clone https://github.com/unpingable/switchyard-runtime.git /tmp/switchyard-runtime
-git -C /tmp/switchyard-runtime checkout --detach 5111a4c068855537d7d5fff76a27da34323a45b5
+git -C /tmp/switchyard-runtime checkout --detach e612e195bdafc193d022f99ce683cb73dfbd7287
 python3 -m venv /tmp/maude-openrouter-venv
 /tmp/maude-openrouter-venv/bin/python -m pip install -e /absolute/path/to/maude
 /tmp/maude-openrouter-venv/bin/python -m pip install /tmp/switchyard-runtime
@@ -59,7 +59,7 @@ git -C /tmp/switchyard-runtime rev-parse HEAD
 ```
 
 The `rev-parse` result must be
-`5111a4c068855537d7d5fff76a27da34323a45b5`. Maude's core install does not
+`e612e195bdafc193d022f99ce683cb73dfbd7287`. Maude's core install does not
 require the transitional `classic-rpc` extra. Make both source roots explicit
 when launching so an ambient Switchyard package cannot be selected:
 
