@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import replace
 from datetime import UTC, datetime
 import json
 
@@ -12,7 +13,10 @@ from maude.plan.document import (
 from maude.plan.operations import PlanOperationV1, UpdateNodeV1
 from maude.plan.proposal_service import ProposalService
 from maude.plan.proposal_store import ProposalStore
-from maude.plan.proposals import ProposalError, ProposalScopeV1
+from maude.plan.proposals import (
+    ProposalError, ProposalScopeV1, ProviderOutputV1,
+    proposal_from_provider_output,
+)
 from maude.plan.store import DraftStore
 from maude.plan.switchyard_provider import (
     UPDATE_NODE_OPERATION_EXAMPLE,
@@ -114,12 +118,98 @@ def test_enrolled_provider_preserves_identity_limits_and_human_acceptance(tmp_pa
     assert schema["properties"]["request_id"]["const"] == request.request_id
     assert "authority" not in json.dumps(response_format)
     assert len(admitted_input) + len(canonical_json_bytes(response_format)) + 512 <= direct["maximum_prompt_tokens"]
-    edit_variants = schema["properties"]["operations"]["items"]["properties"]["operation"]["oneOf"]
+    edit_variants = schema["properties"]["operations"]["items"]["properties"]["operation"]["anyOf"]
     assert [item["properties"]["type"]["const"] for item in edit_variants] == ["update_node"]
     assert b"maude.plan-edit-provider-output/v1" in admitted_input
     assert svc.project(proposal.proposal_id).lifecycle.value == "proposed"
     receipt = svc.accept(proposal.proposal_id, accepting_actor="operator")
     assert receipt.proposal_id == proposal.proposal_id
+
+
+@pytest.mark.parametrize(
+    "allowed_operation_types",
+    [
+        ("add_node",),
+        ("update_node",),
+        ("remove_node",),
+        ("reorder_node",),
+        ("update_document",),
+    ],
+)
+def test_provider_response_format_uses_only_supported_array_and_union_forms(
+    tmp_path, allowed_operation_types
+):
+    svc, base = service(tmp_path)
+    request = request_for(
+        svc, base, SwitchyardProposalProvider(profile(), FixtureApi())
+    )
+    if allowed_operation_types == ("update_document",):
+        scope = ProposalScopeV1(
+            "exact_document", allowed_operation_types, (), (), ("goal",)
+        )
+    else:
+        scope = ProposalScopeV1(
+            "exact_nodes", allowed_operation_types, ("pn_verify",), ("description",)
+        )
+    schema = provider_output_response_format(replace(request, scope=scope))["json_schema"][
+        "schema"
+    ]
+    operations = schema["properties"]["operations"]
+    operation = operations["items"]["properties"]["operation"]
+    assert operations["minItems"] == 1
+    assert "maxItems" not in operations
+    assert "at most 32 operations" in operations["description"].lower()
+    assert "oneOf" not in json.dumps(schema)
+    assert [variant["properties"]["type"] for variant in operation["anyOf"]] == [
+        {"type": "string", "const": item} for item in allowed_operation_types
+    ]
+
+
+def test_local_protocol_still_refuses_more_than_32_operations(tmp_path):
+    svc, base = service(tmp_path)
+    request = request_for(
+        svc, base, SwitchyardProposalProvider(profile(), FixtureApi())
+    )
+    output = json.loads(DeterministicFixtureProvider("bounded_edit").generate(request))
+    output["operations"] *= 33
+    with pytest.raises(ProposalError, match="1..32 operations"):
+        ProviderOutputV1.parse(json.dumps(output).encode("utf-8"))
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (lambda output: output.__setitem__("request_id", "sha256:substituted"), "exact request/base binding"),
+        (
+            lambda output: output["operations"].__setitem__(
+                0,
+                {
+                    "schema": "maude.plan-operation/v1",
+                    "operation": {"type": "remove_node", "node_id": "pn_verify"},
+                },
+            ),
+            "exceeds proposal scope",
+        ),
+    ],
+)
+def test_local_validation_keeps_immutable_bindings_and_scope_closed(
+    tmp_path, mutation, message
+):
+    svc, base = service(tmp_path)
+    request = request_for(
+        svc, base, SwitchyardProposalProvider(profile(), FixtureApi())
+    )
+    output = json.loads(DeterministicFixtureProvider("bounded_edit").generate(request))
+    mutation(output)
+    with pytest.raises(ProposalError, match=message):
+        proposal_from_provider_output(
+            request,
+            json.dumps(output).encode("utf-8"),
+            provider_id="openrouter",
+            model_id="openai/gpt-5.6-terra",
+            model_version="switchyard-direct-api-v3",
+            created_at="2026-09-12T00:00:00Z",
+        )
 
 
 def test_markdown_fenced_json_is_still_refused_without_lenient_repair(tmp_path):
