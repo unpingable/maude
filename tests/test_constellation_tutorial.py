@@ -39,7 +39,7 @@ def test_tutorial_observation_coordinates_match_the_connected_nightshift_fixture
 
 def test_tutorial_lock_pins_the_slot_safe_nightshift_fixture():
     source = json.loads(INPUT_LOCK.read_bytes())["source"]
-    assert source["nightshift_revision"] == "1fc1ab43c4480d8f9d7460690f1329c7d61b702f"
+    assert source["nightshift_revision"] == "eb20a7fe7d3efc478fa17c0e351e2e20febddf5b"
 
 
 def test_runner_preflight_uses_kit_script_and_sanitized_endpoint(monkeypatch, tmp_path):
