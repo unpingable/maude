@@ -135,7 +135,7 @@ inspection, cancellation, credential lookup, and provider completion record.
 
 The adapter refuses an incomplete, cancelled, substituted-model, unmetered, or
 over-budget result before it reaches Proposal Core. A completed provider result
-is still only hostile proposal bytes: Plan Core validates it, renders the
+is still only untrusted proposal bytes: Plan Core validates it, renders the
 ordinary diff, and requires explicit human accept/reject. Provider completion
 does not accept a proposal or authorize/execute the proposed work.
 
@@ -146,9 +146,9 @@ separately authorized one-call live qualification. This repository contains no
 credential, account selection, or provider call.
 
 For the separately approved one-call local qualification, the operator must
-provision a new dedicated Constellation OpenRouter key only at
-`/home/jbeck/.config/constellation/openrouter.env`, mode `0600`, user-owned,
-containing only `OPENROUTER_API_KEY=...`. Do not read, create, reuse,
+provision a new dedicated Constellation OpenRouter key at the explicit private
+`--switchyard-credential-file` path, mode `0600`, user-owned, containing either
+a raw key or `OPENROUTER_API_KEY=...`. Do not read, create, reuse,
 or modify Erin Marginalia credentials or configuration. The explicit test
 profile must name its selected model, use `maximum_concurrent_requests=1`, no
 retry/fallback, a duration of at most 30 seconds, and a user-visible

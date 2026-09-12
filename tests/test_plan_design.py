@@ -925,7 +925,9 @@ def test_http_opt_in_enrolled_provider_requires_explicit_acceptance_and_never_re
 @pytest.mark.parametrize("raw,mode,expected", [
     (b"OPENROUTER_API_KEY=fixture\n", 0o600, "fixture"),
     (b"OPENROUTER_API_KEY=fixture\r\n", 0o600, "fixture"),
+    (b"raw-fixture-key\n", 0o600, "raw-fixture-key"),
     (b"OPENROUTER_API_KEY=fixture\nextra", 0o600, None),
+    (b"raw-fixture-key\rmalformed", 0o600, None),
     (b"OPENROUTER_API_KEY=fixture", 0o644, None),
 ])
 def test_dedicated_credential_loader_is_bounded_and_exact(tmp_path, raw, mode, expected):

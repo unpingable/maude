@@ -31,11 +31,11 @@ The optional enrolled selector is absent unless both `--switchyard-profile` and
 `--switchyard-state` are supplied. Before any provider contact, the operator
 must create a nonsecret JSON profile with the exact selected model, byte/time,
 token, concurrency, fixed-price, and reservation limits. The dedicated key,
-when separately authorized, belongs only at
-`~/.config/constellation/openrouter.env` (0600), and is not read until an
+when separately authorized, belongs at the explicit private
+`--switchyard-credential-file` path (0600), and is not read until an
 explicit enrolled proposal-generation POST. This walkthrough does not supply
 those options and never reads that file.
 
-Completion from an enrolled provider would still be hostile proposal bytes:
+Completion from an enrolled provider would still be untrusted proposal bytes:
 Maude validates them, shows the same diff, and requires an explicit human
 acceptance action. Completion is neither acceptance nor execution authority.

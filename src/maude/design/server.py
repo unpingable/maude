@@ -94,10 +94,11 @@ def dedicated_credential_loader(secret_path: Path):
         elif raw.endswith(b"\n"):
             raw = raw[:-1]
         prefix = b"OPENROUTER_API_KEY="
-        if not raw.startswith(prefix) or b"\n" in raw[len(prefix):] or b"\r" in raw[len(prefix):]:
+        value = raw[len(prefix):] if raw.startswith(prefix) else raw
+        if not value or b"\n" in value or b"\r" in value:
             return None
         try:
-            return raw[len(prefix):].decode("utf-8") or None
+            return value.decode("utf-8")
         except UnicodeDecodeError:
             return None
     return load

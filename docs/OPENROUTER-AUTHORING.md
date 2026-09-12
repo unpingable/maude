@@ -26,14 +26,10 @@ than treating this example as a current price feed.
 
 ## Credential route
 
-The only selected credential path is:
-
-```text
-/home/jbeck/.config/constellation/openrouter.env
-```
-
+Choose an explicit private absolute path with `--switchyard-credential-file`.
 The user provisions it outside the repository as a user-owned regular file,
-mode `0600`, containing exactly one assignment (one final newline is accepted):
+mode `0600`, containing either a raw key or one assignment (one final newline
+is accepted):
 
 ```text
 OPENROUTER_API_KEY=USER_PROVIDED_VALUE
@@ -54,7 +50,7 @@ after the user provisions the credential, choose private state paths and launch:
 phosphor-design \
   --switchyard-profile /absolute/path/to/maude/docs/examples/openrouter-authoring-profile.json \
   --switchyard-state /absolute/private/path/switchyard.sqlite \
-  --switchyard-credential-file /home/jbeck/.config/constellation/openrouter.env
+  --switchyard-credential-file /absolute/private/path/openrouter-key
 ```
 
 Both `--switchyard-profile` and `--switchyard-state` are required together.
