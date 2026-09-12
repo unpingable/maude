@@ -913,16 +913,16 @@ def test_contextual_agent_proposal_review_accept_and_exact_api(tmp_path):
     assert generated.status == 303 and generated.location is not None
     review = application.get(generated.location)
     assert review.status == 200
-    assert b"Review ordinary Plan Core operations" in review.body
+    assert b"Review proposed changes" in review.body
     assert b"exact_nodes" in review.body
-    assert b"2 \xc2\xb7 Affected PlanNodes" in review.body
+    assert b"2 \xc2\xb7 Affected plan steps" in review.body
     assert b"pn_b" in review.body
-    assert b"3 \xc2\xb7 Ordinary semantic diff" in review.body
-    assert review.body.index(b"Ordinary semantic diff") < review.body.index(
-        b"Canonical operations"
+    assert b"3 \xc2\xb7 What will change" in review.body
+    assert review.body.index(b"What will change") < review.body.index(
+        b"Exact edit operations"
     )
     assert b"Model rationale" in review.body
-    assert b"Accept exact operation set" in review.body
+    assert b"Accept changes into draft" in review.body
     api = application.get(generated.location + "/api/v1")
     assert api.status == 200
     assert json_loads(api.body)["schema"] == "maude.plan-edit-proposal-review/v1"
@@ -932,7 +932,7 @@ def test_contextual_agent_proposal_review_accept_and_exact_api(tmp_path):
     assert store.current("draft_test").edit_origin == EditOrigin.AGENT
     terminal = application.get(generated.location)
     assert b"Terminal proposal disposition: accepted" in terminal.body
-    assert b"Accept exact operation set" not in terminal.body
+    assert b"Accept changes into draft" not in terminal.body
 
 
 def test_finding_cross_probe_into_proposal_and_checker_remains_owner(tmp_path):
@@ -1005,7 +1005,7 @@ def test_stale_agent_proposal_is_visible_and_cannot_retarget(tmp_path):
     )
     review = application.get(generated.location)
     assert b"This proposal is stale" in review.body
-    assert b"Accept exact operation set" not in review.body
+    assert b"Accept changes into draft" not in review.body
     refused = application.post(generated.location + "/accept", form(application))
     assert refused.status == 409
     assert store.current(revision.draft_id).document.goal == "External CLI edit"

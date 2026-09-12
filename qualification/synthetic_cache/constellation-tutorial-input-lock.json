@@ -1,0 +1,49 @@
+{
+  "schema": "constellation.synthetic-cache-tutorial-input-lock/v1",
+  "fixture": "synthetic-cache-governed-v1",
+  "status": "registry-pin-resolved-image-not-local",
+  "identity": {
+    "campaign_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "program_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "subject_digest": "sha256:6262626262626262626262626262626262626262626262626262626262626262",
+    "scope_digest": "sha256:cfea2d9e350d18243cdd78a64f25a62376116ba7e4a717e8b13742c6ec277619",
+    "qualify_occurrence_id": "00000000-0000-4000-8000-000000000000",
+    "teardown_occurrence_id": "00000000-0000-4000-8000-000000000001",
+    "qualify_observation_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "teardown_observation_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "c2_qualify_occurrence_id": "00000000-0000-4000-8000-000000000002",
+    "c2_teardown_occurrence_id": "00000000-0000-4000-8000-000000000003",
+    "c2_qualify_observation_id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "c2_teardown_observation_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+  },
+  "runtime": {
+    "front_port": 8080,
+    "image": "python:3.13-alpine@sha256:46ee549c88617e9bc8acb843a326f1a5c0fa5608d7f9703509efe6d53b55f318",
+    "target_platform": "linux/amd64",
+    "docker_program_identity": "sha256:6d0e20f0cc407028d828141d513031c0824681f5bcbeba095d67b74660aa388e",
+    "docker_client_version": "29.1.3",
+    "docker_server_version": "29.1.3",
+    "compose_version": "5.0.0"
+  },
+  "source": {
+    "maude_revision": "145fc6b160a150ad18242b205ed95db422d4b308",
+    "nightshift_revision": "2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4",
+    "ag_revision": "5c8b22b77193798f25298b02758ac3caa3a8fe24",
+    "docket_revision": "c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b",
+    "nightshift_integration_target": "synthetic_cache_design_qualifies_and_tears_down_through_governed_runtime"
+  },
+  "artifact_environment": {
+    "SYNTHETIC_CACHE_LOCKED_PLAN": "plan-locked.json",
+    "SYNTHETIC_CACHE_QUALIFY_PLAN": "executor-plan-qualify.json",
+    "SYNTHETIC_CACHE_TEARDOWN_PLAN": "executor-plan-teardown.json",
+    "SYNTHETIC_CACHE_QUALIFY_HANDOFF": "handoff-qualify.json",
+    "SYNTHETIC_CACHE_TEARDOWN_HANDOFF": "handoff-teardown.json",
+    "SYNTHETIC_CACHE_QUALIFY_COMPILATION_RECEIPT": "compilation-receipt-qualify.json",
+    "SYNTHETIC_CACHE_C2_LOCKED_PLAN": "plan-c2-locked.json",
+    "SYNTHETIC_CACHE_C2_QUALIFY_PLAN": "executor-plan-c2-qualify.json",
+    "SYNTHETIC_CACHE_C2_TEARDOWN_PLAN": "executor-plan-c2-teardown.json",
+    "SYNTHETIC_CACHE_C2_QUALIFY_HANDOFF": "handoff-c2-qualify.json",
+    "SYNTHETIC_CACHE_C2_TEARDOWN_HANDOFF": "handoff-c2-teardown.json",
+    "SYNTHETIC_CACHE_C2_QUALIFY_COMPILATION_RECEIPT": "compilation-receipt-c2-qualify.json"
+  }
+}

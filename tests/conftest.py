@@ -7,8 +7,6 @@ import os
 
 import pytest
 
-from maude.client.rpc import GovernorClient
-
 
 def governor_socket() -> str | None:
     """Return GOVERNOR_SOCKET if set, else None."""
@@ -38,6 +36,10 @@ async def client():
     gdir = governor_dir()
     if sock is None and gdir is None:
         pytest.skip("GOVERNOR_SOCKET/GOVERNOR_DIR not set — run via test-with-governor.sh")
+    # Plan Core and the design service do not use the classic RPC client.
+    # Load that optional test prerequisite only for a configured RPC session.
+    from maude.client.rpc import GovernorClient
+
     c = GovernorClient(socket_path=sock, governor_dir=gdir)
     await c.connect()
     yield c

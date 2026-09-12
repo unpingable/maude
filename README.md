@@ -1,18 +1,29 @@
 # Maude
 
-**Executor desk for governed agent runs. Every mutation goes through the gate.**
+Maude is the authoring and review desk for bounded plans. Create a draft, check
+its dependencies, inspect changes, and lock an exact revision. Human edits and
+accepted model proposals use the same Plan Core revision boundary. A valid or
+locked plan does not authorize execution.
 
-Plans may be created as explicit Maude Plan Core artifacts or supplied by
-external tools. Maude checks, diffs, locks, and supervises those artifacts; the
-governed runtime—not the draft toolchain—decides what may happen. Every harness
-tool call still goes through the [Agent Governor](https://github.com/unpingable/agent_governor)
-gate for the local supervised-run path.
+**Design-flow status: pre-alpha.** Start with [Plan Core](docs/PLAN-CORE.md),
+[the design workbench](docs/PHOSPHOR-DESIGN.md), and the
+[connected tutorial baseline and prerequisites](docs/CONSTELLATION-TUTORIAL.md).
+The current browser proposal examples are deterministic fixtures, not live model
+generation. One closed synthetic-cache compiler exists; there is no generic
+compiler from operational prose or generic browser handoff.
 
-The plan arrives. Maude runs it. The governor gates. You decide.
+Phosphor inspection is a separate read-only process hosted by AG-NG. Nightshift,
+AG-NG, Docket, and the executor own the post-handoff facts and effects. See
+[the surface boundaries](docs/PHOSPHOR-NG-CONVERGENCE.md).
 
 ---
 
-## Supervised Agent Sessions
+## Transitional supervised agent sessions (classic RPC)
+
+The commands in this section use classic Governor's session RPC. They are not
+the AG-NG campaign interface and are not the starting point for new successor
+integrations. Their continued packaging dependency is tracked separately from
+Plan Core; do not infer AG-NG compatibility from a shared “governor” label.
 
 Maude launches and supervises a coding harness (Claude Code today) as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.
 
