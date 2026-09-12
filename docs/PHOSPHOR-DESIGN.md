@@ -206,6 +206,9 @@ See [Plan Edit Proposals](PLAN-EDIT-PROPOSALS.md).
 
 ## Run the deterministic corpus
 
+For the bounded, credential-free newcomer screen and the no-call enrolled
+authoring recipe, see [Bounded authoring walkthrough](BOUNDED-AUTHORING-WALKTHROUGH.md).
+
 From the Maude repository:
 
 ```bash
