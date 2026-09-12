@@ -55,6 +55,35 @@ REQUIRED_ARTIFACTS: dict[str, tuple[str, str | None]] = {
 }
 
 
+def absolute_path(value: Path, label: str, findings: list[Finding]) -> Path | None:
+    """Resolve only an explicitly absolute CLI pathname."""
+    if not value.is_absolute():
+        findings.append(Finding("BLOCK", label, "path must be absolute"))
+        return None
+    # Preserve executable symlinks: resolving a venv Python or /snap/bin/docker
+    # can select a different runtime. Workspace containment is checked separately.
+    return value
+
+
+def docker_environment(endpoint: str) -> dict[str, str] | None:
+    """Return the sole supported local Docker binding, or reject it."""
+    prefix = "unix://"
+    socket = endpoint.removeprefix(prefix)
+    if (
+        not endpoint.startswith(prefix)
+        or not socket.startswith("/")
+        or socket == "/"
+        or any(character.isspace() for character in endpoint)
+        or "?" in endpoint
+        or "#" in endpoint
+    ):
+        return None
+    env = dict(os.environ)
+    env.pop("DOCKER_CONTEXT", None)
+    env["DOCKER_HOST"] = endpoint
+    return env
+
+
 def arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -85,6 +114,11 @@ def arguments() -> argparse.Namespace:
     parser.add_argument("--docket-bin", type=Path, required=True)
     parser.add_argument("--executor", type=Path, required=True)
     parser.add_argument("--docker-program", type=Path, required=True)
+    parser.add_argument(
+        "--docker-endpoint",
+        required=True,
+        help="required local Unix socket binding, for example unix:///run/user/1000/docker.sock",
+    )
     parser.add_argument("--image", default="python:3.13-alpine")
     parser.add_argument("--maude-revision")
     parser.add_argument("--nightshift-revision")
@@ -94,7 +128,9 @@ def arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def command(args: list[str], timeout: int = 10) -> tuple[int, str]:
+def command(
+    args: list[str], timeout: int = 10, env: dict[str, str] | None = None
+) -> tuple[int, str]:
     try:
         completed = subprocess.run(
             args,
@@ -104,6 +140,7 @@ def command(args: list[str], timeout: int = 10) -> tuple[int, str]:
             stderr=subprocess.STDOUT,
             text=True,
             timeout=timeout,
+            env=env,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         return 127, str(exc)
@@ -116,6 +153,7 @@ def checkout(
     path: Path,
     required: tuple[str, ...],
     expected: str | None,
+    env: dict[str, str],
 ) -> None:
     if not path.is_absolute():
         findings.append(Finding("BLOCK", label, "checkout path must be absolute"))
@@ -128,15 +166,15 @@ def checkout(
             findings.append(
                 Finding("BLOCK", label, f"missing required source: {relative}")
             )
-    code, head = command(["git", "-C", str(path), "rev-parse", "HEAD"])
+    code, head = command(["git", "-C", str(path), "rev-parse", "HEAD"], env=env)
     if code:
         findings.append(Finding("BLOCK", label, f"cannot read Git revision: {head}"))
         return
-    code, dirty = command(["git", "-C", str(path), "status", "--porcelain"])
+    code, dirty = command(["git", "-C", str(path), "status", "--porcelain"], env=env)
     if code:
-        findings.append(Finding("WARN", label, f"cannot read Git status: {dirty}"))
+        findings.append(Finding("BLOCK", label, f"cannot read Git status: {dirty}"))
     elif dirty:
-        findings.append(Finding("WARN", label, f"checkout is dirty at {head}"))
+        findings.append(Finding("BLOCK", label, f"checkout is dirty at {head}"))
     else:
         findings.append(Finding("OK", label, f"revision {head}"))
     if expected and head != expected:
@@ -167,6 +205,9 @@ def executable(findings: list[Finding], label: str, path: Path) -> None:
 def artifacts(findings: list[Finding], root: Path, mode: str) -> None:
     if not root.is_absolute():
         findings.append(Finding("BLOCK", "artifact root", "path must be absolute"))
+        return
+    if mode == "generate" and os.path.lexists(root):
+        findings.append(Finding("BLOCK", "artifact root", f"must be absent: {root}"))
         return
     if not root.is_dir() and mode == "generate":
         findings.append(
@@ -215,10 +256,10 @@ def workspace(findings: list[Finding], root: Path, mode: str) -> None:
         findings.append(
             Finding("BLOCK", "workspace root", f"parent does not exist: {parent}")
         )
-    elif root.exists():
+    elif os.path.lexists(root):
         findings.append(
             Finding(
-                "WARN",
+                "BLOCK",
                 "workspace root",
                 f"already exists; a fresh governed root is required: {root}",
             )
@@ -227,9 +268,9 @@ def workspace(findings: list[Finding], root: Path, mode: str) -> None:
         findings.append(Finding("OK", "workspace root", f"candidate is absent: {root}"))
     snap_root = Path("/home/jbeck/snap/docker/common/ag-synthetic-cache")
     if (
-        not str(root).startswith("/tmp/")
-        and root != snap_root
-        and snap_root not in root.parents
+        Path("/tmp") not in root.resolve().parents
+        and root.resolve() != snap_root
+        and snap_root not in root.resolve().parents
     ):
         findings.append(
             Finding(
@@ -240,12 +281,27 @@ def workspace(findings: list[Finding], root: Path, mode: str) -> None:
         )
 
 
-def docker_runtime(findings: list[Finding], program: Path, image: str) -> None:
+def docker_runtime(
+    findings: list[Finding], program: Path, image: str, env: dict[str, str] | None
+) -> None:
+    if env is None:
+        findings.append(
+            Finding(
+                "BLOCK", "Docker endpoint", "must be a unix:// absolute local socket"
+            )
+        )
+        return
     executable(findings, "Docker program", program)
     if not program.is_file() or not os.access(program, os.X_OK):
         return
     code, version = command(
-        [str(program), "version", "--format", "{{.Client.Version}} {{.Server.Version}}"]
+        [
+            str(program),
+            "version",
+            "--format",
+            "{{.Client.Version}} {{.Server.Version}}",
+        ],
+        env=env,
     )
     if code:
         findings.append(
@@ -258,7 +314,7 @@ def docker_runtime(findings: list[Finding], program: Path, image: str) -> None:
     else:
         findings.append(Finding("OK", "Docker daemon", version))
     code, identity = command(
-        [str(program), "image", "inspect", image, "--format", "{{.Id}}"]
+        [str(program), "image", "inspect", image, "--format", "{{.Id}}"], env=env
     )
     if code:
         findings.append(
@@ -286,10 +342,49 @@ def report(findings: list[Finding], as_json: bool) -> int:
 def main() -> int:
     args = arguments()
     findings: list[Finding] = []
+    docker_env = docker_environment(args.docker_endpoint)
+    if docker_env is None:
+        findings.append(
+            Finding(
+                "BLOCK", "Docker endpoint", "must be a unix:// absolute local socket"
+            )
+        )
+        return report(findings, args.json)
+    maude_checkout = absolute_path(args.maude_checkout, "Maude", findings)
+    nightshift_checkout = absolute_path(
+        args.nightshift_checkout, "Nightshift", findings
+    )
+    ag_checkout = absolute_path(args.ag_checkout, "Constellation AG", findings)
+    docket_checkout = absolute_path(args.docket_checkout, "Docket", findings)
+    artifact_root = absolute_path(args.artifact_root, "artifact root", findings)
+    workspace_root = absolute_path(args.workspace_root, "workspace root", findings)
+    ag_loopctl = absolute_path(args.ag_loopctl, "AG loop control", findings)
+    ag_standing_resolver = absolute_path(
+        args.ag_standing_resolver, "AG standing resolver", findings
+    )
+    ag_effectd = absolute_path(args.ag_effectd, "AG effect dispatcher", findings)
+    docket_bin = absolute_path(args.docket_bin, "Docket executable", findings)
+    executor = absolute_path(args.executor, "synthetic-cache executor", findings)
+    docker_program = absolute_path(args.docker_program, "Docker program", findings)
+    if None in (
+        maude_checkout,
+        nightshift_checkout,
+        ag_checkout,
+        docket_checkout,
+        artifact_root,
+        workspace_root,
+        ag_loopctl,
+        ag_standing_resolver,
+        ag_effectd,
+        docket_bin,
+        executor,
+        docker_program,
+    ):
+        return report(findings, args.json)
     checkout(
         findings,
         "Maude",
-        args.maude_checkout,
+        maude_checkout,
         (
             "pyproject.toml",
             "qualification/synthetic_cache/build_plan.py",
@@ -298,35 +393,43 @@ def main() -> int:
             "scripts/check-synthetic-cache-boundaries.sh",
         ),
         args.maude_revision,
+        docker_env,
     )
     checkout(
         findings,
         "Nightshift",
-        args.nightshift_checkout,
+        nightshift_checkout,
         (
             "Cargo.toml",
             "crates/nightshiftd/tests/ag_governed_integration.rs",
         ),
         args.nightshift_revision,
+        docker_env,
     )
     checkout(
         findings,
         "Constellation AG",
-        args.ag_checkout,
+        ag_checkout,
         ("Cargo.toml",),
         args.ag_revision,
+        docker_env,
     )
     checkout(
-        findings, "Docket", args.docket_checkout, ("Cargo.toml",), args.docket_revision
+        findings,
+        "Docket",
+        docket_checkout,
+        ("Cargo.toml",),
+        args.docket_revision,
+        docker_env,
     )
-    artifacts(findings, args.artifact_root, args.artifact_mode)
-    workspace(findings, args.workspace_root, args.artifact_mode)
-    executable(findings, "AG loop control", args.ag_loopctl)
-    executable(findings, "AG standing resolver", args.ag_standing_resolver)
-    executable(findings, "AG effect dispatcher", args.ag_effectd)
-    executable(findings, "Docket executable", args.docket_bin)
-    executable(findings, "synthetic-cache executor", args.executor)
-    docker_runtime(findings, args.docker_program, args.image)
+    artifacts(findings, artifact_root, args.artifact_mode)
+    workspace(findings, workspace_root, args.artifact_mode)
+    executable(findings, "AG loop control", ag_loopctl)
+    executable(findings, "AG standing resolver", ag_standing_resolver)
+    executable(findings, "AG effect dispatcher", ag_effectd)
+    executable(findings, "Docket executable", docket_bin)
+    executable(findings, "synthetic-cache executor", executor)
+    docker_runtime(findings, docker_program, args.image, docker_env)
     return report(findings, args.json)
 
 

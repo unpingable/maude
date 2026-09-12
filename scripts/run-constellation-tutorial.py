@@ -38,6 +38,11 @@ def args() -> argparse.Namespace:
     p.add_argument("--ag-effectd", type=Path, required=True)
     p.add_argument("--docket-bin", type=Path, required=True)
     p.add_argument("--docker-program", type=Path, required=True)
+    p.add_argument(
+        "--docker-endpoint",
+        required=True,
+        help="required unix:// absolute local Docker socket",
+    )
     p.add_argument("--maude-python", type=Path, required=True)
     p.add_argument("--input-lock", type=Path, required=True)
     return p.parse_args()
@@ -55,14 +60,54 @@ def command(parts: list[str], env: dict[str, str], cwd: Path | None = None) -> N
     subprocess.run(parts, check=True, env=env, cwd=cwd)
 
 
+def absolute_path(value: Path, label: str) -> Path:
+    if not value.is_absolute():
+        raise SystemExit(f"{label} must be an absolute path")
+    # Do not dereference executable paths (notably virtualenv Python and Snap).
+    return value
+
+
+def docker_environment(endpoint: str) -> dict[str, str]:
+    socket = endpoint.removeprefix("unix://")
+    if (
+        not endpoint.startswith("unix://")
+        or not socket.startswith("/")
+        or socket == "/"
+        or any(character.isspace() for character in endpoint)
+        or "?" in endpoint
+        or "#" in endpoint
+    ):
+        raise SystemExit("docker endpoint must be a unix:// absolute local socket")
+    env = dict(os.environ)
+    env.pop("DOCKER_CONTEXT", None)
+    env["DOCKER_HOST"] = endpoint
+    return env
+
+
 def main() -> int:
     a = args()
-    root = a.run_root.resolve()
-    lock = load(a.input_lock.resolve())
-    if not root.is_absolute() or not str(root).startswith("/tmp/"):
-        raise SystemExit("run root must be an absolute path below /tmp")
-    if root.exists():
+    root = absolute_path(a.run_root, "run root")
+    if os.path.lexists(root):
         raise SystemExit(f"run root must be absent and exclusive: {root}")
+    root = root.resolve()
+    docker_env = docker_environment(a.docker_endpoint)
+    lock = load(absolute_path(a.input_lock, "input lock"))
+    if Path("/tmp") not in root.parents:
+        raise SystemExit("run root must be an absolute path below /tmp")
+    if os.path.lexists(root):
+        raise SystemExit(f"run root must be absent and exclusive: {root}")
+    a.maude_checkout = absolute_path(a.maude_checkout, "maude checkout")
+    a.nightshift_checkout = absolute_path(a.nightshift_checkout, "nightshift checkout")
+    a.ag_checkout = absolute_path(a.ag_checkout, "AG checkout")
+    a.docket_checkout = absolute_path(a.docket_checkout, "Docket checkout")
+    a.ag_loopctl = absolute_path(a.ag_loopctl, "AG loop control")
+    a.ag_standing_resolver = absolute_path(
+        a.ag_standing_resolver, "AG standing resolver"
+    )
+    a.ag_effectd = absolute_path(a.ag_effectd, "AG effect dispatcher")
+    a.docket_bin = absolute_path(a.docket_bin, "Docket executable")
+    a.docker_program = absolute_path(a.docker_program, "Docker program")
+    a.maude_python = absolute_path(a.maude_python, "Maude Python")
     artifacts = root / "artifacts"
     runtime_root = root / "runtime"
     runtime = runtime_root / "maude-cache-birthday"
@@ -79,6 +124,7 @@ def main() -> int:
                 "runtime_workspace": str(runtime),
                 "c2_runtime_workspace": str(c2_runtime),
                 "image": image,
+                "docker_endpoint": a.docker_endpoint,
                 "fixture_status": lock.get("status"),
             },
             indent=2,
@@ -86,7 +132,7 @@ def main() -> int:
     )
     preflight = [
         sys.executable,
-        str(a.maude_checkout / "scripts/check-constellation-tutorial.py"),
+        str(Path(__file__).resolve().parent / "check-constellation-tutorial.py"),
         "--maude-checkout",
         str(a.maude_checkout),
         "--nightshift-checkout",
@@ -115,6 +161,8 @@ def main() -> int:
         ),
         "--docker-program",
         str(a.docker_program),
+        "--docker-endpoint",
+        a.docker_endpoint,
         "--image",
         image or "python:3.13-alpine",
         "--maude-revision",
@@ -126,7 +174,7 @@ def main() -> int:
         "--docket-revision",
         lock["source"]["docket_revision"],
     ]
-    checked = subprocess.run(preflight, check=False)
+    checked = subprocess.run(preflight, check=False, env=docker_env)
     if not a.run:
         print(
             "Plan only: no directory, artifact, container, or test process was created."
@@ -152,6 +200,7 @@ def main() -> int:
             check=True,
             text=True,
             stdout=subprocess.PIPE,
+            env=docker_env,
         )
         .stdout.strip()
         .split()
@@ -167,6 +216,7 @@ def main() -> int:
             check=True,
             text=True,
             stdout=subprocess.PIPE,
+            env=docker_env,
         )
         .stdout.strip()
         .removeprefix("v")
@@ -177,7 +227,7 @@ def main() -> int:
     identity = lock["identity"]
     rt = lock["runtime"]
     env = dict(
-        os.environ,
+        docker_env,
         PYTHONPATH=str(a.maude_checkout / "src"),
         MAUDE_SRC=str(a.maude_checkout / "src"),
         MAUDE_PYTHON=str(a.maude_python),
