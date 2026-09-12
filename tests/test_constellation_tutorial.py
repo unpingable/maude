@@ -6,6 +6,7 @@ These tests mock subprocesses; they never invoke Docker or contact an endpoint.
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -13,6 +14,7 @@ import pytest
 
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
+INPUT_LOCK = Path(__file__).resolve().parents[1] / "qualification/synthetic_cache/constellation-tutorial-input-lock.json"
 
 
 def module(name: str):
@@ -22,6 +24,17 @@ def module(name: str):
     sys.modules[name] = loaded
     spec.loader.exec_module(loaded)
     return loaded
+
+
+def test_tutorial_observation_coordinates_match_the_connected_nightshift_fixture():
+    # Pinned Nightshift ag_governed_integration.rs constructs the C1 qualify and
+    # teardown requests with digest('d')/digest('e'), then C2 with digest('6')/
+    # digest('7'). The compiled proposal must bind those same observation bases.
+    identity = json.loads(INPUT_LOCK.read_bytes())["identity"]
+    assert [identity[name] for name in (
+        "qualify_observation_id", "teardown_observation_id",
+        "c2_qualify_observation_id", "c2_teardown_observation_id",
+    )] == ["sha256:" + character * 64 for character in "de67"]
 
 
 def test_runner_preflight_uses_kit_script_and_sanitized_endpoint(monkeypatch, tmp_path):
