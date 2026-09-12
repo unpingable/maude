@@ -27,7 +27,7 @@
   },
   "source": {
     "maude_revision": "145fc6b160a150ad18242b205ed95db422d4b308",
-    "nightshift_revision": "2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4",
+    "nightshift_revision": "1fc1ab43c4480d8f9d7460690f1329c7d61b702f",
     "ag_revision": "5c8b22b77193798f25298b02758ac3caa3a8fe24",
     "docket_revision": "c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b",
     "nightshift_integration_target": "synthetic_cache_design_qualifies_and_tears_down_through_governed_runtime"
