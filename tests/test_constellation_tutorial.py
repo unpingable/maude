@@ -83,6 +83,20 @@ def test_runner_preflight_uses_kit_script_and_sanitized_endpoint(monkeypatch, tm
     assert "DOCKER_CONTEXT" not in captured["env"]
 
 
+def test_runtime_handoff_helper_is_bound_to_selected_source(tmp_path):
+    runner = module("run-constellation-tutorial")
+    checkout = tmp_path / "frozen-maude"
+    python = tmp_path / "venv/bin/python"
+    env = runner.maude_environment(
+        {"MAUDE_SYNTHETIC_HANDOFF_HELPER": "/unselected/helper.py"}, checkout, python
+    )
+    assert env["MAUDE_SYNTHETIC_HANDOFF_HELPER"] == str(
+        checkout / "qualification/synthetic_cache/seal_cycle_handoff.py"
+    )
+    assert env["MAUDE_SRC"] == env["PYTHONPATH"] == str(checkout / "src")
+    assert env["MAUDE_PYTHON"] == str(python)
+
+
 def test_runner_rejects_unsafe_endpoint_before_subprocess(monkeypatch, tmp_path):
     runner = module("run-constellation-tutorial")
     monkeypatch.setattr(

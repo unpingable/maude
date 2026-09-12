@@ -390,6 +390,7 @@ def main() -> int:
             "qualification/synthetic_cache/build_plan.py",
             "qualification/synthetic_cache/build_requalification.py",
             "qualification/synthetic_cache/local_compose_executor.py",
+            "qualification/synthetic_cache/seal_cycle_handoff.py",
             "scripts/check-synthetic-cache-boundaries.sh",
         ),
         args.maude_revision,

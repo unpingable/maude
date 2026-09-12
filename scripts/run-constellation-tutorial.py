@@ -84,6 +84,19 @@ def docker_environment(endpoint: str) -> dict[str, str]:
     return env
 
 
+def maude_environment(base: dict[str, str], checkout: Path, python: Path) -> dict[str, str]:
+    """Bind every Maude helper to the selected frozen source, not ambient paths."""
+    return dict(
+        base,
+        PYTHONPATH=str(checkout / "src"),
+        MAUDE_SRC=str(checkout / "src"),
+        MAUDE_PYTHON=str(python),
+        MAUDE_SYNTHETIC_HANDOFF_HELPER=str(
+            checkout / "qualification/synthetic_cache/seal_cycle_handoff.py"
+        ),
+    )
+
+
 def main() -> int:
     a = args()
     root = absolute_path(a.run_root, "run root")
@@ -226,12 +239,7 @@ def main() -> int:
     root.mkdir(mode=0o700)
     identity = lock["identity"]
     rt = lock["runtime"]
-    env = dict(
-        docker_env,
-        PYTHONPATH=str(a.maude_checkout / "src"),
-        MAUDE_SRC=str(a.maude_checkout / "src"),
-        MAUDE_PYTHON=str(a.maude_python),
-    )
+    env = maude_environment(docker_env, a.maude_checkout, a.maude_python)
     base = [
         str(a.maude_python),
         str(a.maude_checkout / "qualification/synthetic_cache/build_plan.py"),
