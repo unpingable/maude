@@ -38,6 +38,36 @@ def hidden(name: str, value: str) -> str:
     return f'<input type="hidden" name="{escape(name)}" value="{escape(value, quote=True)}">'
 
 
+def active_generations_page(
+    draft_id: str,
+    generations: tuple[tuple[str, str], ...],
+    *,
+    csrf_token: str,
+    inspect_url: str,
+) -> str:
+    """Render exact in-flight identities and their local cancel controls."""
+    items = "".join(
+        '<section class="panel">'
+        f'<h2>Generation <code class="mono">{escape(generation_id)}</code></h2>'
+        f'<p>Request <code class="mono">{escape(request_id)}</code></p>'
+        f'<form method="post" action="/phosphor/design/drafts/{quote(draft_id)}/proposal-generations/{quote(generation_id)}/cancel">'
+        + hidden("csrf", csrf_token)
+        + hidden("request_id", request_id)
+        + '<button class="danger" type="submit">Request cancellation</button></form>'
+        "</section>"
+        for generation_id, request_id in generations
+    )
+    body = (
+        '<p class="eyebrow">Plan edit proposal</p>'
+        '<h1>Active proposal generations</h1>'
+        '<p class="nonclaim">Cancellation is local. It prevents a late result '
+        'from becoming a proposal; it does not establish that provider work stopped.</p>'
+        + (items or '<p class="muted">No active enrolled proposal generation.</p>')
+        + f'<p><a href="/phosphor/design/drafts/{quote(draft_id)}">Return to draft</a></p>'
+    )
+    return page("Active proposal generations", body, inspect_url=inspect_url)
+
+
 def _presentation_fields(
     revision: DraftRevisionV1,
     presentation: PresentationProjectionV2,

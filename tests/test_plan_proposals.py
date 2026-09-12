@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import sqlite3
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime
@@ -23,6 +25,7 @@ from maude.plan.proposal_store import (
     ProposalAcceptanceReceiptV1,
     ProposalLifecycle,
     ProposalStore,
+    ProposalStoreError,
 )
 from maude.plan.proposals import (
     MAX_PROVIDER_OUTPUT_BYTES,
@@ -468,6 +471,87 @@ def test_proposal_store_restart_retains_request_proposal_and_staleness(tmp_path)
         edit_origin=EditOrigin.HUMAN,
     )
     assert restarted.project(proposal.proposal_id).lifecycle == ProposalLifecycle.STALE
+
+
+def test_cancellation_and_proposal_writers_are_serialized(tmp_path):
+    _, _, source_service, base = service(tmp_path / "source")
+    request, proposal = generate(source_service, base)
+    target = ProposalStore(tmp_path / "target.sqlite", now=NOW)
+    target.put_request(request)
+
+    blocker = sqlite3.connect(target.path)
+    blocker.execute("BEGIN IMMEDIATE")
+    connection_opened = threading.Event()
+    original_connect = target._connect
+
+    def tracked_connect():
+        connection = original_connect()
+        connection_opened.set()
+        return connection
+
+    target._connect = tracked_connect
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(
+            target.request_cancellation,
+            request.request_id,
+            request.generation_id,
+            request.draft_id,
+        )
+        assert connection_opened.wait(1)
+        blocker.execute(
+            "INSERT INTO proposals VALUES (?,?,?,?,?)",
+            (
+                proposal.proposal_id,
+                proposal.request_id,
+                proposal.draft_id,
+                proposal.base_revision_id,
+                canonical_json_bytes(proposal.to_data()),
+            ),
+        )
+        blocker.commit()
+        with pytest.raises(
+            ProposalStoreError, match="completed generation cannot be cancelled"
+        ):
+            future.result(timeout=2)
+    blocker.close()
+
+    assert target.proposal_for_request(request.request_id) == proposal
+    assert not target.cancellation_requested(request.request_id)
+
+    target = ProposalStore(tmp_path / "cancel-first.sqlite", now=NOW)
+    target.put_request(request)
+    blocker = sqlite3.connect(target.path)
+    blocker.execute("BEGIN IMMEDIATE")
+    connection_opened = threading.Event()
+    original_connect = target._connect
+
+    def tracked_proposal_connect():
+        connection = original_connect()
+        connection_opened.set()
+        return connection
+
+    target._connect = tracked_proposal_connect
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(target.put_proposal, proposal)
+        assert connection_opened.wait(1)
+        blocker.execute(
+            "INSERT INTO generation_cancellations VALUES (?,?,?,?)",
+            (
+                request.request_id,
+                request.generation_id,
+                request.draft_id,
+                "2026-08-21T16:00:00Z",
+            ),
+        )
+        blocker.commit()
+        with pytest.raises(
+            ProposalStoreError, match="cancelled generation cannot persist a proposal"
+        ):
+            future.result(timeout=2)
+    blocker.close()
+
+    assert target.proposal_for_request(request.request_id) is None
+    assert target.cancellation_requested(request.request_id)
 
 
 def test_exact_generation_resend_recovers_after_draft_advances(tmp_path):

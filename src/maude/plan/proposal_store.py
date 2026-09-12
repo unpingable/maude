@@ -324,6 +324,7 @@ class ProposalStore:
             raise ProposalStoreError("cancellation identity does not match proposal request")
         requested_at = _utc(self._now)
         with self._connect() as db:
+            db.execute("BEGIN IMMEDIATE")
             if db.execute(
                 "SELECT 1 FROM proposals WHERE request_id=? UNION SELECT 1 FROM generation_refusals WHERE request_id=?",
                 (request_id, request_id),
@@ -377,6 +378,7 @@ class ProposalStore:
         )
         record = canonical_json_bytes(proposal.to_data())
         with self._connect() as db:
+            db.execute("BEGIN IMMEDIATE")
             if db.execute(
                 "SELECT 1 FROM generation_cancellations WHERE request_id=?",
                 (proposal.request_id,),

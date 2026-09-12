@@ -1048,6 +1048,14 @@ def test_http_enrolled_generation_can_be_cancelled_by_exact_same_origin_request(
         "task": "clarify",
         "provider_scenario": "enrolled-switchyard",
     }
+    invalid_fields = {**fields, "scope_kind": "not-a-scope"}
+    invalid = application.post(
+        "/phosphor/design/drafts/draft_test/proposals/generate",
+        {key: [value] for key, value in invalid_fields.items()},
+    )
+    assert invalid.status == 400
+    assert application.active_generations("draft_test") == ()
+    assert not api.entered.is_set()
     generation_result = {}
 
     def generate():
@@ -1092,6 +1100,9 @@ def test_http_enrolled_generation_can_be_cancelled_by_exact_same_origin_request(
         connection.request("GET", active_page)
         response = connection.getresponse(); body = response.read()
         assert response.status == 200 and active[0].request_id.encode() in body
+        assert b'<meta name="viewport"' in body
+        assert b'<header class="topbar">' in body
+        assert b'<code class="mono">http-cancel-generation</code>' in body
         connection.request("GET", "/phosphor/design/drafts/draft_test")
         response = connection.getresponse(); body = response.read()
         assert response.status == 200 and b"Active proposal generation (1)" in body

@@ -15,7 +15,6 @@ import sqlite3
 import threading
 from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from html import escape
 from pathlib import Path
 from typing import Any, Mapping
 from urllib.parse import parse_qs, quote, unquote, urlsplit
@@ -477,19 +476,14 @@ class DesignApplication:
         active_match = _active_generations_path(path)
         if active_match is not None:
             items = self.active_generations(active_match)
-            forms = "".join(
-                f'<form method="post" action="/phosphor/design/drafts/{quote(item.draft_id)}/proposal-generations/{quote(item.generation_id)}/cancel">'
-                f'<input type="hidden" name="csrf" value="{escape(self.csrf_token, quote=True)}">'
-                f'<input type="hidden" name="request_id" value="{escape(item.request_id or "", quote=True)}">'
-                f'<p>Generation {escape(item.generation_id)}<br>Request {escape(item.request_id or "")}</p>'
-                '<button type="submit">Request cancellation</button></form>'
-                for item in items
-            )
             return Response.html(
                 200,
-                ("<!doctype html><html><body><main><h1>Active proposal generations</h1>"
-                 + (forms or "<p>No active enrolled proposal generation.</p>")
-                 + "</main></body></html>"),
+                render.active_generations_page(
+                    active_match,
+                    tuple((item.generation_id, item.request_id or "") for item in items),
+                    csrf_token=self.csrf_token,
+                    inspect_url=self.inspect_url,
+                ),
             )
         proposal_match = _proposal_path(path)
         if proposal_match is not None:
@@ -679,16 +673,6 @@ class DesignApplication:
                     if scenario == "enrolled-switchyard":
                         if self.enrolled_provider is None:
                             raise ProposalError("enrolled Switchyard provider is not configured")
-                        active = ActiveProposalGeneration(
-                            draft_id, expected, generation_id, threading.Event()
-                        )
-                        with self._active_lock:
-                            if generation_id in self._active_generations:
-                                raise ProposalError("proposal generation is already in flight")
-                            self._active_generations[generation_id] = active
-                        provider = self.enrolled_provider.with_cancellation(
-                            active.cancellation.is_set
-                        )
                     else:
                         if scenario not in FIXTURE_SCENARIOS:
                             raise ProposalError("unknown provider fixture")
@@ -746,6 +730,17 @@ class DesignApplication:
                             )
                     else:
                         raise ProposalError("unknown proposal scope")
+                    if scenario == "enrolled-switchyard":
+                        active = ActiveProposalGeneration(
+                            draft_id, expected, generation_id, threading.Event()
+                        )
+                        with self._active_lock:
+                            if generation_id in self._active_generations:
+                                raise ProposalError("proposal generation is already in flight")
+                            self._active_generations[generation_id] = active
+                        provider = self.enrolled_provider.with_cancellation(
+                            active.cancellation.is_set
+                        )
                     try:
                         request = self.proposal_service.request(
                             draft_id=draft_id,
