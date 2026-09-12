@@ -13,7 +13,7 @@ from urllib.parse import quote, urlencode
 import pytest
 
 from maude.design.demo import generate_demo
-from maude.design.render import check_label
+from maude.design.render import check_label, preview_page
 from maude.design.presentation import (
     PLAN_PRESENTATION_V1_SCHEMA,
     PlanPresentationV2,
@@ -40,6 +40,7 @@ from maude.plan.document import (
     canonical_json_bytes,
     content_digest,
 )
+from maude.plan.diff import semantic_diff
 from maude.plan.operations import (
     AddNodeV1,
     PlanOperationError,
@@ -197,7 +198,9 @@ def test_browser_preview_and_exact_apply_create_successor(tmp_path):
         ),
     )
     assert preview.status == 200
-    assert b"Semantic changes" in preview.body and b"node order" in preview.body
+    assert b"Reviewable before and after values" in preview.body
+    assert b"Plan step order" in preview.body
+    assert b"pn_a" in preview.body and b"pn_b" in preview.body
     applied = application.post(
         "/phosphor/design/drafts/draft_test/apply",
         form(application, preview_token=preview_token(preview.body)),
@@ -208,6 +211,37 @@ def test_browser_preview_and_exact_apply_create_successor(tmp_path):
         "pn_b",
         "pn_a",
     ]
+
+
+def test_preview_renders_escaped_values_for_all_semantic_change_kinds(tmp_path):
+    _, _, revision = app(tmp_path)
+    before = plan(
+        PlanNodeV1("pn_a", "Before <value>"),
+        PlanNodeV1("pn_b", "Removed step"),
+        PlanNodeV1("pn_c", "Moves first"),
+    )
+    after = replace(
+        before,
+        nodes=(
+            PlanNodeV1("pn_c", "Moves first"),
+            PlanNodeV1("pn_a", "After <value>"),
+            PlanNodeV1("pn_d", "Added step"),
+        ),
+    )
+    page = preview_page(
+        replace(revision, document=before),
+        after,
+        semantic_diff(before, after),
+        "local-preview-token",
+        "csrf",
+        "/phosphor/inspect",
+    )
+    assert "Added plan step pn_d" in page
+    assert "Removed plan step pn_b" in page
+    assert "Plan step order" in page
+    assert "Before &lt;value&gt;" in page
+    assert "After &lt;value&gt;" in page
+    assert "Before <value>" not in page
 
 
 def test_double_submit_same_reviewed_operation_is_idempotent(tmp_path):
@@ -915,6 +949,10 @@ def test_http_opt_in_enrolled_provider_requires_explicit_acceptance_and_never_re
     provider = SwitchyardProposalProvider(profile, direct)
     application = DesignApplication(store, PresentationStore(tmp_path / "presentations.sqlite"),
                                     secret=b"s" * 32, enrolled_provider=provider)
+    assert set_casework(application, revision, "proposals").status == 303
+    workspace = application.get("/phosphor/design/drafts/draft_test")
+    assert b"Proposal source (includes configured Switchyard route)" in workspace.body
+    assert b"configured Switchyard route is available only when selected" in workspace.body
     server = DesignServer(("127.0.0.1", 0), application)
     thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
     host, port = server.server_address
@@ -1037,12 +1075,17 @@ def test_contextual_agent_proposal_review_accept_and_exact_api(tmp_path):
     assert review.status == 200
     assert b"Review proposed changes" in review.body
     assert b"exact_nodes" in review.body
+    assert b"Selected plan steps" in review.body
     assert b"2 \xc2\xb7 Affected plan steps" in review.body
     assert b"pn_b" in review.body
-    assert b"3 \xc2\xb7 What will change" in review.body
-    assert review.body.index(b"What will change") < review.body.index(
+    assert b"3 \xc2\xb7 Reviewable before and after values" in review.body
+    assert b"Before" in review.body and b"After" in review.body
+    assert b"Change" in review.body
+    assert b"Change \xe2\x80\x94 clarify verification" in review.body
+    assert review.body.index(b"Reviewable before and after values") < review.body.index(
         b"Exact edit operations"
     )
+    assert b"Exact semantic diff record" in review.body
     assert b"Model rationale" in review.body
     assert b"Accept changes into draft" in review.body
     api = application.get(generated.location + "/api/v1")
@@ -1055,6 +1098,14 @@ def test_contextual_agent_proposal_review_accept_and_exact_api(tmp_path):
     terminal = application.get(generated.location)
     assert b"Proposal accepted. This decision is final" in terminal.body
     assert b"Accept changes into draft" not in terminal.body
+
+
+def test_proposal_panel_only_describes_switchyard_when_configured(tmp_path):
+    application, _, revision = app(tmp_path)
+    assert set_casework(application, revision, "proposals").status == 303
+    workspace = application.get("/phosphor/design/drafts/draft_test")
+    assert b"Deterministic proposal scenario" in workspace.body
+    assert b"configured Switchyard route is available" not in workspace.body
 
 
 def test_finding_cross_probe_into_proposal_and_checker_remains_owner(tmp_path):

@@ -11,7 +11,7 @@ from urllib.parse import quote, urlsplit
 from maude.design.presentation import PresentationProjectionV2
 from maude.plan.diff import PlanDiffV1
 from maude.plan.cross_probe import GovernedNodeBindingV1
-from maude.plan.document import PlanNodeV1
+from maude.plan.document import PlanDocumentV1, PlanNodeV1
 from maude.plan.proposal_service import ProposalProjectionV1
 from maude.plan.proposal_store import GenerationRefusalV1
 from maude.plan.proposals import PlanEditProposalRequestV1
@@ -583,6 +583,66 @@ def _diff_projection(
     return f'<div class="case-summary"><strong>Semantic diff from predecessor</strong><span class="muted">Stable IDs cross-probe into the current object inspector.</span></div><ul class="diff-list">{"".join(rows) or "<li class=muted>No semantic changes.</li>"}</ul>{raw_block("Structured semantic diff", diff.to_data())}'
 
 
+_SCOPE_LABELS = {
+    "exact_nodes": "Selected plan steps",
+    "exact_document": "Entire draft",
+    "exact_finding": "Current checker finding",
+}
+
+
+def _review_value(value: Any) -> str:
+    """Return a readable, escaped semantic value for a human review surface."""
+    if isinstance(value, str):
+        return escape(value)
+    return escape(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
+
+
+def _before_after(label: str, before: Any, after: Any) -> str:
+    return (
+        f'<section class="review-change"><h3>{escape(label)}</h3>'
+        '<dl class="drift"><dt>Before</dt><dd><pre>'
+        f"{_review_value(before)}</pre></dd><dt>After</dt><dd><pre>"
+        f"{_review_value(after)}</pre></dd></dl></section>"
+    )
+
+
+def _proposal_change_review(
+    before: PlanDocumentV1, after: PlanDocumentV1, diff: PlanDiffV1
+) -> str:
+    """Describe the exact diff in reviewable values without replacing its record."""
+    before_nodes = {node.node_id: node.to_data() for node in before.nodes}
+    after_nodes = {node.node_id: node.to_data() for node in after.nodes}
+    changes: list[str] = []
+    for node_id in diff.added:
+        changes.append(
+            _before_after(f"Added plan step {node_id}", None, after_nodes[node_id])
+        )
+    for node_id in diff.removed:
+        changes.append(
+            _before_after(f"Removed plan step {node_id}", before_nodes[node_id], None)
+        )
+    for node_change in diff.changed:
+        old = before_nodes[node_change.node_id]
+        new = after_nodes[node_change.node_id]
+        for field in node_change.fields:
+            changes.append(
+                _before_after(
+                    f"Plan step {node_change.node_id} · {field}",
+                    old[field],
+                    new[field],
+                )
+            )
+    if diff.reordered:
+        changes.append(
+            _before_after("Plan step order", list(diff.before_order), list(diff.after_order))
+        )
+    old_document = before.to_data()
+    new_document = after.to_data()
+    for field in diff.document_fields:
+        changes.append(_before_after(f"Draft field · {field}", old_document[field], new_document[field]))
+    return "".join(changes) or '<p class="muted">No semantic changes.</p>'
+
+
 def _proposal_panel(
     revision: DraftRevisionV1,
     projection: DraftProjectionV1,
@@ -619,6 +679,17 @@ def _proposal_panel(
         f'<option value="{escape(item, quote=True)}">{escape(item.replace("_", " "))}</option>'
         for item in provider_scenarios
     )
+    enrolled_available = "enrolled-switchyard" in provider_scenarios
+    scenario_label = (
+        "Proposal source (includes configured Switchyard route)"
+        if enrolled_available
+        else "Deterministic proposal scenario"
+    )
+    scenario_hint = (
+        "The configured Switchyard route is available only when selected. Other choices are deterministic examples; no proposal is accepted without this separate review."
+        if enrolled_available
+        else "This demo offers deterministic examples only, not a live model. Review the proposed changes before accepting them into your draft."
+    )
     proposal_rows = []
     for item in reversed(proposals):
         targets = ", ".join(item.proposal.scope.target_node_ids) or "document"
@@ -647,7 +718,7 @@ def _proposal_panel(
         f'<li><span class="badge rejected">invalid</span> {escape(item.model_id)}<div class="node-id">{escape(item.reason)}<br>{escape(item.refusal_id)}</div></li>'
         for item in reversed(refusals)
     )
-    form = f"""<form class="editor" method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/proposals/generate">{hidden("csrf", csrf)}{hidden("expected_revision_id", revision.revision_id)}{hidden("proposal_generation_id", proposal_generation_id)}{hidden("scope_kind", scope_kind)}{hidden("target_node_id", target_node_id)}{hidden("finding_id", "" if finding is None else finding.finding_id)}<label>What this proposal may change<input readonly value="{escape(target, quote=True)}"></label><label>Describe the edit<textarea name="task" required maxlength="4000" placeholder="Describe a change within the scope shown above"></textarea></label><label>Sample proposal scenario<select name="provider_scenario">{options}</select></label><button type="submit">Propose edit</button><p class="hint">This demo uses deterministic examples, not a live model. Review the proposed changes before accepting them into your draft. Acceptance does not run checks, hand off work, or authorize execution.</p></form>"""
+    form = f"""<form class="editor" method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/proposals/generate">{hidden("csrf", csrf)}{hidden("expected_revision_id", revision.revision_id)}{hidden("proposal_generation_id", proposal_generation_id)}{hidden("scope_kind", scope_kind)}{hidden("target_node_id", target_node_id)}{hidden("finding_id", "" if finding is None else finding.finding_id)}<label>What this proposal may change<input readonly value="{escape(target, quote=True)}"></label><label>Describe the edit<textarea name="task" required maxlength="4000" placeholder="Describe a change within the scope shown above"></textarea></label><label>{escape(scenario_label)}<select name="provider_scenario">{options}</select></label><button type="submit">Propose edit</button><p class="hint">{escape(scenario_hint)} Acceptance does not run checks, hand off work, or authorize execution.</p></form>"""
     return f"""<div class="case-summary"><strong>Proposed edits</strong><span class="badge">review before applying</span><span class="muted">Choose a task, inspect the proposed changes, then accept or reject.</span></div><div class="proposal-grid"><div>{form}</div><div><h3>Saved proposals</h3><ul class="proposal-list">{"".join(proposal_rows) or '<li class="muted">No proposal has been produced for this draft.</li>'}</ul><h3>Responses that could not be used</h3><ul class="proposal-list">{refusal_rows or '<li class="muted">No invalid provider response has been recorded.</li>'}</ul></div></div>"""
 
 
@@ -1151,6 +1222,7 @@ def proposal_page(
     proposal = projection.proposal
     state = projection.lifecycle.value
     scope_target = ", ".join(proposal.scope.target_node_ids) or "document"
+    scope_label = _SCOPE_LABELS.get(proposal.scope.kind, "Bounded proposal scope")
     affected_ids = tuple(
         dict.fromkeys(
             (
@@ -1194,7 +1266,10 @@ def proposal_page(
             "Immutable disposition receipt", projection.disposition.to_data()
         )
     )
-    body = f"""<div class="eyebrow">Agent edit proposal · review only until accepted</div><h1>Review proposed changes</h1><p><a href="/phosphor/design/drafts/{quote(proposal.draft_id)}">← Return to draft</a></p><section class="identity-strip"><div class="identity-cell"><span class="label">Proposal</span><strong>{escape(short(proposal.proposal_id))}</strong><span class="exact" title="{escape(proposal.proposal_id, quote=True)}">exact proposal identity</span></div><div class="identity-cell"><span class="label">Proposal status</span><strong>{escape(state)}</strong></div><div class="identity-cell"><span class="label">Exact base</span><strong>{escape(short(proposal.base_revision_id))}</strong><span class="exact" title="{escape(proposal.base_plan_digest, quote=True)}">{escape(short(proposal.base_plan_digest))}</span></div><div class="identity-cell"><span class="label">Provider / model</span><strong>{escape(proposal.provider_id)}</strong><span class="exact">{escape(proposal.model_id)} · {escape(proposal.model_version or "version unavailable")}</span></div></section><section class="panel preview"><h2>1 · What this proposal may change</h2><dl class="drift"><dt>kind</dt><dd>{escape(proposal.scope.kind)}</dd><dt>target</dt><dd>{escape(scope_target)}</dd><dt>operations allowed</dt><dd>{escape(", ".join(proposal.scope.allowed_operation_types))}</dd><dt>node fields</dt><dd>{escape(", ".join(proposal.scope.allowed_node_fields) or "none")}</dd><dt>document fields</dt><dd>{escape(", ".join(proposal.scope.allowed_document_fields) or "none")}</dd></dl><h2>2 · Affected plan steps</h2><div class="proposal-affected">{affected or '<span class="muted">Document-level fields only.</span>'}</div><h2>3 · What will change</h2><pre>{escape(projection.preview.diff.render())}</pre>{raw_block("Structured semantic diff", projection.preview.diff.to_data())}<h2>4 · Exact edit operations</h2><ul class="proposal-list">{operations}</ul><h2>5 · After accepting</h2><p class="nonclaim">Acceptance saves one new draft revision. Run checks again on that revision, review any findings, and lock only the version you intend to hand off. Acceptance does not authorize or execute work.</p><h2>6 · Model rationale · explanatory only</h2><p>{escape(rationale)}</p><p class="nonclaim">Operations govern what would change. Rationale is not PlanDocument semantics, a checker fact, or authority.</p>{actions}{disposition}{raw_block("Exact proposal artifact", proposal.to_data())}{raw_block("Exact bounded model request", request.to_data())}</section>"""
+    readable_changes = _proposal_change_review(
+        request.document, projection.preview.document, projection.preview.diff
+    )
+    body = f"""<div class="eyebrow">Agent edit proposal · review only until accepted</div><h1>Review proposed changes</h1><p><a href="/phosphor/design/drafts/{quote(proposal.draft_id)}">← Return to draft</a></p><section class="identity-strip"><div class="identity-cell"><span class="label">Proposal</span><strong>{escape(short(proposal.proposal_id))}</strong><span class="exact" title="{escape(proposal.proposal_id, quote=True)}">exact proposal identity</span></div><div class="identity-cell"><span class="label">Proposal status</span><strong>{escape(state)}</strong></div><div class="identity-cell"><span class="label">Exact base</span><strong>{escape(short(proposal.base_revision_id))}</strong><span class="exact" title="{escape(proposal.base_plan_digest, quote=True)}">{escape(short(proposal.base_plan_digest))}</span></div><div class="identity-cell"><span class="label">Provider / model</span><strong>{escape(proposal.provider_id)}</strong><span class="exact">{escape(proposal.model_id)} · {escape(proposal.model_version or "version unavailable")}</span></div></section><section class="panel preview"><h2>1 · What this proposal may change</h2><dl class="drift"><dt>scope</dt><dd>{escape(scope_label)}<br><span class="exact">exact scope kind: {escape(proposal.scope.kind)}</span></dd><dt>target</dt><dd>{escape(scope_target)}</dd><dt>operations allowed</dt><dd>{escape(", ".join(proposal.scope.allowed_operation_types))}</dd><dt>node fields</dt><dd>{escape(", ".join(proposal.scope.allowed_node_fields) or "none")}</dd><dt>document fields</dt><dd>{escape(", ".join(proposal.scope.allowed_document_fields) or "none")}</dd></dl><h2>2 · Affected plan steps</h2><div class="proposal-affected">{affected or '<span class="muted">Document-level fields only.</span>'}</div><h2>3 · Reviewable before and after values</h2>{readable_changes}<details class="raw"><summary>Exact semantic diff record</summary><pre>{escape(json.dumps(projection.preview.diff.to_data(), ensure_ascii=False, indent=2, sort_keys=True))}</pre></details><h2>4 · Exact edit operations</h2><ul class="proposal-list">{operations}</ul><h2>5 · After accepting</h2><p class="nonclaim">Acceptance saves one new draft revision. Run checks again on that revision, review any findings, and lock only the version you intend to hand off. Acceptance does not authorize or execute work.</p><h2>6 · Model rationale · explanatory only</h2><p>{escape(rationale)}</p><p class="nonclaim">Operations govern what would change. Rationale is not PlanDocument semantics, a checker fact, or authority.</p>{actions}{disposition}{raw_block("Exact proposal artifact", proposal.to_data())}{raw_block("Exact bounded model request", request.to_data())}</section>"""
     return page("Review agent edit proposal", body, inspect_url=inspect_url)
 
 
@@ -1206,7 +1281,7 @@ def preview_page(
     csrf: str,
     inspect_url: str,
 ) -> str:
-    body = f"""<div class="eyebrow">Semantic edit preview</div><h1>Review draft changes</h1><section class="identity-strip"><div class="identity-cell"><span class="label">Current</span><strong>R{revision.ordinal}</strong><span class="node-id">{escape(revision.plan_digest)}</span></div><div class="identity-cell"><span class="label">New revision</span><strong>R{revision.ordinal + 1}</strong><span class="node-id">{escape(proposed.digest)}</span></div></section><section class="panel preview"><h2>Semantic changes</h2><pre>{escape(diff.render())}</pre>{raw_block("Structured semantic diff", diff.to_data())}<div class="actions"><form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/apply">{hidden("csrf", csrf)}{hidden("preview_token", token)}<button type="submit">Save new revision</button></form><a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}">Cancel and keep current</a></div><p class="hint">Saving works only if the draft has not changed since this preview. If someone edits it meanwhile, reload and review the newer revision; your changes will not be silently merged.</p></section>"""
+    body = f"""<div class="eyebrow">Semantic edit preview</div><h1>Review draft changes</h1><section class="identity-strip"><div class="identity-cell"><span class="label">Current</span><strong>R{revision.ordinal}</strong><span class="node-id">{escape(revision.plan_digest)}</span></div><div class="identity-cell"><span class="label">New revision</span><strong>R{revision.ordinal + 1}</strong><span class="node-id">{escape(proposed.digest)}</span></div></section><section class="panel preview"><h2>Reviewable before and after values</h2>{_proposal_change_review(revision.document, proposed, diff)}{raw_block("Exact semantic diff record", diff.to_data())}<div class="actions"><form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/apply">{hidden("csrf", csrf)}{hidden("preview_token", token)}<button type="submit">Save new revision</button></form><a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}">Cancel and keep current</a></div><p class="hint">Saving works only if the draft has not changed since this preview. If someone edits it meanwhile, reload and review the newer revision; your changes will not be silently merged.</p></section>"""
     return page("Review semantic edit", body, inspect_url=inspect_url)
 
 
