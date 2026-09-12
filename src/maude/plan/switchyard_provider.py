@@ -22,6 +22,20 @@ DIRECT_REQUEST_DOMAIN = b"switchyard.direct-api-request.digest/v1\0"
 DIRECT_BINDING_DOMAIN = b"switchyard.direct-api-owner-binding.digest/v1\0"
 OWNER_ID = "maude.proposal-service"
 OWNER_PROFILE_SCHEMA = "maude.switchyard-proposal-profile/v1"
+UPDATE_NODE_OPERATION_EXAMPLE = {
+    "schema": "maude.plan-operation/v1",
+    "operation": {
+        "type": "update_node",
+        "node": {
+            "id": "pn_example",
+            "description": "Replacement description",
+            "depends_on": [],
+            "work": None,
+            "acceptance_criteria": [],
+            "stop_conditions": [],
+        },
+    },
+}
 
 
 class SwitchyardDirectApi(Protocol):
@@ -119,12 +133,14 @@ class SwitchyardProposalProvider:
         return cls(profile, DirectApiCaller(state, **kwargs), cancellation_requested=cancellation_requested)
 
     def _input(self, proposal_request: PlanEditProposalRequestV1) -> bytes:
+        operation_example = canonical_json_bytes(UPDATE_NODE_OPERATION_EXAMPLE).decode("utf-8")
         return canonical_json_bytes({
             "instruction": (
                 "Return only one UTF-8 JSON maude.plan-edit-provider-output/v1 object. "
                 "Required keys: schema, request_id, draft_id, base_revision_id, base_plan_digest, "
                 "operations (one to 32 maude.plan-operation/v1 values), rationale. "
-                "Example operation: {\"schema\":\"maude.plan-operation/v1\",\"edit\":{...}}. "
+                f"Generic update_node operation example: {operation_example}. "
+                "An update_node operation supplies the complete replacement node; preserve every field not selected for change. "
                 "Copy every request/base binding exactly. Do not execute, accept, authorize, or describe an action outside scope."
             ),
             "proposal_request": proposal_request.to_data(),

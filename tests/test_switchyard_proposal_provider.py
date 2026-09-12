@@ -6,11 +6,16 @@ import pytest
 
 from maude.design.providers import DeterministicFixtureProvider
 from maude.plan.document import DocumentConstraintsV1, PlanDocumentV1, PlanNodeV1, SubmitterV1
+from maude.plan.operations import PlanOperationV1, UpdateNodeV1
 from maude.plan.proposal_service import ProposalService
 from maude.plan.proposal_store import ProposalStore
 from maude.plan.proposals import ProposalError, ProposalScopeV1
 from maude.plan.store import DraftStore
-from maude.plan.switchyard_provider import SwitchyardProposalProfileV1, SwitchyardProposalProvider
+from maude.plan.switchyard_provider import (
+    UPDATE_NODE_OPERATION_EXAMPLE,
+    SwitchyardProposalProfileV1,
+    SwitchyardProposalProvider,
+)
 
 
 def test_maude_canonical_json_matches_switchyard_rfc8785_for_non_ascii_strings():
@@ -18,6 +23,12 @@ def test_maude_canonical_json_matches_switchyard_rfc8785_for_non_ascii_strings()
     from maude.plan.document import canonical_json_bytes
     value = {"message": "πlan 😀", "schema": "fixture/v1"}
     assert canonical_json_bytes(value) == direct._canonical(value)
+
+
+def test_generic_prompt_update_node_example_is_parseable_by_the_real_operation_contract():
+    operation = PlanOperationV1.from_data(UPDATE_NODE_OPERATION_EXAMPLE)
+    assert isinstance(operation.edit, UpdateNodeV1)
+    assert operation.edit.node.node_id == "pn_example"
 
 
 NOW = lambda: datetime(2026, 9, 12, tzinfo=UTC)  # noqa: E731
