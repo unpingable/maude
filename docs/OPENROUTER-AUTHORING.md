@@ -50,7 +50,7 @@ same import name:
 
 ```sh
 git clone https://github.com/unpingable/switchyard-runtime.git /tmp/switchyard-runtime
-git -C /tmp/switchyard-runtime checkout --detach b8f188f881f18a658860d34bc4f7b6b689f2025b
+git -C /tmp/switchyard-runtime checkout --detach 5111a4c068855537d7d5fff76a27da34323a45b5
 python3 -m venv /tmp/maude-openrouter-venv
 /tmp/maude-openrouter-venv/bin/python -m pip install -e /absolute/path/to/maude
 /tmp/maude-openrouter-venv/bin/python -m pip install /tmp/switchyard-runtime
@@ -59,7 +59,7 @@ git -C /tmp/switchyard-runtime rev-parse HEAD
 ```
 
 The `rev-parse` result must be
-`b8f188f881f18a658860d34bc4f7b6b689f2025b`. Maude's core install does not
+`5111a4c068855537d7d5fff76a27da34323a45b5`. Maude's core install does not
 require the transitional `classic-rpc` extra. Make both source roots explicit
 when launching so an ambient Switchyard package cannot be selected:
 
@@ -91,6 +91,12 @@ is recorded before Maude signals its caller. It prevents a late result from
 becoming an acceptable proposal, but does not claim that an already-contacted
 provider stopped work. A completed generation and a previously human-accepted
 revision cannot be cancelled.
+
+The direct route applies one parent total deadline around the canonical
+transport child and polls the request-local cancellation callback while that
+child is running. A deadline or local cancellation bounds Maude's wait and
+fails closed for proposal acceptance; it does not prove that an already-sent
+remote request stopped, and the remote outcome may remain unknown.
 
 The enrolled caller binds a strict public JSON Schema response format into the
 v3 request digest. Switchyard validates and forwards that format exactly with
