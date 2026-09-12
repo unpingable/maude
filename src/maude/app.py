@@ -13,15 +13,24 @@ from textual.binding import Binding
 from textual.widgets import Footer, Header, Input, RichLog
 
 from maude import __version__
-from maude.client.rpc import GovernorClient
-from maude.client.models import SessionSummary
-from maude.commands import CommandContext, build_registry
-from maude.config import Settings
-from maude.feed import DecisionFeedController
-from maude.intents import parse_intent
-from maude.screens import AdaptersScreen, BoardScreen, QueueScreen, ScreenManager
-from maude.session import MaudeSession, Mode
-from maude.ui.widgets import GovernorStatusBar
+
+try:
+    from maude.client.rpc import GovernorClient
+    from maude.client.models import SessionSummary
+    from maude.commands import CommandContext, build_registry
+    from maude.config import Settings
+    from maude.feed import DecisionFeedController
+    from maude.intents import parse_intent
+    from maude.screens import AdaptersScreen, BoardScreen, QueueScreen, ScreenManager
+    from maude.session import MaudeSession, Mode
+    from maude.ui.widgets import GovernorStatusBar
+except ModuleNotFoundError as exc:
+    if exc.name != "ag_shell_client":
+        raise
+    raise SystemExit(
+        "Maude's transitional classic RPC interface requires the optional "
+        "'classic-rpc' dependency. Install it with: pip install 'maude[classic-rpc]'"
+    ) from exc
 
 _CSS_PATH = Path(__file__).parent / "ui" / "theme.tcss"
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent.parent / "templates"
