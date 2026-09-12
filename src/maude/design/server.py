@@ -1057,7 +1057,10 @@ class DesignRequestHandler(BaseHTTPRequestHandler):
         )
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("X-Frame-Options", "DENY")
-        self.send_header("Referrer-Policy", "no-referrer")
+        # Basic form POSTs under no-referrer can carry Origin: null, which our
+        # same-origin mutation boundary correctly refuses. Keep the local
+        # origin usable while still withholding referrers across origins.
+        self.send_header("Referrer-Policy", "same-origin")
         if response.location is not None:
             self.send_header("Location", response.location)
         self.end_headers()

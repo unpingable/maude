@@ -844,6 +844,7 @@ def test_loopback_http_host_origin_methods_and_read_api(tmp_path):
 
         connection.request("HEAD", "/phosphor/design/drafts/draft_test")
         response = connection.getresponse()
+        assert response.getheader("Referrer-Policy") == "same-origin"
         assert response.status == 200 and response.read() == b""
 
         body = urlencode(
@@ -863,6 +864,24 @@ def test_loopback_http_host_origin_methods_and_read_api(tmp_path):
         )
         response = connection.getresponse()
         assert response.status == 403
+        response.read()
+
+        # Never admit an opaque origin as a workaround for browser form policy.
+        connection.request(
+            "POST", "/phosphor/design/drafts/draft_test/check", body=body,
+            headers={"Content-Type": "application/x-www-form-urlencoded", "Origin": "null"},
+        )
+        response = connection.getresponse()
+        assert response.status == 403
+        response.read()
+
+        connection.request(
+            "POST", "/phosphor/design/drafts/draft_test/check", body=body,
+            headers={"Content-Type": "application/x-www-form-urlencoded",
+                     "Origin": f"http://{host}:{port}"},
+        )
+        response = connection.getresponse()
+        assert response.status == 303
         response.read()
 
         connection.request("PUT", "/phosphor/design/drafts/draft_test")
@@ -890,7 +909,7 @@ def test_http_opt_in_enrolled_provider_requires_explicit_acceptance_and_never_re
     direct = direct_api.DirectApiCaller(tmp_path / "switchyard.sqlite",
         credential_source=lambda _: "local-test-only", transport=local_transport)
     profile = SwitchyardProposalProfileV1("profile", "openrouter", "openai/gpt-5.6-terra", "account", 30,
-        3000, 65536, 16384, 4000, 1000, 5000, 1, "budget", 50000, 5000, 1, 1)
+        6000, 65536, 16384, 10000, 1000, 11000, 1, "budget", 50000, 11000, 1, 1)
     store = DraftStore(tmp_path / "plans.sqlite")
     revision = store.create(plan(), draft_id="draft_test")
     provider = SwitchyardProposalProvider(profile, direct)
