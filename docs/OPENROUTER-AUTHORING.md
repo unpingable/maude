@@ -43,15 +43,38 @@ named value only for an explicitly selected enrolled-provider call.
 
 ## Opt-in local launch
 
-After separately installing the reviewed Switchyard direct API v3 runtime and
-after the user provisions the credential, choose private state paths and launch:
+Install the public source-only Switchyard runtime at the exact reviewed
+revision. It is a Python package rooted at `src/` and exposes
+`switchyard-direct-api`; do not substitute an unrelated distribution with the
+same import name:
 
 ```sh
-phosphor-design \
-  --switchyard-profile /absolute/path/to/maude/docs/examples/openrouter-authoring-profile.json \
+git clone https://github.com/unpingable/switchyard-runtime.git /tmp/switchyard-runtime
+git -C /tmp/switchyard-runtime checkout --detach b8f188f881f18a658860d34bc4f7b6b689f2025b
+python3 -m venv /tmp/maude-openrouter-venv
+/tmp/maude-openrouter-venv/bin/python -m pip install -e /absolute/path/to/maude
+/tmp/maude-openrouter-venv/bin/python -m pip install /tmp/switchyard-runtime
+git -C /tmp/switchyard-runtime rev-parse HEAD
+/tmp/maude-openrouter-venv/bin/switchyard-direct-api --help
+```
+
+The `rev-parse` result must be
+`b8f188f881f18a658860d34bc4f7b6b689f2025b`. Maude's core install does not
+require the transitional `classic-rpc` extra. Make both source roots explicit
+when launching so an ambient Switchyard package cannot be selected:
+
+```sh
+MAUDE_SRC=/absolute/path/to/maude
+SWITCHYARD_SRC=/tmp/switchyard-runtime
+PYTHONPATH="$MAUDE_SRC/src:$SWITCHYARD_SRC/src" \
+  /tmp/maude-openrouter-venv/bin/phosphor-design \
+  --switchyard-profile "$MAUDE_SRC/docs/examples/openrouter-authoring-profile.json" \
   --switchyard-state /absolute/private/path/switchyard.sqlite \
   --switchyard-credential-file /absolute/private/path/openrouter-key
 ```
+
+This prepares the route only. Do not run it with a real credential until the
+call has separate authorization.
 
 Both `--switchyard-profile` and `--switchyard-state` are required together.
 Without them, only deterministic fixture scenarios are available. In the
@@ -66,6 +89,13 @@ v3 request digest. Switchyard validates and forwards that format exactly with
 required-parameter routing, no model fallback, and no retry. Maude still parses
 the returned bytes against its closed proposal and operation contracts; it does
 not remove Markdown fences or repair malformed provider output.
+
+The first authorized live call completed HTTP 200 but returned Markdown-fenced
+JSON. Maude's strict parser refused it, and no proposal was accepted. The
+subsequent direct-request v3 structured-output repair has deterministic local
+coverage but no successful live provider qualification. Do not describe v3 as
+live-verified, strip response fences, retry that occurrence, or infer acceptance
+authority from provider completion.
 
 Provisioning and launching do not authorize a provider call. Before any live
 qualification, record the exact source/profile/state coordinates and separately

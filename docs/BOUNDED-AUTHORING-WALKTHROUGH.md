@@ -1,41 +1,73 @@
 # Bounded authoring walkthrough
 
-This is a credential-free walkthrough of Maude's actual Plan Core proposal and
-review surface. It uses the deterministic fixture provider; it does not contact
-a model, read a credential file, accept a proposal, or authorize work.
+This credential-free exercise uses Maude's deterministic fixture provider and
+ordinary Plan Core proposal review. It contacts no model, reads no provider
+credential, and grants no authority to execute work.
 
-## Prepare the isolated local screen
+## Prerequisites
 
-The capture owner starts this foreground command through the campaign's durable
-producer and recovery checkpoint; do not run it as an unattended shell job:
+Use Python 3.11 or newer from a Maude checkout with its core dependencies
+installed in `.venv`:
 
 ```sh
-PHOSPHOR_DESIGN_PORT=28427 scripts/run-phosphor-design-demo.sh /tmp/maude-authoring-walkthrough
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
 ```
 
-Open `http://127.0.0.1:28427/phosphor/design`. The generated corpus contains
-real PlanDocument revisions, checker findings, proposal requests, proposal
-refusals, semantic diffs, and accepted/rejected/stale examples. For a newcomer
-screen, select `draft_node_finding`, inspect the finding-scoped proposal, then
-select `draft_dependency_chain` to compare its useful and cycle-producing
-candidates. Do not press **Accept changes into draft** for the frozen capture.
+Choose a new local corpus path. The demo generator refuses to overwrite an
+existing path.
 
-At 1430px and 390px viewport widths, retain only screenshots that show the
-exact base/scope, semantic diff, rationale, and explicit accept/reject boundary.
-Do not retain browser storage, request headers, user home paths, credential
-configuration, or a live-provider result.
+## Start the demo
 
-## No-call enrolled-authoring recipe
+```sh
+PHOSPHOR_DESIGN_PORT=8427 scripts/run-phosphor-design-demo.sh /tmp/maude-authoring-walkthrough
+```
 
-The optional enrolled selector is absent unless both `--switchyard-profile` and
-`--switchyard-state` are supplied. Before any provider contact, the operator
-must create a nonsecret JSON profile with the exact selected model, byte/time,
-token, concurrency, fixed-price, and reservation limits. The dedicated key,
-when separately authorized, belongs at the explicit private
-`--switchyard-credential-file` path (0600), and is not read until an
-explicit enrolled proposal-generation POST. This walkthrough does not supply
-those options and never reads that file.
+Open <http://127.0.0.1:8427/phosphor/design>. Stop the foreground server with
+Ctrl-C when finished.
 
-Completion from an enrolled provider would still be untrusted proposal bytes:
-Maude validates them, shows the same diff, and requires an explicit human
-acceptance action. Completion is neither acceptance nor execution authority.
+The generated corpus is prepopulated with real Plan Core revisions, checks,
+findings, proposal requests, usable proposals, provider refusals, semantic
+diffs, and accepted, rejected, and stale examples. Those records demonstrate
+past outcomes; they are not proof that a proposal attempted during this
+walkthrough succeeded.
+
+## Review and attempt one proposal
+
+1. Select `draft_node_finding`. Inspect its current finding and saved
+   finding-scoped proposal. Confirm that its base revision, exact scope,
+   operations, checker result, semantic diff, and rationale are separate.
+2. Select `draft_dependency_chain`, then node `pn_verify_health`.
+3. In **Agent proposals**, enter `Clarify the verification step`, choose
+   deterministic scenario `bounded_edit`, and press **Propose edit**. This is a
+   new attempt against the displayed base revision, distinct from the proposal
+   already present in the corpus.
+4. Inspect validation, the exact operation, and semantic diff on the review
+   page. Reject it with a short reason. Rejection records a disposition and
+   creates no successor revision.
+5. Generate scenario `cycle` for the same node. Its projected plan is refused
+   by Plan Core validation. Then try `out_of_scope`; its response is refused
+   before it can become a usable proposal. These are negative controls.
+
+For an explicit acceptance-path test only, create another fresh demo corpus,
+generate `bounded_edit` for `pn_verify_health`, review it, and press **Accept
+changes into draft**. Acceptance performs one ordinary revision compare-and-swap
+and should display a new revision with an agent-proposal receipt. It does not
+run checks automatically: use **Check this revision** for the new contents.
+This optional test does not authorize acceptance in another store.
+
+## Expected boundary
+
+A usable proposal remains proposed until explicit accept or reject. Validation
+and diff are review information. Test acceptance creates only a Plan Core
+successor; it does not lock, compile, hand off, authorize, or execute the plan.
+A valid or checked revision likewise grants no authority.
+
+## Recovery
+
+The chosen path contains `plans.sqlite`, `presentations.sqlite`,
+`proposals.sqlite`, and `owner-facts.json`. After interruption, restart the
+server against those exact stores using `docs/PHOSPHOR-DESIGN.md`; do not rerun
+the generator over the retained path. Inspect the current revision and saved
+proposal disposition before retrying. If browser state and stores cannot be
+reconciled, preserve the corpus and use a new path for a separate exercise.
