@@ -22,6 +22,7 @@ def test_classic_rpc_dependency_is_optional_and_pinned() -> None:
     assert classic[0].startswith("ag-shell-client @ git+https://github.com/")
     assert "agent_governor.git@df61549a5e9a0dcc63ebe21efc90bd8958f64123" in classic[0]
     assert classic[0].endswith("#subdirectory=libs/ag_shell_client")
+    assert project["tool"]["hatch"]["metadata"]["allow-direct-references"] is True
 
 
 def test_classic_entrypoint_explains_missing_optional_dependency(tmp_path: Path) -> None:
