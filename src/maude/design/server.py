@@ -8,6 +8,8 @@ import base64
 import hmac
 import ipaddress
 import json
+import os
+import stat
 import secrets
 import sqlite3
 from dataclasses import dataclass
@@ -64,10 +66,41 @@ from maude.plan.store import (
     ExternalArtifactReferenceV1,
     ARTIFACT_REFERENCE_SCHEMA,
 )
+from maude.plan.switchyard_provider import SwitchyardProposalProfileV1, SwitchyardProposalProvider
 
 MAX_REQUEST_BYTES = 128 * 1024
 PREVIEW_SCHEMA = "maude.plan-operation-preview-token/v1"
 OWNER_FACTS_SCHEMA = "maude.plan-design-owner-facts/v1"
+
+
+def dedicated_credential_loader(secret_path: Path):
+    """Lazy bounded reader for the operator-selected dedicated key file."""
+    def load(name: str) -> str | None:
+        if name != "OPENROUTER_API_KEY":
+            return None
+        try:
+            descriptor = os.open(secret_path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW | os.O_CLOEXEC)
+        except OSError:
+            return None
+        try:
+            info = os.fstat(descriptor)
+            if not stat.S_ISREG(info.st_mode) or stat.S_IMODE(info.st_mode) != 0o600 or info.st_uid != os.getuid() or info.st_size > 8192:
+                return None
+            raw = os.read(descriptor, 8193)
+        finally:
+            os.close(descriptor)
+        if raw.endswith(b"\r\n"):
+            raw = raw[:-2]
+        elif raw.endswith(b"\n"):
+            raw = raw[:-1]
+        prefix = b"OPENROUTER_API_KEY="
+        if not raw.startswith(prefix) or b"\n" in raw[len(prefix):] or b"\r" in raw[len(prefix):]:
+            return None
+        try:
+            return raw[len(prefix):].decode("utf-8") or None
+        except UnicodeDecodeError:
+            return None
+    return load
 
 
 @dataclass(frozen=True)
@@ -342,6 +375,7 @@ class DesignApplication:
         ]
         | None = None,
         secret: bytes | None = None,
+        enrolled_provider: SwitchyardProposalProvider | None = None,
     ) -> None:
         self.store = store
         self.presentations = presentations
@@ -357,6 +391,7 @@ class DesignApplication:
             hmac.digest(self.secret, b"csrf:/phosphor/design", "sha256")
         )
         self.preview_codec = PreviewCodec(self.secret)
+        self.enrolled_provider = enrolled_provider
 
     def _projection(self, draft_id: str):
         return self.store.projection(
@@ -516,7 +551,7 @@ class DesignApplication:
                         for item in self.proposal_store.proposals(draft_id)
                     ),
                     proposal_refusals=self.proposal_store.generation_refusals(draft_id),
-                    provider_scenarios=FIXTURE_SCENARIOS,
+                    provider_scenarios=FIXTURE_SCENARIOS + (("enrolled-switchyard",) if self.enrolled_provider is not None else ()),
                     proposal_generation_id="generation_" + secrets.token_hex(16),
                     governed_node_bindings=self.governed_cross_probe.get(
                         draft_id, ()
@@ -573,9 +608,14 @@ class DesignApplication:
                             "proposal revision belongs to another draft"
                         )
                     scenario = form.one("provider_scenario")
-                    if scenario not in FIXTURE_SCENARIOS:
-                        raise ProposalError("unknown provider fixture")
-                    provider = DeterministicFixtureProvider(scenario)
+                    if scenario == "enrolled-switchyard":
+                        if self.enrolled_provider is None:
+                            raise ProposalError("enrolled Switchyard provider is not configured")
+                        provider = self.enrolled_provider
+                    else:
+                        if scenario not in FIXTURE_SCENARIOS:
+                            raise ProposalError("unknown provider fixture")
+                        provider = DeterministicFixtureProvider(scenario)
                     scope_kind = form.one("scope_kind")
                     target_node = form.one("target_node_id", default="").strip()
                     finding_id = form.one("finding_id", default="").strip()
@@ -1075,11 +1115,25 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--inspect-url", default="http://127.0.0.1:8417/phosphor-ng")
     result.add_argument("--bind", default="127.0.0.1")
     result.add_argument("--port", type=int, default=8427)
+    result.add_argument("--switchyard-profile", type=Path)
+    result.add_argument("--switchyard-state", type=Path)
+    result.add_argument("--switchyard-credential-file", type=Path,
+                        default=Path.home() / ".config/constellation/openrouter.env")
     return result
 
 
 def main() -> None:
     args = parser().parse_args()
+    enrolled = None
+    if (args.switchyard_profile is None) != (args.switchyard_state is None):
+        raise SystemExit("--switchyard-profile and --switchyard-state must be supplied together")
+    if args.switchyard_profile is not None:
+        profile_data = json.loads(args.switchyard_profile.read_text(encoding="utf-8"))
+        if not isinstance(profile_data, dict):
+            raise SystemExit("Switchyard profile must be an object")
+        profile = SwitchyardProposalProfileV1(**profile_data)
+        enrolled = SwitchyardProposalProvider.from_switchyard_state(profile, args.switchyard_state,
+                                                                      credential_source=dedicated_credential_loader(args.switchyard_credential_file))
     application = DesignApplication(
         DraftStore(args.store),
         PresentationStore(args.presentation_store),
@@ -1089,6 +1143,7 @@ def main() -> None:
         governed_cross_probe=load_governed_cross_probe(
             args.governed_cross_probe
         ),
+        enrolled_provider=enrolled,
     )
     try:
         serve((args.bind, args.port), application)

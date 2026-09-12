@@ -2,7 +2,7 @@
 
 Maude is the authoring and review desk for bounded plans. Create a draft, check
 its dependencies, inspect changes, and lock an exact revision. Human edits and
-accepted model proposals use the same Plan Core revision boundary. A valid or
+accepted model proposals create a new [Plan Core revision](docs/PLAN-CORE.md). A valid or
 locked plan does not authorize execution.
 
 **Design-flow status: pre-alpha.** Start with [Plan Core](docs/PLAN-CORE.md),
@@ -24,6 +24,18 @@ The commands in this section use classic Governor's session RPC. They are not
 the AG-NG campaign interface and are not the starting point for new successor
 integrations. Their continued packaging dependency is tracked separately from
 Plan Core; do not infer AG-NG compatibility from a shared “governor” label.
+
+Install this transitional interface explicitly:
+
+```bash
+.venv/bin/pip install -e '.[classic-rpc]'
+```
+
+The extra pins `ag-shell-client` to the public classic Agent Governor source
+revision used by this checkout. A base Maude install supports Plan Core and
+authoring without installing the classic RPC transport. Launching `maude`
+without the extra exits with an installation instruction; it does not silently
+fall back to another transport.
 
 Maude launches and supervises a coding harness (Claude Code today) as a governed process. You see every tool call. You approve or deny. When the session ends, you review the diff and promote or reject the changes.
 
@@ -148,7 +160,7 @@ Maude never imports governor code. Two repos, one RPC boundary.
 git clone https://github.com/unpingable/maude
 cd maude
 python3 -m venv .venv
-.venv/bin/pip install -e .
+.venv/bin/pip install -e '.[classic-rpc]'
 
 # Initialize the project Maude will supervise (once)
 governor --root /path/to/project init

@@ -119,6 +119,43 @@ live provider was invoked: the product runtime has no credential-free canonical
 model adapter, and adding provider infrastructure or credentials is outside
 this protocol campaign.
 
+## Enrolled Switchyard proposal caller
+
+`maude.plan.switchyard_provider` is the one optional live-provider caller. It
+constructs a closed `switchyard.direct-api-request/v2` from an immutable
+proposal request and an operator-selected `SwitchyardProposalProfileV1`. The
+profile fixes provider, model, nonsecret account identity, byte/time limits,
+prompt/completion/total-token ceilings, a concurrency limit, and a caller/account
+spend reservation. The input-byte ceiling plus a 512-token chat-wrapper reserve
+cannot exceed the prompt-token ceiling, using a conservative byte upper bound
+rather than a guessed tokenizer. Its v2 owner binding identifies
+`maude.proposal-service`, the selected profile, and the exact proposal request
+digest. Switchyard retains the pre-contact claim, duplicate/uncertain
+inspection, cancellation, credential lookup, and provider completion record.
+
+The adapter refuses an incomplete, cancelled, substituted-model, unmetered, or
+over-budget result before it reaches Proposal Core. A completed provider result
+is still only hostile proposal bytes: Plan Core validates it, renders the
+ordinary diff, and requires explicit human accept/reject. Provider completion
+does not accept a proposal or authorize/execute the proposed work.
+
+Live use still requires an approved installed Switchyard v2 runtime, an exact
+operator-owned profile/account/model and credential route, a private state
+location with an inspection procedure, an approved disclosed input, and the
+separately authorized one-call live qualification. This repository contains no
+credential, account selection, or provider call.
+
+For the separately approved one-call local qualification, the operator must
+provision a new dedicated Constellation OpenRouter key only at
+`/home/jbeck/.config/constellation/openrouter.env`, mode `0600`, user-owned,
+containing only `OPENROUTER_API_KEY=...`. Do not read, create, reuse,
+or modify Erin Marginalia credentials or configuration. The explicit test
+profile must name its selected model, use `maximum_concurrent_requests=1`, no
+retry/fallback, a duration of at most 30 seconds, and a user-visible
+`reserved_spend_micros` no greater than its caller/account budget. Provisioning
+the file does not authorize a call; it remains absent from repository material,
+tests, logs, and proposal records.
+
 ## Human evaluation sequence
 
 1. `draft_node_finding`: judge the exact-finding fix scope and diff.

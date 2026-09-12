@@ -1,0 +1,19 @@
+{
+  "profile_id": "maude.openrouter-authoring.claude-sonnet-4.5.v1",
+  "provider_id": "openrouter",
+  "model_id": "anthropic/claude-sonnet-4.5",
+  "account_id": "openrouter-account:constellation-authoring-local-v1",
+  "timeout_seconds": 60,
+  "maximum_input_bytes": 16384,
+  "maximum_response_bytes": 1048576,
+  "maximum_output_bytes": 65536,
+  "maximum_prompt_tokens": 16896,
+  "maximum_completion_tokens": 2048,
+  "maximum_total_tokens": 18944,
+  "maximum_concurrent_requests": 1,
+  "spend_budget_id": "maude.openrouter-authoring-budget.usd-0.10.v1",
+  "spend_budget_micros": 100000,
+  "reserved_spend_micros": 81408,
+  "prompt_token_price_micros": 3,
+  "completion_token_price_micros": 15
+}

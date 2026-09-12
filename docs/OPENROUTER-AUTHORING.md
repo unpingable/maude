@@ -1,0 +1,70 @@
+# OpenRouter authoring enrollment
+
+This is an opt-in local profile for one bounded Maude Plan Edit proposal call
+through Switchyard. It does not enable a provider by default, accept a proposal,
+or authorize any later action.
+
+## Nonsecret profile
+
+Use [`examples/openrouter-authoring-profile.json`](examples/openrouter-authoring-profile.json).
+It selects `anthropic/claude-sonnet-4.5` with these closed limits:
+
+- admitted input: 16,384 bytes;
+- prompt: 16,896 tokens, including the 512-token wrapper reserve;
+- completion: 2,048 tokens;
+- total: 18,944 tokens;
+- price envelope: 3 microdollars per prompt token and 15 microdollars per
+  completion token;
+- reservation: 81,408 microdollars within a 100,000-microdollar ($0.10)
+  caller budget;
+- concurrency one, timeout 60 seconds, no retry, and no model fallback.
+
+The arithmetic is exact:
+`16,896 * 3 + 2,048 * 15 = 81,408` microdollars. Pricing values are an
+operator-verified point-in-time input; recheck them before any later call rather
+than treating this example as a current price feed.
+
+## Credential route
+
+The only selected credential path is:
+
+```text
+/home/jbeck/.config/constellation/openrouter.env
+```
+
+The user provisions it outside the repository as a user-owned regular file,
+mode `0600`, containing exactly one assignment (one final newline is accepted):
+
+```text
+OPENROUTER_API_KEY=USER_PROVIDED_VALUE
+```
+
+Do not commit, print, inspect, copy, log, or generate the value. Missing files,
+symbolic links, FIFOs, wrong ownership/mode, oversized content, invalid UTF-8,
+additional lines, or embedded carriage returns are refused. Credential loading is lazy:
+starting the design server does not read the file; Switchyard requests the
+named value only for an explicitly selected enrolled-provider call.
+
+## Opt-in local launch
+
+After separately installing the reviewed Switchyard direct API v2 runtime and
+after the user provisions the credential, choose private state paths and launch:
+
+```sh
+phosphor-design \
+  --switchyard-profile /absolute/path/to/maude/docs/examples/openrouter-authoring-profile.json \
+  --switchyard-state /absolute/private/path/switchyard.sqlite \
+  --switchyard-credential-file /home/jbeck/.config/constellation/openrouter.env
+```
+
+Both `--switchyard-profile` and `--switchyard-state` are required together.
+Without them, only deterministic fixture scenarios are available. In the
+authoring page, the operator must explicitly select `enrolled-switchyard` and
+submit a bounded proposal request. Provider completion creates at most proposed
+bytes for validation and ordinary diff review. Only a later explicit human
+accept action can create a Plan Core successor; it still does not check, lock,
+compile, hand off, authorize, or execute the plan.
+
+Provisioning and launching do not authorize a provider call. Before any live
+qualification, record the exact source/profile/state coordinates and separately
+authorize the one call. Do not put credential material in that record.

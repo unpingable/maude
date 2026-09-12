@@ -121,7 +121,10 @@ launch Docker or the connected governed runtime.
 invokes the exact ignored Nightshift test. The runner now reads preflight code
 from its own kit directory and generator/runtime code from the separately pinned
 Maude checkout. Do not use the latest runtime source with an older revision in
-the lock. A plan-only invocation is not a successful runtime run.
+the lock. Preflight compares each checkout's `git rev-parse HEAD` with the
+corresponding revision in the input lock and refuses mismatches or dirty source
+trees. Run the command without `--run` first and resolve every blocking result.
+A plan-only invocation is not a successful runtime run.
 
 The runner requires the same checkout and executable paths as preflight, plus
 `--run-root`, `--maude-python`, and `--input-lock`. It does not take the preflight
@@ -129,7 +132,12 @@ artifact/workspace/revision arguments; it derives those from the run root and
 lock. The Python executable must have the frozen Maude runtime's dependencies.
 Run `python3 "$KIT/scripts/run-constellation-tutorial.py" --help` for the full
 argument list. Retain the printed run coordinates and local Docker endpoint in
-your execution checkpoint before a durable `--run` launch.
+your execution checkpoint before a durable `--run` launch. This is a local text
+file for the next operator: record the run ID, host, exact command, checkout
+revisions, run root, Docker endpoint, supervising service name, log paths and
+expected exit/terminal records. After interruption, inspect those original
+records and the existing service before starting anything again. Do not store
+provider credentials in the checkpoint.
 
 It selects only this test, rather than every ignored test:
 
@@ -204,6 +212,8 @@ The connected tutorial remains blocked until all of these are true:
 Preflight checks are point-in-time checks. Keep the source trees, executable
 paths and runtime coordinates under exclusive campaign control through the run;
 the script does not establish protection against concurrent pathname replacement.
+For example, do not let another process replace a checked executable or modify
+the source checkout or input lock while the run is in progress.
 
 Until then, the accurate result is: generators and source boundaries checked;
 full connected runtime not run; container image not pulled.

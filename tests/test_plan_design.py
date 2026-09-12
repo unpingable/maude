@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import http.client
 import json
+import os
 import re
 import sqlite3
 import threading
@@ -24,6 +25,7 @@ from maude.design.presentation import (
 from maude.design.server import (
     DesignApplication,
     DesignServer,
+    dedicated_credential_loader,
     load_governed_cross_probe,
     serve,
 )
@@ -47,7 +49,10 @@ from maude.plan.operations import (
     apply_plan_operation,
 )
 from maude.plan.proposal_store import ProposalStore
+from maude.plan.proposals import PlanEditProposalRequestV1
 from maude.plan.store import CheckApplicability, DraftStore, EditOrigin
+from maude.plan.switchyard_provider import SwitchyardProposalProfileV1, SwitchyardProposalProvider
+from maude.design.providers import DeterministicFixtureProvider
 
 
 def digest(character: str) -> str:
@@ -868,6 +873,68 @@ def test_loopback_http_host_origin_methods_and_read_api(tmp_path):
         server.shutdown()
         server.server_close()
         thread.join(timeout=3)
+
+
+def test_http_opt_in_enrolled_provider_requires_explicit_acceptance_and_never_retries(tmp_path):
+    direct_api = pytest.importorskip("switchyard.direct_api")
+    calls = []
+    def local_transport(**kwargs):
+        body = json.loads(kwargs["body"])
+        calls.append(body)
+        admitted = json.loads(body["messages"][0]["content"])
+        proposal_request = PlanEditProposalRequestV1.from_data(admitted["proposal_request"])
+        output = DeterministicFixtureProvider().generate(proposal_request).decode()
+        return 200, json.dumps({"model": body["model"], "provider": "local-fixture",
+            "usage": {"prompt_tokens": 10, "completion_tokens": 10, "total_tokens": 20, "cost": 0},
+            "choices": [{"message": {"content": output}, "finish_reason": "stop"}]}).encode()
+    direct = direct_api.DirectApiCaller(tmp_path / "switchyard.sqlite",
+        credential_source=lambda _: "local-test-only", transport=local_transport)
+    profile = SwitchyardProposalProfileV1("profile", "openrouter", "openai/gpt-5.6-terra", "account", 30,
+        3000, 65536, 16384, 4000, 1000, 5000, 1, "budget", 50000, 5000, 1, 1)
+    store = DraftStore(tmp_path / "plans.sqlite")
+    revision = store.create(plan(), draft_id="draft_test")
+    provider = SwitchyardProposalProvider(profile, direct)
+    application = DesignApplication(store, PresentationStore(tmp_path / "presentations.sqlite"),
+                                    secret=b"s" * 32, enrolled_provider=provider)
+    server = DesignServer(("127.0.0.1", 0), application)
+    thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
+    host, port = server.server_address
+    try:
+        connection = http.client.HTTPConnection(host, port, timeout=3)
+        fields = {"csrf": application.csrf_token, "expected_revision_id": revision.revision_id,
+                  "proposal_generation_id": "http-enrolled", "scope_kind": "node", "target_node_id": "pn_b",
+                  "finding_id": "", "task": "clarify", "provider_scenario": "enrolled-switchyard"}
+        connection.request("POST", "/phosphor/design/drafts/draft_test/proposals/generate", urlencode(fields),
+                           {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"http://{host}:{port}"})
+        response = connection.getresponse(); assert response.status == 303
+        location = response.getheader("Location"); response.read()
+        assert location and len(calls) == 1 and store.current("draft_test").revision_id == revision.revision_id
+        connection.request("POST", "/phosphor/design/drafts/draft_test/proposals/generate", urlencode(fields),
+                           {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"http://{host}:{port}"})
+        response = connection.getresponse(); assert response.status == 303; response.read()
+        assert len(calls) == 1
+        connection.request("GET", location); response = connection.getresponse(); assert b"Accept changes into draft" in response.read()
+        connection.request("POST", location + "/accept", urlencode({"csrf": application.csrf_token}),
+                           {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"http://{host}:{port}"})
+        response = connection.getresponse(); assert response.status == 303; response.read()
+        assert store.current("draft_test").ordinal == 2
+    finally:
+        server.shutdown(); server.server_close(); thread.join(timeout=3)
+
+
+@pytest.mark.parametrize("raw,mode,expected", [
+    (b"OPENROUTER_API_KEY=fixture\n", 0o600, "fixture"),
+    (b"OPENROUTER_API_KEY=fixture\r\n", 0o600, "fixture"),
+    (b"OPENROUTER_API_KEY=fixture\nextra", 0o600, None),
+    (b"OPENROUTER_API_KEY=fixture", 0o644, None),
+])
+def test_dedicated_credential_loader_is_bounded_and_exact(tmp_path, raw, mode, expected):
+    path = tmp_path / "credential.env"
+    path.write_bytes(raw); os.chmod(path, mode)
+    loader = dedicated_credential_loader(path)
+    assert loader("OPENROUTER_API_KEY") == expected
+    assert loader("OTHER") is None
+    assert dedicated_credential_loader(tmp_path / "missing")("OPENROUTER_API_KEY") is None
 
 
 def json_loads(value: bytes):
