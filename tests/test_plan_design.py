@@ -12,6 +12,7 @@ from urllib.parse import quote, urlencode
 import pytest
 
 from maude.design.demo import generate_demo
+from maude.design.render import check_label
 from maude.design.presentation import (
     PLAN_PRESENTATION_V1_SCHEMA,
     PlanPresentationV2,
@@ -46,7 +47,7 @@ from maude.plan.operations import (
     apply_plan_operation,
 )
 from maude.plan.proposal_store import ProposalStore
-from maude.plan.store import DraftStore, EditOrigin
+from maude.plan.store import CheckApplicability, DraftStore, EditOrigin
 
 
 def digest(character: str) -> str:
@@ -345,6 +346,39 @@ def test_cycle_is_draftable_but_exact_checker_finds_it(tmp_path):
     assert {finding.rule_id for finding in receipt.findings} == {
         "plan.dependencies.acyclic"
     }
+
+
+def test_check_labels_cover_contract_states_without_changing_them():
+    labels = [check_label(state.value) for state in CheckApplicability]
+    assert len(set(labels)) == len(CheckApplicability)
+    assert all("Unrecognized" not in label for label in labels)
+    assert check_label("future_state") == "Unrecognized check state: future_state"
+
+
+def test_plan_wording_distinguishes_unchecked_current_and_changed(tmp_path):
+    application, store, revision = app(tmp_path)
+    index = application.get("/phosphor/design")
+    assert b"<h1>Plans</h1>" in index.body
+    assert b"Create draft" in index.body
+    assert b"Not checked yet" in index.body
+    assert b"not permission to run" in index.body
+    assert store.projection(revision.draft_id).check_summary.value == "never_checked"
+
+    store.check(revision.draft_id)
+    index = application.get("/phosphor/design")
+    assert b"Current plan checks passed" in index.body
+    assert store.projection(revision.draft_id).check_summary.value == "current_pass"
+
+    store.save_successor(
+        revision.draft_id,
+        revision.revision_id,
+        replace(revision.document, goal="Review a revised plan"),
+        edit_origin=EditOrigin.HUMAN,
+    )
+    index = application.get("/phosphor/design")
+    assert "Plan changed — check again".encode() in index.body
+    assert b"Current plan checks passed" not in index.body
+    assert store.projection(revision.draft_id).check_summary.value == "historical_digest"
 
 
 def test_presentation_changes_do_not_change_semantic_digest_or_receipts(tmp_path):
@@ -931,7 +965,7 @@ def test_contextual_agent_proposal_review_accept_and_exact_api(tmp_path):
     assert accepted.status == 303
     assert store.current("draft_test").edit_origin == EditOrigin.AGENT
     terminal = application.get(generated.location)
-    assert b"Terminal proposal disposition: accepted" in terminal.body
+    assert b"Proposal accepted. This decision is final" in terminal.body
     assert b"Accept changes into draft" not in terminal.body
 
 
@@ -1046,7 +1080,7 @@ def test_hostile_provider_refusal_is_visible_without_semantic_write(tmp_path):
     )
     assert switched.status == 303
     workspace = application.get("/phosphor/design/drafts/draft_test")
-    assert b"Provider refusals" in workspace.body
+    assert b"Responses that could not be used" in workspace.body
     assert b"provider output is not exact UTF-8 JSON" in workspace.body
 
 
@@ -1073,7 +1107,7 @@ def test_agent_rejection_preserves_plan_and_exact_proposal(tmp_path):
     assert rejected.status == 303
     assert store.current(revision.draft_id).revision_id == revision.revision_id
     review = application.get(generated.location)
-    assert b"Terminal proposal disposition: rejected" in review.body
+    assert b"Proposal rejected. This decision is final" in review.body
 
 
 def test_browser_double_generation_submit_converges_on_exact_proposal(tmp_path):
@@ -1147,8 +1181,8 @@ def test_governed_cross_probe_is_exact_read_only_node_navigation(tmp_path):
 
     page = application.get(f"/phosphor/design/drafts/{revision.draft_id}?node=pn_a")
     assert page.status == 200
-    assert b"Governed history \xc2\xb7 owner-produced exact joins" in page.body
-    assert b"Inspect exact governed occurrence in Phosphor-ng" in page.body
+    assert b"Linked run history" in page.body
+    assert b"Inspect this run in Phosphor" in page.body
     assert b"current PlanDocument binding" in page.body
     assert binding.plan_digest.encode() in page.body
     assert binding.inspector_path.encode() in page.body
