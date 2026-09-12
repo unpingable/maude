@@ -84,6 +84,14 @@ bytes for validation and ordinary diff review. Only a later explicit human
 accept action can create a Plan Core successor; it still does not check, lock,
 compile, hand off, authorize, or execute the plan.
 
+While an enrolled generation is in flight, open **Active proposal generation**
+from the draft in a second same-origin browser request to inspect its exact
+generation and request identities or request local cancellation. Cancellation
+is recorded before Maude signals its caller. It prevents a late result from
+becoming an acceptable proposal, but does not claim that an already-contacted
+provider stopped work. A completed generation and a previously human-accepted
+revision cannot be cancelled.
+
 The enrolled caller binds a strict public JSON Schema response format into the
 v3 request digest. Switchyard validates and forwards that format exactly with
 required-parameter routing, no model fallback, and no retry. Maude still parses

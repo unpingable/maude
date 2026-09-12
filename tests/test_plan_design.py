@@ -979,6 +979,147 @@ def test_http_opt_in_enrolled_provider_requires_explicit_acceptance_and_never_re
         server.shutdown(); server.server_close(); thread.join(timeout=3)
 
 
+def test_http_enrolled_generation_can_be_cancelled_by_exact_same_origin_request(tmp_path):
+    class BlockingApi:
+        def __init__(self):
+            self.entered = threading.Event()
+            self.cancelled = threading.Event()
+
+        def run(self, request, admitted_input, owner_binding, *, cancellation_requested):
+            self.entered.set()
+            assert request["request_id"] == owner_binding["proposal_request_id"]
+            for _ in range(200):
+                if cancellation_requested():
+                    self.cancelled.set()
+                    proposal_request = PlanEditProposalRequestV1.from_data(
+                        json.loads(admitted_input)["proposal_request"]
+                    )
+                    output = DeterministicFixtureProvider().generate(
+                        proposal_request
+                    ).decode()
+                    # A transport can complete after local cancellation.  This
+                    # late result must still be refused by Maude.
+                    return {
+                        "state": "PROVIDER_COMPLETED",
+                        "acceptance_state": "NOT_EVALUATED_BY_SWITCHYARD",
+                        "dispatch": "CONTACTED",
+                        "reported_execution": {
+                            "provider_id": "openrouter",
+                            "model_id": "openai/gpt-5.6-terra",
+                        },
+                        "usage": {
+                            "prompt_tokens": 10,
+                            "completion_tokens": 10,
+                            "total_tokens": 20,
+                            "cost": 0,
+                        },
+                        "worker_output": output,
+                    }
+                __import__("time").sleep(0.005)
+            raise AssertionError("cancellation was not delivered to the exact call")
+
+    api = BlockingApi()
+    profile = SwitchyardProposalProfileV1(
+        "profile", "openrouter", "openai/gpt-5.6-terra", "account", 30,
+        6000, 65536, 16384, 10000, 1000, 11000, 1, "budget", 50000, 11000, 1, 1,
+    )
+    store = DraftStore(tmp_path / "plans.sqlite")
+    revision = store.create(plan(), draft_id="draft_test")
+    proposal_store = ProposalStore(tmp_path / "proposals.sqlite")
+    application = DesignApplication(
+        store,
+        PresentationStore(tmp_path / "presentations.sqlite"),
+        proposal_store,
+        secret=b"s" * 32,
+        enrolled_provider=SwitchyardProposalProvider(profile, api),
+    )
+    server = DesignServer(("127.0.0.1", 0), application)
+    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+    server_thread.start()
+    host, port = server.server_address
+    origin = f"http://{host}:{port}"
+    fields = {
+        "csrf": application.csrf_token,
+        "expected_revision_id": revision.revision_id,
+        "proposal_generation_id": "http-cancel-generation",
+        "scope_kind": "node",
+        "target_node_id": "pn_b",
+        "finding_id": "",
+        "task": "clarify",
+        "provider_scenario": "enrolled-switchyard",
+    }
+    generation_result = {}
+
+    def generate():
+        connection = http.client.HTTPConnection(host, port, timeout=3)
+        connection.request(
+            "POST",
+            "/phosphor/design/drafts/draft_test/proposals/generate",
+            urlencode(fields),
+            {"Content-Type": "application/x-www-form-urlencoded", "Origin": origin},
+        )
+        response = connection.getresponse()
+        generation_result["status"] = response.status
+        generation_result["body"] = response.read()
+
+    worker = threading.Thread(target=generate)
+    worker.start()
+    assert api.entered.wait(2)
+    active = application.active_generations("draft_test")
+    assert len(active) == 1 and active[0].request_id
+    cancel_path = "/phosphor/design/drafts/draft_test/proposal-generations/http-cancel-generation/cancel"
+    cancel_fields = urlencode(
+        {"csrf": application.csrf_token, "request_id": active[0].request_id}
+    )
+    try:
+        connection = http.client.HTTPConnection(host, port, timeout=3)
+        connection.request(
+            "POST", cancel_path, cancel_fields,
+            {"Content-Type": "application/x-www-form-urlencoded", "Origin": "http://invalid.example"},
+        )
+        response = connection.getresponse(); assert response.status == 403; response.read()
+        assert not api.cancelled.is_set()
+
+        connection.request(
+            "POST", cancel_path,
+            urlencode({"csrf": application.csrf_token, "request_id": digest("9")}),
+            {"Content-Type": "application/x-www-form-urlencoded", "Origin": origin},
+        )
+        response = connection.getresponse(); assert response.status == 400; response.read()
+        assert not api.cancelled.is_set()
+
+        active_page = f"/phosphor/design/drafts/draft_test/proposal-generations/active"
+        connection.request("GET", active_page)
+        response = connection.getresponse(); body = response.read()
+        assert response.status == 200 and active[0].request_id.encode() in body
+        connection.request("GET", "/phosphor/design/drafts/draft_test")
+        response = connection.getresponse(); body = response.read()
+        assert response.status == 200 and b"Active proposal generation (1)" in body
+
+        connection.request(
+            "POST", cancel_path, cancel_fields,
+            {"Content-Type": "application/x-www-form-urlencoded", "Origin": origin},
+        )
+        response = connection.getresponse(); assert response.status == 303; response.read()
+        assert api.cancelled.wait(2)
+        worker.join(timeout=3)
+        assert generation_result["status"] == 400
+        assert proposal_store.cancellation_requested(active[0].request_id)
+        assert proposal_store.proposal_for_request(active[0].request_id) is None
+        assert store.current("draft_test").revision_id == revision.revision_id
+        application_state = json.loads(
+            application.get("/phosphor/design/drafts/draft_test/api/v1").body
+        )
+        assert application_state["proposal_cancellations"][0]["request_id"] == active[0].request_id
+
+        connection.request("POST", cancel_path, cancel_fields,
+                           {"Content-Type": "application/x-www-form-urlencoded", "Origin": origin})
+        response = connection.getresponse(); assert response.status == 400; response.read()
+    finally:
+        server.shutdown(); server.server_close(); server_thread.join(timeout=3)
+        worker.join(timeout=3)
+
+
 @pytest.mark.parametrize("raw,mode,expected", [
     (b"OPENROUTER_API_KEY=fixture\n", 0o600, "fixture"),
     (b"OPENROUTER_API_KEY=fixture\r\n", 0o600, "fixture"),

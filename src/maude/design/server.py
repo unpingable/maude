@@ -12,8 +12,10 @@ import os
 import stat
 import secrets
 import sqlite3
+import threading
 from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from html import escape
 from pathlib import Path
 from typing import Any, Mapping
 from urllib.parse import parse_qs, quote, unquote, urlsplit
@@ -71,6 +73,15 @@ from maude.plan.switchyard_provider import SwitchyardProposalProfileV1, Switchya
 MAX_REQUEST_BYTES = 128 * 1024
 PREVIEW_SCHEMA = "maude.plan-operation-preview-token/v1"
 OWNER_FACTS_SCHEMA = "maude.plan-design-owner-facts/v1"
+
+
+@dataclass
+class ActiveProposalGeneration:
+    draft_id: str
+    base_revision_id: str
+    generation_id: str
+    cancellation: threading.Event
+    request_id: str | None = None
 
 
 def dedicated_credential_loader(secret_path: Path):
@@ -393,6 +404,15 @@ class DesignApplication:
         )
         self.preview_codec = PreviewCodec(self.secret)
         self.enrolled_provider = enrolled_provider
+        self._active_lock = threading.Lock()
+        self._active_generations: dict[str, ActiveProposalGeneration] = {}
+
+    def active_generations(self, draft_id: str) -> tuple[ActiveProposalGeneration, ...]:
+        with self._active_lock:
+            return tuple(
+                item for item in self._active_generations.values()
+                if item.draft_id == draft_id and item.request_id is not None
+            )
 
     def _projection(self, draft_id: str):
         return self.store.projection(
@@ -453,6 +473,23 @@ class DesignApplication:
                     "drafts": [item.to_data() for item in self.store.list_drafts()],
                     "schema": "maude.plan-design-draft-index/v1",
                 },
+            )
+        active_match = _active_generations_path(path)
+        if active_match is not None:
+            items = self.active_generations(active_match)
+            forms = "".join(
+                f'<form method="post" action="/phosphor/design/drafts/{quote(item.draft_id)}/proposal-generations/{quote(item.generation_id)}/cancel">'
+                f'<input type="hidden" name="csrf" value="{escape(self.csrf_token, quote=True)}">'
+                f'<input type="hidden" name="request_id" value="{escape(item.request_id or "", quote=True)}">'
+                f'<p>Generation {escape(item.generation_id)}<br>Request {escape(item.request_id or "")}</p>'
+                '<button type="submit">Request cancellation</button></form>'
+                for item in items
+            )
+            return Response.html(
+                200,
+                ("<!doctype html><html><body><main><h1>Active proposal generations</h1>"
+                 + (forms or "<p>No active enrolled proposal generation.</p>")
+                 + "</main></body></html>"),
             )
         proposal_match = _proposal_path(path)
         if proposal_match is not None:
@@ -516,6 +553,17 @@ class DesignApplication:
                                 draft_id
                             )
                         ],
+                        "proposal_cancellations": list(
+                            self.proposal_store.generation_cancellations(draft_id)
+                        ),
+                        "active_proposal_generations": [
+                            {
+                                "base_revision_id": item.base_revision_id,
+                                "generation_id": item.generation_id,
+                                "request_id": item.request_id,
+                            }
+                            for item in self.active_generations(draft_id)
+                        ],
                         "governed_node_bindings": [
                             item.to_data()
                             for item in self.governed_cross_probe.get(draft_id, ())
@@ -557,6 +605,7 @@ class DesignApplication:
                     governed_node_bindings=self.governed_cross_probe.get(
                         draft_id, ()
                     ),
+                    active_generation_count=len(self.active_generations(draft_id)),
                 ),
             )
         except (PresentationError, sqlite3.Error) as exc:
@@ -587,6 +636,23 @@ class DesignApplication:
                 ),
             )
         try:
+            cancellation_action = _proposal_cancellation_action(path)
+            if cancellation_action is not None:
+                draft_id, generation_id = cancellation_action
+                request_id = form.one("request_id")
+                with self._active_lock:
+                    active = self._active_generations.get(generation_id)
+                    if active is None:
+                        raise ProposalError("proposal generation is not in flight")
+                    if (active.draft_id, active.request_id) != (draft_id, request_id):
+                        raise ProposalError("cancellation identity does not match in-flight request")
+                    self.proposal_store.request_cancellation(
+                        request_id, generation_id, draft_id
+                    )
+                    active.cancellation.set()
+                return Response.redirect(
+                    f"/phosphor/design/drafts/{quote(draft_id)}/proposal-generations/active"
+                )
             if path == "/phosphor/design/drafts/new":
                 document = PlanDocumentV1(
                     goal=form.one("goal"),
@@ -609,10 +675,20 @@ class DesignApplication:
                             "proposal revision belongs to another draft"
                         )
                     scenario = form.one("provider_scenario")
+                    generation_id = form.one("proposal_generation_id")
                     if scenario == "enrolled-switchyard":
                         if self.enrolled_provider is None:
                             raise ProposalError("enrolled Switchyard provider is not configured")
-                        provider = self.enrolled_provider
+                        active = ActiveProposalGeneration(
+                            draft_id, expected, generation_id, threading.Event()
+                        )
+                        with self._active_lock:
+                            if generation_id in self._active_generations:
+                                raise ProposalError("proposal generation is already in flight")
+                            self._active_generations[generation_id] = active
+                        provider = self.enrolled_provider.with_cancellation(
+                            active.cancellation.is_set
+                        )
                     else:
                         if scenario not in FIXTURE_SCENARIOS:
                             raise ProposalError("unknown provider fixture")
@@ -670,16 +746,24 @@ class DesignApplication:
                             )
                     else:
                         raise ProposalError("unknown proposal scope")
-                    request = self.proposal_service.request(
-                        draft_id=draft_id,
-                        base_revision_id=expected,
-                        task=form.one("task"),
-                        scope=scope,
-                        findings=findings,
-                        provider=provider,
-                        generation_id=form.one("proposal_generation_id"),
-                    )
-                    proposal = self.proposal_service.generate(request, provider)
+                    try:
+                        request = self.proposal_service.request(
+                            draft_id=draft_id,
+                            base_revision_id=expected,
+                            task=form.one("task"),
+                            scope=scope,
+                            findings=findings,
+                            provider=provider,
+                            generation_id=generation_id,
+                        )
+                        if scenario == "enrolled-switchyard":
+                            with self._active_lock:
+                                active.request_id = request.request_id
+                        proposal = self.proposal_service.generate(request, provider)
+                    finally:
+                        if scenario == "enrolled-switchyard":
+                            with self._active_lock:
+                                self._active_generations.pop(generation_id, None)
                     return Response.redirect(
                         f"/phosphor/design/drafts/{quote(draft_id)}/proposals/{quote(proposal.proposal_id)}"
                     )
@@ -890,6 +974,28 @@ def _proposal_path(path: str) -> tuple[str, str, bool] | None:
     if not draft_id or not proposal_id or "/" in proposal_id:
         return None
     return unquote(draft_id), unquote(proposal_id), api
+
+
+def _active_generations_path(path: str) -> str | None:
+    prefix = "/phosphor/design/drafts/"
+    suffix = "/proposal-generations/active"
+    if not path.startswith(prefix) or not path.endswith(suffix):
+        return None
+    draft_id = path[len(prefix) : -len(suffix)]
+    return None if not draft_id or "/" in draft_id else unquote(draft_id)
+
+
+def _proposal_cancellation_action(path: str) -> tuple[str, str] | None:
+    prefix = "/phosphor/design/drafts/"
+    marker = "/proposal-generations/"
+    suffix = "/cancel"
+    if not path.startswith(prefix) or marker not in path or not path.endswith(suffix):
+        return None
+    draft_id, tail = path[len(prefix) :].split(marker, 1)
+    generation_id = tail[: -len(suffix)]
+    if not draft_id or not generation_id or "/" in draft_id or "/" in generation_id:
+        return None
+    return unquote(draft_id), unquote(generation_id)
 
 
 def _proposal_action(path: str) -> tuple[str, str | None, str] | None:

@@ -241,6 +241,13 @@ class SwitchyardProposalProvider:
             "schema": "maude.switchyard-proposal-input/v1",
         })
 
+    def with_cancellation(
+        self, cancellation_requested: Callable[[], bool]
+    ) -> "SwitchyardProposalProvider":
+        return SwitchyardProposalProvider(
+            self.profile, self.api, cancellation_requested=cancellation_requested
+        )
+
     def _records(self, proposal_request: PlanEditProposalRequestV1, admitted_input: bytes) -> tuple[dict, dict]:
         # These JSON values use only strings, booleans, and bounded integers, the
         # interoperable canonical subset required by Switchyard's RFC 8785 boundary.

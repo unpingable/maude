@@ -1085,6 +1085,7 @@ def workspace_page(
     provider_scenarios: tuple[str, ...] = (),
     proposal_generation_id: str = "generation-render-only",
     governed_node_bindings: tuple[GovernedNodeBindingV1, ...] = (),
+    active_generation_count: int = 0,
     *,
     selected_override: str | None = None,
     selected_finding: str | None = None,
@@ -1156,7 +1157,12 @@ def workspace_page(
         selected_object_kind="document",
         selected_object_id="",
     )
-    workspace_tools = f"""<div class="toolbar">{document_move}<form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/presentation">{hidden("csrf", csrf)}{_presentation_fields(revision, presentation, include_outline_percent=False)}<label><span class="visually-hidden">Outline pane size</span><select name="outline_percent">{pane_options}</select></label><button type="submit">Set pane split</button></form></div>"""
+    active_link = (
+        f'<a class="button" href="/phosphor/design/drafts/{quote(revision.draft_id)}/proposal-generations/active">Active proposal generation ({active_generation_count})</a>'
+        if active_generation_count
+        else ""
+    )
+    workspace_tools = f"""<div class="toolbar">{document_move}<form method="post" action="/phosphor/design/drafts/{quote(revision.draft_id)}/presentation">{hidden("csrf", csrf)}{_presentation_fields(revision, presentation, include_outline_percent=False)}<label><span class="visually-hidden">Outline pane size</span><select name="outline_percent">{pane_options}</select></label><button type="submit">Set pane split</button></form>{active_link}</div>"""
     proposal_html = _proposal_panel(
         revision,
         projection,

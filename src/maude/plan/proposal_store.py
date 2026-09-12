@@ -226,6 +226,12 @@ class ProposalStore:
                     request_id TEXT NOT NULL UNIQUE REFERENCES proposal_requests(request_id),
                     record BLOB NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS generation_cancellations(
+                    request_id TEXT PRIMARY KEY REFERENCES proposal_requests(request_id),
+                    generation_id TEXT NOT NULL UNIQUE,
+                    draft_id TEXT NOT NULL,
+                    requested_at TEXT NOT NULL
+                );
                 CREATE TABLE IF NOT EXISTS proposal_dispositions(
                     proposal_id TEXT PRIMARY KEY REFERENCES proposals(proposal_id),
                     kind TEXT NOT NULL,
@@ -310,6 +316,48 @@ class ProposalStore:
             raise ProposalStoreError(f"proposal request not found: {request_id}")
         return PlanEditProposalRequestV1.from_data(json.loads(bytes(row[0])))
 
+    def request_cancellation(
+        self, request_id: str, generation_id: str, draft_id: str
+    ) -> dict[str, str]:
+        request = self.request(request_id)
+        if (request.generation_id, request.draft_id) != (generation_id, draft_id):
+            raise ProposalStoreError("cancellation identity does not match proposal request")
+        requested_at = _utc(self._now)
+        with self._connect() as db:
+            if db.execute(
+                "SELECT 1 FROM proposals WHERE request_id=? UNION SELECT 1 FROM generation_refusals WHERE request_id=?",
+                (request_id, request_id),
+            ).fetchone() is not None:
+                raise ProposalStoreError("completed generation cannot be cancelled")
+            db.execute(
+                "INSERT OR IGNORE INTO generation_cancellations VALUES (?,?,?,?)",
+                (request_id, generation_id, draft_id, requested_at),
+            )
+            row = db.execute(
+                "SELECT request_id,generation_id,draft_id,requested_at FROM generation_cancellations WHERE request_id=?",
+                (request_id,),
+            ).fetchone()
+        if row is None or (row["generation_id"], row["draft_id"]) != (
+            generation_id,
+            draft_id,
+        ):
+            raise ProposalStoreError("cancellation persistence did not converge")
+        return dict(row)
+
+    def cancellation_requested(self, request_id: str) -> bool:
+        with self._connect() as db:
+            return db.execute(
+                "SELECT 1 FROM generation_cancellations WHERE request_id=?", (request_id,)
+            ).fetchone() is not None
+
+    def generation_cancellations(self, draft_id: str) -> tuple[dict[str, str], ...]:
+        with self._connect() as db:
+            rows = db.execute(
+                "SELECT request_id,generation_id,draft_id,requested_at FROM generation_cancellations WHERE draft_id=? ORDER BY rowid",
+                (draft_id,),
+            ).fetchall()
+        return tuple(dict(row) for row in rows)
+
     def put_proposal(self, proposal: PlanEditProposalV1) -> PlanEditProposalV1:
         request = self.request(proposal.request_id)
         if (
@@ -329,6 +377,11 @@ class ProposalStore:
         )
         record = canonical_json_bytes(proposal.to_data())
         with self._connect() as db:
+            if db.execute(
+                "SELECT 1 FROM generation_cancellations WHERE request_id=?",
+                (proposal.request_id,),
+            ).fetchone() is not None:
+                raise ProposalStoreError("cancelled generation cannot persist a proposal")
             existing = db.execute(
                 "SELECT record FROM proposals WHERE request_id=?",
                 (proposal.request_id,),

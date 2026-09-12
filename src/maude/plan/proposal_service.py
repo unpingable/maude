@@ -170,7 +170,11 @@ class ProposalService:
             return existing
         output = b""
         try:
+            if self.proposals.cancellation_requested(request.request_id):
+                raise ProposalError("proposal generation was cancelled")
             output = provider.generate(request)
+            if self.proposals.cancellation_requested(request.request_id):
+                raise ProposalError("proposal generation was cancelled")
             if not isinstance(output, bytes):
                 raise ProposalError("provider output must be exact bytes")
             proposal = proposal_from_provider_output(
@@ -225,6 +229,8 @@ class ProposalService:
         self, proposal_id: str, *, accepting_actor: str
     ) -> ProposalAcceptanceReceiptV1:
         proposal = self.proposals.proposal(proposal_id)
+        if self.proposals.cancellation_requested(proposal.request_id):
+            raise ProposalError("cancelled proposal generation cannot be accepted")
         disposition = self.proposals.disposition(proposal_id)
         if isinstance(disposition, ProposalAcceptanceReceiptV1):
             return disposition
