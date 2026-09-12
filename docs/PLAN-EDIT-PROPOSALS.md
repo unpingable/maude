@@ -122,16 +122,22 @@ this protocol campaign.
 ## Enrolled Switchyard proposal caller
 
 `maude.plan.switchyard_provider` is the one optional live-provider caller. It
-constructs a closed `switchyard.direct-api-request/v2` from an immutable
+constructs a closed `switchyard.direct-api-request/v3` from an immutable
 proposal request and an operator-selected `SwitchyardProposalProfileV1`. The
 profile fixes provider, model, nonsecret account identity, byte/time limits,
 prompt/completion/total-token ceilings, a concurrency limit, and a caller/account
 spend reservation. The input-byte ceiling plus a 512-token chat-wrapper reserve
 cannot exceed the prompt-token ceiling, using a conservative byte upper bound
-rather than a guessed tokenizer. Its v2 owner binding identifies
+rather than a guessed tokenizer. Its v3 owner binding identifies
 `maude.proposal-service`, the selected profile, and the exact proposal request
 digest. Switchyard retains the pre-contact claim, duplicate/uncertain
 inspection, cancellation, credential lookup, and provider completion record.
+
+The v3 request also carries Maude's strict public provider-output JSON Schema.
+It is owner-issued and request-digest-bound; Switchyard validates its bounded
+closed wrapper and forwards it exactly. This format constraint grants no plan
+authority. Exact returned bytes still pass through ordinary proposal validation
+and semantic preview before any separate human acceptance.
 
 The adapter refuses an incomplete, cancelled, substituted-model, unmetered, or
 over-budget result before it reaches Proposal Core. A completed provider result
@@ -139,7 +145,7 @@ is still only untrusted proposal bytes: Plan Core validates it, renders the
 ordinary diff, and requires explicit human accept/reject. Provider completion
 does not accept a proposal or authorize/execute the proposed work.
 
-Live use still requires an approved installed Switchyard v2 runtime, an exact
+Live use still requires an approved installed Switchyard v3 runtime, an exact
 operator-owned profile/account/model and credential route, a private state
 location with an inspection procedure, an approved disclosed input, and the
 separately authorized one-call live qualification. This repository contains no

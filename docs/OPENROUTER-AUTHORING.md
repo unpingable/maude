@@ -43,7 +43,7 @@ named value only for an explicitly selected enrolled-provider call.
 
 ## Opt-in local launch
 
-After separately installing the reviewed Switchyard direct API v2 runtime and
+After separately installing the reviewed Switchyard direct API v3 runtime and
 after the user provisions the credential, choose private state paths and launch:
 
 ```sh
@@ -60,6 +60,12 @@ submit a bounded proposal request. Provider completion creates at most proposed
 bytes for validation and ordinary diff review. Only a later explicit human
 accept action can create a Plan Core successor; it still does not check, lock,
 compile, hand off, authorize, or execute the plan.
+
+The enrolled caller binds a strict public JSON Schema response format into the
+v3 request digest. Switchyard validates and forwards that format exactly with
+required-parameter routing, no model fallback, and no retry. Maude still parses
+the returned bytes against its closed proposal and operation contracts; it does
+not remove Markdown fences or repair malformed provider output.
 
 Provisioning and launching do not authorize a provider call. Before any live
 qualification, record the exact source/profile/state coordinates and separately

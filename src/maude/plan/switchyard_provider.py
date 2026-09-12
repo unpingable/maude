@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Bounded Maude proposal caller for Switchyard direct API v2.
+"""Bounded Maude proposal caller for Switchyard direct API v3.
 
 This is an enrollment adapter, not a second transport.  Switchyard owns the
 single claim/contact/inspection lifecycle; Maude owns prompt construction,
@@ -36,6 +36,100 @@ UPDATE_NODE_OPERATION_EXAMPLE = {
         },
     },
 }
+
+
+def provider_output_response_format(request: PlanEditProposalRequestV1) -> dict:
+    """Public generic output envelope; Plan Core remains the semantic validator."""
+    strings = {"type": "array", "items": {"type": "string"}}
+    command = {"type": "object", "additionalProperties": False,
+               "properties": {"program": {"type": "string"}, "argv_prefix": strings},
+               "required": ["program", "argv_prefix"]}
+    work = {"type": ["object", "null"], "properties": {
+        "write_paths": strings, "commands": {"type": "array", "items": command}},
+        "required": ["write_paths", "commands"], "additionalProperties": False}
+    node = {"type": "object", "additionalProperties": False, "properties": {
+        "id": {"type": "string"}, "description": {"type": "string"},
+        "depends_on": strings, "work": work, "acceptance_criteria": strings,
+        "stop_conditions": strings},
+        "required": ["id", "description", "depends_on", "work",
+                     "acceptance_criteria", "stop_conditions"]}
+    requirement = {"type": "object", "additionalProperties": False,
+                   "properties": {"id": {"type": "string"}, "statement": {"type": "string"}},
+                   "required": ["id", "statement"]}
+    constraints = {"type": "object", "additionalProperties": False, "properties": {
+        "declared_write_paths": strings, "forbidden_paths": strings,
+        "budget_tokens": {"type": ["integer", "null"]},
+        "halt_if": {"type": ["string", "null"]},
+        "world_requirements": {"type": "array", "items": requirement}},
+        "required": ["declared_write_paths", "forbidden_paths", "budget_tokens",
+                     "halt_if", "world_requirements"]}
+    execution = {"type": ["object", "null"], "additionalProperties": False,
+                 "properties": {"write_paths": strings,
+                                "commands": {"type": "array", "items": command},
+                                "network": {"type": "string", "enum": ["denied", "requested"]},
+                                "git": {"type": "string", "enum": ["denied", "requested"]},
+                                "horizon": {"type": "string", "enum": ["run", "session"]}},
+                 "required": ["write_paths", "commands", "network", "git", "horizon"]}
+    edits = {
+        "add_node": {"type": "object", "additionalProperties": False,
+                     "properties": {"type": {"const": "add_node"}, "node": node,
+                                    "position": {"type": "integer"}},
+                     "required": ["type", "node", "position"]},
+        "update_node": {"type": "object", "additionalProperties": False,
+                        "properties": {"type": {"const": "update_node"}, "node": node},
+                        "required": ["type", "node"]},
+        "remove_node": {"type": "object", "additionalProperties": False,
+                        "properties": {"type": {"const": "remove_node"},
+                                       "node_id": {"type": "string"}},
+                        "required": ["type", "node_id"]},
+        "reorder_node": {"type": "object", "additionalProperties": False,
+                         "properties": {"type": {"const": "reorder_node"},
+                                        "node_id": {"type": "string"},
+                                        "position": {"type": "integer"}},
+                         "required": ["type", "node_id", "position"]},
+        "update_document": {"type": "object", "additionalProperties": False,
+                            "properties": {"type": {"const": "update_document"},
+                                           "goal": {"type": "string"},
+                                           "workspace": {"type": "string"},
+                                           "constraints": constraints,
+                                           "acceptance_criteria": strings,
+                                           "execution_request": execution},
+                            "required": ["type", "goal", "workspace", "constraints",
+                                         "acceptance_criteria", "execution_request"]},
+    }
+    allowed_edits = [edits[name] for name in request.scope.allowed_operation_types]
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "maude_plan_edit_provider_output_v1",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "schema": {"type": "string", "const": "maude.plan-edit-provider-output/v1"},
+                    "request_id": {"type": "string", "const": request.request_id},
+                    "draft_id": {"type": "string", "const": request.draft_id},
+                    "base_revision_id": {"type": "string", "const": request.base_revision_id},
+                    "base_plan_digest": {"type": "string", "const": request.base_plan_digest},
+                    "operations": {
+                        "type": "array", "minItems": 1, "maxItems": 32,
+                        "items": {
+                            "type": "object", "additionalProperties": False,
+                            "properties": {
+                                "schema": {"type": "string", "const": "maude.plan-operation/v1"},
+                                "operation": {"oneOf": allowed_edits},
+                            },
+                            "required": ["schema", "operation"],
+                        },
+                    },
+                    "rationale": {"type": ["string", "null"]},
+                },
+                "required": ["schema", "request_id", "draft_id", "base_revision_id",
+                             "base_plan_digest", "operations", "rationale"],
+            },
+        },
+    }
 
 
 class SwitchyardDirectApi(Protocol):
@@ -118,7 +212,7 @@ class SwitchyardProposalProvider:
         self.profile = profile
         self.api = api
         self.cancellation_requested = cancellation_requested
-        self.descriptor = ProviderDescriptorV1(profile.provider_id, profile.model_id, "switchyard-direct-api-v2")
+        self.descriptor = ProviderDescriptorV1(profile.provider_id, profile.model_id, "switchyard-direct-api-v3")
 
     @classmethod
     def from_switchyard_state(cls, profile: SwitchyardProposalProfileV1, state: Path,
@@ -128,7 +222,7 @@ class SwitchyardProposalProvider:
         try:
             from switchyard.direct_api import DirectApiCaller
         except ImportError as error:
-            raise ProposalError("installed Switchyard direct API v2 runtime is required") from error
+            raise ProposalError("installed Switchyard direct API v3 runtime is required") from error
         kwargs = {} if credential_source is None else {"credential_source": credential_source}
         return cls(profile, DirectApiCaller(state, **kwargs), cancellation_requested=cancellation_requested)
 
@@ -153,7 +247,7 @@ class SwitchyardProposalProvider:
         dispatch = "maude.dispatch." + proposal_request.request_id.removeprefix("sha256:")
         attempt = "maude.attempt." + proposal_request.generation_id
         request = {
-            "schema": "switchyard.direct-api-request/v2",
+            "schema": "switchyard.direct-api-request/v3",
             "request_id": proposal_request.request_id,
             "work_attempt_id": attempt,
             "dispatch_occurrence_id": dispatch,
@@ -181,10 +275,11 @@ class SwitchyardProposalProvider:
             "semantic_retry": False,
             "allow_provider_model_fallback": False,
             "authority_effect": "LOCAL_AGENT_COMPUTE_SCHEDULING_ONLY",
+            "response_format": provider_output_response_format(proposal_request),
         }
         request["request_digest"] = content_digest(DIRECT_REQUEST_DOMAIN + canonical_json_bytes(request))
         binding = {
-            "schema": "switchyard.direct-api-owner-binding/v2",
+            "schema": "switchyard.direct-api-owner-binding/v3",
             **{key: request[key] for key in (
                 "request_digest", "request_id", "work_attempt_id", "dispatch_occurrence_id",
                 "admitted_input_sha256", "provider_id", "model_id", "account_id",

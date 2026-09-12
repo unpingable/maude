@@ -5,7 +5,10 @@ import json
 import pytest
 
 from maude.design.providers import DeterministicFixtureProvider
-from maude.plan.document import DocumentConstraintsV1, PlanDocumentV1, PlanNodeV1, SubmitterV1
+from maude.plan.document import (
+    DocumentConstraintsV1, PlanDocumentV1, PlanNodeV1, SubmitterV1,
+    canonical_json_bytes,
+)
 from maude.plan.operations import PlanOperationV1, UpdateNodeV1
 from maude.plan.proposal_service import ProposalService
 from maude.plan.proposal_store import ProposalStore
@@ -15,6 +18,7 @@ from maude.plan.switchyard_provider import (
     UPDATE_NODE_OPERATION_EXAMPLE,
     SwitchyardProposalProfileV1,
     SwitchyardProposalProvider,
+    provider_output_response_format,
 )
 
 
@@ -38,7 +42,7 @@ def profile():
     return SwitchyardProposalProfileV1(
         "maude-profile-fixture", "openrouter", "openai/gpt-5.6-terra",
         "openrouter-account-fixture", 30, 3_000, 64 * 1024, 16 * 1024,
-        4_000, 1_000, 5_000, 1, "maude-live-test-budget", 50_000, 5_000, 1, 1,
+        6_000, 1_000, 7_000, 1, "maude-live-test-budget", 50_000, 7_000, 1, 1,
     )
 
 
@@ -95,17 +99,41 @@ def test_enrolled_provider_preserves_identity_limits_and_human_acceptance(tmp_pa
     request = request_for(svc, base, provider)
     proposal = svc.generate(request, provider)
     direct, admitted_input, binding, _ = api.calls[0]
-    assert direct["schema"] == "switchyard.direct-api-request/v2"
+    assert direct["schema"] == "switchyard.direct-api-request/v3"
+    assert binding["schema"] == "switchyard.direct-api-owner-binding/v3"
     assert direct["request_id"] == request.request_id
-    assert direct["maximum_total_tokens"] == 5_000
+    assert direct["maximum_total_tokens"] == 7_000
     assert direct["maximum_concurrent_requests"] == 1
-    assert direct["reserved_spend_micros"] == 5_000
+    assert direct["reserved_spend_micros"] == 7_000
     assert binding["owner_id"] == "maude.proposal-service"
     assert binding["proposal_request_id"] == request.request_id
+    response_format = direct["response_format"]
+    assert response_format == provider_output_response_format(request)
+    schema = response_format["json_schema"]["schema"]
+    assert response_format["json_schema"]["strict"] is True
+    assert schema["properties"]["request_id"]["const"] == request.request_id
+    assert "authority" not in json.dumps(response_format)
+    assert len(admitted_input) + len(canonical_json_bytes(response_format)) + 512 <= direct["maximum_prompt_tokens"]
+    edit_variants = schema["properties"]["operations"]["items"]["properties"]["operation"]["oneOf"]
+    assert [item["properties"]["type"]["const"] for item in edit_variants] == ["update_node"]
     assert b"maude.plan-edit-provider-output/v1" in admitted_input
     assert svc.project(proposal.proposal_id).lifecycle.value == "proposed"
     receipt = svc.accept(proposal.proposal_id, accepting_actor="operator")
     assert receipt.proposal_id == proposal.proposal_id
+
+
+def test_markdown_fenced_json_is_still_refused_without_lenient_repair(tmp_path):
+    class FencedApi(FixtureApi):
+        def run(self, *args, **kwargs):
+            result = super().run(*args, **kwargs)
+            result["worker_output"] = "```json\n" + result["worker_output"] + "\n```"
+            return result
+    provider = SwitchyardProposalProvider(profile(), FencedApi())
+    svc, base = service(tmp_path)
+    request = request_for(svc, base, provider)
+    with pytest.raises(ProposalError, match="not exact UTF-8 JSON"):
+        svc.generate(request, provider)
+    assert svc.proposals.proposal_for_request(request.request_id) is None
 
 
 @pytest.mark.parametrize("state,usage", [("CANCELLED_AFTER_CONTACT_OUTCOME_UNKNOWN", True), ("PROVIDER_COMPLETED", False)])
