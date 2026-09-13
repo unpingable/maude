@@ -270,14 +270,36 @@ class DraftStore:
         path: str | Path,
         *,
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
+        readonly: bool = False,
     ) -> None:
         self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._readonly = readonly
+        if readonly:
+            if not self.path.is_file():
+                raise FileNotFoundError(self.path)
+        else:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
         self._now = now
-        self._initialize()
+        if not readonly:
+            self._initialize()
+
+    @classmethod
+    def open_readonly(
+        cls,
+        path: str | Path,
+        *,
+        now: Callable[[], datetime] = lambda: datetime.now(UTC),
+    ) -> DraftStore:
+        """Open an existing Plan Core store without schema initialization or writes."""
+        return cls(path, now=now, readonly=True)
 
     def _connect(self) -> sqlite3.Connection:
-        connection = sqlite3.connect(self.path, timeout=10)
+        if self._readonly:
+            connection = sqlite3.connect(
+                f"file:{self.path.resolve()}?mode=ro", uri=True, timeout=10
+            )
+        else:
+            connection = sqlite3.connect(self.path, timeout=10)
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
@@ -516,13 +538,22 @@ class DraftStore:
             )
         return receipt
 
-    def check_receipts(self, draft_id: str) -> tuple[CheckReceiptV1, ...]:
+    def check_receipts(
+        self, draft_id: str, revision_id: str | None = None
+    ) -> tuple[CheckReceiptV1, ...]:
         with self._connect() as db:
-            rows = db.execute(
-                "SELECT receipt_id,revision_id,plan_digest,record FROM check_receipts "
-                "WHERE draft_id=? ORDER BY rowid",
-                (draft_id,),
-            ).fetchall()
+            if revision_id is None:
+                rows = db.execute(
+                    "SELECT receipt_id,revision_id,plan_digest,record FROM check_receipts "
+                    "WHERE draft_id=? ORDER BY rowid",
+                    (draft_id,),
+                ).fetchall()
+            else:
+                rows = db.execute(
+                    "SELECT receipt_id,revision_id,plan_digest,record FROM check_receipts "
+                    "WHERE draft_id=? AND revision_id=? ORDER BY rowid",
+                    (draft_id, revision_id),
+                ).fetchall()
         receipts: list[CheckReceiptV1] = []
         for row in rows:
             receipt = CheckReceiptV1.from_data(json.loads(bytes(row["record"])))
