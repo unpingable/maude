@@ -88,6 +88,25 @@ def test_read_only_malformed_store_refuses_without_mutation(tmp_path):
     assert (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns) == before
 
 
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "UPDATE plan_store_meta SET schema = 'unsupported/v9'",
+        "DELETE FROM plan_store_meta",
+        "INSERT INTO plan_store_meta(schema) VALUES ('unsupported/v9')",
+    ),
+)
+def test_read_only_refuses_invalid_metadata_without_mutation(tmp_path, mutation):
+    store = tmp_path / "plans.sqlite"
+    run(("--store", str(store), "list"))
+    with sqlite3.connect(store) as db:
+        db.execute(mutation)
+    before = (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns)
+    with pytest.raises(ValueError, match="unsupported plan store schema"):
+        run(("--store", str(store), "--read-only", "list"))
+    assert (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns) == before
+
+
 def test_read_only_cli_refuses_mutator_without_opening_store(tmp_path):
     store = tmp_path / "plans.sqlite"
     with pytest.raises(SystemExit) as error:

@@ -82,6 +82,17 @@ Saving requires the expected current revision under `BEGIN IMMEDIATE`; a stale
 writer refuses rather than overwriting. Exact duplicate saves converge. A
 locked revision's bytes are retained forever; an edit creates a successor.
 
+### Read-only CLI inspection
+
+`maude-plan --read-only list` and `maude-plan --read-only inspect DRAFT_ID`
+open an existing regular SQLite store with SQLite's `mode=ro`. They do not make
+parent directories, initialize tables, insert metadata, or accept mutating
+commands. The existing store metadata must contain exactly
+`maude.plan-store/v1`; an absent, malformed, or incompatible store refuses
+without a replacement store. This mode observes one command's SQLite snapshot;
+separate commands can observe different current revisions if a concurrent
+writer creates a successor between them.
+
 `edit_origin = human | agent | import` records provenance only. Human `$EDITOR`
 edits and agent/file edits both call `save_revision_bytes` and create the same
 `maude.plan-revision/v1` object. There is no model-only field, artifact, checker,

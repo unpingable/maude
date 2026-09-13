@@ -278,6 +278,7 @@ class DraftStore:
         if read_only:
             if not self.path.is_file():
                 raise FileNotFoundError(f"read-only Plan Core store is absent: {self.path}")
+            self._validate_read_only_schema()
         else:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self._initialize()
@@ -292,6 +293,16 @@ class DraftStore:
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
+
+    def _validate_read_only_schema(self) -> None:
+        """Refuse a store whose existing metadata is not this closed schema."""
+        with self._connect() as db:
+            rows = db.execute(
+                "SELECT schema FROM plan_store_meta ORDER BY schema LIMIT 2"
+            ).fetchall()
+        schemas = [row[0] for row in rows]
+        if schemas != [STORE_SCHEMA]:
+            raise ValueError(f"unsupported plan store schema(s): {schemas}")
 
     def _initialize(self) -> None:
         with self._connect() as db:
