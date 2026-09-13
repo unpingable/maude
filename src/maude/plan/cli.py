@@ -105,6 +105,11 @@ def build_parser() -> argparse.ArgumentParser:
         description="Maude Plan Core: mutable design artifacts, not governed authority",
     )
     parser.add_argument("--store", type=Path, default=default_store_path())
+    parser.add_argument(
+        "--read-only",
+        action="store_true",
+        help="open an existing Plan Core store without initialization; supports list and inspect only",
+    )
     commands = parser.add_subparsers(dest="command", required=True)
 
     new = commands.add_parser("new", help="create a draft")
@@ -169,7 +174,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def run(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    store = DraftStore(args.store)
+    if args.read_only and args.command not in {"list", "inspect"}:
+        build_parser().error("--read-only supports only list or inspect")
+    store = DraftStore(args.store, read_only=args.read_only)
     if args.command == "new":
         document = PlanDocumentV1(
             goal=args.goal,
