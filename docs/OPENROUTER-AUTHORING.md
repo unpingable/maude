@@ -65,20 +65,51 @@ The two `rev-parse` results must be, in order,
 `8c943d77013b1916a157f32f0fccc0ed933be264` and
 `9ce03b158589ca4c73907b48cd9632762b2c15a2`. Maude's core install does not
 require the transitional `classic-rpc` extra. Make both source roots explicit
-when launching so an ambient package cannot be selected:
+when launching so an ambient package cannot be selected. Create one fresh demo
+store first; the server does not create these stores itself:
 
 ```sh
 MAUDE_SRC=/tmp/maude
 SWITCHYARD_SRC=/tmp/switchyard-runtime
+DEMO=/tmp/maude-openrouter-demo
+OPENROUTER_CREDENTIAL_FILE=/absolute/path/to/operator-provisioned-openrouter-key
+test ! -e "$DEMO"
+PYTHONPATH="$MAUDE_SRC/src" \
+  /tmp/maude-openrouter-venv/bin/python -m maude.design.demo "$DEMO"
 PYTHONPATH="$MAUDE_SRC/src:$SWITCHYARD_SRC/src" \
   /tmp/maude-openrouter-venv/bin/phosphor-design \
+  --store "$DEMO/plans.sqlite" \
+  --presentation-store "$DEMO/presentations.sqlite" \
+  --proposal-store "$DEMO/proposals.sqlite" \
+  --owner-facts "$DEMO/owner-facts.json" \
   --switchyard-profile "$MAUDE_SRC/docs/examples/openrouter-authoring-profile.json" \
-  --switchyard-state /absolute/private/path/switchyard.sqlite \
-  --switchyard-credential-file /absolute/private/path/openrouter-key
+  --switchyard-state "$DEMO/switchyard.sqlite" \
+  --switchyard-credential-file "$OPENROUTER_CREDENTIAL_FILE" \
+  --port 8427
 ```
 
 This prepares the route only. Do not run it with a real credential until the
-call has separate authorization.
+call has separate authorization. Credential loading is lazy: a nonexistent
+absolute credential path is sufficient to inspect that the enrolled selector is
+present, but submitting it refuses without a valid operator-provisioned key.
+
+Open `http://127.0.0.1:8427/phosphor/design/drafts/draft_dependency_chain`,
+select node `pn_verify_health`, then open **Agent proposals**. The selector
+includes `enrolled-switchyard` only because the profile and state flags above
+are both present. A suitable bounded task is: "Clarify this step's description:
+verify the service evidence; do not change dependencies or add work." Review
+the displayed exact node scope and select `enrolled-switchyard`. Submit only
+after the operator has authorized this task and the profile's one-call budget;
+starting the server alone is not that authorization. Maude and Switchyard bind
+and track the request through the enrolled path—there is no separate manual
+admission command in this walkthrough. Inspect the resulting request identity,
+before/after values, exact operation, semantic diff, base revision and scope.
+If a call times out or refuses, inspect its recorded state before considering
+another separately authorized request; do not resubmit automatically.
+If a result is proposed, an explicit later
+**Accept changes into draft** creates a Plan Core successor. Open **Checks** and
+use **Check this revision** separately; acceptance and checking do not lock,
+hand off, authorize, or execute anything.
 
 ## Credential-free review walkthrough
 
@@ -107,9 +138,8 @@ fixture store. It is not a human acceptance of any retained provider proposal,
 and it does not check, lock, compile, hand off, authorize, or execute a plan.
 
 Both `--switchyard-profile` and `--switchyard-state` are required together.
-Without them, only deterministic fixture scenarios are available. In the
-authoring page, the operator must explicitly select `enrolled-switchyard` and
-submit a bounded proposal request. Provider completion creates at most proposed
+Without them, only deterministic fixture scenarios are available. Provider
+completion creates at most proposed
 bytes for validation and ordinary diff review. Only a later explicit human
 accept action can create a Plan Core successor; it still does not check, lock,
 compile, hand off, authorize, or execute the plan.
@@ -141,9 +171,9 @@ returned one HTTP 200 result that Maude validated as a proposed, scope-bound
 description-only edit. It remains unaccepted: it made no Plan Core successor,
 check, lock, handoff, authorization, or execution. This is one bounded live
 proposal/diff result, not a qualification of every provider/model/schema, a
-public-only fresh installation, or human interaction. Do not strip response
-fences, retry a retained occurrence, or infer acceptance authority from provider
-completion.
+public-only fresh installation, human interaction, or the synthetic-cache
+workflow. Do not strip response fences, retry a retained occurrence, or infer
+acceptance authority from provider completion.
 
 Provisioning and launching do not authorize a provider call. Before any live
 qualification, record the exact source/profile/state coordinates and separately
