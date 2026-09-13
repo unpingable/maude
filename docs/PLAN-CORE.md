@@ -89,9 +89,12 @@ open an existing regular SQLite store with SQLite's `mode=ro`. They do not make
 parent directories, initialize tables, insert metadata, or accept mutating
 commands. The existing store metadata must contain exactly
 `maude.plan-store/v1`; an absent, malformed, or incompatible store refuses
-without a replacement store. This mode observes one command's SQLite snapshot;
-separate commands can observe different current revisions if a concurrent
-writer creates a successor between them.
+without a replacement store. `mode=ro` preserves database contents through this
+connection; it does not promise the absence of all SQLite sidecar activity.
+`inspect` assembles its projection through separate reads, so a concurrent
+writer can yield a mixed-time aggregate even within one command. A consistent
+aggregate profile requires quiescent writers. Returned identifiers bind the
+records read and do not assert a present state.
 
 `edit_origin = human | agent | import` records provenance only. Human `$EDITOR`
 edits and agent/file edits both call `save_revision_bytes` and create the same

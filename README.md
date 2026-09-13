@@ -111,8 +111,11 @@ settlement, and the selected executor performs the authorized work.
 For an existing local Plan Core database, `maude-plan --read-only list` and
 `maude-plan --read-only inspect DRAFT_ID` provide observation-only CLI access.
 They refuse an absent, malformed, or incompatible store and do not initialize
-or modify it; separate commands can observe different revisions if a concurrent
-writer advances a draft. Mutating commands refuse with `--read-only`.
+or modify its database contents. `inspect` assembles an aggregate through
+separate reads, so concurrent writers can make even one command mixed-time;
+use quiescent writers for a consistent aggregate. `mode=ro` does not promise
+the absence of all SQLite sidecar activity. Mutating commands refuse with
+`--read-only`.
 
 ## Relationship to Phosphor-ng
 
