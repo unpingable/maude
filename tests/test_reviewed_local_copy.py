@@ -242,6 +242,50 @@ def test_supported_compile_and_pinned_readonly_validator_cli(tmp_path):
     )
     assert checked.returncode == 0, checked.stderr
     assert json.loads(checked.stdout)["result"] == "passed"
+    artifact = tmp_path / "reviewed-local-copy-validator.pyz"
+    manifest = tmp_path / "reviewed-local-copy-validator.json"
+    package = subprocess.run(
+        [
+            "/usr/bin/python3.12",
+            str(Path(__file__).parents[1] / "tools" / "build_reviewed_local_copy_validator.py"),
+            "--output",
+            str(artifact),
+            "--manifest",
+            str(manifest),
+            "--source-revision",
+            subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=Path(__file__).parents[1],
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip(),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert package.returncode == 0, package.stderr
+    sealed = subprocess.run(
+        [str(artifact), "validate", "--config", str(config_path), "--binding", str(output_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=tmp_path,
+        env={"PATH": __import__("os").environ["PATH"]},
+    )
+    assert sealed.returncode == 0, sealed.stderr
+    assert json.loads(sealed.stdout)["result"] == "passed"
+    refused = subprocess.run(
+        [str(artifact), "compile"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=tmp_path,
+        env={"PATH": __import__("os").environ["PATH"]},
+    )
+    assert refused.returncode != 0
+    assert "only the validate operation" in refused.stderr
 
 
 def test_closed_validator_zipapp_embeds_its_import_closure(tmp_path):
@@ -256,6 +300,14 @@ def test_closed_validator_zipapp_embeds_its_import_closure(tmp_path):
             str(artifact),
             "--manifest",
             str(manifest),
+            "--source-revision",
+            subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip(),
         ],
         check=False,
         capture_output=True,
@@ -267,7 +319,8 @@ def test_closed_validator_zipapp_embeds_its_import_closure(tmp_path):
     assert "maude/plan/reviewed_local_copy.py" in package["entries"]
     assert "yaml/__init__.py" in package["entries"]
     help_text = subprocess.run(
-        [str(artifact), "--help"], check=False, capture_output=True, text=True
+        [str(artifact), "validate", "--help"], check=False, capture_output=True, text=True,
+        cwd=tmp_path, env={"PATH": __import__("os").environ["PATH"]},
     )
     assert help_text.returncode == 0
     assert "compile" not in help_text.stdout
