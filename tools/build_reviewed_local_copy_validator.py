@@ -1,5 +1,10 @@
 #!/usr/bin/python3.12
-"""Build the closed, validate-only reviewed-local-copy validator artifact."""
+"""Build closed reviewed-local-copy validator or executor artifacts.
+
+The default ``validator`` role remains validate-only for compatibility.  The
+explicit ``executor`` role exposes only the sealed component operations
+``plan-id``, ``execute``, and ``reconcile``.
+"""
 
 from __future__ import annotations
 

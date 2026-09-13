@@ -40,3 +40,31 @@ repeats the copy.
 This adapter has component tests only. It does not establish Docket custody,
 AG authorization, a qualified runtime deployment, or a completed cross-system
 integration.
+
+## Closed component packages
+
+`tools/build_reviewed_local_copy_validator.py` exports a deterministic Python
+zipapp from a clean, pinned source revision. The default role remains the
+validate-only package; callers that need the component executor must select
+`--role executor` explicitly. Both package manifests record the source
+revision, exact archive entries and digests, the fixed `/usr/bin/python3.12`
+interpreter digest, and the deployment-trusted standard-library boundary.
+
+```sh
+REVISION=$(git rev-parse HEAD)
+/usr/bin/python3.12 tools/build_reviewed_local_copy_validator.py \
+  --output /absolute/path/reviewed-local-copy-validator.pyz \
+  --manifest /absolute/path/reviewed-local-copy-validator.json \
+  --source-revision "$REVISION"
+/usr/bin/python3.12 tools/build_reviewed_local_copy_validator.py --role executor \
+  --output /absolute/path/reviewed-local-copy-executor.pyz \
+  --manifest /absolute/path/reviewed-local-copy-executor.json \
+  --source-revision "$REVISION"
+```
+
+The validator zipapp accepts only `validate --config CONFIG --binding BINDING`;
+it cannot compile or execute. The executor zipapp accepts only `plan-id CONFIG`,
+`execute CONFIG` with one dispatch document on standard input, and `reconcile
+CONFIG` with that same dispatch form. Its `execute` and `reconcile` operations
+remain component-level behavior: exporting or testing them does not establish a
+Docket transport qualification, an AG authorization, or a public release.
