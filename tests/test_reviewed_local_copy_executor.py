@@ -6,6 +6,8 @@ from __future__ import annotations
 import base64
 import json
 import os
+import subprocess
+from pathlib import Path
 import threading
 
 import pytest
@@ -204,3 +206,61 @@ def test_state_path_replacement_after_pinning_does_not_redirect_record(tmp_path,
     assert (pinned / attempt / "record.json").is_file()
     assert not (state / attempt).exists()
     assert (scratch / "result.txt").read_bytes() == b"exact public text\n"
+
+
+def test_closed_executor_zipapp_has_exact_closure_and_restricted_cli(tmp_path):
+    root = Path(__file__).parents[1]
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    artifacts = []
+    manifests = []
+    for name in ("first", "second"):
+        artifact = tmp_path / f"executor-{name}.pyz"
+        manifest = tmp_path / f"executor-{name}.json"
+        built = subprocess.run(
+            [
+                "/usr/bin/python3.12", str(root / "tools" / "build_reviewed_local_copy_validator.py"),
+                "--role", "executor", "--output", str(artifact), "--manifest", str(manifest),
+                "--source-revision", revision,
+            ],
+            check=False, capture_output=True, text=True,
+        )
+        assert built.returncode == 0, built.stderr
+        artifacts.append(artifact)
+        manifests.append(manifest)
+    assert artifacts[0].read_bytes() == artifacts[1].read_bytes()
+    assert manifests[0].read_bytes() == manifests[1].read_bytes()
+    default_validator = tmp_path / "validator-default.pyz"
+    explicit_validator = tmp_path / "validator-explicit.pyz"
+    for artifact, role in ((default_validator, []), (explicit_validator, ["--role", "validator"])):
+        manifest = artifact.with_suffix(".json")
+        built = subprocess.run(
+            [
+                "/usr/bin/python3.12", str(root / "tools" / "build_reviewed_local_copy_validator.py"),
+                *role, "--output", str(artifact), "--manifest", str(manifest),
+                "--source-revision", revision,
+            ],
+            check=False, capture_output=True, text=True,
+        )
+        assert built.returncode == 0, built.stderr
+    assert default_validator.read_bytes() == explicit_validator.read_bytes()
+    package = json.loads(manifests[0].read_text())
+    assert package["schema"] == "maude.reviewed-local-copy-executor-package/v1"
+    assert package["closure"] == "maude.reviewed-local-copy-executor/imports-v1"
+    assert "maude/plan/reviewed_local_copy_executor.py" in package["entries"]
+    assert "maude/plan/reviewed_local_copy.py" in package["entries"]
+    _scratch, _state, config, _dispatch = executor_fixture(tmp_path)
+    plan_id = subprocess.run(
+        [str(artifacts[0]), "plan-id", str(config)],
+        check=False, capture_output=True, text=True, cwd=tmp_path,
+        env={"PATH": os.environ["PATH"]},
+    )
+    assert plan_id.returncode == 0, plan_id.stderr
+    assert plan_id.stdout.strip().startswith("sha256:")
+    refused = subprocess.run(
+        [str(artifacts[0]), "validate"], check=False, capture_output=True, text=True,
+        cwd=tmp_path, env={"PATH": os.environ["PATH"]},
+    )
+    assert refused.returncode != 0
+    assert "only the plan-id, execute, and reconcile operations" in refused.stderr

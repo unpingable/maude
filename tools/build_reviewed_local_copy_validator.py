@@ -53,7 +53,9 @@ def source_revision(root: Path) -> str:
     ).stdout.strip()
 
 
-def build(output: Path, expected_revision: str) -> dict[str, object]:
+def build(output: Path, expected_revision: str, role: str = "validator") -> dict[str, object]:
+    if role not in {"validator", "executor"}:
+        raise SystemExit("package role must be validator or executor")
     root = Path(__file__).resolve().parents[1]
     actual_revision = source_revision(root)
     if expected_revision != actual_revision:
@@ -66,6 +68,8 @@ def build(output: Path, expected_revision: str) -> dict[str, object]:
         "checks.py", "compiler.py", "document.py", "envelope.py", "local_compose.py",
         "ration_containment.py", "reviewed_local_copy.py", "store.py",
     ]
+    if role == "executor":
+        closure.append("reviewed_local_copy_executor.py")
     entries.extend((f"maude/plan/{name}", maude_root / "plan" / name) for name in closure)
     entries.extend((f"yaml/{path.name}", path) for path in sorted(PYAML_ROOT.glob("*.py")))
     entries.extend([
@@ -77,14 +81,28 @@ def build(output: Path, expected_revision: str) -> dict[str, object]:
     if missing or not INTERPRETER.is_file():
         raise SystemExit(f"validator import closure is unavailable: {missing or INTERPRETER}")
 
-    main = (
-        b"import sys\n"
-        b"from maude.plan.reviewed_local_copy import main\n"
-        b"if len(sys.argv) < 2 or sys.argv[1] != 'validate':\n"
-        b"    raise SystemExit('only the validate operation is available')\n"
-        b"raise SystemExit(main(sys.argv[1:]))\n"
-    )
-    package_init = b"# Closed validator import package; exports intentionally omitted.\n"
+    if role == "validator":
+        main = (
+            b"import sys\n"
+            b"from maude.plan.reviewed_local_copy import main\n"
+            b"if len(sys.argv) < 2 or sys.argv[1] != 'validate':\n"
+            b"    raise SystemExit('only the validate operation is available')\n"
+            b"raise SystemExit(main(sys.argv[1:]))\n"
+        )
+        package_init = b"# Closed validator import package; exports intentionally omitted.\n"
+        schema = "maude.reviewed-local-copy-validator-package/v1"
+        closure_identity = "maude.reviewed-local-copy-validator/imports-v1"
+    else:
+        main = (
+            b"import sys\n"
+            b"from maude.plan.reviewed_local_copy_executor import main\n"
+            b"if len(sys.argv) < 2 or sys.argv[1] not in {'plan-id', 'execute', 'reconcile'}:\n"
+            b"    raise SystemExit('only the plan-id, execute, and reconcile operations are available')\n"
+            b"raise SystemExit(main(sys.argv[1:]))\n"
+        )
+        package_init = b"# Closed executor import package; exports intentionally omitted.\n"
+        schema = "maude.reviewed-local-copy-executor-package/v1"
+        closure_identity = "maude.reviewed-local-copy-executor/imports-v1"
     manifest: dict[str, str] = {
         "__main__.py": digest(main),
         "maude/plan/__init__.py": digest(package_init),
@@ -108,13 +126,13 @@ def build(output: Path, expected_revision: str) -> dict[str, object]:
         payload.unlink(missing_ok=True)
         temporary_output.unlink(missing_ok=True)
     return {
-        "schema": "maude.reviewed-local-copy-validator-package/v1",
+        "schema": schema,
         "interpreter": str(INTERPRETER),
         "interpreter_sha256": digest(INTERPRETER.read_bytes()),
         "python_isolated_mode": True,
         "stdlib_trust": "the fixed interpreter and its standard library remain deployment-trusted",
         "source_revision": actual_revision,
-        "closure": "maude.reviewed-local-copy-validator/imports-v1",
+        "closure": closure_identity,
         "archive_sha256": digest(output.read_bytes()),
         "entries": manifest,
     }
@@ -125,10 +143,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--source-revision", required=True)
+    parser.add_argument("--role", choices=("validator", "executor"), default="validator")
     args = parser.parse_args()
     if args.output.exists() or args.manifest.exists():
         parser.error("output and manifest must be absent")
-    record = build(args.output, args.source_revision)
+    record = build(args.output, args.source_revision, args.role)
     args.manifest.write_text(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
     return 0
 
