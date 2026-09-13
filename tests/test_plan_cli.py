@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import sqlite3
 import sys
 from pathlib import Path
 
@@ -21,6 +23,95 @@ def test_new_refuses_unsupported_origin_before_creating_store(tmp_path):
     with pytest.raises(SystemExit) as error:
         run(("--store", str(store), "new", "--goal", "Inspect a local example",
              "--workspace", "example-workspace", "--origin", "unsupported_origin"))
+    assert error.value.code == 2
+    assert not store.exists()
+
+
+def test_read_only_nonexistent_store_refuses_without_creating_artifacts(tmp_path):
+    store = tmp_path / "absent" / "plans.sqlite"
+    with pytest.raises(FileNotFoundError, match="read-only Plan Core store is absent"):
+        run(("--store", str(store), "--read-only", "list"))
+    assert not store.parent.exists()
+
+
+def test_read_only_inspect_preserves_store_bytes_and_projection(tmp_path, capsys):
+    store = tmp_path / "plans.sqlite"
+    _, created = invoke(
+        store,
+        capsys,
+        "new",
+        "--goal",
+        "Inspect the existing draft",
+        "--workspace",
+        "/srv/example",
+        "--draft-id",
+        "draft_" + "2" * 32,
+    )
+    before = hashlib.sha256(store.read_bytes()).hexdigest()
+    before_mtime_ns = store.stat().st_mtime_ns
+    before_entries = {path.name for path in store.parent.iterdir()}
+    _, inspected = invoke(store, capsys, "--read-only", "inspect", created["draft_id"])
+    assert inspected["schema"] == "maude.plan-lifecycle-projection/v1"
+    assert inspected["current_revision"]["revision_id"] == created["revision_id"]
+    assert inspected["check_summary"] == "never_checked"
+    assert hashlib.sha256(store.read_bytes()).hexdigest() == before
+    assert store.stat().st_mtime_ns == before_mtime_ns
+    assert {path.name for path in store.parent.iterdir()} == before_entries
+
+
+def test_read_only_list_and_inspect_see_committed_wal_data(tmp_path, capsys):
+    store = tmp_path / "plans.sqlite"
+    _, first = invoke(
+        store, capsys, "new", "--goal", "First draft", "--workspace", "/srv/example",
+        "--draft-id", "draft_" + "3" * 32,
+    )
+    with sqlite3.connect(store) as writer:
+        assert writer.execute("PRAGMA journal_mode=WAL").fetchone()[0].lower() == "wal"
+        _, second = invoke(
+            store, capsys, "new", "--goal", "Second draft", "--workspace", "/srv/example",
+            "--draft-id", "draft_" + "4" * 32,
+        )
+        _, listed = invoke(store, capsys, "--read-only", "list")
+        assert {item["draft_id"] for item in listed["drafts"]} == {
+            first["draft_id"], second["draft_id"]
+        }
+        _, inspected = invoke(store, capsys, "--read-only", "inspect", second["draft_id"])
+        assert inspected["current_revision"]["revision_id"] == second["revision_id"]
+
+
+def test_read_only_malformed_store_refuses_without_mutation(tmp_path):
+    store = tmp_path / "plans.sqlite"
+    store.write_bytes(b"not a SQLite database")
+    before = (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns)
+    with pytest.raises(sqlite3.DatabaseError):
+        run(("--store", str(store), "--read-only", "list"))
+    assert (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns) == before
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "UPDATE plan_store_meta SET schema = 'unsupported/v9'",
+        "DELETE FROM plan_store_meta",
+        "INSERT INTO plan_store_meta(schema) VALUES ('unsupported/v9')",
+    ),
+)
+def test_read_only_refuses_invalid_metadata_without_mutation(tmp_path, mutation):
+    store = tmp_path / "plans.sqlite"
+    run(("--store", str(store), "list"))
+    with sqlite3.connect(store) as db:
+        db.execute(mutation)
+    before = (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns)
+    with pytest.raises(ValueError, match="unsupported plan store schema"):
+        run(("--store", str(store), "--read-only", "list"))
+    assert (hashlib.sha256(store.read_bytes()).hexdigest(), store.stat().st_mtime_ns) == before
+
+
+def test_read_only_cli_refuses_mutator_without_opening_store(tmp_path):
+    store = tmp_path / "plans.sqlite"
+    with pytest.raises(SystemExit) as error:
+        run(("--store", str(store), "--read-only", "new", "--goal", "no write",
+             "--workspace", "/srv/example"))
     assert error.value.code == 2
     assert not store.exists()
 

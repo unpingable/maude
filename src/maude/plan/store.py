@@ -270,17 +270,22 @@ class DraftStore:
         path: str | Path,
         *,
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
-        readonly: bool = False,
+        read_only: bool = False,
+        readonly: bool | None = None,
     ) -> None:
         self.path = Path(path)
-        self._readonly = readonly
-        if readonly:
+        self._now = now
+        if readonly is not None:
+            if read_only and readonly != read_only:
+                raise ValueError("conflicting Plan Core read-only options")
+            read_only = readonly
+        self._readonly = read_only
+        if self._readonly:
             if not self.path.is_file():
-                raise FileNotFoundError(self.path)
+                raise FileNotFoundError(f"read-only Plan Core store is absent: {self.path}")
+            self._validate_read_only_schema()
         else:
             self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._now = now
-        if not readonly:
             self._initialize()
 
     @classmethod
@@ -291,18 +296,28 @@ class DraftStore:
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> DraftStore:
         """Open an existing Plan Core store without schema initialization or writes."""
-        return cls(path, now=now, readonly=True)
+        return cls(path, now=now, read_only=True)
 
     def _connect(self) -> sqlite3.Connection:
         if self._readonly:
             connection = sqlite3.connect(
-                f"file:{self.path.resolve()}?mode=ro", uri=True, timeout=10
+                f"{self.path.resolve().as_uri()}?mode=ro", uri=True, timeout=10
             )
         else:
             connection = sqlite3.connect(self.path, timeout=10)
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
+
+    def _validate_read_only_schema(self) -> None:
+        """Refuse a store whose existing metadata is not this closed schema."""
+        with self._connect() as db:
+            rows = db.execute(
+                "SELECT schema FROM plan_store_meta ORDER BY schema LIMIT 2"
+            ).fetchall()
+        schemas = [row[0] for row in rows]
+        if schemas != [STORE_SCHEMA]:
+            raise ValueError(f"unsupported plan store schema(s): {schemas}")
 
     def _initialize(self) -> None:
         with self._connect() as db:
