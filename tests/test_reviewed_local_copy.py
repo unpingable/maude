@@ -318,9 +318,17 @@ def test_closed_validator_zipapp_embeds_its_import_closure(tmp_path):
     assert package["interpreter"] == "/usr/bin/python3.12"
     assert "maude/plan/reviewed_local_copy.py" in package["entries"]
     assert "yaml/__init__.py" in package["entries"]
+    injected = tmp_path / "injected"
+    injected.mkdir()
+    marker = tmp_path / "sitecustomize-ran"
+    (injected / "sitecustomize.py").write_text(
+        f"from pathlib import Path; Path({str(marker)!r}).write_text('ran')\n"
+    )
     help_text = subprocess.run(
         [str(artifact), "validate", "--help"], check=False, capture_output=True, text=True,
-        cwd=tmp_path, env={"PATH": __import__("os").environ["PATH"]},
+        cwd=tmp_path,
+        env={"PATH": __import__("os").environ["PATH"], "PYTHONPATH": str(injected)},
     )
     assert help_text.returncode == 0
     assert "compile" not in help_text.stdout
+    assert not marker.exists()

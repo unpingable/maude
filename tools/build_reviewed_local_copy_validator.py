@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import stat
 import subprocess
+import tempfile
 import zipfile
 from pathlib import Path
 
@@ -15,7 +17,7 @@ from pathlib import Path
 INTERPRETER = Path("/usr/bin/python3.12")
 PYAML_ROOT = Path("/usr/lib/python3/dist-packages/yaml")
 PYAML_NOTICE = Path("/usr/share/doc/python3-yaml/copyright")
-SHEBANG = b"#!/usr/bin/python3.12\n"
+SHEBANG = b"#!/usr/bin/python3.12 -I\n"
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -56,6 +58,8 @@ def build(output: Path, expected_revision: str) -> dict[str, object]:
     actual_revision = source_revision(root)
     if expected_revision != actual_revision:
         raise SystemExit("source revision does not match the checked-out validator source")
+    if not output.is_absolute() or output.exists():
+        raise SystemExit("validator output must be an absent absolute path")
     maude_root = root / "src" / "maude"
     entries: list[tuple[str, Path]] = [("maude/__init__.py", maude_root / "__init__.py")]
     closure = [
@@ -85,19 +89,30 @@ def build(output: Path, expected_revision: str) -> dict[str, object]:
         "__main__.py": digest(main),
         "maude/plan/__init__.py": digest(package_init),
     }
-    payload = output.with_suffix(output.suffix + ".zip")
-    with zipfile.ZipFile(payload, "w", compression=zipfile.ZIP_STORED) as archive:
-        add_bytes(archive, "__main__.py", main, manifest)
-        add_bytes(archive, "maude/plan/__init__.py", package_init, manifest)
-        for name, source in entries:
-            add_file(archive, name, source, manifest)
-    output.write_bytes(SHEBANG + payload.read_bytes())
-    payload.unlink()
-    output.chmod(0o755)
+    payload_fd, payload_name = tempfile.mkstemp(prefix=".reviewed-local-copy-validator-", dir=output.parent)
+    os.close(payload_fd)
+    payload = Path(payload_name)
+    output_fd, output_name = tempfile.mkstemp(prefix=".reviewed-local-copy-validator-", dir=output.parent)
+    os.close(output_fd)
+    temporary_output = Path(output_name)
+    try:
+        with zipfile.ZipFile(payload, "w", compression=zipfile.ZIP_STORED) as archive:
+            add_bytes(archive, "__main__.py", main, manifest)
+            add_bytes(archive, "maude/plan/__init__.py", package_init, manifest)
+            for name, source in entries:
+                add_file(archive, name, source, manifest)
+        temporary_output.write_bytes(SHEBANG + payload.read_bytes())
+        temporary_output.chmod(0o755)
+        os.link(temporary_output, output)
+    finally:
+        payload.unlink(missing_ok=True)
+        temporary_output.unlink(missing_ok=True)
     return {
         "schema": "maude.reviewed-local-copy-validator-package/v1",
         "interpreter": str(INTERPRETER),
         "interpreter_sha256": digest(INTERPRETER.read_bytes()),
+        "python_isolated_mode": True,
+        "stdlib_trust": "the fixed interpreter and its standard library remain deployment-trusted",
         "source_revision": actual_revision,
         "closure": "maude.reviewed-local-copy-validator/imports-v1",
         "archive_sha256": digest(output.read_bytes()),
