@@ -43,28 +43,32 @@ named value only for an explicitly selected enrolled-provider call.
 
 ## Opt-in local launch
 
-Install the public source-only Switchyard runtime at the exact reviewed
-revision. It is a Python package rooted at `src/` and exposes
-`switchyard-direct-api`; do not substitute an unrelated distribution with the
-same import name:
+Use a clean public checkout at the exact reviewed Maude revision, then install
+the public source-only Switchyard runtime at its reviewed revision. Both are
+Python packages rooted at `src/`; do not substitute an unrelated distribution
+with either import name:
 
 ```sh
+git clone https://github.com/unpingable/maude.git /tmp/maude
+git -C /tmp/maude checkout --detach 8c943d77013b1916a157f32f0fccc0ed933be264
 git clone https://github.com/unpingable/switchyard-runtime.git /tmp/switchyard-runtime
 git -C /tmp/switchyard-runtime checkout --detach e612e195bdafc193d022f99ce683cb73dfbd7287
 python3 -m venv /tmp/maude-openrouter-venv
-/tmp/maude-openrouter-venv/bin/python -m pip install -e /absolute/path/to/maude
+/tmp/maude-openrouter-venv/bin/python -m pip install -e /tmp/maude
 /tmp/maude-openrouter-venv/bin/python -m pip install /tmp/switchyard-runtime
+git -C /tmp/maude rev-parse HEAD
 git -C /tmp/switchyard-runtime rev-parse HEAD
 /tmp/maude-openrouter-venv/bin/switchyard-direct-api --help
 ```
 
-The `rev-parse` result must be
+The two `rev-parse` results must be, in order,
+`8c943d77013b1916a157f32f0fccc0ed933be264` and
 `e612e195bdafc193d022f99ce683cb73dfbd7287`. Maude's core install does not
 require the transitional `classic-rpc` extra. Make both source roots explicit
-when launching so an ambient Switchyard package cannot be selected:
+when launching so an ambient package cannot be selected:
 
 ```sh
-MAUDE_SRC=/absolute/path/to/maude
+MAUDE_SRC=/tmp/maude
 SWITCHYARD_SRC=/tmp/switchyard-runtime
 PYTHONPATH="$MAUDE_SRC/src:$SWITCHYARD_SRC/src" \
   /tmp/maude-openrouter-venv/bin/phosphor-design \
@@ -75,6 +79,32 @@ PYTHONPATH="$MAUDE_SRC/src:$SWITCHYARD_SRC/src" \
 
 This prepares the route only. Do not run it with a real credential until the
 call has separate authorization.
+
+## Credential-free review walkthrough
+
+The following creates an absent local fixture directory with deterministic Plan
+Core drafts. It contacts no provider and does not use the enrolled route:
+
+```sh
+DEMO=/tmp/maude-plan-core-demo
+test ! -e "$DEMO"
+PYTHONPATH=/tmp/maude/src \
+  /tmp/maude-openrouter-venv/bin/python -m maude.design.demo "$DEMO"
+PYTHONPATH=/tmp/maude/src \
+  /tmp/maude-openrouter-venv/bin/phosphor-design \
+  --store "$DEMO/plans.sqlite" \
+  --presentation-store "$DEMO/presentations.sqlite" \
+  --proposal-store "$DEMO/proposals.sqlite" \
+  --owner-facts "$DEMO/owner-facts.json" \
+  --port 8427
+```
+
+Open `http://127.0.0.1:8427/phosphor/design/drafts/draft_dependency_chain`.
+Choose **Propose edit**, select a deterministic fixture scenario, and review the
+before/after values and exact semantic diff. **Accept changes into draft** is a
+separate deliberate local CAS action: it creates one successor in that local
+fixture store. It is not a human acceptance of any retained provider proposal,
+and it does not check, lock, compile, hand off, authorize, or execute a plan.
 
 Both `--switchyard-profile` and `--switchyard-state` are required together.
 Without them, only deterministic fixture scenarios are available. In the
@@ -105,11 +135,15 @@ the returned bytes against its closed proposal and operation contracts; it does
 not remove Markdown fences or repair malformed provider output.
 
 The first authorized live call completed HTTP 200 but returned Markdown-fenced
-JSON. Maude's strict parser refused it, and no proposal was accepted. The
-subsequent direct-request v3 structured-output repair has deterministic local
-coverage but no successful live provider qualification. Do not describe v3 as
-live-verified, strip response fences, retry that occurrence, or infer acceptance
-authority from provider completion.
+JSON. Maude's strict parser refused it, and no proposal was accepted. After the
+v3 structured-output compatibility repair, a separately authorized 003 call
+returned one HTTP 200 result that Maude validated as a proposed, scope-bound
+description-only edit. It remains unaccepted: it made no Plan Core successor,
+check, lock, handoff, authorization, or execution. This is one bounded live
+proposal/diff result, not a qualification of every provider/model/schema, a
+public-only fresh installation, or human interaction. Do not strip response
+fences, retry a retained occurrence, or infer acceptance authority from provider
+completion.
 
 Provisioning and launching do not authorize a provider call. Before any live
 qualification, record the exact source/profile/state coordinates and separately
