@@ -242,3 +242,32 @@ def test_supported_compile_and_pinned_readonly_validator_cli(tmp_path):
     )
     assert checked.returncode == 0, checked.stderr
     assert json.loads(checked.stdout)["result"] == "passed"
+
+
+def test_closed_validator_zipapp_embeds_its_import_closure(tmp_path):
+    root = Path(__file__).parents[1]
+    artifact = tmp_path / "reviewed-local-copy-validator.pyz"
+    manifest = tmp_path / "reviewed-local-copy-validator.json"
+    built = subprocess.run(
+        [
+            "/usr/bin/python3.12",
+            str(root / "tools" / "build_reviewed_local_copy_validator.py"),
+            "--output",
+            str(artifact),
+            "--manifest",
+            str(manifest),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert built.returncode == 0, built.stderr
+    package = json.loads(manifest.read_text())
+    assert package["interpreter"] == "/usr/bin/python3.12"
+    assert "maude/plan/reviewed_local_copy.py" in package["entries"]
+    assert "yaml/__init__.py" in package["entries"]
+    help_text = subprocess.run(
+        [str(artifact), "--help"], check=False, capture_output=True, text=True
+    )
+    assert help_text.returncode == 0
+    assert "compile" not in help_text.stdout
