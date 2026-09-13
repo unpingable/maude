@@ -5,6 +5,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 from maude.plan.cli import run
 
 
@@ -12,6 +14,15 @@ def invoke(store: Path, capsys, *arguments: str) -> tuple[int, dict]:
     status = run(("--store", str(store), *arguments))
     output = capsys.readouterr().out
     return status, json.loads(output)
+
+
+def test_new_refuses_unsupported_origin_before_creating_store(tmp_path):
+    store = tmp_path / "plans.sqlite"
+    with pytest.raises(SystemExit) as error:
+        run(("--store", str(store), "new", "--goal", "Inspect a local example",
+             "--workspace", "example-workspace", "--origin", "unsupported_origin"))
+    assert error.value.code == 2
+    assert not store.exists()
 
 
 def test_headless_create_inspect_check_lock_and_compiler_refusal(tmp_path, capsys):

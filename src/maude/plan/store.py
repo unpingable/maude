@@ -367,6 +367,9 @@ class DraftStore:
         draft_id: str | None = None,
         edit_origin: EditOrigin = EditOrigin.HUMAN,
     ) -> DraftRevisionV1:
+        # Dataclass construction does not validate the closed wire schema.
+        # Refuse invalid documents before a transaction can retain them.
+        document = PlanDocumentV1.parse(document.canonical_bytes)
         draft_id = draft_id or "draft_" + uuid.uuid4().hex
         created_at = _utc(self._now)
         revision_id = self._revision_id(draft_id, None, document.digest, edit_origin)
@@ -444,6 +447,7 @@ class DraftStore:
         *,
         edit_origin: EditOrigin,
     ) -> DraftRevisionV1:
+        document = PlanDocumentV1.parse(document.canonical_bytes)
         revision_id = self._revision_id(
             draft_id, expected_revision_id, document.digest, edit_origin
         )

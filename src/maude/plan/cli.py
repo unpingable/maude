@@ -15,6 +15,7 @@ from typing import Sequence
 from maude.plan.compiler import CompilerRegistryV1, CompilerUnavailable
 from maude.plan.diff import semantic_diff
 from maude.plan.document import (
+    PLAN_ORIGINS,
     PlanDocumentV1,
     PlanNodeV1,
     SubmitterV1,
@@ -113,7 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
     new.add_argument(
         "--submitter-kind", choices=("human", "synthetic_agent"), default="human"
     )
-    new.add_argument("--origin", default="human_written")
+    new.add_argument("--origin", choices=sorted(PLAN_ORIGINS), default="human_written")
     new.add_argument("--draft-id")
 
     commands.add_parser("list", help="list current draft revisions")

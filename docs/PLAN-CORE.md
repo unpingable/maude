@@ -68,6 +68,13 @@ and CRLF/non-ASCII round trips are pinned by tests.
 
 ## Store and revisions
 
+The store validates the closed document schema before creating a draft or
+saving a successor, including documents constructed directly through the Python
+API. Invalid input creates no revision and cannot advance the current pointer.
+`maude-plan new --origin` accepts only `human_written`, `agent_generated`,
+`agent_revised`, or `imported_from_review`. These are provenance labels, not
+permission or evidence that a human actually reviewed the document.
+
 The local SQLite store defaults to `.maude/plans.sqlite` and may be selected by
 `MAUDE_PLAN_STORE` or `maude-plan --store`. It persists immutable artifact
 bytes in an append-only revision chain and a separate current-revision pointer.

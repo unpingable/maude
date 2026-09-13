@@ -94,6 +94,36 @@ def test_layout_fields_are_closed_out_of_semantic_schema():
         PlanDocumentV1.from_data(raw)
 
 
+@pytest.mark.parametrize("invalid_submitter", [
+    SubmitterV1("human", "unsupported_origin", "example-operator"),
+    SubmitterV1("unsupported_kind", "human_written", "example-operator"),
+])
+def test_create_refuses_invalid_wire_document_before_writing(tmp_path, invalid_submitter):
+    path = tmp_path / "plans.sqlite"
+    store = DraftStore(path, now=now)
+    with pytest.raises(PlanDocumentError):
+        store.create(replace(document(), submitter=invalid_submitter))
+    assert store.list_drafts() == ()
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT count(*) FROM revisions").fetchone()[0] == 0
+
+
+def test_invalid_successor_preserves_current_revision_and_history(tmp_path):
+    path = tmp_path / "plans.sqlite"
+    store = DraftStore(path, now=now)
+    original = store.create(document())
+    invalid = replace(original.document,
+                      submitter=SubmitterV1("human", "unsupported_origin", "example-operator"))
+    with pytest.raises(PlanDocumentError):
+        store.save_successor(original.draft_id, original.revision_id, invalid,
+                             edit_origin=EditOrigin.HUMAN)
+    reopened = DraftStore(path, now=now)
+    assert reopened.current(original.draft_id) == original
+    assert reopened.revisions(original.draft_id) == (original,)
+    with sqlite3.connect(path) as db:
+        assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
+
+
 def test_stable_node_identity_survives_order_and_diff_reports_only_reorder():
     before = document()
     after = replace(before, nodes=tuple(reversed(before.nodes)))
