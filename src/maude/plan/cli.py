@@ -108,9 +108,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--read-only",
         action="store_true",
-        help="open an existing Plan Core store without initialization; supports list and inspect only",
+        help="open an existing Plan Core store without initialization; objective-read never opens a store",
     )
     commands = parser.add_subparsers(dest="command", required=True)
+
+    objective = commands.add_parser(
+        "objective-read", help="read authored goal and criteria from one exact plan file; no store or authority"
+    )
+    objective.add_argument("--plan", type=Path, required=True)
+    objective.add_argument("--expected-plan-digest", required=True)
 
     new = commands.add_parser("new", help="create a draft")
     new.add_argument("--goal", required=True)
@@ -174,6 +180,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 def run(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "objective-read":
+        from maude.plan.objective_read import read_objective
+        result = read_objective(args.plan, args.expected_plan_digest)
+        _emit(result)
+        # Transport success preserves typed missing/conflicting results for
+        # read-only consumers; it is not source availability or completion.
+        return 0
     if args.read_only and args.command not in {"list", "inspect"}:
         build_parser().error("--read-only supports only list or inspect")
     store = DraftStore(args.store, read_only=args.read_only)

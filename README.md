@@ -5,6 +5,10 @@ its dependencies, inspect changes, and lock an exact revision. Human edits and
 accepted model proposals create a new [Plan Core revision](docs/PLAN-CORE.md). A valid or
 locked plan does not authorize execution.
 
+For a read-only external caller, [read an exact authored objective](docs/OBJECTIVE-READ.md)
+without opening a draft store. This exports goal and criteria for operator use;
+it does not assess completion or make private prose public-safe.
+
 **Design-flow status: pre-alpha.** For a credential-free first exercise, start
 with the [bounded authoring walkthrough](docs/BOUNDED-AUTHORING-WALKTHROUGH.md).
 Then consult [Plan Core](docs/PLAN-CORE.md), [the design workbench](docs/PHOSPHOR-DESIGN.md),
