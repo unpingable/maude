@@ -50,6 +50,23 @@ validate-only package; callers that need the component executor must select
 revision, exact archive entries and digests, the fixed `/usr/bin/python3.12`
 interpreter digest, and the deployment-trusted standard-library boundary.
 
+The current builder is Linux/distribution-specific: it requires Git, the fixed
+`/usr/bin/python3.12` interpreter, the distro PyYAML Python sources at
+`/usr/lib/python3/dist-packages/yaml`, and their license notice at
+`/usr/share/doc/python3-yaml/copyright`. Installing PyYAML only in a virtual
+environment does not supply those paths. The component packages were reproduced
+on Ubuntu 24.04 with Python 3.12.3 (`python3.12` package
+`3.12.3-1ubuntu0.17`) and `python3-yaml` `6.0.1-2build2`. Provision the public
+distribution packages `git`, `python3.12`, and `python3-yaml` before building;
+another interpreter or dependency build changes the recorded hashes and is
+not the same qualified artifact. Other distributions are not verified here.
+
+Use a clean public checkout at an explicitly selected full commit ID. Create
+the output parent directory first and keep it outside the checkout; both output
+and manifest filenames must be absent. Record the emitted manifest alongside
+each archive. No private repository, provider credential, or running service
+is required to build these component packages.
+
 ```sh
 REVISION=$(git rev-parse HEAD)
 /usr/bin/python3.12 tools/build_reviewed_local_copy_validator.py \
