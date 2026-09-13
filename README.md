@@ -8,8 +8,11 @@ locked plan does not authorize execution.
 **Design-flow status: pre-alpha.** Start with [Plan Core](docs/PLAN-CORE.md),
 [the design workbench](docs/PHOSPHOR-DESIGN.md), and the
 [connected tutorial baseline and prerequisites](docs/CONSTELLATION-TUTORIAL.md).
-The current browser proposal examples are deterministic fixtures, not live model
-generation. One closed synthetic-cache compiler exists; there is no generic
+The default browser proposal examples use deterministic fixtures. An opt-in
+[OpenRouter route](docs/OPENROUTER-AUTHORING.md) uses Switchyard's bounded provider
+path; one live description-only proposal and its semantic diff have been
+verified. Provider completion does not accept a plan. One closed synthetic-cache
+compiler exists; there is no generic
 compiler from operational prose or generic browser handoff.
 
 Phosphor inspection is a separate read-only process hosted by AG-NG. Nightshift,
@@ -99,8 +102,10 @@ and agent changes enter through the same revision boundary. The retired
 conversational PLAN/BUILD state remains retired.
 
 Draft validity is not governed admissibility, and locking exact bytes does not
-authorize them. See [Plan Core](docs/PLAN-CORE.md). Maude remains the execution
-side of supervised runs; AG/runtime owners retain all post-handoff judgments.
+authorize them. See [Plan Core](docs/PLAN-CORE.md). The separate transitional
+classic-RPC commands supervise a coding harness. They are not the successor
+governed execution path: AG owns authorization, Docket owns attempt custody and
+settlement, and the selected executor performs the authorized work.
 
 ## Relationship to Phosphor-ng
 
@@ -125,9 +130,10 @@ not its trust domain: `ag-operator-ui` remains read-only and imports no Plan
 Core machinery. See [Phosphor-ng Design](docs/PHOSPHOR-DESIGN.md).
 
 The Design process also supports immutable, scope-bounded agent edit proposals.
-Provider output is hostile structured input containing only ordinary Plan Core
-operations; nothing is saved without explicit review and the same revision CAS
-used for human edits. There is no auto-accept, generic compiler, or browser
+Provider output is proposed structured data containing only ordinary Plan Core
+operations. Maude validates and retains proposals for review; only an explicit
+accept action creates a draft successor through the same revision CAS used for
+human edits. There is no auto-accept, generic compiler, or browser
 handoff path. One closed local-Compose compiler exists solely for the
 disposable synthetic cache qualification and remains outside `/design`. See
 [Plan Edit Proposals](docs/PLAN-EDIT-PROPOSALS.md).
