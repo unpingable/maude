@@ -117,6 +117,12 @@ use quiescent writers for a consistent aggregate. `mode=ro` does not promise
 the absence of all SQLite sidecar activity. Mutating commands refuse with
 `--read-only`.
 
+For a supported external-caller walkthrough, use the
+[versioned Maude-only consultation guide](https://unpingable.com/constellation/releases/0.1.0-alpha.1/guide.html)
+and its [Constellation integration map](https://unpingable.com/constellation/integration.html).
+That profile reads one caller-selected Plan Core store; it does not compose with
+AG, grant permission, or dispatch an effect.
+
 ## Relationship to Phosphor-ng
 
 Maude is the bounded-plan and supervised-session desk. Phosphor-ng (the
