@@ -5,9 +5,10 @@ its dependencies, inspect changes, and lock an exact revision. Human edits and
 accepted model proposals create a new [Plan Core revision](docs/PLAN-CORE.md). A valid or
 locked plan does not authorize execution.
 
-**Design-flow status: pre-alpha.** Start with [Plan Core](docs/PLAN-CORE.md),
-[the design workbench](docs/PHOSPHOR-DESIGN.md), and the
-[connected tutorial baseline and prerequisites](docs/CONSTELLATION-TUTORIAL.md).
+**Design-flow status: pre-alpha.** For a credential-free first exercise, start
+with the [bounded authoring walkthrough](docs/BOUNDED-AUTHORING-WALKTHROUGH.md).
+Then consult [Plan Core](docs/PLAN-CORE.md), [the design workbench](docs/PHOSPHOR-DESIGN.md),
+and the [connected tutorial baseline and prerequisites](docs/CONSTELLATION-TUTORIAL.md).
 The default browser proposal examples use deterministic fixtures. An opt-in
 [OpenRouter route](docs/OPENROUTER-AUTHORING.md) uses Switchyard's bounded provider
 path; one live description-only proposal and its semantic diff have been

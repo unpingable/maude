@@ -45,9 +45,10 @@ walkthrough succeeded.
 4. Inspect validation, the exact operation, and semantic diff on the review
    page. Reject it with a short reason. Rejection records a disposition and
    creates no successor revision.
-5. Generate scenario `cycle` for the same node. Its projected plan is refused
-   by Plan Core validation. Then try `out_of_scope`; its response is refused
-   before it can become a usable proposal. These are negative controls.
+5. Generate scenario `cycle` for the same node. Inspect its proposed candidate
+   and reject it; proposal creation does not run a structural check or make the
+   candidate valid. Then try `out_of_scope`; its response is refused before it
+   can become a usable proposal. These are distinct negative controls.
 
 For an explicit acceptance-path test only, create another fresh demo corpus,
 generate `bounded_edit` for `pn_verify_health`, review it, and press **Accept
@@ -55,6 +56,11 @@ changes into draft**. Acceptance performs one ordinary revision compare-and-swap
 and should display a new revision with an agent-proposal receipt. It does not
 run checks automatically: use **Check this revision** for the new contents.
 This optional test does not authorize acceptance in another store.
+
+To observe the cycle finding itself, use a separate disposable corpus: accept
+the reviewed `cycle` candidate deliberately, then use **Check this revision**.
+The checker reports the dependency cycle on that successor. Do not treat this
+optional local sequence as a new automatic proposal-refusal policy.
 
 ## Expected boundary
 

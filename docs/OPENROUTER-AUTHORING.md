@@ -52,7 +52,7 @@ with either import name:
 git clone https://github.com/unpingable/maude.git /tmp/maude
 git -C /tmp/maude checkout --detach 8c943d77013b1916a157f32f0fccc0ed933be264
 git clone https://github.com/unpingable/switchyard-runtime.git /tmp/switchyard-runtime
-git -C /tmp/switchyard-runtime checkout --detach e612e195bdafc193d022f99ce683cb73dfbd7287
+git -C /tmp/switchyard-runtime checkout --detach 9ce03b158589ca4c73907b48cd9632762b2c15a2
 python3 -m venv /tmp/maude-openrouter-venv
 /tmp/maude-openrouter-venv/bin/python -m pip install -e /tmp/maude
 /tmp/maude-openrouter-venv/bin/python -m pip install /tmp/switchyard-runtime
@@ -63,7 +63,7 @@ git -C /tmp/switchyard-runtime rev-parse HEAD
 
 The two `rev-parse` results must be, in order,
 `8c943d77013b1916a157f32f0fccc0ed933be264` and
-`e612e195bdafc193d022f99ce683cb73dfbd7287`. Maude's core install does not
+`9ce03b158589ca4c73907b48cd9632762b2c15a2`. Maude's core install does not
 require the transitional `classic-rpc` extra. Make both source roots explicit
 when launching so an ambient package cannot be selected:
 
