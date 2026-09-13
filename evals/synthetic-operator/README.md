@@ -1,7 +1,9 @@
 # Synthetic operator evaluation corpus
 
-**Status:** Empty evaluation scaffold. No synthetic operator run has been
-performed and no result, finding, or UX verdict is implied.
+**Status:** Retained evaluation corpus. It contains scenario fixtures, captured
+runs, qualification records, and their exact supporting artifacts. Each result
+applies only to the revision, inputs, and qualification boundary recorded with
+that result; the directory as a whole does not imply a current product verdict.
 
 **Authority effect:** None. Files retained here are evaluation inputs and
 observations. They do not authorize a Maude run, settle runtime state, approve a
@@ -12,7 +14,7 @@ The evaluation method and acceptance criteria are defined in
 This directory is the durable repository location for exact prompts, scenario
 fixtures, captured interactions, and machine-readable run metadata.
 
-## Intended layout
+## Retained layout
 
 ```text
 evals/synthetic-operator/
@@ -35,9 +37,10 @@ evals/synthetic-operator/
             └── summary.json
 ```
 
-Directories are created only when their first real artifact is added. This
-README does not claim that the harness, personas, scenarios, runs, or findings
-already exist.
+Some campaigns retain additional manifests, installation media, runtime
+snapshots, and raw evidence beneath this layout. Those files are deliberate
+historical evidence, not inputs to the default product test suite. Use the
+specific campaign or qualification instructions when reproducing them.
 
 ## Exact prompts
 
