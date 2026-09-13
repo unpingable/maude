@@ -76,26 +76,39 @@ def _regular_directory(path: Path, where: str) -> None:
         raise ExecutorRefusal(f"{where} must be a non-symlink directory")
 
 
-def _fsync_directory(path: Path) -> None:
-    descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)
+def _open_directory(path: Path, where: str) -> int:
+    """Open and pin a validated directory against later pathname replacement."""
     try:
+        before = path.lstat()
+        descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    except (FileNotFoundError, NotADirectoryError) as error:
+        raise ExecutorRefusal(f"{where} is absent or not a directory") from error
+    after = os.fstat(descriptor)
+    if stat.S_ISLNK(before.st_mode) or not stat.S_ISDIR(before.st_mode) or (before.st_dev, before.st_ino) != (after.st_dev, after.st_ino):
+        os.close(descriptor)
+        raise ExecutorRefusal(f"{where} changed during validation")
+    return descriptor
+
+
+def _write_all(descriptor: int, raw: bytes) -> None:
+    view = memoryview(raw)
+    while view:
+        written = os.write(descriptor, view)
+        if written <= 0:
+            raise OSError("write made no progress")
+        view = view[written:]
+
+
+def _write_atomic(directory: int, name: str, raw: bytes) -> None:
+    temp = name + ".new"
+    descriptor = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC, 0o600, dir_fd=directory)
+    try:
+        _write_all(descriptor, raw)
         os.fsync(descriptor)
     finally:
         os.close(descriptor)
-
-
-def _write_atomic(path: Path, raw: bytes) -> None:
-    parent = path.parent
-    _regular_directory(parent, "attempt directory")
-    temp = parent / (path.name + ".new")
-    descriptor = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC, 0o600)
-    try:
-        os.write(descriptor, raw)
-        os.fsync(descriptor)
-    finally:
-        os.close(descriptor)
-    os.replace(temp, path)
-    _fsync_directory(parent)
+    os.replace(temp, name, src_dir_fd=directory, dst_dir_fd=directory)
+    os.fsync(directory)
 
 
 def _decode_text(plan: dict[str, Any]) -> bytes:
@@ -160,10 +173,6 @@ def _dispatch(raw: bytes, plan: dict[str, Any]) -> dict[str, Any]:
     return dispatch
 
 
-def _attempt_directory(state_root: Path, attempt: str) -> Path:
-    return state_root / attempt.removeprefix("sha256:")
-
-
 def _outcome(dispatch: dict[str, Any], receipt: str, outcome: str) -> bytes:
     value = {"attempt": dispatch["attempt"], "marker": dispatch["marker"], "outcome": outcome, "receipt": receipt}
     _closed(value, _OUTCOME, "outcome")
@@ -177,65 +186,108 @@ def _record(dispatch: dict[str, Any], state: str, receipt: str | None = None) ->
     return canonical_json_bytes(value)
 
 
-def _read_record(path: Path) -> dict[str, Any]:
-    return _json(path.read_bytes(), "attempt record")
+def _read_record(directory: int) -> dict[str, Any]:
+    try:
+        descriptor = os.open("record.json", os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=directory)
+    except FileNotFoundError as error:
+        raise ExecutorRefusal("attempt record is absent after reservation") from error
+    try:
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise ExecutorRefusal("attempt record must be a regular file")
+        chunks: list[bytes] = []
+        remaining = MAX_DOCUMENT_BYTES + 1
+        while remaining:
+            chunk = os.read(descriptor, min(65536, remaining))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            remaining -= len(chunk)
+    finally:
+        os.close(descriptor)
+    return _json(b"".join(chunks), "attempt record")
 
 
 def _terminal_from_record(record: dict[str, Any]) -> bytes | None:
-    if record.get("state") == "success" and isinstance(record.get("receipt"), str):
-        return _outcome(record["dispatch"], record["receipt"], "success")
+    state = record.get("state")
+    expected = {"dispatch", "schema", "state", "receipt"} if state == "success" else {"dispatch", "schema", "state"}
+    _closed(record, expected, "attempt record")
+    if record.get("schema") != RECEIPT_SCHEMA or state not in {"reserved", "indeterminate", "success"}:
+        raise ExecutorRefusal("attempt record schema or state is invalid")
+    if state == "success":
+        receipt = _digest(record.get("receipt"), "attempt record.receipt")
+        if receipt != content_digest(_record(record["dispatch"], "success")):
+            raise ExecutorRefusal("attempt record receipt identity mismatch")
+        return _outcome(record["dispatch"], receipt, "success")
     return None
 
 
 def execute(config_path: Path, raw_dispatch: bytes) -> bytes:
     _, plan, scratch, state_root = _load_config(config_path)
     dispatch = _dispatch(raw_dispatch, plan)
-    directory = _attempt_directory(state_root, dispatch["attempt"])
-    record_path = directory / "record.json"
+    attempt_name = dispatch["attempt"].removeprefix("sha256:")
+    state_descriptor = _open_directory(state_root, "state root")
+    scratch_descriptor = _open_directory(scratch, "scratch root")
     try:
-        os.mkdir(directory, 0o700)
-        _fsync_directory(state_root)
-        _write_atomic(record_path, _record(dispatch, "reserved"))
-    except FileExistsError:
-        _regular_directory(directory, "attempt directory")
-        prior = _read_record(record_path)
-        if prior.get("dispatch") != dispatch:
-            raise ExecutorRefusal("attempt dispatch substitution")
-        terminal = _terminal_from_record(prior)
-        if terminal is not None:
-            return terminal
-        return _outcome(dispatch, content_digest(canonical_json_bytes(prior)), "indeterminate")
-    result = scratch / "result.txt"
-    try:
-        descriptor = os.open(result, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
-    except FileExistsError as error:
-        _write_atomic(record_path, _record(dispatch, "indeterminate"))
-        raise ExecutorRefusal("result.txt already exists; effect not retried") from error
-    text = _decode_text(plan)
-    try:
-        os.write(descriptor, text)
-        os.fsync(descriptor)
+        try:
+            os.mkdir(attempt_name, 0o700, dir_fd=state_descriptor)
+            os.fsync(state_descriptor)
+            attempt_descriptor = os.open(attempt_name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=state_descriptor)
+            _write_atomic(attempt_descriptor, "record.json", _record(dispatch, "reserved"))
+        except FileExistsError:
+            attempt_descriptor = os.open(attempt_name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=state_descriptor)
+            try:
+                prior = _read_record(attempt_descriptor)
+                if prior.get("dispatch") != dispatch:
+                    raise ExecutorRefusal("attempt dispatch substitution")
+                terminal = _terminal_from_record(prior)
+                if terminal is not None:
+                    return terminal
+                return _outcome(dispatch, content_digest(canonical_json_bytes(prior)), "indeterminate")
+            finally:
+                os.close(attempt_descriptor)
+        try:
+            try:
+                descriptor = os.open("result.txt", os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=scratch_descriptor)
+            except FileExistsError as error:
+                _write_atomic(attempt_descriptor, "record.json", _record(dispatch, "indeterminate"))
+                raise ExecutorRefusal("result.txt already exists; effect not retried") from error
+            try:
+                _write_all(descriptor, _decode_text(plan))
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+            os.fsync(scratch_descriptor)
+            receipt = content_digest(_record(dispatch, "success"))
+            _write_atomic(attempt_descriptor, "record.json", _record(dispatch, "success", receipt))
+            return _outcome(dispatch, receipt, "success")
+        finally:
+            os.close(attempt_descriptor)
     finally:
-        os.close(descriptor)
-    _fsync_directory(scratch)
-    receipt = content_digest(_record(dispatch, "success"))
-    _write_atomic(record_path, _record(dispatch, "success", receipt))
-    return _outcome(dispatch, receipt, "success")
+        os.close(scratch_descriptor)
+        os.close(state_descriptor)
 
 
 def reconcile(config_path: Path, raw_dispatch: bytes) -> bytes:
     _, plan, _scratch, state_root = _load_config(config_path)
     dispatch = _dispatch(raw_dispatch, plan)
-    record_path = _attempt_directory(state_root, dispatch["attempt"]) / "record.json"
-    if not record_path.is_file():
-        raise ExecutorRefusal("attempt evidence is absent")
-    prior = _read_record(record_path)
-    if prior.get("dispatch") != dispatch:
-        raise ExecutorRefusal("attempt dispatch substitution")
-    terminal = _terminal_from_record(prior)
-    if terminal is not None:
-        return terminal
-    return _outcome(dispatch, content_digest(canonical_json_bytes(prior)), "indeterminate")
+    state_descriptor = _open_directory(state_root, "state root")
+    try:
+        try:
+            attempt_descriptor = os.open(dispatch["attempt"].removeprefix("sha256:"), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=state_descriptor)
+        except FileNotFoundError as error:
+            raise ExecutorRefusal("attempt evidence is absent") from error
+        try:
+            prior = _read_record(attempt_descriptor)
+            if prior.get("dispatch") != dispatch:
+                raise ExecutorRefusal("attempt dispatch substitution")
+            terminal = _terminal_from_record(prior)
+            if terminal is not None:
+                return terminal
+            return _outcome(dispatch, content_digest(canonical_json_bytes(prior)), "indeterminate")
+        finally:
+            os.close(attempt_descriptor)
+    finally:
+        os.close(state_descriptor)
 
 
 def main(argv: list[str] | None = None) -> int:
