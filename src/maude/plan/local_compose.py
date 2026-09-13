@@ -387,10 +387,9 @@ class LocalComposeWorkflowInputsV1:
             raise LocalComposeCompilerError(
                 "proposal_class must be initial or successor"
             )
-        if self.proposal_class == "initial" and self.action != "qualify":
-            raise LocalComposeCompilerError(
-                "the initial synthetic occurrence must qualify"
-            )
+        # ``initial`` selects the AG occurrence open mode, independently of
+        # the closed workflow action.  Fresh remediation can thus open an
+        # exact teardown as genesis.
         for name, value in (
             ("docker_client_version", self.docker_client_version),
             ("docker_server_version", self.docker_server_version),

@@ -314,6 +314,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--teardown-occurrence-id", required=True)
     parser.add_argument("--qualify-observation-id", required=True)
     parser.add_argument("--teardown-observation-id", required=True)
+    parser.add_argument("--teardown-proposal-class", choices=("initial", "successor"),
+                        default="successor")
     return parser.parse_args()
 
 
@@ -428,6 +430,7 @@ def main() -> int:
             ),
             subject_digest=args.subject_digest,
             scope_digest=args.scope_digest,
+            proposal_class=(args.teardown_proposal_class if action == "teardown" else None),
         )
         result = registry.compile("local-compose", final.document, explicit)
         executor_plan = executor_plan_from_handoff(result.handoff_bytes)

@@ -252,6 +252,19 @@ def test_identical_locked_bytes_can_produce_distinct_intentional_handoffs(
     ) != ag_executor_plan_identity(executor_plan_from_handoff(teardown.handoff_bytes))
 
 
+def test_fresh_remediation_can_compile_initial_teardown_genesis(tmp_path: Path):
+    selected = dataclasses.replace(
+        inputs(tmp_path, action="teardown"), proposal_class="initial"
+    )
+    result = LocalComposeWorkflowCompilerV1().compile(document(), selected)
+    handoff = json.loads(result.handoff_bytes)
+    plan = executor_plan_from_handoff(result.handoff_bytes)
+    assert handoff["proposal_input"]["class"] == "initial"
+    assert handoff["mode"]["genesis"]["genesis"]["expected_ag_work"] == \
+        ag_executor_plan_identity(plan)
+    assert plan["node_actions"] == [{"node_id": "pn_teardown", "action": "teardown"}]
+
+
 def test_c2_scope_change_preserves_nodes_and_changes_exact_compiled_artifact(
     tmp_path: Path,
 ):
