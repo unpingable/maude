@@ -82,6 +82,23 @@ def test_dispatch_substitution_and_existing_or_symlink_destination_refuse(tmp_pa
         execute(config, dispatch)
 
 
+def test_existing_regular_destination_refuses_without_changing_bytes(tmp_path):
+    scratch, state, config, dispatch = executor_fixture(tmp_path)
+    destination = scratch / "result.txt"
+    sentinel = b"pre-existing application bytes\n"
+    destination.write_bytes(sentinel)
+
+    with pytest.raises(ExecutorRefusal, match="already exists"):
+        execute(config, dispatch)
+
+    assert destination.read_bytes() == sentinel
+    attempt = state / digest("1").removeprefix("sha256:") / "record.json"
+    record = json.loads(attempt.read_bytes())
+    assert record["dispatch"] == json.loads(dispatch)
+    assert record["schema"] == "maude.reviewed-local-copy.executor-receipt/v1"
+    assert record["state"] == "indeterminate"
+
+
 def test_reserved_interruption_reconciles_indeterminate_without_copy(tmp_path):
     scratch, state, config, dispatch = executor_fixture(tmp_path)
     attempt = digest("1").removeprefix("sha256:")

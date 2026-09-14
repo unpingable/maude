@@ -32,10 +32,11 @@ the same sealed plan. It implements Docket's untagged
 `docket.governed-executor-transport/v1` process operations: `plan-id`,
 `execute`, and `reconcile`. Its executor-owned config carries canonical sealed
 plan bytes and an isolated state directory. It accepts only the matching work,
-subject, and scope bindings, creates only a previously absent `result.txt`,
-and records a durable attempt before writing. Terminal replay returns the same
-outcome. A reserved but unproven attempt reconciles as indeterminate and never
-repeats the copy.
+subject, and scope bindings. At the effect boundary it creates `result.txt`
+exclusively: any existing destination pathname causes refusal without opening
+or overwriting that destination. It records a durable attempt before this
+exclusive creation. Terminal replay returns the same outcome. A reserved but
+unproven attempt reconciles as indeterminate and never repeats the copy.
 
 This adapter has component tests only. It does not establish Docket custody,
 AG authorization, a qualified runtime deployment, or a completed cross-system
