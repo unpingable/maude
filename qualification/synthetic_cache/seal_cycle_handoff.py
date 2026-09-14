@@ -31,6 +31,25 @@ def exact(path: Path, maximum: int) -> bytes:
     return data
 
 
+def read_cycle_request(request_bytes: bytes) -> dict:
+    """Accept canonical request bytes with optional single CLI line framing.
+
+    Nightshift's prepare-cycle prints its canonical object followed by LF.
+    The LF is transport framing, not part of the request's semantic identity.
+    Do not normalize arbitrary JSON or recompute an identity here: downstream
+    owners still validate the exact request and its existing request_id.
+    """
+    request = json.loads(request_bytes)
+    if not isinstance(request, dict):
+        raise ValueError("base cycle request is not a JSON object")
+    canonical = _canonical(request)
+    if request_bytes not in (canonical, canonical + b"\n"):
+        raise ValueError("base cycle request is not exact canonical JSON with optional LF")
+    if not isinstance(request.get("request_id"), str):
+        raise ValueError("base cycle request has no request identity")
+    return request
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--store", type=Path, required=True)
@@ -45,12 +64,8 @@ def main() -> int:
 
     plan = exact(args.plan, 1024 * 1024)
     request_bytes = exact(args.base_request, 16 * 1024 * 1024)
-    request = json.loads(request_bytes)
-    if not isinstance(request, dict) or _canonical(request) != request_bytes:
-        raise ValueError("base cycle request is not exact canonical JSON")
-    request_id = request.get("request_id")
-    if not isinstance(request_id, str):
-        raise ValueError("base cycle request has no request identity")
+    request = read_cycle_request(request_bytes)
+    request_id = request["request_id"]
 
     session_profile = SessionCustodyProfileV1(
         args.store,
