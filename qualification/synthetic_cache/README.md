@@ -1,5 +1,11 @@
 # Synthetic local cache governed qualification
 
+For the current connected NQ/Pulse path, start with
+[public prerequisites and the portable driver](CONNECTED_SUCCESSOR.md).
+The remainder of this page records the earlier qualification, including its
+test NQ admission port and original host-specific Docker workaround. Those
+historical details are not the installation instructions for the connected path.
+
 This is the first nontrivial disposable workload taken from a mutable
 `maude.plan-document/v1` through an exact workflow compiler, authenticated
 Maude/Nightshift custody, AG-NG governance, Docket execution, world

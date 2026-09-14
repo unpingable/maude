@@ -15,8 +15,10 @@ The preparation helpers are public code in this directory:
 - `public-governance-bootstrap.py`,
   `generate_connected_cache_setup_config.py`, and
   `prepare_connected_cache_run.py` close and pin the caller's input boundary.
-- `run_connected_cache.py` is the intended driver, but remains under separate
-  public qualification. Its presence is not a claim that it is ready to run.
+- `run_connected_cache.py` executes the connected profile and retains numbered
+  stage records. Native local qualification passed at source
+  `7aa6053898483929688fc863c13efe4fa8a1e16e`; public-only reproduction and a
+  composed release are still separate, unfinished checks.
 
 No helper discovers credentials, accepts an implicit identity, or reads a
 campaign-owned record.
@@ -159,8 +161,22 @@ MAUDE=/absolute/path/to/pinned-maude
 ```
 
 The final command currently exposes `--context` and `--execute`; do not invoke
-it with `--execute` until its separate public qualification records an admitted
-result and the operator has established the required local authority, resource,
-and durable recovery boundary. No native build, provider action, container
-launch, cache acquisition, public publication, or push is performed by this
-guide.
+it with `--execute` until the operator has established the local authority,
+resource, and durable recovery boundary. Run from a clean, quiescent checkout
+at the exact declared commit, outside the working copy being edited. The driver
+checks that commit and records hashes of its source closure, rechecking them
+before each command. This detects drift; it is not an atomic filesystem snapshot.
+
+The native local qualification exercised actual NQ admission/acquisition,
+Pulse production and custody, Nightshift handoff, AG one-use authorization,
+Docket execution and settlement, exact-result NQ admission, one same-family
+local-successor acquisition, and separately authorized teardown. Both attempts
+reported success and a fresh exact-project query found no remaining containers
+or network. Standing and deterministic authoring inputs were synthetic. The
+result admission concerns the recorded attempt, not the cache's condition now.
+
+The driver retains at most16MiB per command output stream. Timeout, excess output,
+or loss of a descendant-held output pipe stops the created process group and
+records an uncertain result. Process termination does not settle a Docket
+attempt. The enclosing durable manager must also own the full control group;
+inspect the original owner records before any recovery submission.
