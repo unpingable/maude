@@ -129,7 +129,8 @@ def test_absent_external_nq_working_directory_refuses_before_root(tmp_path):
 def test_existing_caller_nq_working_directory_is_preserved(tmp_path, monkeypatch):
     config = minimal_config(tmp_path)
     external = tmp_path / "caller-work"
-    external.mkdir(mode=0o750)
+    external.mkdir()
+    external.chmod(0o750)
     config["nq"]["working_directory"] = str(external)
     monkeypatch.setattr(MODULE, "expected_host_scope_digest",
                         lambda *unused: config["identities"]["scope_digest"])
