@@ -13,6 +13,10 @@ it does not assess completion or make private prose public-safe.
 with the [bounded authoring walkthrough](docs/BOUNDED-AUTHORING-WALKTHROUGH.md).
 Then consult [Plan Core](docs/PLAN-CORE.md), [the design workbench](docs/PHOSPHOR-DESIGN.md),
 and the [connected tutorial baseline and prerequisites](docs/CONSTELLATION-TUTORIAL.md).
+For the implemented local cache composition, see
+[connected setup, source pins, and recovery boundaries](qualification/synthetic_cache/CONNECTED_SUCCESSOR.md).
+Its native local run is qualified; public-only reproduction and the composed
+release remain separate checks. This profile uses explicitly synthetic Standing.
 The default browser proposal examples use deterministic fixtures. An opt-in
 [OpenRouter route](docs/OPENROUTER-AUTHORING.md) uses Switchyard's bounded provider
 path; one live description-only proposal and its semantic diff have been
