@@ -263,3 +263,136 @@ def test_runner_helper_command_shapes_pass_actual_argparse(relative, arguments):
     assert completed.returncode != 0
     assert "unrecognized arguments" not in error
     assert "the following arguments are required" not in error
+
+
+@pytest.mark.parametrize("arguments", [
+    ["--accepted-bundle", "/bundle"],
+    ["--accepted-bundle", "/bundle", "--accepted-bundle-sha256", "1" * 64],
+    ["--accepted-store", "/store", "--accepted-store-sha256", "2" * 64],
+])
+def test_accepted_cli_is_all_or_none_before_run(arguments, monkeypatch, tmp_path):
+    launched = []
+    monkeypatch.setattr(MODULE, "Run", lambda *args: launched.append(args))
+    monkeypatch.setattr(sys, "argv", ["run_connected_cache.py", "--context", str(tmp_path / "c"),
+                                      "--execute", *arguments])
+    with pytest.raises(SystemExit) as error:
+        MODULE.main()
+    assert error.value.code == 2
+    assert launched == []
+
+
+def test_accepted_cli_passes_exact_closed_coordinates(monkeypatch, tmp_path):
+    observed = []
+
+    class FakeRun:
+        def __init__(self, context_path, accepted):
+            observed.append((context_path, accepted))
+
+        def run(self):
+            observed.append("run")
+
+    monkeypatch.setattr(MODULE, "Run", FakeRun)
+    monkeypatch.setattr(sys, "argv", ["run_connected_cache.py", "--context", str(tmp_path / "c"),
+        "--execute", "--accepted-bundle", str(tmp_path / "bundle"),
+        "--accepted-bundle-sha256", "1" * 64, "--accepted-store", str(tmp_path / "store"),
+        "--accepted-store-sha256", "2" * 64])
+    MODULE.main()
+    assert observed == [(tmp_path / "c", {
+        "bundle": tmp_path / "bundle", "bundle_sha256": "1" * 64,
+        "store": tmp_path / "store", "store_sha256": "2" * 64,
+    }), "run"]
+
+
+@pytest.mark.parametrize("failure", ["pin", "sidecar"])
+def test_accepted_input_refusal_precedes_nq(tmp_path, monkeypatch, failure):
+    path, _, _ = context(tmp_path)
+    bundle = tmp_path / "accepted.json"
+    store = tmp_path / "accepted.sqlite"
+    bundle.write_bytes(b"bundle")
+    store.write_bytes(b"store")
+    accepted = {"bundle": bundle, "bundle_sha256": MODULE.file_digest(bundle),
+                "store": store, "store_sha256": MODULE.file_digest(store)}
+    if failure == "pin":
+        accepted["bundle_sha256"] = "0" * 64
+        match = "explicit pin"
+    else:
+        Path(str(store) + "-wal").write_bytes(b"sidecar")
+        match = "writable sidecars"
+    run = MODULE.Run(path, accepted)
+    monkeypatch.setattr(run, "check_pins", lambda: None)
+    nq_calls = []
+    monkeypatch.setattr(run, "nq", lambda *args, **kwargs: nq_calls.append(args))
+    with pytest.raises(ValueError, match=match):
+        run.run()
+    assert nq_calls == []
+    assert not run.records.exists()
+
+
+@pytest.mark.parametrize("failure", ["relative", "malformed-pin"])
+def test_accepted_coordinate_shape_refuses_before_nq(tmp_path, monkeypatch, failure):
+    path, _, _ = context(tmp_path)
+    bundle = tmp_path / "accepted.json"
+    store = tmp_path / "accepted.sqlite"
+    bundle.write_bytes(b"bundle")
+    store.write_bytes(b"store")
+    accepted = {"bundle": bundle, "bundle_sha256": MODULE.file_digest(bundle),
+                "store": store, "store_sha256": MODULE.file_digest(store)}
+    if failure == "relative":
+        accepted["bundle"] = Path("accepted.json")
+    else:
+        accepted["store_sha256"] = "A" * 64
+    run = MODULE.Run(path, accepted)
+    monkeypatch.setattr(run, "check_pins", lambda: None)
+    nq_calls = []
+    monkeypatch.setattr(run, "nq", lambda *args, **kwargs: nq_calls.append(args))
+    with pytest.raises(ValueError, match="absolute paths and lowercase SHA-256"):
+        run.run()
+    assert nq_calls == []
+    assert not run.records.exists()
+
+
+def test_accepted_actions_reuse_locked_plan_and_use_action_specific_inputs(tmp_path):
+    path, value, _ = context(tmp_path)
+    compiler_source = Path(value["files"]["maude_source"]["path"]) / "src/maude/plan/local_compose.py"
+    compiler_source.parent.mkdir(parents=True)
+    compiler_source.write_bytes(b"compiler source")
+    bundle = tmp_path / "accepted.json"
+    store = tmp_path / "accepted.sqlite"
+    bundle.write_bytes(b'{"accepted":"opaque"}')
+    store.write_bytes(b"retained-store")
+    accepted = {"bundle": bundle, "bundle_sha256": MODULE.file_digest(bundle),
+                "store": store, "store_sha256": MODULE.file_digest(store)}
+    run = MODULE.Run(path, accepted)
+    run.c["programs"]["python"] = {"path": sys.executable}
+    run.records.mkdir(parents=True)
+    (run.records / "diagnostic-q.json").write_bytes(b'{"stage":"q"}')
+    (run.records / "diagnostic-t.json").write_bytes(b'{"stage":"t"}')
+    calls = []
+    locked = b'{"same":"accepted-plan"}'
+
+    def call(name, argv, **_kwargs):
+        calls.append((name, [str(value) for value in argv]))
+        output = Path(argv[argv.index("--output") + 1])
+        if name.startswith("prepare-accepted-"):
+            action = argv[2]
+            output.mkdir()
+            (output / "accepted-plan.sqlite").write_bytes(store.read_bytes())
+            (output / "accepted-bundle.json").write_bytes(bundle.read_bytes())
+            (output / f"compiler-input-{action}.json").write_bytes(action.encode())
+            (output / "plan-locked.json").write_bytes(locked)
+        else:
+            output.mkdir()
+            (output / "plan-locked.json").write_bytes(locked)
+        return b""
+
+    run.call = call
+    qualify = run.compile_accepted("q", tmp_path / "plan-q")
+    teardown = run.compile_accepted("t", tmp_path / "plan-t")
+    assert (qualify / "plan-locked.json").read_bytes() == (teardown / "plan-locked.json").read_bytes() == locked
+    prepare_q, compile_q, prepare_t, compile_t = calls
+    assert prepare_q[0] == "prepare-accepted-q" and prepare_q[1][2] == "qualify"
+    assert prepare_t[0] == "prepare-accepted-t" and prepare_t[1][2] == "teardown"
+    assert prepare_q[1][prepare_q[1].index("--accepted-store") + 1] == str(store)
+    assert prepare_t[1][prepare_t[1].index("--accepted-store") + 1] == str(store)
+    assert compile_q[1][compile_q[1].index("--compiler-input") + 1].endswith("compiler-input-qualify.json")
+    assert compile_t[1][compile_t[1].index("--compiler-input") + 1].endswith("compiler-input-teardown.json")

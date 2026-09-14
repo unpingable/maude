@@ -39,7 +39,7 @@ def source_digest(path):
 
 
 class Run:
-    def __init__(self, context: Path):
+    def __init__(self, context: Path, accepted: dict | None = None):
         self.context_path = context
         self.c = json.loads(read_regular(context, 128 * 1024))
         if self.c.get('schema') != CONTEXT_SCHEMA or self.c.get('governance', {}).get('standing_kind') != 'synthetic_fixture':
@@ -51,6 +51,7 @@ class Run:
         self.phase = 'preflight'
         self.sequence = 0
         self.source_pins = {}
+        self.accepted = accepted
         self.env = {'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8', 'PYTHONDONTWRITEBYTECODE': '1',
                     'PYTHONPATH': str(Path(self.c['files']['maude_source']['path']) / 'src'),
                     'DOCKER_HOST': 'unix:///var/run/docker.sock'}
@@ -119,6 +120,17 @@ class Run:
 
     def preflight(self):
         self.check_pins()
+        if self.accepted:
+            for name in ('bundle', 'store'):
+                pin = self.accepted[name + '_sha256']
+                if not Path(self.accepted[name]).is_absolute() or not isinstance(pin, str) \
+                        or len(pin) != 64 or any(c not in '0123456789abcdef' for c in pin):
+                    raise ValueError('accepted inputs require absolute paths and lowercase SHA-256 pins')
+                if file_digest(Path(self.accepted[name])) != self.accepted[name + '_sha256']:
+                    raise ValueError('accepted input differs from its explicit pin')
+            for suffix in ('-wal', '-shm'):
+                if Path(str(self.accepted['store']) + suffix).exists():
+                    raise ValueError('accepted store must be quiescent without writable sidecars')
         if self.c['runtime']['project'] != 'maude-cache-birthday':
             raise ValueError('this compiler profile supports only project maude-cache-birthday')
         source = Path(self.c['files']['maude_source']['path'])
@@ -181,6 +193,8 @@ class Run:
     def compile(self, stage, initial_observation, successor_observation):
         runtime = self.c['runtime']; ids = self.ids
         output = self.root / ('plan-' + stage)
+        if self.accepted:
+            return self.compile_accepted(stage, output)
         self.call('compile-' + stage, [self.program('python'), self.file('maude_build_plan'),
             '--output-root', output, '--runtime-root', runtime['runtime_root'],
             '--runtime-workspace', runtime['workspace'], '--front-port', str(runtime['front_port']),
@@ -193,6 +207,28 @@ class Run:
             '--qualify-occurrence-id', ids['qualification_occurrence_id'],
             '--teardown-occurrence-id', ids['successor_occurrence_id'],
             '--qualify-observation-id', initial_observation, '--teardown-observation-id', successor_observation])
+        return output
+
+    def compile_accepted(self, stage, output):
+        action = 'qualify' if stage == 'q' else 'teardown'
+        preparation = self.root / ('accepted-input-' + stage)
+        source = Path(self.c['files']['maude_source']['path'])
+        compiler_pin = source_digest(source / 'src/maude/plan/local_compose.py')
+        observation = self.records / f'diagnostic-{stage}.json'
+        helper = [self.program('python'), HERE / 'compile_accepted_cache_actions.py', action]
+        self.call('prepare-accepted-' + stage, [*helper, '--prepare-input',
+            '--context', self.context_path, '--context-sha256', file_digest(self.context_path),
+            '--accepted-store', self.accepted['store'], '--accepted-store-sha256', self.accepted['store_sha256'],
+            '--bundle', self.accepted['bundle'], '--bundle-sha256', self.accepted['bundle_sha256'],
+            '--nq-observation', observation, '--nq-observation-sha256', source_digest(observation),
+            '--maude-local-compose-sha256', compiler_pin, '--output', preparation])
+        self.call('compile-accepted-' + stage, [*helper, '--maude-source', source,
+            '--maude-local-compose-sha256', compiler_pin, '--accepted-store', preparation / 'accepted-plan.sqlite',
+            '--accepted-store-sha256', file_digest(preparation / 'accepted-plan.sqlite'),
+            '--bundle', preparation / 'accepted-bundle.json', '--bundle-sha256', self.accepted['bundle_sha256'],
+            '--compiler-input', preparation / f'compiler-input-{action}.json',
+            '--compiler-input-sha256', source_digest(preparation / f'compiler-input-{action}.json'),
+            '--output', output])
         return output
 
     def proposal(self, stage, plan, action):
@@ -283,6 +319,10 @@ class Run:
             'state': self.state, 'standing': 'synthetic_fixture', 'expected_terminal': 'terminal.json',
             'recovery': 'Inspect the original manager and numbered stage records, then original NQ/AG/Docket stores. Do not rerun this driver.'})
         self.write('source-pins.json', self.source_pins)
+        if self.accepted:
+            self.write('accepted-inputs.json', {**{k: str(v) for k, v in self.accepted.items()},
+                'acceptance_scope': 'Caller-supplied reference; this driver does not authenticate a human or create acceptance.',
+                'model_call': False})
         try:
             self.project_absent('initial')
             self.call('image', [self.program('docker'), 'image', 'inspect', self.c['runtime']['image']])
@@ -353,7 +393,8 @@ class Run:
         self.helper('verify-cache-observation-family.py', '--predecessor', self.records / 'posture-q.json',
             '--successor', self.records / 'posture-t.json')
         successor = self.compile('t', observation, following)
-        for name in ('executor-plan-qualify.json', 'compilation-receipt-qualify.json'):
+        retained = ('plan-locked.json',) if self.accepted else ('executor-plan-qualify.json', 'compilation-receipt-qualify.json')
+        for name in retained:
             if (plan / name).read_bytes() != (successor / name).read_bytes():
                 raise ValueError('successor compilation changed initial work')
         proposal = self.proposal('t', successor, 'teardown')
@@ -406,8 +447,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--context', type=Path, required=True)
     parser.add_argument('--execute', action='store_true', required=True)
+    parser.add_argument('--accepted-bundle', type=Path)
+    parser.add_argument('--accepted-bundle-sha256')
+    parser.add_argument('--accepted-store', type=Path)
+    parser.add_argument('--accepted-store-sha256')
     args = parser.parse_args()
-    Run(args.context).run()
+    values = (args.accepted_bundle, args.accepted_bundle_sha256, args.accepted_store, args.accepted_store_sha256)
+    if any(values) and not all(values):
+        parser.error('accepted mode requires exact bundle/store paths and both SHA-256 pins')
+    accepted = {'bundle': args.accepted_bundle, 'bundle_sha256': args.accepted_bundle_sha256,
+                'store': args.accepted_store, 'store_sha256': args.accepted_store_sha256} if all(values) else None
+    Run(args.context, accepted).run()
 
 
 if __name__ == '__main__':
