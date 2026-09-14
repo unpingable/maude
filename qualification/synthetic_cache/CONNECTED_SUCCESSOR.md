@@ -28,13 +28,14 @@ record the checked-out commit plus the executable and configuration digests in
 the caller's preparation record. This tutorial's component compatibility set
 is:
 
-| Component | Public source revision | Required surface |
+| Component | Public repository and source revision | Required surface |
 | --- | --- | --- |
-| NQ | `d3089a9787a27c50faf1e3f393a88f8e64bd412d` | native `nq`, `nq-host-helper`, and the `nq.host/v1` descriptor |
-| Nightshift | `2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4` | cycle, external-observation, and resolver CLI surfaces |
-| AG | `5c8b22b77193798f25298b02758ac3caa3a8fe24` | governed-loop catalog, runtime-profile seal/verify, and standing resolver |
-| Docket | `c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b` | exact executor custody, attempt, reconciliation, and inspection surfaces |
-| Pulse support integration | Nightshift `d91b214cd22afd5585fcd259d22463d08d606b58`, `integrations/pulse-nq-load-support` | `LoadSupportConfigV1` and `seal-pulse-support-resolver-launcher.py` |
+| NQ CLI | `https://github.com/unpingable/constellation-nq.git` at `d3089a9787a27c50faf1e3f393a88f8e64bd412d` | native `nq` and its compiled profile descriptors |
+| NQ helpers | `https://github.com/unpingable/constellation-nq.git` at `ce0a04a175b6d87ac17395f08fd7bc70ddf1e7b3` | native `nq-host-helper` and `nq-synthetic-cache-result-helper` used by the tested mixed cohort |
+| Nightshift | `https://github.com/unpingable/constellation-nightshift.git` at `2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4` | cycle, external-observation, and resolver CLI surfaces |
+| AG | `https://github.com/unpingable/constellation-ag.git` at `5c8b22b77193798f25298b02758ac3caa3a8fe24` | governed-loop catalog, runtime-profile seal/verify, and standing resolver |
+| Docket | `https://github.com/unpingable/constellation-docket.git` at `c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b` | exact executor custody, attempt, reconciliation, and inspection surfaces |
+| Pulse support integration | `https://github.com/unpingable/constellation-nightshift.git` at `d91b214cd22afd5585fcd259d22463d08d606b58`, subtree `integrations/pulse-nq-load-support` | `LoadSupportConfigV1` and `seal-pulse-support-resolver-launcher.py` |
 
 The older source-history NQ pin is intentional. It is the compatible source
 for this tutorial's NQ104-era host profile, not a claim about a current NQ
@@ -59,13 +60,20 @@ and resolver bytes before preparation. All caller-provided paths must be
 absolute, regular files where a reader requires it, and inputs with a supplied
 digest must match their digest before the fresh output root is allocated.
 
-Build NQ natively from the exact source pin so `nq` and `nq-host-helper` come
-from the same source/build semantics. The public NQ host configuration derives
-the profile descriptor from the selected NQ binary (`nq --json profiles list`),
-then binds the resulting `nq.host/v1` digest into the host scope. Do not paste
-a profile semantic/digest from an unrelated build: the NQ104 profile namespace
-is a build-semantic input. Pulse prepares support only for the exact supported
-NQ host/load-pressure identities defined by its pinned integration.
+The locally qualified mixed cohort used `nq` and `nq-host-helper` with the
+documented compatible NQ host profile, and used the separately pinned result
+helper above. That qualification is evidence for those exact bytes; it is not
+a general same-build compatibility claim. A future public-only reproduction
+may instead build `nq`, `nq-host-helper`, and
+`nq-synthetic-cache-result-helper` together from the NQ `d3089a9` source pin,
+but must first verify the resulting profile identities and helper admission
+rather than assuming source proximity preserves them. The public NQ host
+configuration derives the profile descriptor from the selected NQ binary
+(`nq --json profiles list`), then binds the resulting `nq.host/v1` digest into
+the host scope. Do not paste a profile semantic/digest from an unrelated build:
+the NQ104 profile namespace is a build-semantic input. Pulse prepares support
+only for the exact supported NQ host/load-pressure identities defined by its
+pinned integration.
 
 The NQ watcher must name both a concrete `execution_account` and a concrete
 host watcher binding (`instance_id`, `subject`, and scope ID). Debug use of an
