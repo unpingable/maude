@@ -4,7 +4,8 @@ This is a public, development-stage prerequisite guide for the connected
 synthetic-cache tutorial. It describes how a caller can prepare a closed local
 input set. It does not establish an end-to-end qualification, authority,
 current cache health, a production Standing service, or permission to run the
-workload.
+workload. For retained-state inspection, interruption handling, and cleanup
+boundaries, continue with [OPERATIONS.md](OPERATIONS.md).
 
 The preparation helpers are public code in this directory:
 
