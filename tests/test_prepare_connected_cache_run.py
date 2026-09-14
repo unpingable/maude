@@ -97,6 +97,56 @@ def test_nq_host_subject_scope_mismatch_refuses_before_root_allocation(tmp_path)
     assert not Path(config["root"]).exists()
 
 
+def test_owned_nq_working_directory_is_created_before_bootstrap(tmp_path, monkeypatch):
+    config = minimal_config(tmp_path)
+    root = Path(config["root"])
+    config["nq"]["working_directory"] = str(root / "nq-work")
+    monkeypatch.setattr(MODULE, "expected_host_scope_digest",
+                        lambda *unused: config["identities"]["scope_digest"])
+
+    class ReachedBootstrap(Exception):
+        pass
+
+    def inspect_bootstrap(args):
+        assert args.working_directory == root / "nq-work"
+        assert args.working_directory.is_dir()
+        assert args.working_directory.stat().st_mode & 0o777 == 0o700
+        raise ReachedBootstrap
+
+    monkeypatch.setattr(MODULE.NQ_HOST, "prepare", inspect_bootstrap)
+    with pytest.raises(ReachedBootstrap):
+        MODULE.prepare(config)
+
+
+def test_absent_external_nq_working_directory_refuses_before_root(tmp_path):
+    config = minimal_config(tmp_path)
+    config["nq"]["working_directory"] = str(tmp_path / "absent-external")
+    with pytest.raises(ValueError, match="must already exist"):
+        MODULE.prepare(config)
+    assert not Path(config["root"]).exists()
+
+
+def test_existing_caller_nq_working_directory_is_preserved(tmp_path, monkeypatch):
+    config = minimal_config(tmp_path)
+    external = tmp_path / "caller-work"
+    external.mkdir(mode=0o750)
+    config["nq"]["working_directory"] = str(external)
+    monkeypatch.setattr(MODULE, "expected_host_scope_digest",
+                        lambda *unused: config["identities"]["scope_digest"])
+
+    class ReachedBootstrap(Exception):
+        pass
+
+    def inspect_bootstrap(args):
+        assert args.working_directory == external
+        assert external.stat().st_mode & 0o777 == 0o750
+        raise ReachedBootstrap
+
+    monkeypatch.setattr(MODULE.NQ_HOST, "prepare", inspect_bootstrap)
+    with pytest.raises(ReachedBootstrap):
+        MODULE.prepare(config)
+
+
 def test_scope_digest_uses_exact_pinned_nq_profile(monkeypatch):
     digest = "sha256:" + "1" * 64
     monkeypatch.setattr(MODULE, "run", lambda argv: json.dumps([{

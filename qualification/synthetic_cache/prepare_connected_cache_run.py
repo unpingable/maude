@@ -144,6 +144,10 @@ def validate(config: dict) -> dict:
         raise ValueError("NQ enrollment differs")
     if nq["subject"] != "host:" + nq["scope_id"]:
         raise ValueError("NQ host subject and scope do not correlate")
+    working_directory = Path(nq["working_directory"])
+    owned_working_directory = root / "nq-work"
+    if working_directory != owned_working_directory and not working_directory.is_dir():
+        raise ValueError("caller-provided NQ working directory must already exist")
     runtime = config["runtime"]
     if not isinstance(runtime, dict) or set(runtime) != {
         "image", "docker_client_version", "docker_server_version", "compose_version",
@@ -240,6 +244,9 @@ def prepare(config: dict) -> dict:
     root.mkdir(mode=0o700)
     for name in ("credentials", "governance", "nq", "runtime", "records"):
         (root / name).mkdir(mode=0o700)
+    owned_working_directory = root / "nq-work"
+    if Path(config["nq"]["working_directory"]) == owned_working_directory:
+        owned_working_directory.mkdir(mode=0o700)
     session_key, producer_key = root / "credentials/maude-session.key", root / "credentials/maude-producer.key"
     write_new(session_key, secrets.token_bytes(32))
     write_new(producer_key, secrets.token_bytes(32))

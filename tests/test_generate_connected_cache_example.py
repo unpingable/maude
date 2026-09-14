@@ -91,6 +91,27 @@ def test_example_expands_pinned_install_into_existing_schema(tmp_path, monkeypat
     assert value["programs"]["nq"]["path"] == str(args.program_dir / programs["nq"]["filename"])
 
 
+def test_example_output_prepares_fresh_owned_nq_working_directory(tmp_path, monkeypatch):
+    args, _ = inputs(tmp_path)
+    monkeypatch.setattr(MODULE, "checked_source", lambda source, install: None)
+    scope = "sha256:" + "d" * 64
+    monkeypatch.setattr(MODULE.SETUP, "expected_host_scope_digest", lambda *unused: scope)
+    config = MODULE.generate(args)
+    assert config["nq"]["working_directory"] == str(args.root / "nq-work")
+
+    class ReachedBootstrap(Exception):
+        pass
+
+    def inspect_bootstrap(nq_args):
+        assert nq_args.working_directory == args.root / "nq-work"
+        assert nq_args.working_directory.is_dir()
+        raise ReachedBootstrap
+
+    monkeypatch.setattr(MODULE.SETUP.NQ_HOST, "prepare", inspect_bootstrap)
+    with pytest.raises(ReachedBootstrap):
+        MODULE.SETUP.prepare(config)
+
+
 def test_example_pin_or_debug_omission_refuses_before_output(tmp_path, monkeypatch):
     args, _ = inputs(tmp_path)
     monkeypatch.setattr(MODULE, "checked_source", lambda source, install: None)
