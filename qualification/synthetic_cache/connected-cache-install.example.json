@@ -1,0 +1,29 @@
+{
+  "schema": "maude.connected-cache-example-install/v1",
+  "maude_source_revision": "REPLACE_WITH_40_LOWERCASE_HEX_COMMIT",
+  "maude_build_plan_sha256": "REPLACE_WITH_64_LOWERCASE_HEX",
+  "maude_executor_sha256": "REPLACE_WITH_64_LOWERCASE_HEX",
+  "programs": {
+    "nq": {"filename": "nq", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "nq_host_helper": {"filename": "nq-host-helper", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "nq_result_helper": {"filename": "nq-synthetic-cache-result-helper", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "pulse": {"filename": "pulse-nq-load-support", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "nightshift": {"filename": "nightshift", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "nightshift_observation_resolver": {"filename": "nightshift-observation-resolver", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "ag": {"filename": "ag-loopctl", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "ag_standing_resolver": {"filename": "ag-standing-resolver", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "docket": {"filename": "docket", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "openssl": {"filename": "openssl", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"},
+    "docker": {"filename": "docker", "sha256": "REPLACE_WITH_64_LOWERCASE_HEX"}
+  },
+  "python_sha256": "REPLACE_WITH_64_LOWERCASE_HEX",
+  "pulse_launcher_sealer_sha256": "REPLACE_WITH_64_LOWERCASE_HEX",
+  "source_revisions": {
+    "nq_cli": "d3089a9787a27c50faf1e3f393a88f8e64bd412d",
+    "nq_helpers": "ce0a04a175b6d87ac17395f08fd7bc70ddf1e7b3",
+    "nightshift": "2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4",
+    "ag": "5c8b22b77193798f25298b02758ac3caa3a8fe24",
+    "docket": "c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b",
+    "pulse_integration": "d91b214cd22afd5585fcd259d22463d08d606b58"
+  }
+}

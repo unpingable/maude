@@ -1,0 +1,47 @@
+{
+  "schema": "maude.connected-cache-example-profile/v1",
+  "identities": {
+    "campaign_id": "sha256:REPLACE_WITH_64_LOWERCASE_HEX",
+    "program_id": "sha256:REPLACE_WITH_64_LOWERCASE_HEX",
+    "subject_digest": "sha256:REPLACE_WITH_64_LOWERCASE_HEX",
+    "qualification_occurrence_id": "REPLACE_WITH_FRESH_UUID_V4",
+    "successor_occurrence_id": "REPLACE_WITH_DIFFERENT_FRESH_UUID_V4",
+    "watcher_instance_id": "REPLACE_WITH_FRESH_WATCHER_ID",
+    "local_successor_acquisition_id": "REPLACE_WITH_FRESH_SUCCESSOR_ACQUISITION_ID",
+    "runtime_id": "REPLACE_WITH_FRESH_RUNTIME_ID",
+    "generation": "REPLACE_WITH_FRESH_GENERATION_ID",
+    "configuration_version": "REPLACE_WITH_FRESH_CONFIGURATION_ID",
+    "role_id": "nightshift-role:cache-bootstrap-host",
+    "role_version": 1,
+    "role_digest": "sha256:REPLACE_WITH_VERIFIED_ROLE_DIGEST",
+    "qualification_schedule_id": "REPLACE_WITH_FRESH_QUALIFICATION_SCHEDULE_ID",
+    "successor_schedule_id": "REPLACE_WITH_FRESH_SUCCESSOR_SCHEDULE_ID",
+    "qualification_attempt_id": "REPLACE_WITH_FRESH_QUALIFICATION_ATTEMPT_ID",
+    "successor_attempt_id": "REPLACE_WITH_FRESH_SUCCESSOR_ATTEMPT_ID",
+    "scheduler_clock_id": "clock:local-realtime",
+    "qualification_pulse_acquisition_id": "REPLACE_WITH_FRESH_QUALIFICATION_PULSE_ID",
+    "successor_pulse_acquisition_id": "REPLACE_WITH_FRESH_SUCCESSOR_PULSE_ID"
+  },
+  "nq": {
+    "nq_subject": "host:REPLACE_WITH_FRESH_NQ_SCOPE_ID",
+    "nq_scope_id": "REPLACE_WITH_FRESH_NQ_SCOPE_ID"
+  },
+  "runtime": {
+    "image": "python:3.13-alpine@sha256:46ee549c88617e9bc8acb843a326f1a5c0fa5608d7f9703509efe6d53b55f318",
+    "docker_client_version": "29.1.3",
+    "docker_server_version": "29.1.3",
+    "compose_version": "5.0.0",
+    "project": "maude-cache-birthday",
+    "front_port": 8080
+  },
+  "governance": {
+    "profile_label": "synthetic-standing-cache-example",
+    "observation_resolver_id": "nightshift-observation-resolver/v1",
+    "standing_resolver_id": "ag-standing-resolver/integration-v1",
+    "issuer_principal": "REPLACE_WITH_FRESH_SYNTHETIC_ISSUER_ID",
+    "issuer_key_id": "REPLACE_WITH_FRESH_SYNTHETIC_ISSUER_KEY_ID",
+    "observation_ttl_ms": 120000,
+    "standing_ttl_ms": 60000,
+    "docket_standing_ttl_ms": 60000
+  }
+}

@@ -105,3 +105,16 @@ def test_example_pin_or_debug_omission_refuses_before_output(tmp_path, monkeypat
     with pytest.raises(ValueError, match="installed program bytes"):
         MODULE.generate(args)
     assert not args.output.exists() and not args.root.exists()
+
+
+def test_distributed_templates_are_closed_and_deliberately_non_runnable():
+    install = json.loads((HERE / "connected-cache-install.example.json").read_text())
+    profile = json.loads((HERE / "connected-cache-profile.example.json").read_text())
+    assert install["schema"] == MODULE.INSTALL_SCHEMA
+    assert set(install["programs"]) == set(MODULE.SETUP.PROGRAMS) - {"python"}
+    assert set(install["source_revisions"]) == MODULE.SOURCE_NAMES
+    assert profile["schema"] == MODULE.PROFILE_SCHEMA
+    assert set(profile) == {"schema", "identities", "nq", "runtime", "governance"}
+    assert profile["governance"]["profile_label"] == "synthetic-standing-cache-example"
+    assert profile["runtime"]["project"] == "maude-cache-birthday"
+    assert "REPLACE_WITH" in json.dumps(install) and "REPLACE_WITH" in json.dumps(profile)

@@ -103,6 +103,13 @@ repeat the exact NQ CLI, NQ helpers, Nightshift, AG, Docket, and Pulse
 integration revisions in the compatibility table above; executable hashes
 remain the identity actually admitted by preparation.
 
+Copy `connected-cache-install.example.json` and replace every
+`REPLACE_WITH_...` value from the exact checked-out source and installed file
+bytes. Copy `connected-cache-profile.example.json` and replace every identity
+placeholder with caller-owned values; do not reuse identifiers from a previous
+run. The templates are deliberately rejected until every placeholder is
+replaced.
+
 The profile has schema `maude.connected-cache-example-profile/v1` and exactly
 four objects: `identities`, `nq`, `runtime`, and `governance`. Their fields are
 the corresponding fields documented by
@@ -141,6 +148,33 @@ The final flag is mandatory for this single-account development example. It is
 an explicit NQ debug exception, not a deployment recommendation. This command
 only measures and assembles setup input. It performs no NQ initialization or
 acquisition, AG issuance, Docket action, Docker operation, or provider call.
+
+For a public-only build candidate, use separate clean detached checkouts at the
+source revisions above. After the storage owner admits the native targets, the
+corresponding narrow build commands are:
+
+```bash
+cargo build --locked --manifest-path "$NQ_CLI/Cargo.toml" -p nq-app --bin nq
+cargo build --locked --manifest-path "$NQ_HELPERS/Cargo.toml" \
+  -p nq-host-helper -p nq-synthetic-cache-result-helper
+cargo build --locked --manifest-path "$NIGHTSHIFT/Cargo.toml" -p nightshiftd \
+  --bin nightshift --bin nightshift-observation-resolver
+cargo build --locked --manifest-path "$AG/Cargo.toml" -p ag-app \
+  --bin ag-loopctl --bin ag-standing-resolver
+cargo build --locked --manifest-path "$DOCKET/Cargo.toml" -p gwr-local --bin docket
+cargo build --locked \
+  --manifest-path "$PULSE/integrations/pulse-nq-load-support/Cargo.toml" \
+  --bin pulse-nq-load-support
+```
+
+Here `$NQ_CLI` and `$NQ_HELPERS` are distinct checkouts at their distinct table
+revisions; `$PULSE` is the Nightshift integration revision. Copy the resulting
+regular executable files into one caller-owned program directory, record their
+SHA-256 values in the installation manifest, and separately pin the selected
+system Docker/OpenSSL programs and copied virtual-environment Python. These
+commands describe source construction only. Source fetch and successful build
+do not establish profile compatibility or reproduce the connected run; that
+requires the later preparation and public-only qualification.
 
 ## Prepare, inspect, then stop
 
