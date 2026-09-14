@@ -189,7 +189,8 @@ class SequenceRun(MODULE.Run):
     def pulse(self, stage): return self.note("pulse-" + stage, Path("/resolver-" + stage))
     def open_cycle(self, stage, *args): self.note("open-" + stage)
     def execute(self, stage, plan, action): return self.note("execute-" + stage, ("issuance", {}, Path("/inspection")))
-    def successor(self, *args): self.note("successor")
+    def successor(self, *args):
+        return self.note("successor", {"qualification": {}, "teardown": {}})
     def write(self, name, value):
         self.events.append("write-" + name)
         return self.records / name
@@ -215,6 +216,56 @@ def test_full_top_level_stage_order_is_closed_and_refusal_stops_successor(tmp_pa
         refused.run()
     assert "successor" not in refused.events and "absent-final" not in refused.events
     assert refused.events[-1] == "write-terminal.json"
+
+
+def test_post_teardown_pause_refuses_nonaccepted_mode_before_records(tmp_path, monkeypatch):
+    path, _, _ = context(tmp_path)
+    monkeypatch.setenv("INVOCATION_ID", "fixture-invocation")
+    run = MODULE.Run(path, qualification_pause_after_teardown=True)
+    monkeypatch.setattr(run, "check_pins", lambda: None)
+    with pytest.raises(ValueError, match="only for accepted synthetic qualification"):
+        run.run()
+    assert not run.records.exists()
+
+
+def test_post_teardown_pause_writes_exact_barrier_then_has_no_terminal(tmp_path, monkeypatch):
+    path, _, _ = context(tmp_path)
+    monkeypatch.setenv("INVOCATION_ID", "fixture-invocation")
+    run = MODULE.Run(path, {"fixture": True}, True)
+    run.records.mkdir(parents=True)
+    run.sequence = 53
+    refs = {
+        "qualification": {"issuance": "issuance-q", "attempt": "attempt-q",
+                          "settlement": "settlement-q", "outcome": "success"},
+        "teardown": {"issuance": "issuance-t", "attempt": "attempt-t",
+                     "settlement": "settlement-t", "outcome": "success"},
+    }
+
+    def supervisor_stop(_seconds):
+        raise SystemExit("manager stopped")
+
+    monkeypatch.setattr(MODULE.time, "sleep", supervisor_stop)
+    with pytest.raises(SystemExit, match="manager stopped"):
+        run.post_teardown_pause(refs)
+    barrier = json.loads((run.records / "post-teardown-supervisor-pause.json").read_bytes())
+    assert barrier["last_finished_stage"] == "053-inspect-t"
+    assert barrier["settlements"] == refs
+    assert barrier["expected_absent_records"] == [
+        "054-final-containers.started.json", "055-final-networks.started.json", "terminal.json"]
+    assert not (run.records / "terminal.json").exists()
+
+
+def test_pause_settlement_reference_requires_exact_successful_owner_record():
+    inspection = {"record": {"status": "settled", "indeterminate": None,
+        "issuance": {"issuance": "issuance"}, "custody": {"attempt": "attempt"},
+        "settlement": {"issuance": "issuance", "settlement": "settlement",
+                       "outcome": "success"}}}
+    assert MODULE.Run.settlement_reference("issuance", inspection) == {
+        "issuance": "issuance", "attempt": "attempt",
+        "settlement": "settlement", "outcome": "success"}
+    inspection["record"]["settlement"]["outcome"] = "failure"
+    with pytest.raises(ValueError, match="exact successful settlements"):
+        MODULE.Run.settlement_reference("issuance", inspection)
 
 
 @pytest.mark.parametrize("relative,arguments", [
@@ -285,8 +336,8 @@ def test_accepted_cli_passes_exact_closed_coordinates(monkeypatch, tmp_path):
     observed = []
 
     class FakeRun:
-        def __init__(self, context_path, accepted):
-            observed.append((context_path, accepted))
+        def __init__(self, context_path, accepted, qualification_pause_after_teardown):
+            observed.append((context_path, accepted, qualification_pause_after_teardown))
 
         def run(self):
             observed.append("run")
@@ -300,7 +351,23 @@ def test_accepted_cli_passes_exact_closed_coordinates(monkeypatch, tmp_path):
     assert observed == [(tmp_path / "c", {
         "bundle": tmp_path / "bundle", "bundle_sha256": "1" * 64,
         "store": tmp_path / "store", "store_sha256": "2" * 64,
-    }), "run"]
+    }, False), "run"]
+
+
+def test_pause_cli_passes_explicit_qualification_mode(monkeypatch, tmp_path):
+    observed = []
+
+    class FakeRun:
+        def __init__(self, _context, _accepted, pause): observed.append(pause)
+        def run(self): observed.append("run")
+
+    monkeypatch.setattr(MODULE, "Run", FakeRun)
+    monkeypatch.setattr(sys, "argv", ["run_connected_cache.py", "--context", str(tmp_path / "c"),
+        "--execute", "--accepted-bundle", str(tmp_path / "bundle"),
+        "--accepted-bundle-sha256", "1" * 64, "--accepted-store", str(tmp_path / "store"),
+        "--accepted-store-sha256", "2" * 64, "--qualification-pause-after-teardown"])
+    MODULE.main()
+    assert observed == [True, "run"]
 
 
 @pytest.mark.parametrize("failure", ["pin", "sidecar"])

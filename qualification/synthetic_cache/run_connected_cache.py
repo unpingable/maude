@@ -39,7 +39,8 @@ def source_digest(path):
 
 
 class Run:
-    def __init__(self, context: Path, accepted: dict | None = None):
+    def __init__(self, context: Path, accepted: dict | None = None,
+                 qualification_pause_after_teardown: bool = False):
         self.context_path = context
         self.c = json.loads(read_regular(context, 128 * 1024))
         if self.c.get('schema') != CONTEXT_SCHEMA or self.c.get('governance', {}).get('standing_kind') != 'synthetic_fixture':
@@ -52,6 +53,7 @@ class Run:
         self.sequence = 0
         self.source_pins = {}
         self.accepted = accepted
+        self.qualification_pause_after_teardown = qualification_pause_after_teardown
         self.env = {'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8', 'PYTHONDONTWRITEBYTECODE': '1',
                     'PYTHONPATH': str(Path(self.c['files']['maude_source']['path']) / 'src'),
                     'DOCKER_HOST': 'unix:///var/run/docker.sock'}
@@ -120,6 +122,8 @@ class Run:
 
     def preflight(self):
         self.check_pins()
+        if self.qualification_pause_after_teardown and not self.accepted:
+            raise ValueError('post-teardown pause is only for accepted synthetic qualification')
         if self.accepted:
             for name in ('bundle', 'store'):
                 pin = self.accepted[name + '_sha256']
@@ -338,7 +342,9 @@ class Run:
             authoring = self.seal('q', plan, proposal)
             self.open_cycle('q', proposal, authoring, self.pulse('q'))
             issuance, inspection, inspection_path = self.execute('q', plan, 'qualify')
-            self.successor(plan, observation, issuance, inspection, inspection_path)
+            settlements = self.successor(plan, observation, issuance, inspection, inspection_path)
+            if self.qualification_pause_after_teardown:
+                self.post_teardown_pause(settlements)
             self.project_absent('final')
             self.write('terminal.json', {'exit_code': 0, 'phase': 'verified_local_composition',
                 'standing': 'synthetic_fixture', 'present_cache_state': 'project absent at final inspection',
@@ -407,7 +413,56 @@ class Run:
         self.ns('prepare-external', 'external-observation', 'prepare-cycle', '--request', base, '--profile', profile, output=prepared)
         authoring = self.seal('t', successor, prepared)
         self.open_cycle('t', prepared, authoring, resolver, profile)
-        self.execute('t', successor, 'teardown')
+        teardown_issuance, teardown_inspection, _ = self.execute('t', successor, 'teardown')
+        if self.qualification_pause_after_teardown:
+            return {
+                'qualification': self.settlement_reference(issuance, inspection),
+                'teardown': self.settlement_reference(teardown_issuance, teardown_inspection),
+            }
+        return None
+
+    @staticmethod
+    def settlement_reference(issuance, inspection):
+        record = inspection.get('record', {})
+        custody = record.get('custody', {})
+        settlement = record.get('settlement', {})
+        if (record.get('status') != 'settled' or record.get('indeterminate') is not None
+                or record.get('issuance', {}).get('issuance') != issuance
+                or settlement.get('issuance') != issuance or settlement.get('outcome') != 'success'
+                or not isinstance(custody.get('attempt'), str)
+                or not isinstance(settlement.get('settlement'), str)):
+            raise ValueError('post-teardown pause requires exact successful settlements')
+        return {'issuance': issuance, 'attempt': custody['attempt'],
+                'settlement': settlement['settlement'], 'outcome': 'success'}
+
+    def post_teardown_pause(self, settlements):
+        if self.sequence != 53 or set(settlements) != {'qualification', 'teardown'}:
+            raise ValueError('post-teardown pause reached outside the fixed qualification seam')
+        barrier = self.records / 'post-teardown-supervisor-pause.json'
+        self.write(barrier.name, {
+            'schema': 'maude.connected-cache-post-teardown-supervisor-pause/v1',
+            'qualification_only': True,
+            'invocation_id': os.environ['INVOCATION_ID'],
+            'context': str(self.context_path),
+            'context_sha256': file_digest(self.context_path),
+            'last_finished_stage': '053-inspect-t',
+            'settlements': settlements,
+            'expected_absent_records': [
+                '054-final-containers.started.json',
+                '055-final-networks.started.json',
+                'terminal.json',
+            ],
+            'next': 'stop the durable manager; inspect original owners and exact project; never resume this root',
+        })
+        descriptor = os.open(self.records, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        deadline = time.monotonic() + 600
+        while time.monotonic() < deadline:
+            time.sleep(0.1)
+        raise ValueError('qualification pause expired; preserve and inspect this root')
 
     def qualify_result(self, plan, inspection):
         result = self.root / 'result'
@@ -451,13 +506,15 @@ def main():
     parser.add_argument('--accepted-bundle-sha256')
     parser.add_argument('--accepted-store', type=Path)
     parser.add_argument('--accepted-store-sha256')
+    parser.add_argument('--qualification-pause-after-teardown', action='store_true',
+        help='synthetic accepted-mode recovery qualification only; wait after settled teardown before final inspection')
     args = parser.parse_args()
     values = (args.accepted_bundle, args.accepted_bundle_sha256, args.accepted_store, args.accepted_store_sha256)
     if any(values) and not all(values):
         parser.error('accepted mode requires exact bundle/store paths and both SHA-256 pins')
     accepted = {'bundle': args.accepted_bundle, 'bundle_sha256': args.accepted_bundle_sha256,
                 'store': args.accepted_store, 'store_sha256': args.accepted_store_sha256} if all(values) else None
-    Run(args.context, accepted).run()
+    Run(args.context, accepted, args.qualification_pause_after_teardown).run()
 
 
 if __name__ == '__main__':
