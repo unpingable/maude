@@ -43,6 +43,10 @@ class UncertainProcessTimeout(BoundedProcessError):
     """The command exceeded its wait bound; owner settlement must be inspected."""
 
 
+class UncertainDrainLoss(BoundedProcessError):
+    """The leader exited while a process-group member retained an output pipe."""
+
+
 class _StreamCapture:
     def __init__(self, source, destination, maximum: int, cancel: threading.Event):
         self.source = source
@@ -72,24 +76,33 @@ class _StreamCapture:
             self.cancel.set()
 
 
-def _stop_group(process: subprocess.Popen) -> None:
-    if process.poll() is not None:
-        return
+def _group_exists(process_group: int) -> bool:
     try:
-        os.killpg(process.pid, signal.SIGTERM)
+        os.killpg(process_group, 0)
+        return True
     except ProcessLookupError:
-        process.wait(timeout=TERMINATE_GRACE_SECONDS)
-        return
+        return False
+    except PermissionError:
+        return True
+
+
+def _stop_group(process: subprocess.Popen, process_group: int) -> None:
+    # The leader may already be reaped while a descendant still owns the
+    # inherited pipes. Address the process group independently of leader state.
     try:
-        process.wait(timeout=TERMINATE_GRACE_SECONDS)
-        return
-    except subprocess.TimeoutExpired:
-        pass
-    try:
-        os.killpg(process.pid, signal.SIGKILL)
+        os.killpg(process_group, signal.SIGTERM)
     except ProcessLookupError:
         pass
-    process.wait(timeout=TERMINATE_GRACE_SECONDS)
+    deadline = time.monotonic() + TERMINATE_GRACE_SECONDS
+    while _group_exists(process_group) and time.monotonic() < deadline:
+        time.sleep(POLL_SECONDS)
+    if _group_exists(process_group):
+        try:
+            os.killpg(process_group, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    if process.returncode is None:
+        process.wait(timeout=TERMINATE_GRACE_SECONDS)
 
 
 def run_bounded(
@@ -110,6 +123,7 @@ def run_bounded(
         stderr=subprocess.PIPE, start_new_session=True,
     )
     assert process.stdout is not None and process.stderr is not None
+    process_group = process.pid
     cancel = threading.Event()
     stdout = _StreamCapture(process.stdout, stdout_path, max_stream_bytes, cancel)
     stderr = _StreamCapture(process.stderr, stderr_path, max_stream_bytes, cancel)
@@ -128,14 +142,16 @@ def run_bounded(
             break
         time.sleep(POLL_SECONDS)
     if reason is not None:
-        _stop_group(process)
+        _stop_group(process, process_group)
     else:
         process.wait()
     for thread in threads:
         thread.join(timeout=TERMINATE_GRACE_SECONDS)
-    if any(thread.is_alive() for thread in threads):
-        _stop_group(process)
-        raise RuntimeError("stream drain did not terminate after process-group cleanup")
+    drain_loss = any(thread.is_alive() for thread in threads)
+    if drain_loss:
+        _stop_group(process, process_group)
+        for thread in threads:
+            thread.join(timeout=TERMINATE_GRACE_SECONDS)
     if stdout.error is not None:
         raise RuntimeError("stdout capture failed") from stdout.error
     if stderr.error is not None:
@@ -146,6 +162,11 @@ def run_bounded(
         stdout_bytes=stdout.total, stderr_bytes=stderr.total,
         stdout_truncated=stdout.truncated, stderr_truncated=stderr.truncated,
     )
+    if drain_loss:
+        raise UncertainDrainLoss(
+            "leader exited while a descendant retained an output pipe; process group stopped",
+            status="uncertain", result=result,
+        )
     if reason == "timeout":
         raise UncertainProcessTimeout(
             "command timed out; process group stopped, but owner settlement is uncertain",

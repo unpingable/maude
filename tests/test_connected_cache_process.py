@@ -1,4 +1,5 @@
 import importlib.util
+import os
 from pathlib import Path
 import sys
 
@@ -57,3 +58,27 @@ def test_preflight_refuses_existing_stream_before_start(tmp_path):
             stdout_path=stdout, stderr_path=stderr, timeout=1,
         )
     assert stdout.read_bytes() == b"retained" and not stderr.exists()
+
+
+def test_exited_parent_with_pipe_holding_child_is_cleaned_as_typed_uncertain(tmp_path):
+    stdout, stderr = tmp_path / "stdout", tmp_path / "stderr"
+    child_code = "import os,time; print(os.getpid(),flush=True); time.sleep(30)"
+    parent_code = (
+        "import subprocess,sys; "
+        f"subprocess.Popen([sys.executable,'-c',{child_code!r}]); "
+        "raise SystemExit(0)"
+    )
+    with pytest.raises(MODULE.UncertainDrainLoss) as caught:
+        MODULE.run_bounded(
+            [sys.executable, "-c", parent_code],
+            stdout_path=stdout, stderr_path=stderr, timeout=5,
+        )
+    assert caught.value.status == "uncertain"
+    child_pid = int(stdout.read_text().strip())
+    try:
+        os.kill(child_pid, 0)
+    except ProcessLookupError:
+        pass
+    else:
+        stat = Path(f"/proc/{child_pid}/stat")
+        assert stat.exists() and stat.read_text().split()[2] == "Z"
