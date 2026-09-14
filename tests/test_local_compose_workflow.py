@@ -5,6 +5,7 @@ import dataclasses
 import importlib.util
 import json
 import os
+import stat
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
@@ -70,6 +71,38 @@ def executor_fixture(tmp_path: Path):
         "work_schema": "maude.local-compose-workflow/v1",
     }
     return module, plan, path, plan_id, dispatch
+
+
+def test_runtime_fixture_modes_survive_restrictive_wrapper_umask(tmp_path: Path):
+    module, plan, _, _, _ = executor_fixture(tmp_path)
+    workspace = Path(plan["workspace"])
+    previous = os.umask(0o077)
+    try:
+        module.write_artifacts(plan, workspace)
+    finally:
+        os.umask(previous)
+
+    assert stat.S_IMODE(workspace.stat().st_mode) == 0o755
+    assert {item["path"] for item in plan["artifacts"]} == {
+        "cache.py",
+        "compose.yaml",
+        "front.py",
+        "origin.py",
+    }
+    for artifact in plan["artifacts"]:
+        path = workspace / artifact["path"]
+        mode = stat.S_IMODE(path.stat().st_mode)
+        assert mode == 0o644
+        # uid 65534 relies on the public read bit when the host files are
+        # mounted into the container; no Docker process is needed to test it.
+        assert mode & stat.S_IROTH
+        assert path.read_bytes() == artifact["content_utf8"].encode("utf-8")
+
+    private_state = workspace / "evidence" / "attempts"
+    private_state.mkdir(mode=0o700, parents=True)
+    module.write_once(private_state / ("a" * 64 + ".json"), {"state": "private"})
+    assert stat.S_IMODE(private_state.stat().st_mode) == 0o700
+    assert stat.S_IMODE(next(private_state.iterdir()).stat().st_mode) == 0o600
 
 
 def node(node_id: str, action: str, depends_on: tuple[str, ...] = ()) -> PlanNodeV1:

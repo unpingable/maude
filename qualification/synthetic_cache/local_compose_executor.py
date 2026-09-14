@@ -270,17 +270,32 @@ def write_artifacts(plan: dict[str, Any], workspace: Path) -> None:
     parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     if parent.is_symlink() or not parent.is_dir():
         raise Refusal("workspace_parent_not_directory")
-    # Generated programs are immutable world-readable inputs for the explicit
-    # non-root container user; the containing campaign root remains dedicated.
+    # These four plan-authored files are public runtime inputs for the explicit
+    # non-root container user.  Set their final modes explicitly: os.open's
+    # creation mode is otherwise reduced by the durable wrapper's umask.  No
+    # state, evidence, configuration, or containing private directory shares
+    # this mode transition.
     workspace.mkdir(mode=0o755)
+    workspace_descriptor = os.open(
+        workspace, os.O_RDONLY | os.O_DIRECTORY | getattr(os, "O_NOFOLLOW", 0)
+    )
+    try:
+        os.fchmod(workspace_descriptor, 0o755)
+    finally:
+        os.close(workspace_descriptor)
     for artifact in plan["artifacts"]:
         path = workspace / artifact["path"]
-        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        descriptor = os.open(
+            path,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0),
+            0o600,
+        )
         try:
             data = artifact["content_utf8"].encode("utf-8")
             view = memoryview(data)
             while view:
                 view = view[os.write(descriptor, view) :]
+            os.fchmod(descriptor, 0o644)
             os.fsync(descriptor)
         finally:
             os.close(descriptor)
