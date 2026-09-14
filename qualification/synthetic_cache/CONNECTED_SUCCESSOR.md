@@ -84,6 +84,64 @@ execution account resolving to the caller's own identity requires the explicit
 exception; it neither changes the account binding nor qualifies a deployment
 configuration.
 
+### Compact setup-config caller
+
+`generate_connected_cache_example.py` reduces the setup command line without
+creating another setup schema. It reads two caller-owned JSON files and emits
+the same `maude.connected-cache-run-preparation/v1` document accepted by
+`prepare_connected_cache_run.py`.
+
+The installation manifest has schema
+`maude.connected-cache-example-install/v1`. It pins the Maude revision, the
+build-plan and executor source bytes, each installed program by logical name,
+the copied virtual-environment Python, and the Pulse launcher sealer. Each
+program entry is `{"filename":"NAME","sha256":"64 lowercase hex"}` and
+must resolve beneath the supplied program directory. The manifest must name
+all programs listed by `prepare_connected_cache_run.py`; it must not refer to
+moving branches or an ambient `PATH`. Its closed `source_revisions` object must
+repeat the exact NQ CLI, NQ helpers, Nightshift, AG, Docket, and Pulse
+integration revisions in the compatibility table above; executable hashes
+remain the identity actually admitted by preparation.
+
+The profile has schema `maude.connected-cache-example-profile/v1` and exactly
+four objects: `identities`, `nq`, `runtime`, and `governance`. Their fields are
+the corresponding fields documented by
+`generate_connected_cache_setup_config.py`, except that `nq` contains
+`nq_subject` and `nq_scope_id`; the caller and working directory come from the
+command. Supply fresh, distinct occurrence and acquisition IDs. The tested
+runtime tuple is project `maude-cache-birthday`, image
+`python:3.13-alpine@sha256:46ee549c88617e9bc8acb843a326f1a5c0fa5608d7f9703509efe6d53b55f318`,
+Docker client/server `29.1.3`, and Compose `5.0.0`. The profile labels must say
+that authoring and Standing are synthetic fixtures; they do not grant
+authority.
+
+Before invoking the caller, retain the exact manifest/profile bytes, verify
+that the output root is absent, and preserve at least the documented 60 GiB
+host reserve on both its filesystem and `/data` when present. The helper also
+checks that reserve before writing the setup document.
+
+```bash
+PYTHON=/absolute/path/to/copied-venv/bin/python
+MAUDE=/absolute/path/to/pinned-maude
+
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/generate_connected_cache_example.py" \
+  --output /absolute/records/setup.json \
+  --root /absolute/fresh/run-root \
+  --maude-source "$MAUDE" \
+  --program-dir /absolute/pinned-programs \
+  --python "$PYTHON" \
+  --pulse-launcher-sealer /absolute/seal-pulse-support-resolver-launcher.py \
+  --install-manifest /absolute/connected-cache-install.json \
+  --profile /absolute/connected-cache-profile.json \
+  --execution-account local-example-account \
+  --allow-same-identity-in-debug
+```
+
+The final flag is mandatory for this single-account development example. It is
+an explicit NQ debug exception, not a deployment recommendation. This command
+only measures and assembles setup input. It performs no NQ initialization or
+acquisition, AG issuance, Docket action, Docker operation, or provider call.
+
 ## Prepare, inspect, then stop
 
 Choose a fresh, caller-owned absolute root and all occurrence, acquisition,
@@ -155,6 +213,7 @@ PYTHON=/absolute/path/to/maude-venv/bin/python
 MAUDE=/absolute/path/to/pinned-maude
 
 "$PYTHON" "$MAUDE/qualification/synthetic_cache/generate_connected_cache_setup_config.py" --help
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/generate_connected_cache_example.py" --help
 "$PYTHON" "$MAUDE/qualification/synthetic_cache/prepare_connected_cache_run.py" --help
 "$PYTHON" "$MAUDE/qualification/synthetic_cache/prepare_pulse_support.py" --help
 "$PYTHON" "$MAUDE/qualification/synthetic_cache/run_connected_cache.py" --help
