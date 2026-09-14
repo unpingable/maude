@@ -1,93 +1,158 @@
-# Portable connected-cache successor preparation
+# Connected-cache successor: public prerequisites
 
-This development helper exposes the accepted-plan compilation boundary without
-embedding a campaign checkout, retained record, executable, configuration, or
-credential path. It does not run the connected cache journey.
+This is a public, development-stage prerequisite guide for the connected
+synthetic-cache tutorial. It describes how a caller can prepare a closed local
+input set. It does not establish an end-to-end qualification, authority,
+current cache health, a production Standing service, or permission to run the
+workload.
 
-`compile_accepted_cache_actions.py` accepts an explicit Maude source tree and
-the SHA-256 of its `src/maude/plan/local_compose.py`, an
-immutable accepted Plan Core store and its SHA-256, a small caller-owned
-`maude.accepted-cache-plan-bundle/v1`, and one closed action-specific compiler
-input plus its SHA-256. The bundle fields are exactly:
+The preparation helpers are public code in this directory:
 
-```json
-{"acceptance_ref":"application-owned opaque reference","draft_id":"draft id","lock_id":"sha256:...","plan_digest":"sha256:...","schema":"maude.accepted-cache-plan-bundle/v1"}
-```
+- `public-nq-host-bootstrap.py` writes one fresh NQ host-watcher configuration.
+- `prepare_pulse_support.py` creates fresh Pulse support credentials, config,
+  and a sealed resolver launcher after it is given an exact NQ artifact and
+  Nightshift posture request.
+- `public-governance-bootstrap.py`,
+  `generate_connected_cache_setup_config.py`, and
+  `prepare_connected_cache_run.py` close and pin the caller's input boundary.
+- `run_connected_cache.py` is the intended driver, but remains under separate
+  public qualification. Its presence is not a claim that it is ready to run.
 
-Run `qualify` first against a fresh output directory. After qualification has
-settled and the retained-result owner has admitted its result, acquire one NQ
-local successor through the same admitted watcher/store/config and a fresh
-caller-owned acquisition ID. Do not repeat `init`, watcher admission, or the
-genesis-only diagnostic request. After the fresh successor observation passes
-the exact Nightshift family check, run `teardown` with its distinct explicit
-compiler input. Preserve the qualification handoff and receipt bytes; never
-recompile them merely to obtain a later timestamp.
+No helper discovers credentials, accepts an implicit identity, or reads a
+campaign-owned record.
 
-Each helper invocation refuses a source store with WAL/SHM sidecars, then uses
-SQLite's read-only backup interface to create a
-fresh private store copy and records compilation custody only in that copy.
-Inputs are bounded, regular, non-symlink files and outputs are create-only.
-Pathname pins assume the operator keeps the supplied source and inputs quiescent
-for the bounded invocation; they are not authenticated execution provenance.
+## Public source pins
 
-The surrounding recipe must supply pinned NQ, Pulse, Nightshift, AG and Docket
-programs and their closed configurations explicitly. The preparation command
-checks every file the caller lists, but does not discover inputs or establish
-that the list is complete. The eventual driver must define that closed list. It
-must retain owner
-acquisition/result/reconciliation records, use distinct qualification and
-successor occurrence identities, and plan bounded exact-project teardown.
-Synthetic Standing must remain labeled as a fixture and does not qualify a
-deployment Standing service. A plan lock, compilation, result, or successor
-observation grants no authority and does not imply current cache health.
+Obtain sources only from the corresponding published component repository and
+record the checked-out commit plus the executable and configuration digests in
+the caller's preparation record. This tutorial's component compatibility set
+is:
 
-This is development-stage component glue. Public-only end-to-end qualification
-and release-profile integration remain separate evidence.
+| Component | Public source revision | Required surface |
+| --- | --- | --- |
+| NQ | `d3089a9787a27c50faf1e3f393a88f8e64bd412d` | native `nq`, `nq-host-helper`, and the `nq.host/v1` descriptor |
+| Nightshift | `2db475b0bb8be5e3afa7ac6c95e2ab1f73a9ceb4` | cycle, external-observation, and resolver CLI surfaces |
+| AG | `5c8b22b77193798f25298b02758ac3caa3a8fe24` | governed-loop catalog, runtime-profile seal/verify, and standing resolver |
+| Docket | `c49ad8d0f26fb2a13b9dbafdde84d7abfe1f867b` | exact executor custody, attempt, reconciliation, and inspection surfaces |
+| Pulse support integration | Nightshift `d91b214cd22afd5585fcd259d22463d08d606b58`, `integrations/pulse-nq-load-support` | `LoadSupportConfigV1` and `seal-pulse-support-resolver-launcher.py` |
 
-`prepare_connected_cache_successor.py` seals the complete caller boundary for
-the eventual bounded driver. Its closed enrollment requires exact paths and
-SHA-256 pins for NQ, Pulse, Nightshift, AG and Docket; the seven narrow public
-helpers, including the proposal binder; and the caller-enrolled owner
-configuration/input files. Its stage contract fixes the
-owner ordering from NQ genesis through initial custody and settlement, external
-acquisition, result-owner reconciliation, same-owner NQ local successor, exact
-family comparison, successor custody/settlement, bounded teardown and owner
-readback. It explicitly forbids a repeated genesis request and labels Standing
-as `synthetic_fixture`.
+The older source-history NQ pin is intentional. It is the compatible source
+for this tutorial's NQ104-era host profile, not a claim about a current NQ
+release. Do not substitute a later component because its executable name or a
+JSON field happens to match.
 
-The preparation output is not itself an executor and has `authority: none` and
-`effects: false`. Until the exact driver consuming this closed preparation is
-published and qualified, do not describe it as a runnable end-to-end recipe.
+## Local toolchain and installation boundary
 
-## Public helper invocation
-
-Run helpers from a pinned Maude checkout with an explicitly selected Python:
+Use Python 3.11 or later. Create the Maude environment with copies, rather
+than symlinks, because the Pulse support reader admits only a regular,
+non-symlink Python interpreter path:
 
 ```bash
-MAUDE=/absolute/path/to/pinned-maude
-PYTHON=/absolute/path/to/python3
-
-"$PYTHON" "$MAUDE/qualification/synthetic_cache/helpers/cache-successor-compose-request.py" \
-  --posture-request /absolute/run/initial-posture.json \
-  --precompiled-proposal /absolute/run/plan/handoff-qualify.json \
-  --output /absolute/run/initial-proposed.json
-
-"$PYTHON" "$MAUDE/qualification/synthetic_cache/helpers/verify-cache-observation-family.py" \
-  --predecessor /absolute/run/initial-posture.json \
-  --successor /absolute/run/successor-posture.json
+python3 -m venv --copies /absolute/path/to/maude-venv
+/absolute/path/to/maude-venv/bin/python -m pip install -e /absolute/path/to/pinned-maude
 ```
 
-The first command refuses a proposal that does not bind the request's exact
-observation, scope, and `maude.local-compose-workflow/v1` schema. The second
-checks that the later request retains the exact Nightshift observation family.
-It does not acquire the later observation. Use NQ's supported same-watcher,
-same-store, same-config local-successor command only after the first settlement
-and retained-result qualification; do not repeat genesis initialization or its
-state-changing diagnostic request.
+Install Maude's core dependency set. Do not install or invoke the transitional
+`classic-rpc` extra for this path; it is not AG-NG compatibility. Pin the
+actual selected `python`, `openssl`, NQ, Pulse, Nightshift, AG, Docket, helper,
+and resolver bytes before preparation. All caller-provided paths must be
+absolute, regular files where a reader requires it, and inputs with a supplied
+digest must match their digest before the fresh output root is allocated.
 
-Every helper provides `--help`. Callers must use absolute paths and fresh
-create-only outputs. `compile_accepted_cache_actions.py` is required only for
-accepted mode; fixture mode remains explicitly synthetic. Neither mode supplies
-a Standing service. The still-missing public end-to-end driver must create and
-pin owner configurations and credentials, invoke the owner CLIs in the declared
-stage order, retain terminal/recovery evidence, and perform bounded teardown.
+Build NQ natively from the exact source pin so `nq` and `nq-host-helper` come
+from the same source/build semantics. The public NQ host configuration derives
+the profile descriptor from the selected NQ binary (`nq --json profiles list`),
+then binds the resulting `nq.host/v1` digest into the host scope. Do not paste
+a profile semantic/digest from an unrelated build: the NQ104 profile namespace
+is a build-semantic input. Pulse prepares support only for the exact supported
+NQ host/load-pressure identities defined by its pinned integration.
+
+The NQ watcher must name both a concrete `execution_account` and a concrete
+host watcher binding (`instance_id`, `subject`, and scope ID). Debug use of an
+execution account resolving to the caller's own identity requires the explicit
+`--allow-same-identity-in-debug` option. That option is a local debug
+exception; it neither changes the account binding nor qualifies a deployment
+configuration.
+
+## Prepare, inspect, then stop
+
+Choose a fresh, caller-owned absolute root and all occurrence, acquisition,
+runtime, role, and schedule identities before generating setup input. The
+configuration generator computes the NQ host scope digest from the selected
+NQ profile and writes a create-only setup configuration. The preparation
+helper then makes only the following fresh local artifacts:
+
+```text
+<root>/
+  credentials/                 fresh Maude session and producer key files
+  governance/                  catalog, enrolled/sealed AG profile, resolver wrappers
+  nq/                          generated NQ watcher config and uninitialized state path
+  runtime/                     declared future project workspace; no containers yet
+  records/                     reserved for driver terminal/recovery records
+  context.json                 closed byte-pinned preparation context
+```
+
+`prepare_pulse_support.py` is deliberately later in the ordering: it needs the
+actual, admitted NQ diagnostic artifact and the exact posture-only Nightshift
+request. It writes a separate fresh root containing `producer.hex`, Pulse
+configuration, outgoing/receipt directories, sealed resolver launcher,
+enrollment, and `preparation.json`. It creates neither a measurement nor a
+receipt, and it grants no runtime permission.
+
+Inspect each preparation output and retain its exact bytes and hashes. A
+partial root after a helper refusal is evidence to inspect, not a directory to
+reuse or overwrite. Start again only with a fresh root after identifying the
+retained terminal/refusal state. In particular, never rerun an uncertain NQ
+acquisition, AG/Docket settlement, or teardown merely to obtain a later
+timestamp; use that component's retained inspection/reconciliation interface.
+
+## Intended stage order
+
+The closed context fixes the intended order:
+
+```text
+NQ genesis and watcher admission
+  -> initial NQ artifact custody in Pulse and Nightshift
+  -> AG/Docket settlement of the qualification occurrence
+  -> exact external-result reconciliation
+  -> one fresh NQ local-successor acquisition in the same watcher/store/config
+  -> exact observation-family comparison
+  -> successor Pulse/Nightshift custody and separate AG/Docket settlement
+  -> bounded exact-project teardown and owner readback
+```
+
+The successor must use its explicit, fresh local acquisition ID and must not
+repeat genesis initialization or the genesis-only diagnostic request. The
+qualification and successor have distinct occurrence, schedule, attempt, and
+Pulse acquisition identities. The driver must retain initial and successor
+artifacts, custody records, AG decisions/issuances, Docket attempts and
+settlements, inspection/reconciliation outputs, and teardown inventory. A
+failure, pending state, unknown state, or incomplete readback is a fail-closed
+result, not permission to continue.
+
+Synthetic Standing remains exactly that: a local fixture used to exercise the
+published interfaces. It does not stand in for a deployment Standing service,
+does not create authority outside the fixture, and does not imply a current
+external observation.
+
+## Invocation status
+
+The commands below are accurate preparation interfaces, not an authorization
+to execute the journey:
+
+```bash
+PYTHON=/absolute/path/to/maude-venv/bin/python
+MAUDE=/absolute/path/to/pinned-maude
+
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/generate_connected_cache_setup_config.py" --help
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/prepare_connected_cache_run.py" --help
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/prepare_pulse_support.py" --help
+"$PYTHON" "$MAUDE/qualification/synthetic_cache/run_connected_cache.py" --help
+```
+
+The final command currently exposes `--context` and `--execute`; do not invoke
+it with `--execute` until its separate public qualification records an admitted
+result and the operator has established the required local authority, resource,
+and durable recovery boundary. No native build, provider action, container
+launch, cache acquisition, public publication, or push is performed by this
+guide.
