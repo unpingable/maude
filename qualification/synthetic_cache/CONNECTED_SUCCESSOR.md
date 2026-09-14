@@ -40,3 +40,17 @@ observation grants no authority and does not imply current cache health.
 
 This is development-stage component glue. Public-only end-to-end qualification
 and release-profile integration remain separate evidence.
+
+`prepare_connected_cache_successor.py` seals the complete caller boundary for
+the eventual bounded driver. Its closed enrollment requires exact paths and
+SHA-256 pins for NQ, Pulse, Nightshift, AG and Docket; the six narrow public
+helpers; and every owner configuration/input file. Its stage contract fixes the
+owner ordering from NQ genesis through initial custody and settlement, external
+acquisition, result-owner reconciliation, same-owner NQ local successor, exact
+family comparison, successor custody/settlement, bounded teardown and owner
+readback. It explicitly forbids a repeated genesis request and labels Standing
+as `synthetic_fixture`.
+
+The preparation output is not itself an executor and has `authority: none` and
+`effects: false`. Until the exact driver consuming this closed preparation is
+published and qualified, do not describe it as a runnable end-to-end recipe.
