@@ -19,6 +19,7 @@ def load_module(name, filename):
 PREPARE = load_module("cache_external_successor", "prepare-cache-external-successor.py")
 RESULT = load_module("cache_successor_result", "cache-successor-result-config.py")
 ATTACH = load_module("cache_successor_attach", "cache-successor-attach-external.py")
+COMPOSE = load_module("cache_successor_compose", "cache-successor-compose-request.py")
 
 
 def write_json(path, value):
@@ -170,6 +171,56 @@ class TestSuccessorAttachment(unittest.TestCase):
                                         "output": root / "second.json"})
             with self.assertRaisesRegex(ValueError, "without external evidence"):
                 ATTACH.main(second)
+
+
+class TestComposeRequest(unittest.TestCase):
+    def test_binds_exact_observation_scope_and_recomputes_request_id(self):
+        digest = lambda value: "sha256:" + value * 64
+        posture = {
+            "schema": "nightshift.canonical_cycle_request.v1",
+            "request_id": digest("1"),
+            "observation_id": digest("2"),
+            "slot": {"scope_id": digest("3")},
+            "proposal": None,
+            "authoring_context": None,
+        }
+        proposal = {
+            "schema": "nightshift.precompiled_workflow_proposal.v2",
+            "proposal_input": {
+                "observation": digest("2"),
+                "proposal": {
+                    "scope": digest("3"),
+                    "work_schema": "maude.local-compose-workflow/v1",
+                },
+            },
+        }
+        result = COMPOSE.bind(posture, proposal)
+        self.assertEqual(result["proposal"], proposal)
+        self.assertEqual(result["request_id"], COMPOSE.object_id(result, "request_id"))
+        self.assertIsNone(posture["proposal"])
+
+        proposal["proposal_input"]["observation"] = digest("4")
+        with self.assertRaisesRegex(ValueError, "exact host observation"):
+            COMPOSE.bind(posture, proposal)
+
+    def test_refuses_scope_or_work_schema_substitution(self):
+        digest = lambda value: "sha256:" + value * 64
+        posture = {
+            "schema": "nightshift.canonical_cycle_request.v1",
+            "observation_id": digest("1"),
+            "slot": {"scope_id": digest("2")},
+            "proposal": None,
+            "authoring_context": None,
+        }
+        proposal = {
+            "schema": "nightshift.precompiled_workflow_proposal.v2",
+            "proposal_input": {
+                "observation": digest("1"),
+                "proposal": {"scope": digest("3"), "work_schema": "other/v1"},
+            },
+        }
+        with self.assertRaisesRegex(ValueError, "request scope"):
+            COMPOSE.bind(posture, proposal)
 
 
 if __name__ == "__main__":

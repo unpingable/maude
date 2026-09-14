@@ -16,8 +16,15 @@ import stat
 
 SCHEMA = "maude.connected-cache-successor-preparation/v1"
 PROGRAMS = ("nq", "pulse", "nightshift", "ag", "docket")
-HELPERS = ("host_bootstrap", "family_check", "external_prepare",
-           "external_attach", "result_config", "accepted_action_compile")
+HELPERS = (
+    "host_bootstrap",
+    "proposal_attach",
+    "family_check",
+    "external_prepare",
+    "external_attach",
+    "result_config",
+    "accepted_action_compile",
+)
 STAGES = ("nq_genesis", "initial_pulse_custody", "initial_nightshift",
           "initial_ag_docket_settlement", "external_acquisition",
           "result_owner_reconciliation", "nq_local_successor",
