@@ -3,7 +3,9 @@
 
 The executor owns only a durable local attempt record and the exact creation of
 ``result.txt`` in a plan-bound scratch root.  It has no command language,
-overwrite mode, provider, or recovery retry.
+overwrite mode, provider, or recovery retry.  A separately built and pinned
+qualification package can terminate after the result and directory are synced
+but before the success record; the ordinary executor never selects that mode.
 """
 
 from __future__ import annotations
@@ -26,6 +28,7 @@ from maude.plan.reviewed_local_copy import COMPILER_CONTRACT, EXECUTOR_PLAN_SCHE
 CONFIG_SCHEMA = "maude.reviewed-local-copy.executor-config/v1"
 RECEIPT_SCHEMA = "maude.reviewed-local-copy.executor-receipt/v1"
 MAX_DOCUMENT_BYTES = 1024 * 1024
+QUALIFICATION_CUT_EXIT_CODE = 75
 _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 _DISPATCH = {"attempt", "marker", "work_schema", "work", "subject", "scope"}
 _OUTCOME = {"attempt", "marker", "receipt", "outcome"}
@@ -33,6 +36,10 @@ _OUTCOME = {"attempt", "marker", "receipt", "outcome"}
 
 class ExecutorRefusal(ValueError):
     pass
+
+
+class QualificationInterruption(RuntimeError):
+    """Stop only the separately enrolled uncertainty qualification program."""
 
 
 def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -222,6 +229,15 @@ def _terminal_from_record(record: dict[str, Any]) -> bytes | None:
 
 
 def execute(config_path: Path, raw_dispatch: bytes) -> bytes:
+    return _execute(config_path, raw_dispatch, qualification_cut=False)
+
+
+def execute_interruption_qualification(config_path: Path, raw_dispatch: bytes) -> bytes:
+    """Run the exact-copy mechanics with the one documented qualification cut."""
+    return _execute(config_path, raw_dispatch, qualification_cut=True)
+
+
+def _execute(config_path: Path, raw_dispatch: bytes, *, qualification_cut: bool) -> bytes:
     _, plan, scratch, state_root = _load_config(config_path)
     dispatch = _dispatch(raw_dispatch, plan)
     attempt_name = dispatch["attempt"].removeprefix("sha256:")
@@ -257,6 +273,10 @@ def execute(config_path: Path, raw_dispatch: bytes) -> bytes:
             finally:
                 os.close(descriptor)
             os.fsync(scratch_descriptor)
+            if qualification_cut:
+                raise QualificationInterruption(
+                    "qualification interruption after result fsync before success record"
+                )
             receipt = content_digest(_record(dispatch, "success"))
             _write_atomic(attempt_descriptor, "record.json", _record(dispatch, "success", receipt))
             return _outcome(dispatch, receipt, "success")
@@ -290,7 +310,7 @@ def reconcile(config_path: Path, raw_dispatch: bytes) -> bytes:
         os.close(state_descriptor)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None, *, qualification_interruption: bool) -> int:
     parser = argparse.ArgumentParser(prog="maude-reviewed-local-copy-executor")
     parser.add_argument("operation", choices=("plan-id", "execute", "reconcile"))
     parser.add_argument("config", type=Path)
@@ -303,12 +323,32 @@ def main(argv: list[str] | None = None) -> int:
             raw = sys.stdin.buffer.read(MAX_DOCUMENT_BYTES + 1)
             if len(raw) > MAX_DOCUMENT_BYTES:
                 raise ExecutorRefusal("dispatch exceeds transport bound")
-            result = execute(args.config, raw) if args.operation == "execute" else reconcile(args.config, raw)
+            if args.operation == "execute":
+                operation = (
+                    execute_interruption_qualification
+                    if qualification_interruption
+                    else execute
+                )
+                result = operation(args.config, raw)
+            else:
+                result = reconcile(args.config, raw)
             sys.stdout.buffer.write(result)
+    except QualificationInterruption as error:
+        print(str(error), file=sys.stderr)
+        return QUALIFICATION_CUT_EXIT_CODE
     except (OSError, ExecutorRefusal, ValueError) as error:
         print(str(error), file=sys.stderr)
         return 2
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    return _main(argv, qualification_interruption=False)
+
+
+def qualification_main(argv: list[str] | None = None) -> int:
+    """CLI for the separately packaged interruption qualification program."""
+    return _main(argv, qualification_interruption=True)
 
 
 if __name__ == "__main__":

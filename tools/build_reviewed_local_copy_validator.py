@@ -3,7 +3,9 @@
 
 The default ``validator`` role remains validate-only for compatibility.  The
 explicit ``executor`` role exposes only the sealed component operations
-``plan-id``, ``execute``, and ``reconcile``.
+``plan-id``, ``execute``, and ``reconcile``.  The separately pinned
+``executor-interruption-qualification`` role exposes the same operations but
+terminates ``execute`` only at the post-result-fsync/pre-success-record cut.
 """
 
 from __future__ import annotations
@@ -59,8 +61,10 @@ def source_revision(root: Path) -> str:
 
 
 def build(output: Path, expected_revision: str, role: str = "validator") -> dict[str, object]:
-    if role not in {"validator", "executor"}:
-        raise SystemExit("package role must be validator or executor")
+    if role not in {"validator", "executor", "executor-interruption-qualification"}:
+        raise SystemExit(
+            "package role must be validator, executor, or executor-interruption-qualification"
+        )
     root = Path(__file__).resolve().parents[1]
     actual_revision = source_revision(root)
     if expected_revision != actual_revision:
@@ -73,7 +77,7 @@ def build(output: Path, expected_revision: str, role: str = "validator") -> dict
         "checks.py", "compiler.py", "document.py", "envelope.py", "local_compose.py",
         "ration_containment.py", "reviewed_local_copy.py", "store.py",
     ]
-    if role == "executor":
+    if role != "validator":
         closure.append("reviewed_local_copy_executor.py")
     entries.extend((f"maude/plan/{name}", maude_root / "plan" / name) for name in closure)
     entries.extend((f"yaml/{path.name}", path) for path in sorted(PYAML_ROOT.glob("*.py")))
@@ -97,7 +101,7 @@ def build(output: Path, expected_revision: str, role: str = "validator") -> dict
         package_init = b"# Closed validator import package; exports intentionally omitted.\n"
         schema = "maude.reviewed-local-copy-validator-package/v1"
         closure_identity = "maude.reviewed-local-copy-validator/imports-v1"
-    else:
+    elif role == "executor":
         main = (
             b"import sys\n"
             b"from maude.plan.reviewed_local_copy_executor import main\n"
@@ -108,6 +112,21 @@ def build(output: Path, expected_revision: str, role: str = "validator") -> dict
         package_init = b"# Closed executor import package; exports intentionally omitted.\n"
         schema = "maude.reviewed-local-copy-executor-package/v1"
         closure_identity = "maude.reviewed-local-copy-executor/imports-v1"
+    else:
+        main = (
+            b"import sys\n"
+            b"from maude.plan.reviewed_local_copy_executor import qualification_main\n"
+            b"if len(sys.argv) < 2 or sys.argv[1] not in {'plan-id', 'execute', 'reconcile'}:\n"
+            b"    raise SystemExit('only the plan-id, execute, and reconcile operations are available')\n"
+            b"raise SystemExit(qualification_main(sys.argv[1:]))\n"
+        )
+        package_init = (
+            b"# Closed interruption-qualification executor package; exports intentionally omitted.\n"
+        )
+        schema = "maude.reviewed-local-copy-interruption-qualification-package/v1"
+        closure_identity = (
+            "maude.reviewed-local-copy-interruption-qualification/imports-v1"
+        )
     manifest: dict[str, str] = {
         "__main__.py": digest(main),
         "maude/plan/__init__.py": digest(package_init),
@@ -148,7 +167,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--source-revision", required=True)
-    parser.add_argument("--role", choices=("validator", "executor"), default="validator")
+    parser.add_argument(
+        "--role",
+        choices=("validator", "executor", "executor-interruption-qualification"),
+        default="validator",
+    )
     args = parser.parse_args()
     if args.output.exists() or args.manifest.exists():
         parser.error("output and manifest must be absent")

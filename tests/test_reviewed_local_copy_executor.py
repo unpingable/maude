@@ -25,7 +25,10 @@ from maude.plan.reviewed_local_copy import ReviewedLocalCopyCompilerV1, Reviewed
 from maude.plan.reviewed_local_copy_executor import (
     CONFIG_SCHEMA,
     ExecutorRefusal,
+    QUALIFICATION_CUT_EXIT_CODE,
+    QualificationInterruption,
     execute,
+    execute_interruption_qualification,
     reconcile,
 )
 import maude.plan.reviewed_local_copy_executor as executor_module
@@ -111,6 +114,40 @@ def test_reserved_interruption_reconciles_indeterminate_without_copy(tmp_path):
     assert not (scratch / "result.txt").exists()
     assert json.loads(execute(config, dispatch))["outcome"] == "indeterminate"
     assert not (scratch / "result.txt").exists()
+
+
+def test_post_fsync_qualification_cut_reconciles_without_repeating_copy(tmp_path):
+    scratch, state, config, dispatch = executor_fixture(tmp_path)
+
+    with pytest.raises(QualificationInterruption, match="after result fsync"):
+        execute_interruption_qualification(config, dispatch)
+
+    destination = scratch / "result.txt"
+    assert destination.read_bytes() == b"exact public text\n"
+    before = destination.stat()
+    attempt = state / digest("1").removeprefix("sha256:") / "record.json"
+    assert json.loads(attempt.read_bytes())["state"] == "reserved"
+
+    outcome = json.loads(reconcile(config, dispatch))
+    assert outcome["outcome"] == "indeterminate"
+    assert json.loads(execute(config, dispatch))["outcome"] == "indeterminate"
+    after = destination.stat()
+    assert (after.st_dev, after.st_ino, after.st_size) == (
+        before.st_dev,
+        before.st_ino,
+        before.st_size,
+    )
+    assert destination.read_bytes() == b"exact public text\n"
+
+
+def test_ordinary_executor_has_no_ambient_qualification_selector(tmp_path, monkeypatch):
+    scratch, _state, config, dispatch = executor_fixture(tmp_path)
+    monkeypatch.setenv(
+        "MAUDE_REVIEWED_LOCAL_COPY_QUALIFICATION_CUT",
+        "post-result-fsync-pre-success-record-v1",
+    )
+    assert json.loads(execute(config, dispatch))["outcome"] == "success"
+    assert (scratch / "result.txt").read_bytes() == b"exact public text\n"
 
 
 def test_transport_unknown_fields_and_missing_evidence_fail_closed(tmp_path):
@@ -267,7 +304,7 @@ def test_closed_executor_zipapp_has_exact_closure_and_restricted_cli(tmp_path):
     assert package["closure"] == "maude.reviewed-local-copy-executor/imports-v1"
     assert "maude/plan/reviewed_local_copy_executor.py" in package["entries"]
     assert "maude/plan/reviewed_local_copy.py" in package["entries"]
-    _scratch, _state, config, _dispatch = executor_fixture(tmp_path)
+    scratch, _state, config, dispatch = executor_fixture(tmp_path)
     plan_id = subprocess.run(
         [str(artifacts[0]), "plan-id", str(config)],
         check=False, capture_output=True, text=True, cwd=tmp_path,
@@ -275,9 +312,109 @@ def test_closed_executor_zipapp_has_exact_closure_and_restricted_cli(tmp_path):
     )
     assert plan_id.returncode == 0, plan_id.stderr
     assert plan_id.stdout.strip().startswith("sha256:")
+    ordinary = subprocess.run(
+        [str(artifacts[0]), "execute", str(config)],
+        input=dispatch,
+        check=False,
+        capture_output=True,
+        text=False,
+        cwd=tmp_path,
+        env={
+            "PATH": os.environ["PATH"],
+            "MAUDE_REVIEWED_LOCAL_COPY_QUALIFICATION_CUT": (
+                "post-result-fsync-pre-success-record-v1"
+            ),
+        },
+    )
+    assert ordinary.returncode == 0, ordinary.stderr
+    assert json.loads(ordinary.stdout)["outcome"] == "success"
+    assert (scratch / "result.txt").read_bytes() == b"exact public text\n"
     refused = subprocess.run(
         [str(artifacts[0]), "validate"], check=False, capture_output=True, text=True,
         cwd=tmp_path, env={"PATH": os.environ["PATH"]},
     )
     assert refused.returncode != 0
     assert "only the plan-id, execute, and reconcile operations" in refused.stderr
+
+
+def test_closed_interruption_qualification_package_cuts_then_reconciles(tmp_path):
+    root = Path(__file__).parents[1]
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    artifacts = []
+    manifests = []
+    for name in ("first", "second"):
+        artifact = tmp_path / f"interruption-{name}.pyz"
+        manifest = tmp_path / f"interruption-{name}.json"
+        built = subprocess.run(
+            [
+                "/usr/bin/python3.12",
+                str(root / "tools" / "build_reviewed_local_copy_validator.py"),
+                "--role",
+                "executor-interruption-qualification",
+                "--output",
+                str(artifact),
+                "--manifest",
+                str(manifest),
+                "--source-revision",
+                revision,
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert built.returncode == 0, built.stderr
+        artifacts.append(artifact)
+        manifests.append(manifest)
+    assert artifacts[0].read_bytes() == artifacts[1].read_bytes()
+    assert manifests[0].read_bytes() == manifests[1].read_bytes()
+    package = json.loads(manifests[0].read_text())
+    assert package["schema"] == "maude.reviewed-local-copy-interruption-qualification-package/v1"
+    assert package["closure"] == "maude.reviewed-local-copy-interruption-qualification/imports-v1"
+
+    scratch, state, config, dispatch = executor_fixture(tmp_path)
+    interrupted = subprocess.run(
+        [str(artifacts[0]), "execute", str(config)],
+        input=dispatch,
+        check=False,
+        capture_output=True,
+        cwd=tmp_path,
+        env={"PATH": os.environ["PATH"]},
+    )
+    assert interrupted.returncode == QUALIFICATION_CUT_EXIT_CODE
+    assert interrupted.stdout == b""
+    assert b"after result fsync before success record" in interrupted.stderr
+    destination = scratch / "result.txt"
+    assert destination.read_bytes() == b"exact public text\n"
+    before = destination.stat()
+    attempt = state / digest("1").removeprefix("sha256:") / "record.json"
+    assert json.loads(attempt.read_bytes())["state"] == "reserved"
+
+    reconciled = subprocess.run(
+        [str(artifacts[0]), "reconcile", str(config)],
+        input=dispatch,
+        check=False,
+        capture_output=True,
+        cwd=tmp_path,
+        env={"PATH": os.environ["PATH"]},
+    )
+    assert reconciled.returncode == 0, reconciled.stderr
+    assert json.loads(reconciled.stdout)["outcome"] == "indeterminate"
+    replay = subprocess.run(
+        [str(artifacts[0]), "execute", str(config)],
+        input=dispatch,
+        check=False,
+        capture_output=True,
+        cwd=tmp_path,
+        env={"PATH": os.environ["PATH"]},
+    )
+    assert replay.returncode == 0, replay.stderr
+    assert json.loads(replay.stdout)["outcome"] == "indeterminate"
+    after = destination.stat()
+    assert (after.st_dev, after.st_ino, after.st_size) == (
+        before.st_dev,
+        before.st_ino,
+        before.st_size,
+    )
+    assert destination.read_bytes() == b"exact public text\n"
