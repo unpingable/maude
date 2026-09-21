@@ -1,5 +1,11 @@
 # Maude Documentation
 
+For the current public composed path, use the immutable
+[Constellation 0.1.0-alpha.6 walkthrough](https://unpingable.com/constellation/releases/0.1.0-alpha.6/guide.html).
+It qualifies one reviewed, authorized-once local effect and preserves the
+boundary that a valid Maude plan is not execution permission. Maude's broader
+design-flow workspace remains pre-alpha.
+
 ## Guides
 
 | Document | Contents |
@@ -35,7 +41,7 @@ maude --socket /run/user/1000/governor-abc123.sock
 
 Starting the daemon from an unrelated checkout produces a different socket.
 Maude uses the Unix-socket daemon, not `governor serve --stdio` and not a direct
-AG-NG connection.
+Constellation AG connection.
 
 ### Commands
 
@@ -78,4 +84,6 @@ Ctrl+Q   Quit
 
 ---
 
-For governor setup and configuration, see the [Agent Governor documentation](https://github.com/unpingable/agent_governor).
+The classic Governor commands above are transitional material, not the current
+Constellation integration. For the authority component and its current guide,
+see [constellation-ag](https://github.com/unpingable/constellation-ag).

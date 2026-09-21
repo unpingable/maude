@@ -24,8 +24,18 @@ verified. Provider completion does not accept a plan. One closed synthetic-cache
 compiler exists; there is no generic
 compiler from operational prose or generic browser handoff.
 
-Phosphor inspection is a separate read-only process hosted by AG-NG. Nightshift,
-AG-NG, Docket, and the executor own the post-handoff facts and effects. See
+For the current public composed path, start with the immutable
+[Constellation 0.1.0-alpha.6 walkthrough](https://unpingable.com/constellation/releases/0.1.0-alpha.6/guide.html).
+Its `reviewed-local-copy/v1` profile used Maude's exact plan validation and
+authority-neutral executor to complete one reviewed, authorized-once local
+effect under Docket custody. Public newcomers reproduced the retained evidence
+without repeating the provider call or effect. It is a narrow integration
+profile, not a claim that the pre-alpha design workspace is ready for general
+ECAD/design-flow use.
+
+Phosphor inspection is a separate read-only process hosted by Constellation AG.
+Nightshift, Constellation AG, Docket, and the executor own the post-handoff
+facts and effects. See
 [the surface boundaries](docs/PHOSPHOR-NG-CONVERGENCE.md).
 
 ---
@@ -33,9 +43,9 @@ AG-NG, Docket, and the executor own the post-handoff facts and effects. See
 ## Transitional supervised agent sessions (classic RPC)
 
 The commands in this section use classic Governor's session RPC. They are not
-the AG-NG campaign interface and are not the starting point for new successor
+the Constellation AG campaign interface and are not the starting point for new successor
 integrations. Their continued packaging dependency is tracked separately from
-Plan Core; do not infer AG-NG compatibility from a shared “governor” label.
+Plan Core; do not infer Constellation AG compatibility from a shared “governor” label.
 
 Install this transitional interface explicitly:
 
@@ -125,17 +135,18 @@ use quiescent writers for a consistent aggregate. `mode=ro` does not promise
 the absence of all SQLite sidecar activity. Mutating commands refuse with
 `--read-only`.
 
-For a supported external-caller walkthrough, use the
-[versioned Maude-only consultation guide](https://unpingable.com/constellation/releases/0.1.0-alpha.1/guide.html)
+For a supported external-caller walkthrough, use the current
+[alpha.6 integration guide](https://unpingable.com/constellation/releases/0.1.0-alpha.6/guide.html)
 and its [Constellation integration map](https://unpingable.com/constellation/integration.html).
-That profile reads one caller-selected Plan Core store; it does not compose with
-AG, grant permission, or dispatch an effect.
+The earlier Maude-only alpha.1 consultation profile remains a historical,
+read-only example; it does not compose with AG, grant permission, or dispatch
+an effect.
 
 ## Relationship to Phosphor-ng
 
-Maude is the bounded-plan and supervised-session desk. Phosphor-ng (the
-operator-facing identity of `ag_ng`'s `ag-operator-ui`) is the separate,
-read-only Nightshift → AG-NG → Docket campaign inspector. The two surfaces
+Maude is the bounded-plan and supervised-session desk. Phosphor (the
+operator-facing identity of `constellation-ag`'s `ag-operator-ui`) is the
+separate, read-only Nightshift → Constellation AG → Docket campaign inspector. The two surfaces
 share canonical language, exact identity presentation, honest absence, and a
 navigation-only deep-link contract; they do not share authority or state
 machines. Nightshift now owns an optional immutable plan/session → exact
@@ -174,7 +185,7 @@ browser a runtime owner.
 Earlier versions framed Maude as a governed-chat client. That framing is retired (ratified decision D-GS-2 in the Agent Governor governed-shell campaign). The chat path — streaming model responses through the daemon's `chat.stream`, plus the PLAN/BUILD spec-lock workflow — still exists in the code but is **unsupported legacy**, scheduled for removal at the v3.0 release (GS-15). Do not build on it. If a chat lane is ever missed, it returns as its own recorded decision, not as a leftover.
 
 Terminology note: Maude's current `runtime.intervention.*` calls are local
-supervised tool-approval records. They are not AG-NG governed-intervention
+supervised tool-approval records. They are not Constellation AG governed-intervention
 requests and confer no AG standing or authorization. The exact cross-surface
 namespace and future authoring boundary are documented in
 [`docs/PHOSPHOR-NG-CONVERGENCE.md`](docs/PHOSPHOR-NG-CONVERGENCE.md).
@@ -208,9 +219,9 @@ Governor source checkout while Maude targets another project starts a healthy
 daemon on the wrong socket. `governor serve --stdio` is for other clients and
 cannot accept Maude's Unix-socket connection.
 
-This local Governor daemon supervises Maude sessions. It is not AG-NG, and
-Maude does not maintain a direct interactive socket to AG-NG. Governed work
-reaches AG-NG only through the separately documented exact Nightshift handoff
+This local Governor daemon supervises Maude sessions. It is not Constellation AG, and
+Maude does not maintain a direct interactive socket to Constellation AG. Governed work
+reaches Constellation AG only through the separately documented exact Nightshift handoff
 and authenticated intervention ingress.
 
 Type `help` for a one-screen orientation or `help all` for the complete
