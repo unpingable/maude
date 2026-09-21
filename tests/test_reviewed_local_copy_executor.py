@@ -116,7 +116,9 @@ def test_reserved_interruption_reconciles_indeterminate_without_copy(tmp_path):
     assert not (scratch / "result.txt").exists()
 
 
-def test_post_fsync_qualification_cut_reconciles_without_repeating_copy(tmp_path):
+def test_post_fsync_qualification_cut_reconciles_without_repeating_copy(
+    tmp_path, monkeypatch
+):
     scratch, state, config, dispatch = executor_fixture(tmp_path)
 
     with pytest.raises(QualificationInterruption, match="after result fsync"):
@@ -128,9 +130,21 @@ def test_post_fsync_qualification_cut_reconciles_without_repeating_copy(tmp_path
     attempt = state / digest("1").removeprefix("sha256:") / "record.json"
     assert json.loads(attempt.read_bytes())["state"] == "reserved"
 
+    result_write_attempted = False
+    real_write_all = executor_module._write_all
+
+    def refuse_repeated_result_write(descriptor, raw):
+        nonlocal result_write_attempted
+        if raw == b"exact public text\n":
+            result_write_attempted = True
+            pytest.fail("reconciliation or replay attempted to rewrite result.txt")
+        real_write_all(descriptor, raw)
+
+    monkeypatch.setattr(executor_module, "_write_all", refuse_repeated_result_write)
     outcome = json.loads(reconcile(config, dispatch))
     assert outcome["outcome"] == "indeterminate"
     assert json.loads(execute(config, dispatch))["outcome"] == "indeterminate"
+    assert not result_write_attempted
     after = destination.stat()
     assert (after.st_dev, after.st_ino, after.st_size) == (
         before.st_dev,
