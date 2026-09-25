@@ -157,7 +157,7 @@ def main() -> int:
     write("kit-inputs.json", inputs(f"{root}/scratch-kit").canonical_bytes)
     write("dispatch-main-a.json", dispatch("main", "main-a"))
     write("dispatch-main-b.json", dispatch("main", "main-b"))
-    write("dispatch-mismatch.json", dispatch("main", "mismatch", work=works["fresh"]))
+    write("dispatch-mismatch.json", dispatch("fresh", "mismatch", work=works["main"]))
     write("dispatch-existing.json", dispatch("existing", "existing"))
     write("dispatch-fresh.json", dispatch("fresh", "fresh"))
     facts = {"library": args.library, "module_origins": origins, "python": sys.version,
