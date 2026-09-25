@@ -199,9 +199,9 @@ Maude never imports governor code. Two repos, one RPC boundary.
 > **Caution.** This quick start installs `.[classic-rpc]` and runs the
 > deprecated classic Agent Governor (`governor serve`). That daemon is not
 > Constellation AG and has no authority in Constellation exact-work
-> authorization. Maude's supervised agent sessions still depend on it; that
-> dependency is a known parity gap with a decision pending, not a Constellation
-> integration path.
+> authorization. Maude's supervised agent sessions still depend on it, and they
+> are not supported in the pre-beta Constellation release. This is not a
+> Constellation integration path.
 
 ```bash
 # Install
