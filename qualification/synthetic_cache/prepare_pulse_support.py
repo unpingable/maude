@@ -20,6 +20,8 @@ HERE = Path(__file__).resolve().parent
 SUPPORTED_SEMANTICS = {
     'sha256:f500ddf6bf3b61e5e65bcec8fbf8bfa2b38728fa9949c9406480b6941a0cbec0',
     'sha256:fb7bce89e23f88174e87309002b78a9fc78e45db748252cc76aff0ecade79490',
+    # NQ 0.2.0 (released nq-ng_0.2.0_amd64.deb, source dbe29d8) nq.host profile.
+    'sha256:c08ea495bc40a18171653825f732872b73454cbec00c38a514dea5fe1d13794c',
 }
 IDENTITIES = {
     'question': {'id': 'nq.host.load_pressure', 'version': '1',
