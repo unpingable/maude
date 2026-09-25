@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Offline, reproducible release build of the reviewed-local-copy validator and executor.
+"""Offline, reproducible release build of Maude's reviewed-local-copy artifacts.
 
 The shipped programs are the closed ``.pyz`` archives that alpha.6 executed in
 ``reviewed-local-copy/v1`` (B004): the read-only plan validator and the
-exclusive-create executor. Their Maude modules come from the pinned public source
+exclusive-create executor. Two more things are shipped with them. The first is
+``maude-plan.pyz``, an importable plan library (Plan Core document, store,
+compiler and validator) for the setup kit's ``prepare_plan.py``. The second is
+the two host helpers the setup driver uses, the posture ``construct`` in
+``cache-host-bootstrap.py`` and ``prepare_pulse_support.py``. The helpers are
+byte-identical to the source commit. Their Maude modules come from the pinned public source
 commit ``SOURCE_COMMIT`` and must match the digests B004 executed; PyYAML's pure
 Python modules come from a hash-pinned ``python3-yaml`` package and must match
 the same executed digests. Only ``__main__.py`` (identity dispatch for
-``--version`` and ``--build-info``) and the shebang (``/usr/bin/python3 -IS``: a Debian 12 host runs
-it with its own interpreter, isolated and without ``site``, so no dist-packages
-path or ``.pth`` hook is loaded) differ from B004.
+``--version`` and ``--build-info``) and the shebang differ from B004. The shebang
+is ``/usr/bin/python3.11 -IS``: Debian 12's interpreter, isolated and without
+``site``, so no dist-packages path or ``.pth`` hook is ever loaded.
 
 Host mode builds twice, each time from a separate clean clone, in the pinned
 Debian 12 builder image with ``--network none``, compares the two outputs byte
@@ -52,7 +57,8 @@ IMAGE_PYTHON = "/usr/bin/python3"
 YAML_DEB = "python3-yaml_6.0.1-2build2_amd64.deb"
 YAML_DEB_SHA256 = "315e59500af855f23ee4e95525b99009bd798c4d2658af8eb4b2d66a8a91ec23"
 YAML_DEB_ORIGIN = "http://archive.ubuntu.com/ubuntu/pool/main/p/pyyaml/" + YAML_DEB
-SHEBANG = b"#!/usr/bin/python3 -IS\n"
+INTERPRETER = "/usr/bin/python3.11"
+SHEBANG = f"#!{INTERPRETER} -IS\n".encode()
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 TOP = f"{COMPONENT}-{VERSION}"
 TARBALL = f"{TOP}.tar.gz"
@@ -104,6 +110,13 @@ EXPECTED_YAML = {
     "serializer.py": "0a1b85826854d35863e31808f0668abfabdf33606e8f06bd8bb7761401e3edc0",
     "tokens.py": "953408cd2570f0c83dc2fe39f7e4e388e41eeb05738aa69196a5f6ffcf6ba79e",
 }
+# Host helpers, shipped byte-identical from SOURCE_COMMIT (same bytes at c1fce17 and 26ae43d).
+EXPECTED_HELPERS = {
+    "qualification/synthetic_cache/helpers/cache-host-bootstrap.py":
+        "895b59ab97788d2f49a701028cd472224fbd00e51cfc9f2ed96ccb9a145d5316",
+    "qualification/synthetic_cache/prepare_pulse_support.py":
+        "78b9eae616cfac613d701c31dd5400621653f4573e94e067f124f9d2e26f5356",
+}
 EXPECTED_YAML_NOTICE = "45f2bd1337c3a154cc47b3e9dac295708f8eb8c919c8b821451a1214ad4e6ad1"
 # Import roots permitted in the closed archives besides the standard library.
 PACKAGED_ROOTS = {"maude", "yaml"}
@@ -124,14 +137,25 @@ ROLES = {
         "init": b"# Closed executor import package; exports intentionally omitted.\n",
         "closure": "maude.reviewed-local-copy-executor/imports-v1",
     },
+    "plan-library": {
+        "operations": (),
+        "entry": None,
+        "refusal": "maude-plan.pyz is an import library: put it first on sys.path and import maude.plan.<module>",
+        "init": b"# Closed plan library package; import maude.plan submodules directly.\n",
+        "closure": "maude.reviewed-local-copy-plan-library/imports-v1",
+    },
 }
+MEMBERS = {"validator": "lib/validator.pyz", "executor": "lib/executor.pyz", "plan-library": "lib/maude-plan.pyz"}
 LIMITATIONS = [
     "Supervised agent sessions are not supported in this release: no classic RPC client, "
     "no TUI and no agent_governor dependency is shipped or required.",
-    "Only the reviewed-local-copy/v1 validator and executor are packaged; plan authoring, "
-    "compilation and the plan CLI are not.",
-    "The interpreter is the host's /usr/bin/python3 (3.11 or newer) with -IS (isolated, no site); it and its "
+    "Packaged: the reviewed-local-copy/v1 validator and executor, the importable plan library and two "
+    "host helpers. Not packaged: the plan CLI, the TUI, and plan authoring beyond the library.",
+    "The interpreter is Debian 12's /usr/bin/python3.11 with -IS (isolated, no site). It and its "
     "standard library remain deployment-trusted and must be enrolled by the installer.",
+    "prepare_pulse_support.py enrolls only the NQ nq.host profile semantic IDs that Pulse d91b214 accepts "
+    "(sha256:f500ddf6..., sha256:fb7bce89...). It refuses artifacts from an NQ build with a different nq.host "
+    "semantic ID until Pulse and this helper enroll that ID together.",
     "The executor performs exactly one exclusive create of result.txt under the plan's scratch "
     "root; it carries no authority of its own and relies on AG and Docket for admission.",
 ]
@@ -157,7 +181,7 @@ def canonical(value: object) -> str:
 def main_source(role: str, build_info: str) -> bytes:
     spec = ROLES[role]
     operations = "{" + ", ".join(repr(op) for op in spec["operations"]) + "}"
-    return (
+    identity = (
         "import sys\n"
         f"BUILD_INFO = {build_info!r}\n"
         "if sys.argv[1:] == ['--build-info']:\n"
@@ -168,11 +192,17 @@ def main_source(role: str, build_info: str) -> bytes:
         "    info = json.loads(BUILD_INFO)\n"
         "    print(f\"{info['component']} {info['version']} {info['source_commit']}\")\n"
         "    raise SystemExit(0)\n"
-        f"from {spec['entry']} import main\n"
-        f"if len(sys.argv) < 2 or sys.argv[1] not in {operations}:\n"
-        f"    raise SystemExit({spec['refusal']!r})\n"
-        "raise SystemExit(main(sys.argv[1:]))\n"
-    ).encode("utf-8")
+    )
+    if spec["entry"] is None:
+        dispatch = f"raise SystemExit({spec['refusal']!r})\n"
+    else:
+        dispatch = (
+            f"from {spec['entry']} import main\n"
+            f"if len(sys.argv) < 2 or sys.argv[1] not in {operations}:\n"
+            f"    raise SystemExit({spec['refusal']!r})\n"
+            "raise SystemExit(main(sys.argv[1:]))\n"
+        )
+    return (identity + dispatch).encode("utf-8")
 
 
 def zip_entry(archive: zipfile.ZipFile, name: str, data: bytes) -> None:
@@ -220,7 +250,6 @@ def build_role(role: str, staging: pathlib.Path, request: dict) -> tuple[bytes, 
         ("NOTICE", (source / "NOTICE").read_bytes()),
         ("THIRD_PARTY_NOTICES/PyYAML-Debian-copyright", (staging / "yaml-copyright").read_bytes()),
     ])
-    # Reorder to B004's layout: maude/__init__ precedes the plan modules.
     module_digests = {name: f"sha256:{sha256_bytes(data)}" for name, data in payload}
     audit = import_audit(dict(payload))
     build_info = canonical({
@@ -235,10 +264,10 @@ def build_role(role: str, staging: pathlib.Path, request: dict) -> tuple[bytes, 
         "packaging_commit": request["packaging_commit"],
         "closure": spec["closure"],
         "entries": module_digests,
-        "interpreter": {"path": "/usr/bin/python3", "flags": "-IS", "isolated_mode": True, "site": False, "minimum": "3.11",
+        "interpreter": {"path": INTERPRETER, "flags": "-IS", "isolated_mode": True, "site": False,
                         "trust": "deployment-trusted; enroll its sha256 at install"},
         "supervised_agent_sessions": "unsupported",
-        "b004_executed_archive": B004_ARCHIVES[role],
+        "b004_executed_archive": B004_ARCHIVES.get(role),
     })
     main = main_source(role, build_info)
     buffer = io.BytesIO()
@@ -258,7 +287,7 @@ def build_role(role: str, staging: pathlib.Path, request: dict) -> tuple[bytes, 
         "closure": spec["closure"],
         "archive_sha256": f"sha256:{sha256_bytes(archive_bytes)}",
         "shebang": SHEBANG.decode().strip(),
-        "interpreter": "/usr/bin/python3",
+        "interpreter": INTERPRETER,
         "interpreter_sha256": None,
         "python_isolated_mode": True,
         "python_site_disabled": True,
@@ -269,8 +298,8 @@ def build_role(role: str, staging: pathlib.Path, request: dict) -> tuple[bytes, 
             "maude/plan/__init__.py": f"sha256:{sha256_bytes(spec['init'])}",
             **module_digests,
         },
-        "b004_executed_archive": B004_ARCHIVES[role],
-        "differs_from_b004_only_in": ["shebang", "__main__.py"],
+        "b004_executed_archive": B004_ARCHIVES.get(role),
+        "differs_from_b004_only_in": ["shebang", "__main__.py"] if role in B004_ARCHIVES else None,
     }
     return archive_bytes, manifest
 
@@ -317,10 +346,21 @@ def inside(staging: pathlib.Path, out: pathlib.Path) -> int:
         manifest_bytes = (json.dumps(manifest, sort_keys=True, indent=2) + "\n").encode()
         outputs[f"{COMPONENT}-{role}-{VERSION}.pyz"] = archive
         outputs[f"{COMPONENT}-{role}-{VERSION}.manifest.json"] = manifest_bytes
-        members.append((f"{TOP}/{role}.pyz", archive, 0o755))
-        members.append((f"{TOP}/{role}.manifest.json", manifest_bytes, 0o644))
-        infos[role] = {"archive_sha256": manifest["archive_sha256"], "component": manifest["component"]}
+        member = MEMBERS[role]
+        members.append((f"{TOP}/{member}", archive, 0o755))
+        members.append((f"{TOP}/{member.removesuffix('.pyz')}.manifest.json", manifest_bytes, 0o644))
+        infos[role] = {"path": member, "archive_sha256": manifest["archive_sha256"], "component": manifest["component"]}
     source = staging / "source"
+    helpers = {}
+    for path in EXPECTED_HELPERS:
+        data = (source / path).read_bytes()
+        name = pathlib.PurePosixPath(path).name
+        stdlib_only = import_audit({name: data})
+        if any(root in PACKAGED_ROOTS for root in stdlib_only):
+            raise Refusal(f"helper imports packaged modules: {name}")
+        members.append((f"{TOP}/share/helpers/{name}", data, 0o644))
+        helpers[name] = {"path": f"share/helpers/{name}", "source_path": path, "sha256": f"sha256:{sha256_bytes(data)}",
+                         "import_roots": stdlib_only, "run_as": f"{INTERPRETER} -I -S share/helpers/{name} ..."}
     members += [
         (f"{TOP}/README.md", (staging / "packaging/README.md").read_bytes(), 0o644),
         (f"{TOP}/LICENSE", (source / "LICENSE").read_bytes(), 0o644),
@@ -336,6 +376,9 @@ def inside(staging: pathlib.Path, out: pathlib.Path) -> int:
         "source_tree": request["source_tree"],
         "packaging_commit": request["packaging_commit"],
         "programs": infos,
+        "helpers": helpers,
+        "interpreter": INTERPRETER,
+        "supervised_agent_sessions": "unsupported",
         "limitations": LIMITATIONS,
     }
     members.append((f"{TOP}/BUILD-INFO.json", (json.dumps(build_info, sort_keys=True, indent=2) + "\n").encode(), 0o644))
@@ -387,16 +430,17 @@ def stage(repo: pathlib.Path, yaml_deb: pathlib.Path, staging: pathlib.Path) -> 
         raise Refusal("source commit is not reachable from origin/main")
     source = staging / "source"
     source.mkdir(parents=True)
-    raw = run(["git", "-C", str(repo), "archive", "--format=tar", SOURCE_COMMIT, "--", *EXPECTED_SOURCE]).stdout
+    raw = run(["git", "-C", str(repo), "archive", "--format=tar", SOURCE_COMMIT, "--", *EXPECTED_SOURCE,
+               *EXPECTED_HELPERS]).stdout
     with tarfile.open(fileobj=io.BytesIO(raw)) as archive:
         for member in archive.getmembers():
             if member.isfile():
                 target = source / member.name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(archive.extractfile(member).read())
-    for name, expected in EXPECTED_SOURCE.items():
+    for name, expected in {**EXPECTED_SOURCE, **EXPECTED_HELPERS}.items():
         if sha256_file(source / name) != expected:
-            raise Refusal(f"source file differs from the executed B004 bytes: {name}")
+            raise Refusal(f"source file differs from the pinned bytes: {name}")
     if sha256_file(yaml_deb) != YAML_DEB_SHA256:
         raise Refusal("python3-yaml package digest differs from the pin")
     fsys = run(["dpkg-deb", "--fsys-tarfile", str(yaml_deb)]).stdout
@@ -463,7 +507,7 @@ def b004_continuity(repo: pathlib.Path, scratch: pathlib.Path) -> dict:
     run(["git", "-C", str(repo), "worktree", "add", "--detach", str(tree), SOURCE_COMMIT])
     try:
         results = {}
-        for role in ROLES:
+        for role in B004_ARCHIVES:
             output = scratch / f"b004-{role}.pyz"
             run(["/usr/bin/python3.12", "-I", str(tree / "tools/build_reviewed_local_copy_validator.py"), "--role", role,
                  "--source-revision", SOURCE_COMMIT, "--output", str(output), "--manifest", str(scratch / f"b004-{role}.json")])
@@ -506,7 +550,7 @@ def host(args: argparse.Namespace) -> int:
             "commit": SOURCE_COMMIT,
             "tree": SOURCE_TREE,
             "reachable_from": "origin/main",
-            "files": {name: f"sha256:{digest}" for name, digest in EXPECTED_SOURCE.items()},
+            "files": {name: f"sha256:{digest}" for name, digest in {**EXPECTED_SOURCE, **EXPECTED_HELPERS}.items()},
             "pin_resolution": (
                 "The executed B004 validator.pyz and executor.pyz state source_revision d0f1375 and rebuild "
                 "byte-equal from it. c1fce17 (site source-pins.json) changes reviewed_local_copy_executor.py, so "
