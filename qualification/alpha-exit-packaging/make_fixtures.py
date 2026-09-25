@@ -2,9 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 """Write synthetic reviewed-local-copy fixtures for the clean-VM gate.
 
-Runs on the qualification host with ``PYTHONPATH`` pointing at the pinned Maude
-``src`` (d0f1375). The fixtures are synthetic test data. Every path they bind
-is under ``--guest-root``, where the gate copies them. Nothing here is shipped.
+The gate runs this inside the guest as ``python3.11 -I -S make_fixtures.py
+--library <maude-plan.pyz>``. That also exercises the shipped plan library
+(Plan Core store, check, lock, compile and bind) on the target interpreter.
+``--library`` may also be a Maude ``src`` directory. The fixtures are
+synthetic test data. Every path they bind is under ``--guest-root``. Nothing
+here is shipped.
 """
 
 from __future__ import annotations
@@ -13,10 +16,16 @@ import argparse
 import base64
 import hashlib
 import json
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from maude.plan.document import (
+if __name__ == "__main__":
+    _early = argparse.ArgumentParser(add_help=False)
+    _early.add_argument("--library", required=True)
+    sys.path.insert(0, _early.parse_known_args()[0].library)
+
+from maude.plan.document import (  # noqa: E402
     DocumentConstraintsV1,
     PlanDocumentV1,
     PlanNodeV1,
@@ -81,7 +90,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--guest-root", default="/home/maudeacceptor/fx")
+    parser.add_argument("--library", required=True)
     args = parser.parse_args()
+    import maude
+    import yaml
+    origins = {"maude": maude.__file__, "yaml": yaml.__file__}
+    if not all(origin.startswith(args.library.rstrip("/") + "/") for origin in origins.values()):
+        raise SystemExit(f"modules did not load from the library: {origins}")
     out: Path = args.out
     out.mkdir(parents=True)
     root = args.guest_root
@@ -137,12 +152,17 @@ def main() -> int:
             "work": work or works[name], "work_schema": COMPILER_CONTRACT,
         })
 
+    # Inputs for the site kit's prepare_plan.py (its own fresh store and scratch).
+    write("kit-document.json", document("Copy reviewed synthetic text (kit)").canonical_bytes)
+    write("kit-inputs.json", inputs(f"{root}/scratch-kit").canonical_bytes)
     write("dispatch-main-a.json", dispatch("main", "main-a"))
     write("dispatch-main-b.json", dispatch("main", "main-b"))
     write("dispatch-mismatch.json", dispatch("main", "mismatch", work=works["fresh"]))
     write("dispatch-existing.json", dispatch("existing", "existing"))
     write("dispatch-fresh.json", dispatch("fresh", "fresh"))
-    facts = {"reviewed_text_sha256": hashlib.sha256(TEXT).hexdigest(), "reviewed_text_bytes": len(TEXT),
+    facts = {"library": args.library, "module_origins": origins, "python": sys.version,
+             "isolated": bool(sys.flags.isolated), "no_site": bool(sys.flags.no_site),
+             "reviewed_text_sha256": hashlib.sha256(TEXT).hexdigest(), "reviewed_text_bytes": len(TEXT),
              "works": works, "binding_id": main_binding["binding_id"], "guest_root": root,
              "files": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(out.iterdir())}}
     write("FIXTURES.json", (json.dumps(facts, indent=2, sort_keys=True) + "\n").encode())

@@ -14,8 +14,15 @@ executor on synthetic fixtures. Each case ends as PASS, FAIL or NOT_EXERCISED.
 
 The guest receives:
 - the release artifacts and the build receipt;
-- the synthetic fixtures (make_fixtures.py);
-- the guest closure probe.
+- the fixture generator (make_fixtures.py), which runs in the guest on the
+  shipped plan library;
+- the guest closure probe;
+- three read-only compatibility inputs:
+  - the public site kit files that call the plan library (tag
+    constellation-v0.1.0-alpha.6);
+  - Pulse's public launcher sealer (d91b214);
+  - one NQ 0.2.0 nq.host artifact taken from NQ's own disposable-VM
+    acceptance.
 
 No source tree, share or host PATH is exposed.
 """
@@ -39,6 +46,7 @@ from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
 HARNESS_FILES = ("run_vm_gate.py", "make_fixtures.py", "guest/closure_probe.py")
+HOST_TOOLS = ("qemu-img", "qemu-system-x86_64", "xorriso", "ssh", "scp", "ssh-keygen")
 IMAGE = pathlib.Path(
     "/data/git/.campaign-artifacts/constellation-operator-beta-composed-m2-run-002/input/"
     "debian-12-genericcloud-amd64-20260903-2590.qcow2"
@@ -49,6 +57,12 @@ FX = f"{HOME}/fx"
 PREFIX = "/usr/lib/maude-reviewed-local-copy"
 VALIDATOR = f"{PREFIX}/validator.pyz"
 EXECUTOR = f"{PREFIX}/executor.pyz"
+LIBRARY = f"{PREFIX}/maude-plan.pyz"
+PY = "/usr/bin/python3.11"
+PROGRAMS = (("validator", VALIDATOR, "lib/validator.pyz"), ("executor", EXECUTOR, "lib/executor.pyz"),
+            ("plan-library", LIBRARY, "lib/maude-plan.pyz"))
+KIT_FILES = ("prepare_plan.py", "prepare_review_candidate.py", "reviewed_action.py", "prepare_finite_run.py")
+ENROLLED_SEMANTIC = "sha256:fb7bce89e23f88174e87309002b78a9fc78e45db748252cc76aff0ecade79490"
 VERSION = "0.1.0"
 TOP = f"maude-reviewed-local-copy-{VERSION}"
 TARBALL = f"{TOP}.tar.gz"
@@ -56,16 +70,19 @@ RECEIPT = "build-receipt.v1.json"
 LOOSE = {
     "validator": f"maude-reviewed-local-copy-validator-{VERSION}.pyz",
     "executor": f"maude-reviewed-local-copy-executor-{VERSION}.pyz",
+    "plan-library": f"maude-reviewed-local-copy-plan-library-{VERSION}.pyz",
 }
 PROBE = f"{HOME}/bin/closure_probe.py"
 
 CASES = [
-    ("I-01", "guest: Debian 12, Debian python3 is the only interpreter used"),
+    ("I-01", "guest: Debian 12; Debian's /usr/bin/python3.11 is the interpreter; no python3.12"),
     ("I-02", "artifact: sha256sum --check SHA256SUMS in the guest"),
     ("I-03", "install: from the tarball only; member sums verify; installed bytes equal the receipt"),
     ("I-04", "identity: --version and --build-info carry component, version and the 40-hex source commit"),
     ("I-05", "environment: no source tree, no Maude or classic library importable, no egress"),
     ("I-06", "docs: packaged README states supervised agent sessions are unsupported"),
+    ("L-01", "library: maude-plan.pyz under python3.11 -I -S stores, checks, locks, compiles and binds the gate fixtures"),
+    ("L-02", "library: the site kit's prepare_plan.prepare() runs on maude-plan.pyz; the shipped validator accepts its binding"),
     ("C-01", "closure: validator run loads only archive and stdlib modules, nothing from agent_gov/classic"),
     ("C-02", "closure: executor run loads only archive and stdlib modules, nothing from agent_gov/classic"),
     ("V-01", "validator: valid synthetic binding passes"),
@@ -84,6 +101,9 @@ CASES = [
     ("E-07", "executor: a tampered sealed plan is refused"),
     ("E-08", "executor: reconcile never copies (absent evidence refused; success/indeterminate read back)"),
     ("E-09", "executor: operations other than plan-id/execute/reconcile refused"),
+    ("H-01", "helper: cache-host-bootstrap.py construct builds a posture request from an NQ 0.2.0 artifact (stdlib only)"),
+    ("H-02", "helper: prepare_pulse_support.py refuses the NQ 0.2.0 nq.host semantic ID (not enrolled by Pulse d91b214)"),
+    ("H-03", "helper: prepare_pulse_support.py on an enrolled-ID artifact makes a fresh Ed25519 key, config and sealed launcher"),
     ("P-01", "packaging: a corrupted tarball fails its checksum"),
 ]
 
@@ -203,7 +223,7 @@ class Gate:
                 "files": {name: sha(HERE / name) for name in HARNESS_FILES}}
 
     def preflight(self) -> None:
-        for tool in ("qemu-img", "qemu-system-x86_64", "xorriso", "ssh", "scp", "ssh-keygen"):
+        for tool in HOST_TOOLS:
             if shutil.which(tool) is None:
                 raise Refusal(f"required tool absent: {tool}")
         if not os.access("/dev/kvm", os.R_OK | os.W_OK):
@@ -226,7 +246,6 @@ class Gate:
         receipt = json.loads((candidate / RECEIPT).read_text())
         if not receipt.get("reproduction", {}).get("byte_equal"):
             raise Refusal("receipt does not record a byte-equal reproduction")
-        fixtures: pathlib.Path = self.args.fixtures_dir
         expected = None
         for line in (IMAGE.parent / "SHA512SUMS").read_text().splitlines():
             digest, _, name = line.strip().partition("  ")
@@ -238,15 +257,18 @@ class Gate:
         if os.access(IMAGE, os.W_OK):
             raise Refusal("base image must not be writable")
         self.receipt = receipt
-        self.fixtures = json.loads((fixtures / "FIXTURES.json").read_text())
+        self.inputs = {
+            **{f"kit/{name}": self.args.kit_dir / name for name in KIT_FILES},
+            "pulse-sealer": self.args.pulse_sealer,
+            "nq-0.2.0-host-artifact": self.args.nq_artifact,
+        }
         self.facts = {
             "started": utc_now(),
             "harness": self.harness_identity(),
             "candidate": {"directory": str(candidate), "receipt_sha256": sha(candidate / RECEIPT),
                           "artifacts": receipt["artifacts"], "source_commit": receipt["source"]["commit"],
                           "packaging_commit": receipt["packaging"]["commit"]},
-            "fixtures": {"directory": str(fixtures), "FIXTURES.json": sha(fixtures / "FIXTURES.json"),
-                         "files": self.fixtures["files"]},
+            "compatibility_inputs": {name: {"path": str(path), "sha256": sha(path)} for name, path in self.inputs.items()},
             "image": {"path": str(IMAGE), "sha512": actual},
             "ssh_port": self.args.ssh_port,
         }
@@ -301,11 +323,13 @@ users:
         else:
             raise Refusal("guest SSH not reachable")
         run(self.ssh_base() + ["cloud-init status --wait >/dev/null; cloud-init status"], check=False, timeout=900)
-        run(self.ssh_base() + [f"mkdir -p {HOME}/bin {HOME}/candidate {HOME}/fx-src"])
+        run(self.ssh_base() + [f"mkdir -p {HOME}/bin {HOME}/candidate {HOME}/kit {HOME}/inputs"])
         candidate: pathlib.Path = self.args.candidate_dir
         self.scp([candidate / name for name in (*self.receipt["artifacts"], RECEIPT)], f"{HOME}/candidate/")
-        self.scp(sorted(p for p in self.args.fixtures_dir.iterdir() if p.is_file()), f"{HOME}/fx-src/")
-        self.scp([HERE / "guest" / "closure_probe.py"], f"{HOME}/bin/")
+        self.scp([HERE / "guest" / "closure_probe.py", HERE / "make_fixtures.py"], f"{HOME}/bin/")
+        self.scp([self.args.kit_dir / name for name in KIT_FILES], f"{HOME}/kit/")
+        self.scp([self.args.pulse_sealer], f"{HOME}/inputs/seal-pulse-support-resolver-launcher.py")
+        self.scp([self.args.nq_artifact], f"{HOME}/inputs/nq-0.2.0-host-artifact.json")
         self.log("guest ready")
 
     def destroy(self) -> None:
@@ -329,7 +353,7 @@ users:
     # ------------------------------------------------------------ helpers
     def fresh_fixture_tree(self) -> None:
         self.sh(f"rm -rf {FX} && mkdir -p {FX}/state {FX}/scratch-main {FX}/scratch-existing {FX}/scratch-fresh"
-                f" && cp {HOME}/fx-src/* {FX}/ && chmod 0700 {FX}/state", check=True)
+                f" {FX}/scratch-kit && cp {HOME}/fx-src/* {FX}/ && chmod 0700 {FX}/state", check=True)
 
     def json_out(self, completed: subprocess.CompletedProcess[bytes]) -> Any:
         try:
@@ -344,16 +368,19 @@ users:
     def i01(self) -> dict:
         osr = text(self.sh('. /etc/os-release; printf "%s:%s" "$ID" "$VERSION_ID"', check=True).stdout)
         expect(osr == "debian:12", f"not Debian 12: {osr}")
-        version = text(self.sh("/usr/bin/python3 -V", check=True).stdout).strip()
-        real = text(self.sh("readlink -f /usr/bin/python3", check=True).stdout).strip()
-        owner = text(self.sh(f"dpkg -S {real}", check=True).stdout).strip()
-        digest = text(self.sh(f"sha256sum {real}", check=True).stdout).split()[0]
+        version = text(self.sh(f"{PY} -V", check=True).stdout).strip()
+        owner = text(self.sh(f"dpkg -S {PY}", check=True).stdout).strip()
+        digest = text(self.sh(f"sha256sum {PY}", check=True).stdout).split()[0]
+        python3 = text(self.sh("readlink -f /usr/bin/python3", check=True).stdout).strip()
         expect(version.startswith("Python 3.11"), f"unexpected interpreter {version}")
         expect(owner.startswith("python3.11-minimal"), f"interpreter not from Debian: {owner}")
+        expect(self.sh("test ! -e /usr/bin/python3.12").returncode == 0, "python3.12 present")
         others = text(self.sh("ls /usr/local/bin/python* 2>/dev/null; true").stdout).strip()
         expect(not others, f"non-Debian interpreters present: {others}")
-        self.facts["guest_interpreter"] = {"path": real, "version": version, "package": owner, "sha256": digest}
-        return {"os": osr, "python": version, "interpreter": real, "package": owner, "sha256": digest}
+        openssl = text(self.sh("openssl version; sha256sum /usr/bin/openssl").stdout).strip()
+        self.facts["guest_interpreter"] = {"path": PY, "version": version, "package": owner, "sha256": digest}
+        return {"os": osr, "python": version, "interpreter": PY, "package": owner, "sha256": digest,
+                "python3_resolves_to": python3, "openssl": openssl}
 
     def i02(self) -> dict:
         done = self.sh(f"cd {HOME}/candidate && sha256sum --check --strict SHA256SUMS", check=True)
@@ -362,33 +389,37 @@ users:
     def i03(self) -> dict:
         self.sh(f"rm -rf {HOME}/unpack && mkdir {HOME}/unpack && tar -xzf {HOME}/candidate/{TARBALL} -C {HOME}/unpack", check=True)
         members = self.sh(f"cd {HOME}/unpack/{TOP} && sha256sum --check --strict SHA256SUMS", check=True)
-        self.sh(f"sudo install -d -m 0755 {PREFIX} && sudo install -m 0755 -o root -g root "
-                f"{HOME}/unpack/{TOP}/validator.pyz {HOME}/unpack/{TOP}/executor.pyz {PREFIX}/", check=True)
-        listing = text(self.sh(f"stat -c '%a %U:%G %n' {PREFIX} {VALIDATOR} {EXECUTOR}", check=True).stdout)
-        installed = {role: text(self.sh(f"sha256sum {path}", check=True).stdout).split()[0]
-                     for role, path in (("validator", VALIDATOR), ("executor", EXECUTOR))}
+        sources = " ".join(f"{HOME}/unpack/{TOP}/{member}" for _, _, member in PROGRAMS)
+        self.sh(f"sudo install -d -m 0755 {PREFIX} && sudo install -m 0755 -o root -g root {sources} {PREFIX}/", check=True)
+        listing = text(self.sh(f"stat -c '%a %U:%G %n' {PREFIX} {VALIDATOR} {EXECUTOR} {LIBRARY}", check=True).stdout)
+        installed = {role: text(self.sh(f"sha256sum {path}", check=True).stdout).split()[0] for role, path, _ in PROGRAMS}
         for role, digest in installed.items():
             expect(f"sha256:{digest}" == self.receipt["artifacts"][LOOSE[role]],
                    f"installed {role} differs from the receipt: {digest}")
         head = text(self.sh(f"head -c 32 {VALIDATOR} | head -1", check=True).stdout).strip()
-        expect(head == "#!/usr/bin/python3 -IS", f"unexpected shebang {head!r}")
+        expect(head == f"#!{PY} -IS", f"unexpected shebang {head!r}")
+        helpers = text(self.sh(f"cd {HOME}/unpack/{TOP} && ls share/helpers", check=True).stdout).split()
+        expect(helpers == ["cache-host-bootstrap.py", "prepare_pulse_support.py"], f"helpers {helpers}")
         self.facts["installed"] = installed
         return {"member_check": text(members.stdout).strip().splitlines(), "modes": listing.strip().splitlines(),
-                "installed_sha256": installed, "shebang": head}
+                "installed_sha256": installed, "shebang": head, "helpers": helpers}
 
     def i04(self) -> dict:
         commit = self.receipt["source"]["commit"]
         expect(len(commit) == 40, "receipt commit is not 40-hex")
         observed = {}
-        for role, path in (("validator", VALIDATOR), ("executor", EXECUTOR)):
+        for role, path, member in PROGRAMS:
             version = text(self.sh(f"{path} --version", check=True).stdout).strip()
+            via = text(self.sh(f"{PY} -I {path} --version", check=True).stdout).strip()
+            expect(via == version, f"{role}: python3.11 -I --version differs")
             expect(version == f"maude-reviewed-local-copy-{role} {VERSION} {commit}", f"{role} --version: {version!r}")
             info = self.json_out(self.sh(f"{path} --build-info", check=True))
             expect(info["source_commit"] == commit and info["version"] == VERSION
                    and info["component"] == f"maude-reviewed-local-copy-{role}", f"{role} build-info identity")
             expect(info["packaging_commit"] == self.receipt["packaging"]["commit"], f"{role} packaging commit")
             expect(info["supervised_agent_sessions"] == "unsupported", f"{role} sessions field")
-            manifest = json.loads(text(self.sh(f"cat {HOME}/unpack/{TOP}/{role}.manifest.json", check=True).stdout))
+            manifest_path = f"{HOME}/unpack/{TOP}/{member.removesuffix('.pyz')}.manifest.json"
+            manifest = json.loads(text(self.sh(f"cat {manifest_path}", check=True).stdout))
             for name, digest in info["entries"].items():
                 expect(manifest["entries"].get(name) == digest, f"{role} entry {name} differs from manifest")
             observed[role] = {"version": version, "source_commit": info["source_commit"],
@@ -400,9 +431,9 @@ users:
             "no /data": "test ! -e /data",
             "no maude source": "! find / -xdev \\( -path /proc -o -path /sys \\) -prune -o \\( -name 'build_reviewed_local_copy_validator.py' -o -name 'reviewed_local_copy.py' \\) -print 2>/dev/null | grep -q .",
             "no agent_gov or ag_shell_client on disk": "! find / -xdev \\( -path /proc -o -path /sys \\) -prune -o \\( -iname '*agent_gov*' -o -iname '*ag_shell_client*' -o -iname 'agent_governor*' \\) -print 2>/dev/null | grep -q .",
-            "maude not importable": "! /usr/bin/python3 -c 'import maude' 2>/dev/null",
-            "ag_shell_client not importable": "! /usr/bin/python3 -c 'import ag_shell_client' 2>/dev/null",
-            "no egress": "! timeout 8 /usr/bin/python3 -c \"import socket; socket.create_connection(('1.1.1.1', 443), 5)\" 2>/dev/null",
+            "maude not importable": f"! {PY} -c 'import maude' 2>/dev/null",
+            "ag_shell_client not importable": f"! {PY} -c 'import ag_shell_client' 2>/dev/null",
+            "no egress": f"! timeout 8 {PY} -c \"import socket; socket.create_connection(('1.1.1.1', 443), 5)\" 2>/dev/null",
         }
         observed = {}
         for label, command in checks.items():
@@ -422,7 +453,7 @@ users:
         return {"readme_line": next(l for l in readme.splitlines() if "Supervised agent sessions" in l)}
 
     def probe(self, report: str, program: str, arguments: str, stdin_file: str | None = None) -> dict:
-        self.sh(f"cd {FX} && /usr/bin/python3 -I -S {PROBE} {report} {program} {arguments}", stdin_file=stdin_file)
+        self.sh(f"cd {FX} && {PY} -I -S {PROBE} {report} {program} {arguments}", stdin_file=stdin_file)
         data = json.loads(text(self.sh(f"cat {report}", check=True).stdout))
         expect(data["isolated"] and data["no_site"], "probe not isolated/no-site")
         expect(not data["modules"]["outside"], f"modules outside the closure: {data['modules']['outside']}")
@@ -431,6 +462,101 @@ users:
         return {"exit": data["exit"], "archive_modules": data["modules"]["archive"],
                 "stdlib_module_count": len(data["modules"]["stdlib"]), "outside": data["modules"]["outside"],
                 "forbidden_loaded": data["forbidden_loaded"]}
+
+    def l01(self) -> dict:
+        done = self.sh(f"rm -rf {HOME}/fx-src && cd {HOME} && {PY} -I -S {HOME}/bin/make_fixtures.py "
+                       f"--library {LIBRARY} --out {HOME}/fx-src --guest-root {FX}", check=True)
+        self.fixtures = json.loads(text(self.sh(f"cat {HOME}/fx-src/FIXTURES.json", check=True).stdout))
+        origins = self.fixtures["module_origins"]
+        expect(all(origin.startswith(LIBRARY + "/") for origin in origins.values()), f"origins {origins}")
+        expect(self.fixtures["isolated"] and self.fixtures["no_site"], "fixture generator not isolated")
+        expect(self.fixtures["python"].startswith("3.11"), f"python {self.fixtures['python']}")
+        self.fresh_fixture_tree()
+        return {"module_origins": origins, "python": self.fixtures["python"], "binding_id": self.fixtures["binding_id"],
+                "works": self.fixtures["works"], "files": sorted(self.fixtures["files"])}
+
+    def l02(self) -> dict:
+        out = f"{HOME}/kit-prepared"
+        code = ("import sys; sys.path[:0] = [" + repr(LIBRARY) + ", " + repr(f"{HOME}/kit") + "]; "
+                "import prepare_plan; prepare_plan.main(sys.argv[1:]); "
+                "import maude, yaml, json; print(json.dumps({'maude': maude.__file__, 'yaml': yaml.__file__}))")
+        done = self.sh(f"rm -rf {out} && {PY} -I -S -c {shlex.quote(code)} --document {FX}/kit-document.json "
+                       f"--compiler-inputs {FX}/kit-inputs.json --output {out} --draft-id draft_{'d' * 32}")
+        expect(done.returncode == 0, f"kit prepare_plan failed: {text(done.stderr)[-800:]}")
+        origins = json.loads(text(done.stdout).strip().splitlines()[-1])
+        expect(all(origin.startswith(LIBRARY + "/") for origin in origins.values()), f"origins {origins}")
+        listing = text(self.sh(f"ls {out}", check=True).stdout).split()
+        checked = self.sh(f"cd {out} && {VALIDATOR} validate --config validator-config.json --binding binding.json")
+        expect(checked.returncode == 0 and self.json_out(checked)["result"] == "passed", "shipped validator refused kit binding")
+        plan_id = text(self.sh(f"cd {out} && {EXECUTOR} plan-id executor-config.json", check=True).stdout).strip()
+        binding = json.loads(text(self.sh(f"cat {out}/binding.json", check=True).stdout))
+        expect(plan_id == binding["work"], "executor plan-id differs from kit binding work")
+        return {"module_origins": origins, "outputs": listing, "validator": self.json_out(checked), "plan_id": plan_id}
+
+    def h_construct(self, artifact: str, out: str) -> subprocess.CompletedProcess[bytes]:
+        return self.sh(f"{PY} -I -S {HOME}/unpack/{TOP}/share/helpers/cache-host-bootstrap.py construct --artifact {artifact} "
+                       "--role-id maude-vm-gate-role --role-version 1 --role-digest sha256:" + "0" * 64 +
+                       f" --generation 1 --schedule-id gate-schedule --attempt-id gate-attempt --configuration-version 1"
+                       f" --scheduler-clock-id gate-clock --cycle-request-out {out}")
+
+    def h01(self) -> dict:
+        self.sh(f"rm -rf {HOME}/helpers && mkdir -m 0700 {HOME}/helpers", check=True)
+        report = self.probe(f"{HOME}/probe-construct.json", f"{HOME}/unpack/{TOP}/share/helpers/cache-host-bootstrap.py",
+                            f"construct --artifact {HOME}/inputs/nq-0.2.0-host-artifact.json --role-id maude-vm-gate-role "
+                            "--role-version 1 --role-digest sha256:" + "0" * 64 + " --generation 1 --schedule-id gate-schedule"
+                            " --attempt-id gate-attempt --configuration-version 1 --scheduler-clock-id gate-clock"
+                            f" --cycle-request-out {HOME}/helpers/nq020-request.json")
+        expect(report["exit"] == 0, "construct failed")
+        request = json.loads(text(self.sh(f"cat {HOME}/helpers/nq020-request.json", check=True).stdout))
+        expect(request["schema"] == "nightshift.canonical_cycle_request.v1" and "proposal" not in request, "request shape")
+        return {"closure": report, "request_id": request["request_id"],
+                "semantic_id": request["policy"]["inventory"][0]["binding"]["profile_semantic_id"]}
+
+    def pulse_support(self, artifact: str, request: str, out: str) -> subprocess.CompletedProcess[bytes]:
+        standin = f"{HOME}/helpers/pulse-nq-load-support"
+        sealer = f"{HOME}/inputs/seal-pulse-support-resolver-launcher.py"
+        return self.sh(
+            f"test -e {standin} || printf '#!/bin/sh\nexit 64\n' > {standin}; chmod 0755 {standin}; "
+            f"{PY} -I -S {HOME}/unpack/{TOP}/share/helpers/prepare_pulse_support.py --artifact {artifact}"
+            f" --posture-request {request} --output {out} --pulse {standin} --pulse-sha256 sha256:$(sha256sum {standin} | cut -d' ' -f1)"
+            f" --python {PY} --python-sha256 sha256:$(sha256sum {PY} | cut -d' ' -f1)"
+            f" --openssl /usr/bin/openssl --openssl-sha256 sha256:$(sha256sum /usr/bin/openssl | cut -d' ' -f1)"
+            f" --sealer {sealer} --sealer-sha256 sha256:$(sha256sum {sealer} | cut -d' ' -f1)"
+            " --authority-id maude-vm-gate-authority --producer-id maude-vm-gate-producer")
+
+    def h02(self) -> dict:
+        done = self.pulse_support(f"{HOME}/inputs/nq-0.2.0-host-artifact.json", f"{HOME}/helpers/nq020-request.json",
+                                  f"{HOME}/helpers/pulse-nq020")
+        expect(done.returncode != 0 and b"Pulse has not enrolled this exact NQ profile identity" in done.stderr,
+               f"unexpected result {done.returncode}: {text(done.stderr)[-400:]}")
+        expect(self.sh(f"test ! -e {HOME}/helpers/pulse-nq020").returncode == 0, "refusal left an output directory")
+        semantic = json.loads(text(self.sh(f"cat {HOME}/inputs/nq-0.2.0-host-artifact.json", check=True).stdout))["profile_semantic_id"]
+        return {"exit": done.returncode, "stderr_last": text(done.stderr).strip().splitlines()[-1],
+                "nq_0_2_0_semantic_id": semantic, "output_created": False}
+
+    def h03(self) -> dict:
+        relabel = (f"import json; d = json.load(open('{HOME}/inputs/nq-0.2.0-host-artifact.json')); "
+                   f"d['profile_semantic_id'] = '{ENROLLED_SEMANTIC}'; "
+                   f"open('{HOME}/helpers/enrolled-artifact.json', 'w').write(json.dumps(d, sort_keys=True, separators=(',', ':')))")
+        self.sh(f"{PY} -I -S -c {shlex.quote(relabel)}", check=True)
+        built = self.h_construct(f"{HOME}/helpers/enrolled-artifact.json", f"{HOME}/helpers/enrolled-request.json")
+        expect(built.returncode == 0, "construct on the relabelled artifact failed")
+        out = f"{HOME}/helpers/pulse-enrolled"
+        done = self.pulse_support(f"{HOME}/helpers/enrolled-artifact.json", f"{HOME}/helpers/enrolled-request.json", out)
+        expect(done.returncode == 0, f"prepare_pulse_support failed: {text(done.stderr)[-800:]}")
+        result = self.json_out(done)
+        modes = text(self.sh(f"stat -c '%a %n' {out} {out}/producer.pk8 {out}/producer.hex {out}/config.json {out}/pulse-support-resolver", check=True).stdout).strip().splitlines()
+        config = json.loads(text(self.sh(f"cat {out}/config.json", check=True).stdout))
+        launcher_head = text(self.sh(f"head -1 {out}/pulse-support-resolver", check=True).stdout).strip()
+        key_bytes = int(text(self.sh(f"stat -c %s {out}/producer.pk8", check=True).stdout))
+        expect(result["measurements_created"] == 0 and result["receipts_created"] == 0, "measurements created")
+        expect(modes[1].startswith("600 ") and key_bytes == 48, f"key file {modes[1]} {key_bytes}")
+        expect(config["profile_semantic_id"] == ENROLLED_SEMANTIC and len(config["producer_public_key_hex"]) == 64, "config")
+        expect(launcher_head.startswith(f"#!{PY}"), f"launcher shebang {launcher_head}")
+        leftovers = text(self.sh(f"find {out}/outgoing {out}/receipts -mindepth 1", check=True).stdout).split()
+        expect(not leftovers, f"outgoing/receipts not empty: {leftovers}")
+        return {"preparation": result, "modes": modes, "producer_key_id": config["producer_key_id"],
+                "launcher_shebang": launcher_head, "note": "NQ 0.2.0 guest artifact relabelled to the Pulse-enrolled semantic ID; a stand-in resolver file; synthetic identities only"}
 
     def c01(self) -> dict:
         self.fresh_fixture_tree()
@@ -624,7 +750,11 @@ users:
                 self.case(cid, fn)
             if self.results["I-03"]["outcome"] != "PASS":
                 raise Refusal("install failed; later cases not exercised")
-            for cid, fn in (("C-01", self.c01), ("C-02", self.c02), ("V-01", self.v01), ("V-02", self.v02),
+            self.case("L-01", self.l01)
+            if self.results["L-01"]["outcome"] != "PASS":
+                raise Refusal("fixtures could not be generated with the plan library")
+            for cid, fn in (("L-02", self.l02), ("H-01", self.h01), ("H-02", self.h02), ("H-03", self.h03),
+                            ("C-01", self.c01), ("C-02", self.c02), ("V-01", self.v01), ("V-02", self.v02),
                             ("V-03", self.v03), ("V-04", self.v04), ("V-05", self.v05), ("V-06", self.v06),
                             ("V-07", self.v07), ("E-01", self.e01), ("E-02", self.e02)):
                 self.case(cid, fn)
@@ -652,7 +782,12 @@ users:
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--candidate-dir", type=pathlib.Path, required=True)
-    p.add_argument("--fixtures-dir", type=pathlib.Path, required=True)
+    p.add_argument("--kit-dir", type=pathlib.Path, required=True,
+                   help="site constellation/examples/reviewed_local_copy at tag constellation-v0.1.0-alpha.6")
+    p.add_argument("--pulse-sealer", type=pathlib.Path, required=True,
+                   help="nightshift d91b214 integrations/pulse-nq-load-support/tools/seal-pulse-support-resolver-launcher.py")
+    p.add_argument("--nq-artifact", type=pathlib.Path, required=True,
+                   help="one nq.host diagnostic execution v2 artifact from NQ 0.2.0's disposable-VM acceptance")
     p.add_argument("--output", type=pathlib.Path, required=True)
     p.add_argument("--state-dir", type=pathlib.Path, required=True)
     p.add_argument("--ssh-port", type=int, default=23401)
