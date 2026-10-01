@@ -762,6 +762,7 @@ class DesignApplication:
                     active.cancellation.set()
                 return Response.redirect(
                     f"/phosphor/design/drafts/{quote(draft_id)}/proposal-generations/active"
+                )
             investigation_action = _investigation_action(path)
             if investigation_action is not None:
                 investigation_draft, owner_action = investigation_action
