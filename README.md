@@ -462,3 +462,7 @@ Apache-2.0
 Maude owns plan design and compiles one exact service-investigation handoff.
 It does not grant the mandate, acquire evidence, or settle an effect. See the
 local [Operational ECAD journey](/data/git/operational-ecad/README.md).
+
+## Beta work planning
+
+See the [current beta work plan](docs/BETA-WORK.md) for owned requirements, exclusions, dependencies and GitHub issues. Plan publication does not start implementation or transfer qualification.
